@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://blg1tirohklb7"]
+
+[node name="Main" type="Control" unique_id=480960145]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OfficeArea" type="Panel" parent="." unique_id=1323558881]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -360.0
+grow_horizontal = 2
+grow_vertical = 0

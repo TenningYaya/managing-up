@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://bo6ht30ec63jh"]
+
+[node name="Sidebar" type="Control" unique_id=520361795]
+layout_mode = 3
+anchors_preset = 0
