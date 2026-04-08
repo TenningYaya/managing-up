@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://s6hqcjwc8g78"]
+
+[node name="DeskSlot" type="Control" unique_id=974996053]
+custom_minimum_size = Vector2(220, 300)
+layout_mode = 3
+anchors_preset = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=424280766]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Desk" type="TextureRect" parent="VBoxContainer" unique_id=1300169145]
+layout_mode = 2
