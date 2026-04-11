@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dedxv6p02evcj"
-path="res://.godot/imported/Desk(temp).png-2a791816e1611207a77a63532b3d6834.ctex"
+uid="uid://dp11gayc1fhvm"
+path="res://.godot/imported/B-C-D-E Office 2.png-a7c60f5cee107ca47c99848a653ff69e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Desk(temp).png"
-dest_files=["res://.godot/imported/Desk(temp).png-2a791816e1611207a77a63532b3d6834.ctex"]
+source_file="res://assets/Office Tileset/Office VX Ace/B-C-D-E Office 2.png"
+dest_files=["res://.godot/imported/B-C-D-E Office 2.png-a7c60f5cee107ca47c99848a653ff69e.ctex"]
 
 [params]
 

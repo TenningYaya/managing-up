@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://dfnm7sh1rtiky"]
+
+[ext_resource type="Texture2D" uid="uid://doy2ulgdnmxi7" path="res://assets/Office Tileset/Office Tileset All 48x48.png" id="1_bfrbe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_72mnh"]
+atlas = ExtResource("1_bfrbe")
+region = Rect2(6, 879, 36, 39)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bef2k"]
+atlas = ExtResource("1_bfrbe")
+region = Rect2(0, 192, 96, 66)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7b6jb"]
+atlas = ExtResource("1_bfrbe")
+region = Rect2(606, 1194, 36, 30)
+
+[node name="DeskSet_Level1" type="Control" unique_id=1449933388]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 60.0
+offset_bottom = 60.0
+
+[node name="Chair" type="TextureRect" parent="." unique_id=1881372552]
+layout_mode = 0
+offset_left = 18.75
+offset_right = 41.25
+offset_bottom = 24.375
+texture = SubResource("AtlasTexture_72mnh")
+expand_mode = 1
+
+[node name="Desk" type="TextureRect" parent="." unique_id=345841938]
+z_index = 2
+layout_mode = 0
+offset_top = 18.75
+offset_right = 60.0
+offset_bottom = 60.0
+texture = SubResource("AtlasTexture_bef2k")
+expand_mode = 1
+
+[node name="Computer" type="TextureRect" parent="." unique_id=1888207587]
+z_index = 2
+layout_mode = 0
+offset_left = 18.75
+offset_top = 25.0
+offset_right = 41.25
+offset_bottom = 43.75
+texture = SubResource("AtlasTexture_7b6jb")
+expand_mode = 1
