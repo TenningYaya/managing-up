@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cj130y7inpn67" path="res://scripts/UI/sidebar/side_menu.gd" id="1_7o1yw"]
 [ext_resource type="Texture2D" uid="uid://bhdgpy4vms7ux" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Pixel Map Base/0.png" id="2_qlopi"]
-[ext_resource type="PackedScene" uid="uid://cef1cc6y8xrd6" path="res://scenes/settings_page.tscn" id="3_qlopi"]
+[ext_resource type="PackedScene" uid="uid://cef1cc6y8xrd6" path="res://scenes/sidebar/settings_page.tscn" id="3_qlopi"]
 [ext_resource type="Texture2D" uid="uid://b2fojsgp6ucyj" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Pixel Map Base/1.png" id="3_tae0b"]
 [ext_resource type="Texture2D" uid="uid://ny4y8iio8a3x" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Side Tabs/0.png" id="4_ydyuc"]
 [ext_resource type="Texture2D" uid="uid://d4vok7ld6v6s" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Side Tabs/1.png" id="5_3krn0"]
@@ -34,6 +34,7 @@ offset_top = -360.0
 offset_right = 270.0
 grow_horizontal = 0
 grow_vertical = 0
+mouse_filter = 1
 script = ExtResource("1_7o1yw")
 
 [node name="BG" type="TextureRect" parent="." unique_id=313222355]
@@ -44,21 +45,12 @@ offset_bottom = 360.0
 texture = SubResource("AtlasTexture_hbk5s")
 expand_mode = 1
 
-[node name="Content" type="Control" parent="BG" unique_id=1947333797]
-anchors_preset = 0
-offset_right = 270.0
-offset_bottom = 360.0
-
-[node name="SettingsPage" parent="BG/Content" unique_id=517570582 instance=ExtResource("3_qlopi")]
-layout_mode = 0
-offset_right = 270.0
-offset_bottom = 360.0
-
 [node name="BG_Frame" type="TextureRect" parent="." unique_id=1847319922]
 layout_mode = 0
 offset_left = 80.0
 offset_right = 350.0
 offset_bottom = 360.0
+mouse_filter = 2
 texture = SubResource("AtlasTexture_kxbck")
 expand_mode = 1
 
@@ -145,6 +137,17 @@ offset_top = 2.0
 offset_right = 78.0
 offset_bottom = 82.0
 texture = ExtResource("10_eak2a")
+
+[node name="Content" type="Control" parent="." unique_id=1947333797]
+anchors_preset = 0
+offset_left = 80.0
+offset_right = 350.0
+offset_bottom = 360.0
+
+[node name="SettingsPage" parent="Content" unique_id=517570582 instance=ExtResource("3_qlopi")]
+layout_mode = 0
+offset_right = 270.0
+offset_bottom = 360.0
 
 [connection signal="pressed" from="VBoxContainer/General" to="." method="_on_general_pressed"]
 [connection signal="pressed" from="VBoxContainer/Hire" to="." method="_on_hire_pressed"]
