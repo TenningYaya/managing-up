@@ -96,3 +96,8 @@ offset_left = 933.0
 offset_top = 761.0
 offset_right = 1033.0
 offset_bottom = 861.0
+
+[node name="TestMenu" type="Control" parent="." unique_id=1584317131]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

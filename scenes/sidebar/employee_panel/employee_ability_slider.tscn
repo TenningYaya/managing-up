@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://8o18jsagw05c"]
+
+[node name="EmployeeAbility" type="HBoxContainer" unique_id=1543880291]
+
+[node name="Label" type="Label" parent="." unique_id=261480415]
+layout_mode = 2
+
+[node name="HSlider" type="HSlider" parent="." unique_id=359559550]
+layout_mode = 2
