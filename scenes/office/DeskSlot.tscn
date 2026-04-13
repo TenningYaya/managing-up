@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://s6hqcjwc8g78"]
 
-[ext_resource type="PackedScene" uid="uid://dfnm7sh1rtiky" path="res://scenes/DeskSet_Level1.tscn" id="1_ohn7j"]
+[ext_resource type="PackedScene" uid="uid://dfnm7sh1rtiky" path="res://scenes/office/DeskSet_Level1.tscn" id="1_ohn7j"]
 
 [node name="DeskSlot" type="Control" unique_id=974996053]
 custom_minimum_size = Vector2(262, 328)
