@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dfnm7sh1rtiky"]
 
 [ext_resource type="Texture2D" uid="uid://doy2ulgdnmxi7" path="res://assets/Office Tileset/Office Tileset All 48x48.png" id="1_bfrbe"]
+[ext_resource type="Script" uid="uid://q7tpt6us2ywy" path="res://scripts/office/seat.gd" id="1_jwd3b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_72mnh"]
 atlas = ExtResource("1_bfrbe")
@@ -20,6 +21,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 60.0
 offset_bottom = 60.0
+script = ExtResource("1_jwd3b")
 
 [node name="Chair" type="TextureRect" parent="." unique_id=1881372552]
 layout_mode = 0
@@ -47,3 +49,20 @@ offset_right = 59.4
 offset_bottom = 63.0
 texture = SubResource("AtlasTexture_7b6jb")
 expand_mode = 1
+
+[node name="DropArea" type="Control" parent="." unique_id=1490702353]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SnapPoint" type="Control" parent="." unique_id=1066139837]
+anchors_preset = 0
+offset_left = 43.2
+offset_top = 43.2
+offset_right = 44.2
+offset_bottom = 44.2
+mouse_filter = 2
