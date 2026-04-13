@@ -9,11 +9,6 @@
 [node name="EmployeePanel" type="CanvasLayer" unique_id=1329495967]
 script = ExtResource("1_sl25x")
 
-[node name="ClickBlocker" type="ColorRect" parent="." unique_id=319725284]
-offset_right = 1940.0
-offset_bottom = 1112.0
-color = Color(1, 1, 1, 0)
-
 [node name="PanelBg" type="Panel" parent="." unique_id=1968908939]
 custom_minimum_size = Vector2(270, 360)
 anchors_preset = 3

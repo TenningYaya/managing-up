@@ -103,9 +103,11 @@ offset_bottom = 861.0
 z_index = 3
 layout_mode = 1
 
-[node name="TestMenu" type="Control" parent="." unique_id=1584317131]
+[node name="Add All Test Button Here" type="Control" parent="." unique_id=1584317131]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="EmployeePanel" parent="." unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
+visible = false

@@ -86,6 +86,18 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 			_end_drag()
 
+func _draw() -> void:
+	if dragging:
+		# 画出同事当前的几何中心（蓝点）
+		var my_center = size / 2.0
+		draw_circle(my_center, 8.0, Color.AQUA)
+		
+		# 画出 snap_distance 的判定圆圈
+		draw_arc(my_center, snap_distance, 0, TAU, 32, Color.AQUA, 1.0)
+
+func _process(_delta):
+	if dragging:
+		queue_redraw()
 # ==========================================
 # 5. 拖拽与吸附逻辑 (融合了生产中断与恢复)
 # ==========================================
@@ -157,8 +169,9 @@ func _find_valid_seat() -> DeskSeat:
 	# 遍历所有工位，寻找最近的空位
 	for node in get_tree().get_nodes_in_group("desk_seats"):
 		var seat := node as DeskSeat
-		if seat == null or not seat.is_free():
-			continue
+		#print("正在检查工位: ", seat.name, " | 是否为空: ", seat.is_free())
+		#if seat == null or not seat.is_free():
+			#continue
 
 		if not seat.contains_global_point(mouse_pos):
 			continue
@@ -212,10 +225,12 @@ func _generate_attributes() -> void:
 
 # TODO: 开始生产文件 (计算 600s 基础时间及效率缩减)
 func _start_production_timer() -> void:
-	print(employee_name + " 开始在工位上生产了！")
+	#print(employee_name + " 开始在工位上生产了！")
 	# 之后在这里实例化你的 Timer 节点
+	pass
 
 # TODO: 打断生产结算 (进度百分比 * 50% KPI)
 func _calculate_interrupted_kpi() -> void:
-	print("生产被打断，结算补偿 KPI...")
+	#print("生产被打断，结算补偿 KPI...")
 	# 之后在这里获取 Timer 的进度并加钱
+	pass

@@ -1,11 +1,28 @@
+#seat.gd
 extends Control
 class_name DeskSeat
 
 @onready var drop_area: Control = $DropArea
 @onready var snap_point: Control = $SnapPoint
 
-var occupant: Control = null
+var occupant: Control = null: 
+	set(v):
+		occupant = v
+		# 可以在这里打印一下，看看谁占了座
+		if v: print(name, " 被 ", v.name, " 占领了")
+		else: print(name, " 现在空出来了")
 
+func _draw() -> void:
+	# 画出 DropArea 的矩形框（绿色）
+	var rect = Rect2(Vector2.ZERO, $DropArea.size) # 相对于自身位置
+	draw_rect(rect, Color(0, 1, 0, 0.3), false, 2.0)
+	
+	# 画出吸附中心点（红点）
+	draw_circle($SnapPoint.position, 5.0, Color.RED)
+
+func _process(_delta):
+	queue_redraw() # 确保每一帧都重绘（如果你的桌子是动的）
+	
 func _ready() -> void:
 	add_to_group("desk_seats")
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
