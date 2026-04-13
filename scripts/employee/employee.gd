@@ -33,6 +33,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP # 确保能接收到鼠标点击
 	z_index = 1 # 默认层级
 	randomize() # 确保每次生成的随机数不同
+	employee_name = name
 
 # 招聘系统调用此函数来初始化新同事
 func setup_employee(new_rarity: Rarity) -> void:
@@ -42,12 +43,37 @@ func setup_employee(new_rarity: Rarity) -> void:
 # ==========================================
 # 4. 核心交互逻辑 (鼠标输入处理)
 # ==========================================
+# 修改后的核心交互逻辑
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			# 按下时，记录起始位置并准备拖拽
 			_start_drag()
-			accept_event() # 吞噬事件，防止传递给下层UI
+			accept_event()
+		else:
+			# 【功能更新】：松开鼠标时，判断是“点击”还是“拖拽结束”
+			# 如果位移非常小（比如小于 5 像素），我们就认为玩家只是点了一下，而不是想拖走
+			var drag_distance = global_position.distance_to(drag_start_position)
+			
+			if drag_distance < 5.0:
+				_on_employee_clicked()
+			
+			_end_drag()
 
+# 点击后触发的函数
+func _on_employee_clicked() -> void:
+	print("点击了同事: ", employee_name)
+	
+	# 寻找场景中的 EmployeePanel
+	# 做法：通过之前建议的 Group 来寻找，或者在主场景中给面板起个固定的名字
+	var panel = get_tree().get_first_node_in_group("employee_panel")
+	if panel:
+		panel.open_panel(self)
+	else:
+		# 如果没设 Group，也可以尝试直接找路径（假设在主场景根目录下）
+		get_tree().root.find_child("EmployeePanel", true, false).open_panel(self)
+		print("警告：未找到 EmployeePanel 节点，请检查是否加入了 'employee_panel' 群组")
+		
 func _input(event: InputEvent) -> void:
 	if not dragging:
 		return

@@ -1,5 +1,5 @@
 #normal_button.gd
-extends Button
+extends TextureButton
 
 # 使用 @export 关键字，这样它就会出现在 Inspector 里
 # 使用 setter (setget) 确保你在面板修改文字时，Label 能实时更新

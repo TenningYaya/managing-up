@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://cjfjfj4l46h23"]
 
-[ext_resource type="Texture2D" uid="uid://b70dtrr3021wm" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Map inventory/Map/Map Close/5.png" id="1_lvnth"]
-[ext_resource type="PackedScene" uid="uid://8o18jsagw05c" path="res://scenes/sidebar/employee_panel/employee_ability_slider.tscn" id="2_lsrq1"]
-[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/normal_button.tscn" id="3_lsrq1"]
+[ext_resource type="Texture2D" uid="uid://b70dtrr3021wm" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Map inventory/Map/Map Close/5.png" id="1_kp28t"]
+[ext_resource type="Script" uid="uid://bpk1q1i0i3xmm" path="res://scripts/UI/sidebar/employee_panel.gd" id="1_sl25x"]
+[ext_resource type="PackedScene" uid="uid://8o18jsagw05c" path="res://scenes/sidebar/employee_panel/employee_ability_slider.tscn" id="2_sl25x"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/normal_button.tscn" id="3_r7cc6"]
+[ext_resource type="PackedScene" uid="uid://5sdsush0erlr" path="res://scenes/UI/popup_window.tscn" id="4_e3e08"]
 
 [node name="EmployeePanel" type="CanvasLayer" unique_id=1329495967]
+script = ExtResource("1_sl25x")
 
 [node name="ClickBlocker" type="ColorRect" parent="." unique_id=319725284]
 offset_right = 1940.0
@@ -30,7 +33,7 @@ offset_top = -133.0
 offset_right = 498.57135
 offset_bottom = 601.5238
 scale = Vector2(0.84, 0.84)
-texture = ExtResource("1_lvnth")
+texture = ExtResource("1_kp28t")
 
 [node name="EmployeePage" type="VBoxContainer" parent="PanelBg" unique_id=949899160]
 layout_mode = 0
@@ -61,13 +64,16 @@ layout_mode = 2
 [node name="Abilities" type="VBoxContainer" parent="PanelBg/EmployeePage/Information" unique_id=177485216]
 layout_mode = 2
 
-[node name="EmployeeAbility" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=1543880291 instance=ExtResource("2_lsrq1")]
+[node name="EfficiencyBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=1543880291 instance=ExtResource("2_sl25x")]
 layout_mode = 2
 
-[node name="EmployeeAbility2" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=922107843 instance=ExtResource("2_lsrq1")]
+[node name="QualityBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=922107843 instance=ExtResource("2_sl25x")]
 layout_mode = 2
 
-[node name="EmployeeAbility3" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=1321981527 instance=ExtResource("2_lsrq1")]
+[node name="ExperienceBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=1321981527 instance=ExtResource("2_sl25x")]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="PanelBg/EmployeePage/Information" unique_id=1672313752]
 layout_mode = 2
 
 [node name="Buffs" type="VBoxContainer" parent="PanelBg/EmployeePage/Information" unique_id=66573066]
@@ -77,10 +83,15 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="NormalButton" parent="PanelBg/EmployeePage/Manage" unique_id=2048579194 instance=ExtResource("3_lsrq1")]
+[node name="DispatchButton" parent="PanelBg/EmployeePage/Manage" unique_id=2048579194 instance=ExtResource("3_r7cc6")]
 layout_mode = 2
 ignore_texture_size = false
+button_text = "Dispatch"
 
-[node name="NormalButton2" parent="PanelBg/EmployeePage/Manage" unique_id=1722932454 instance=ExtResource("3_lsrq1")]
+[node name="NormalButton2" parent="PanelBg/EmployeePage/Manage" unique_id=1722932454 instance=ExtResource("3_r7cc6")]
 layout_mode = 2
 ignore_texture_size = false
+button_text = "Fire"
+
+[node name="PopupWindow" parent="PanelBg" unique_id=1050921675 instance=ExtResource("4_e3e08")]
+layout_mode = 0
