@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://54t8ifr67wbj"]
+
+[ext_resource type="Texture2D" uid="uid://bhdgpy4vms7ux" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Pixel Map Base/0.png" id="1_8vfe7"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_1iand"]
+[ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="3_ye1fd"]
+[ext_resource type="Texture2D" uid="uid://dqr2mdtswy5g1" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/UI Buttons/4.png" id="4_ye1fd"]
+[ext_resource type="Texture2D" uid="uid://cbxocuhjaouug" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/UI Buttons/5.png" id="5_su0nc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_su0nc"]
+atlas = ExtResource("1_8vfe7")
+region = Rect2(28.100021, 48.702408, 299.19995, 292.82007)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y3rnx"]
+atlas = ExtResource("3_ye1fd")
+
+[node name="ConfirmDialog" type="Control" unique_id=1003794883]
+custom_minimum_size = Vector2(1920, 360)
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1920.0
+offset_top = -360.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Panel" type="TextureRect" parent="." unique_id=1817486427]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -44.0
+offset_right = 150.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_su0nc")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1195735686]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 19
+alignment = 1
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer" unique_id=1449918164]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9843137, 0.20784314, 0.2509804, 1)
+theme_override_fonts/font = ExtResource("2_1iand")
+text = "Do you want to save and exit?"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1412053543]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 40
+
+[node name="ConfirmButton" type="TextureButton" parent="Panel/VBoxContainer/HBoxContainer" unique_id=603639073]
+custom_minimum_size = Vector2(80, 30)
+layout_mode = 2
+tooltip_auto_translate_mode = 1
+texture_normal = SubResource("AtlasTexture_y3rnx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer/ConfirmButton" unique_id=1126977224]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 2.5
+offset_right = 74.0
+offset_bottom = 25.5
+theme_override_fonts/font = ExtResource("2_1iand")
+text = "QUIT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CancelButton" type="TextureButton" parent="Panel/VBoxContainer/HBoxContainer" unique_id=744445462]
+custom_minimum_size = Vector2(80, 30)
+layout_mode = 2
+tooltip_auto_translate_mode = 1
+texture_normal = SubResource("AtlasTexture_y3rnx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer/CancelButton" unique_id=1089049207]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 2.5
+offset_right = 75.0
+offset_bottom = 25.5
+theme_override_fonts/font = ExtResource("2_1iand")
+text = "cancel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="Panel" unique_id=669498132]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -22.0
+offset_top = -4.0
+offset_right = -2.0
+offset_bottom = 29.0
+grow_horizontal = 0
+texture_normal = ExtResource("4_ye1fd")
+texture_pressed = ExtResource("5_su0nc")
+ignore_texture_size = true
+stretch_mode = 0
