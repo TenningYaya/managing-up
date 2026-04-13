@@ -31,7 +31,7 @@ var drag_start_position: Vector2 = Vector2.ZERO
 func _ready() -> void:
 	add_to_group("employees") # 加入群组，方便全局查找
 	mouse_filter = Control.MOUSE_FILTER_STOP # 确保能接收到鼠标点击
-	z_index = 10 # 默认层级
+	z_index = 1 # 默认层级
 	randomize() # 确保每次生成的随机数不同
 
 # 招聘系统调用此函数来初始化新同事
@@ -78,7 +78,7 @@ func _start_drag() -> void:
 
 func _end_drag() -> void:
 	dragging = false
-	z_index = 10 # 恢复正常层级
+	z_index = 1 # 恢复正常层级
 
 	var target_seat := _find_valid_seat()
 
