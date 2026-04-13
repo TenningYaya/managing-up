@@ -19,6 +19,8 @@ region = Rect2(27.300018, 48.45536, 299.99997, 293.75705)
 atlas = ExtResource("3_tae0b")
 region = Rect2(13.045013, 48.486374, 297.62228, 292.4687)
 
+[sub_resource type="ButtonGroup" id="ButtonGroup_7o1yw"]
+
 [node name="SideMenu" type="Control" unique_id=1012173253]
 layout_mode = 3
 anchors_preset = 3
@@ -58,6 +60,8 @@ alignment = 1
 [node name="General" type="TextureButton" parent="VBoxContainer" unique_id=929581729]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_7o1yw")
 texture_normal = ExtResource("4_ydyuc")
 texture_pressed = ExtResource("5_3krn0")
 texture_hover = ExtResource("6_6pbfu")
@@ -74,6 +78,8 @@ texture = ExtResource("7_v83px")
 [node name="Hire" type="TextureButton" parent="VBoxContainer" unique_id=830354154]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_7o1yw")
 texture_normal = ExtResource("4_ydyuc")
 texture_pressed = ExtResource("5_3krn0")
 texture_hover = ExtResource("6_6pbfu")
@@ -92,6 +98,8 @@ texture = ExtResource("8_ap86d")
 [node name="Upgrades" type="TextureButton" parent="VBoxContainer" unique_id=2060125637]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_7o1yw")
 texture_normal = ExtResource("4_ydyuc")
 texture_pressed = ExtResource("5_3krn0")
 texture_hover = ExtResource("6_6pbfu")
@@ -110,6 +118,8 @@ texture = ExtResource("9_w6w8c")
 [node name="Settings" type="TextureButton" parent="VBoxContainer" unique_id=609711880]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_7o1yw")
 texture_normal = ExtResource("4_ydyuc")
 texture_pressed = ExtResource("5_3krn0")
 texture_hover = ExtResource("6_6pbfu")
