@@ -10,6 +10,7 @@ script/source = "extends Control
 # 假设你的 BGM 在音频总线（Bus）的第 1 条，音效在第 2 条
 # 你可以在编辑器最下方的 Audio 面板里查看或添加
 var bgm_bus_index = AudioServer.get_bus_index(\"Master\") 
+const CONFIRM_DIALOG = preload(\"res://scenes/sidebar/confirm_dialog.tscn\")
 
 func _on_bgm_slider_value_changed(value):
 	# value 通常是 0 到 100，我们需要把它转成音量分贝
@@ -32,6 +33,15 @@ func _on_save_button_pressed():
 	# 然后我们可以通过代码告诉侧边栏：“我点完了，你可以收起来了”
 	# 为了简单，我们先只打印一句话
 	print(\"设置已保存！\")
+
+func _on_save__quit_pressed() -> void:
+		# 1. 创建对话框的“分身”
+	var dialog_instance = CONFIRM_DIALOG.instantiate()
+
+	# 2. 把它加入到当前正在运行的场景中
+	# 如果你的 ConfirmDialog 场景大小已经是 1920 * 360 且小框已居中，
+	# 那么它一出现就会刚好在整个游戏画面的正中间。
+	get_tree().root.add_child(dialog_instance)
 "
 
 [node name="SettingsPage" type="Control" unique_id=517570582]
@@ -143,3 +153,5 @@ grow_vertical = 2
 theme_override_fonts/font = ExtResource("1_wtuay")
 theme_override_font_sizes/font_size = 20
 text = "save&quit"
+
+[connection signal="pressed" from="Save & Quit" to="." method="_on_save__quit_pressed"]
