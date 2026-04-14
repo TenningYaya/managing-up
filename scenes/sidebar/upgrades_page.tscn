@@ -5,13 +5,14 @@
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_70tse"]
 [ext_resource type="Texture2D" uid="uid://b343jwsuuh7fn" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Buttons & Holders/13.png" id="4_lh86t"]
 [ext_resource type="Texture2D" uid="uid://cikjriby4i27n" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Icons/14.png" id="4_vc4hl"]
+[ext_resource type="Texture2D" uid="uid://bf3w3mlc2krib" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Decoration/3.png" id="6_70tse"]
 
 [node name="UpgradesPage" type="Control" unique_id=1808630414]
 custom_minimum_size = Vector2(270, 360)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 270.0
+offset_bottom = 360.0
 
 [node name="TextureRect" type="ColorRect" parent="." unique_id=1357907453]
 visible = false
@@ -28,7 +29,7 @@ offset_right = 271.0
 offset_bottom = 69.0
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 34
-text = "updates"
+text = "upgrades"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -74,20 +75,24 @@ grow_vertical = 2
 theme_override_constants/separation = 15
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainLayout" unique_id=1071642607]
-custom_minimum_size = Vector2(270, 360)
+custom_minimum_size = Vector2(200, 247.05)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_horizontal = 4
+size_flags_vertical = 6
 horizontal_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="MainLayout/ScrollContainer" unique_id=1324768904]
 layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 80
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 10
 
 [node name="ItemsList" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer" unique_id=1013653389]
 layout_mode = 2
+alignment = 1
 
 [node name="Item1" type="HBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=191970214]
 layout_mode = 2
@@ -125,27 +130,33 @@ stretch_mode = 2
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/VBoxContainer" unique_id=82975487]
+custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 28
 text = "+ STAFF×6"
+autowrap_mode = 2
 
 [node name="DescLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/VBoxContainer" unique_id=787904701]
-custom_minimum_size = Vector2(180, 0)
+custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 11
-text = "You can recruit more people to join your workforce."
+theme_override_font_sizes/font_size = 14
+text = "You can recruit more people to join the workforce."
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Item2" type="HBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=217030500]
+[node name="TextureRect" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1517829118]
+layout_mode = 2
+texture = ExtResource("6_70tse")
+
+[node name="Item2" type="HBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=215196802]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 20
 
-[node name="ICON_BG" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2" unique_id=1400252512]
+[node name="ICON_BG" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2" unique_id=1434541052]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -154,7 +165,7 @@ texture = ExtResource("4_lh86t")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ICON" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/ICON_BG" unique_id=78832058]
+[node name="ICON" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/ICON_BG" unique_id=147419691]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 1
 anchors_preset = 8
@@ -171,31 +182,37 @@ grow_vertical = 2
 texture = ExtResource("4_vc4hl")
 stretch_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2" unique_id=1354357125]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2" unique_id=2057847718]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer" unique_id=1022793881]
+[node name="TitleLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer" unique_id=1377390854]
+custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 28
 text = "+ STAFF×6"
+autowrap_mode = 2
 
-[node name="DescLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer" unique_id=215645684]
-custom_minimum_size = Vector2(180, 0)
+[node name="DescLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer" unique_id=815085535]
+custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 11
-text = "You can recruit more people to join your workforce."
+theme_override_font_sizes/font_size = 14
+text = "You can recruit more people to join the workforce."
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Item3" type="HBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1829749788]
+[node name="TextureRect2" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1375197860]
+layout_mode = 2
+texture = ExtResource("6_70tse")
+
+[node name="Item3" type="HBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1444016716]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 20
 
-[node name="ICON_BG" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3" unique_id=648072386]
+[node name="ICON_BG" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3" unique_id=1070179992]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -204,7 +221,7 @@ texture = ExtResource("4_lh86t")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ICON" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/ICON_BG" unique_id=1217764954]
+[node name="ICON" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/ICON_BG" unique_id=575845956]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 1
 anchors_preset = 8
@@ -221,20 +238,22 @@ grow_vertical = 2
 texture = ExtResource("4_vc4hl")
 stretch_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3" unique_id=1310470326]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3" unique_id=360240960]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer" unique_id=1368756261]
+[node name="TitleLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer" unique_id=1858416977]
+custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 28
 text = "+ STAFF×6"
+autowrap_mode = 2
 
-[node name="DescLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer" unique_id=268990340]
-custom_minimum_size = Vector2(180, 0)
+[node name="DescLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer" unique_id=454053701]
+custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 11
-text = "You can recruit more people to join your workforce."
+theme_override_font_sizes/font_size = 14
+text = "You can recruit more people to join the workforce."
 vertical_alignment = 1
 autowrap_mode = 2
