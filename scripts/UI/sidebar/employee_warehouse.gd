@@ -8,6 +8,7 @@ extends Control
 func _ready() -> void:
 	# 这一行必须有，且 EmployeeManager 必须是 Autoload 的单例名
 	EmployeeManager.employee_added.connect(_on_employee_hired)
+	EmployeeManager.employee_removed.connect(_on_employee_fired)
 	
 func _on_employee_hired(new_employee: Employee) -> void:
 	var card_instance = card_scene.instantiate()
