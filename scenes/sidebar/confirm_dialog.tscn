@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://54t8ifr67wbj"]
 
-[ext_resource type="Script" uid="uid://dbcegrtbn2tjg" path="res://scripts/confirm_dialog.gd" id="1_e2drj"]
+[ext_resource type="Script" uid="uid://dbcegrtbn2tjg" path="res://scripts/UI/sidebar/confirm_dialog.gd" id="1_e2drj"]
 [ext_resource type="Texture2D" uid="uid://bhdgpy4vms7ux" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Pixel Map Base/0.png" id="1_hshmp"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_e2drj"]
 [ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="3_k2yra"]

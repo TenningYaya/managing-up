@@ -4,7 +4,10 @@
 [ext_resource type="Script" uid="uid://bpk1q1i0i3xmm" path="res://scripts/UI/sidebar/employee_panel.gd" id="1_sl25x"]
 [ext_resource type="PackedScene" uid="uid://8o18jsagw05c" path="res://scenes/sidebar/employee_panel/employee_ability_slider.tscn" id="2_sl25x"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/normal_button.tscn" id="3_r7cc6"]
+[ext_resource type="Texture2D" uid="uid://db3dnhkb3b0xc" path="res://assets/progress bar/progress bar most rounded under.png" id="4_bfpbm"]
 [ext_resource type="PackedScene" uid="uid://5sdsush0erlr" path="res://scenes/UI/popup_window.tscn" id="4_e3e08"]
+[ext_resource type="Texture2D" uid="uid://dwaqo62o1yx1u" path="res://assets/progress bar/progress bar most rounded over.png" id="5_fq3kw"]
+[ext_resource type="Texture2D" uid="uid://bbt1nylq8pmni" path="res://assets/progress bar/progress bar most rounded progress cinnamon.png" id="6_p7uvh"]
 
 [node name="EmployeePanel" type="CanvasLayer" unique_id=1329495967]
 script = ExtResource("1_sl25x")
@@ -69,8 +72,13 @@ layout_mode = 2
 [node name="ExperienceBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=1321981527 instance=ExtResource("2_sl25x")]
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="PanelBg/EmployeePage/Information" unique_id=1672313752]
+[node name="ProgressBar" type="TextureProgressBar" parent="PanelBg/EmployeePage/Information" unique_id=159914970]
+custom_minimum_size = Vector2(220, 15)
 layout_mode = 2
+nine_patch_stretch = true
+texture_under = ExtResource("4_bfpbm")
+texture_over = ExtResource("5_fq3kw")
+texture_progress = ExtResource("6_p7uvh")
 
 [node name="Buffs" type="VBoxContainer" parent="PanelBg/EmployeePage/Information" unique_id=66573066]
 layout_mode = 2
@@ -90,6 +98,7 @@ ignore_texture_size = false
 button_text = "Fire"
 
 [node name="PopupWindow" parent="PanelBg" unique_id=1050921675 instance=ExtResource("4_e3e08")]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
