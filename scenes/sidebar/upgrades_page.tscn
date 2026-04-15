@@ -46,7 +46,7 @@ grow_vertical = 2
 theme_override_constants/separation = 15
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainLayout" unique_id=1071642607]
-custom_minimum_size = Vector2(200, 247.05)
+custom_minimum_size = Vector2(200, 221.865)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
@@ -64,6 +64,16 @@ theme_override_constants/margin_bottom = 10
 [node name="ItemsList" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer" unique_id=1013653389]
 layout_mode = 2
 alignment = 1
+
+[node name="Label" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=439292396]
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8070806, 0.36724484, 0.27068415, 0.9411765)
+theme_override_fonts/font = ExtResource("3_70tse")
+theme_override_font_sizes/font_size = 22
+text = "Spend 10,000 KPI to upgrade from T0->T1."
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="Item1" type="HBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=191970214]
 layout_mode = 2
