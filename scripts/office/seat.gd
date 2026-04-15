@@ -8,9 +8,6 @@ class_name DeskSeat
 var occupant: Control = null: 
 	set(v):
 		occupant = v
-		# 可以在这里打印一下，看看谁占了座
-		if v: print(name, " 被 ", v.name, " 占领了")
-		else: print(name, " 现在空出来了")
 
 func _draw() -> void:
 	# 画出 DropArea 的矩形框（绿色）

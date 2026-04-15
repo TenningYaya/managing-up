@@ -22,6 +22,7 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="BackgroundImage" type="TextureRect" parent="PanelBg" unique_id=1393985823]
+visible = false
 layout_mode = 0
 offset_left = -130.00006
 offset_top = -133.0
@@ -89,4 +90,11 @@ ignore_texture_size = false
 button_text = "Fire"
 
 [node name="PopupWindow" parent="PanelBg" unique_id=1050921675 instance=ExtResource("4_e3e08")]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
