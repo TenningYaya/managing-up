@@ -74,9 +74,6 @@ func _generate_and_deliver(rarity: Employee.Rarity) -> void:
 	# 交给全局管理器入职
 	EmployeeManager.hire_employee(new_emp)
 
-func _on_fire_all() -> void:
-	EmployeeManager.fire_all_employees()
-
 # ==========================================
 # 冷却时间倒计时器 (利用 Godot 4 的 Tween 实现按钮禁用与倒计时)
 # ==========================================

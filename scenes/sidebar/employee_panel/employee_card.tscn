@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_fd3x5"]
 
 [node name="EmployeeCard" type="Control" unique_id=1721669152]
-custom_minimum_size = Vector2(75, 100)
+custom_minimum_size = Vector2(75, 300)
 layout_mode = 3
 anchors_preset = 0
 offset_top = -1.0
