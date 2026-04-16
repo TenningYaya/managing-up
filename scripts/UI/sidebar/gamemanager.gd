@@ -15,3 +15,11 @@ var dollar: int = 0:
 	set(value):
 		dollar = value
 		dollar_changed.emit(dollar) # 发出广播：Dollar 变了！
+
+enum OfficeType {
+	NONE,           # 未分配（空置）
+	PANTRY,         # 茶水间
+	MEETING_ROOM,   # 会议室
+	RECRUITMENT,    # 招聘办公室
+	BULLETIN_BOARD  # 公告栏
+}

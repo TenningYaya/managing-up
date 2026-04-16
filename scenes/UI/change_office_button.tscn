@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bh0062hnotklq"]
+
+[ext_resource type="Script" uid="uid://bqm6ojq7xdl2y" path="res://scripts/UI/custom/change_office_button.gd" id="1_2dd3i"]
+
+[node name="ChangeOfficeButton" type="TextureButton" unique_id=959548433]
+custom_minimum_size = Vector2(100, 100)
+ignore_texture_size = true
+script = ExtResource("1_2dd3i")
+
+[node name="Label" type="Label" parent="." unique_id=158870519]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Name"

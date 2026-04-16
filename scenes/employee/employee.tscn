@@ -63,6 +63,7 @@ offset_top = -30.0
 offset_right = 46.0
 offset_bottom = 70.0
 script = ExtResource("1_ldasa")
+snap_distance = null
 
 [node name="SelectionFeedback" type="TextureRect" parent="." unique_id=28408216]
 layout_mode = 0

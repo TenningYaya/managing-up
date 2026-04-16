@@ -16,7 +16,7 @@ class_name EmployeePanel
 @onready var quality_bar: EmployeeAbility = $PanelBg/EmployeePage/Information/Abilities/QualityBar
 @onready var experience_bar: EmployeeAbility = $PanelBg/EmployeePage/Information/Abilities/ExperienceBar
 
-@onready var progress_bar: ProgressBar = $PanelBg/EmployeePage/Information/ProgressBar
+@onready var progress_bar: TextureProgressBar = $PanelBg/EmployeePage/Information/ProgressBar
 
 # --- 底部按钮部分 ---
 @onready var dispatch_btn: TextureButton = $PanelBg/EmployeePage/Manage/DispatchButton

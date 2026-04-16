@@ -1,0 +1,70 @@
+[gd_scene format=4 uid="uid://cwnvgk0s3ybnf"]
+
+[ext_resource type="Texture2D" uid="uid://cum4hn5xxinhk" path="res://assets/Office Tileset/Office VX Ace/A5 Office Floors & Walls.png" id="1_88o6m"]
+[ext_resource type="Script" uid="uid://bdo3f6tfs8bk2" path="res://scripts/office/office.gd" id="1_d5yd0"]
+[ext_resource type="Texture2D" uid="uid://dlcfrb1rbk12b" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/0.png" id="3_4houj"]
+[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_7m821"]
+[ext_resource type="Texture2D" uid="uid://c2bhltrmpscm5" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/5.png" id="4_j6fj6"]
+[ext_resource type="Texture2D" uid="uid://0egbjch7bqrf" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/4.png" id="5_4aho4"]
+[ext_resource type="Texture2D" uid="uid://b8bg8h0vakies" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/4.png" id="6_y0aq1"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_88o6m"]
+texture = ExtResource("1_88o6m")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+2:1/0 = 0
+1:1/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+6:8/0 = 0
+7:8/0 = 0
+7:9/0 = 0
+6:9/0 = 0
+5:9/0 = 0
+4:9/0 = 0
+3:9/0 = 0
+2:9/0 = 0
+1:9/0 = 0
+0:9/0 = 0
+0:10/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_16a3e"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_88o6m")
+
+[node name="Office" type="Control" unique_id=1395701316]
+custom_minimum_size = Vector2(288, 150)
+layout_mode = 3
+anchors_preset = 0
+offset_top = -9.0
+offset_right = 288.0
+offset_bottom = 150.0
+script = ExtResource("1_d5yd0")
+tex_empty = ExtResource("3_7m821")
+tex_pantry = ExtResource("3_4houj")
+tex_meeting = ExtResource("4_j6fj6")
+tex_recruitment = ExtResource("5_4aho4")
+tex_bulletin = ExtResource("6_y0aq1")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1834985146]
+visible = false
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAABAAAAAAACAAAAAAABAAAAAAADAAAAAAABAAAAAAAEAAAAAAABAAAAAAAFAAAAAAABAAAAAAAAAAEAAAAAAAEAAAAAAAIAAAAAAAEAAAAAAAMAAAAAAAEAAAAAAAQAAAAAAAIAAAABAAQAAAABAAIAAAACAAQAAAABAAIAAAADAAQAAAABAAIAAAAEAAQAAAABAAIAAAAFAAQAAAABAAIAAAAGAAQAAAABAAIAAAAHAAQAAAABAAIAAAAGAAAAAAABAAAAAAAHAAAAAAABAAAAAAAIAAAAAAACAAAAAAAIAAEAAAACAAEAAAAIAAIAAAACAAEAAAAIAAQAAAACAAIAAAAIAAMAAAACAAEAAAABAAEAAAAGAAgAAAABAAIAAAAGAAgAAAABAAMAAAAGAAgAAAACAAEAAAAGAAgAAAACAAIAAAAGAAgAAAACAAMAAAAGAAgAAAADAAEAAAAGAAgAAAADAAIAAAAGAAgAAAADAAMAAAAGAAgAAAAEAAEAAAAGAAgAAAAEAAIAAAAGAAgAAAAEAAMAAAAGAAgAAAAFAAEAAAAGAAgAAAAFAAIAAAAGAAgAAAAFAAMAAAAGAAgAAAAGAAEAAAAGAAgAAAAGAAIAAAAGAAgAAAAGAAMAAAAGAAgAAAAHAAEAAAAGAAgAAAAHAAIAAAAGAAgAAAAHAAMAAAAGAAgAAAA=")
+tile_set = SubResource("TileSet_16a3e")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2070433266]
+layout_mode = 0
+offset_left = 17.0
+offset_right = 273.0
+offset_bottom = 139.0
+mouse_filter = 2
+texture = ExtResource("3_7m821")
+expand_mode = 1
