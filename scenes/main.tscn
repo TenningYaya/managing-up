@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://bonpcggpr1rvm" path="res://scenes/recruitment_system.gd" id="5_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://cjfjfj4l46h23" path="res://scenes/UI/employee_panel.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://c8d4rax1ise3l" path="res://scenes/sidebar/employee_panel/employee_warehouse.tscn" id="6_tefeu"]
+[ext_resource type="Script" uid="uid://bo4d6sxmvchpt" path="res://scripts/test/test_time_control.gd" id="6_tipki"]
 
 [node name="Main" type="Control" unique_id=480960145]
 layout_mode = 3
@@ -112,27 +113,60 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="HireFire" type="Control" parent="Add All Test Button Here" unique_id=1513030298]
-custom_minimum_size = Vector2(0, 100)
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("5_o6xl0")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Add All Test Button Here/HireFire" unique_id=900182918]
+[node name="VBoxContainer" type="VBoxContainer" parent="Add All Test Button Here" unique_id=1337094133]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="NormalRecruitBtn" type="Button" parent="Add All Test Button Here/HireFire/VBoxContainer" unique_id=743225544]
+[node name="HireFire" type="Control" parent="Add All Test Button Here/VBoxContainer" unique_id=1513030298]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+script = ExtResource("5_o6xl0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Add All Test Button Here/VBoxContainer/HireFire" unique_id=900182918]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="NormalRecruitBtn" type="Button" parent="Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=743225544]
 layout_mode = 2
 
-[node name="HeadhuntBtn" type="Button" parent="Add All Test Button Here/HireFire/VBoxContainer" unique_id=1609376755]
+[node name="HeadhuntBtn" type="Button" parent="Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=1609376755]
 layout_mode = 2
 
-[node name="FireAllBtn" type="Button" parent="Add All Test Button Here/HireFire/VBoxContainer" unique_id=1047602332]
+[node name="FireAllBtn" type="Button" parent="Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=1047602332]
 layout_mode = 2
 text = "FireAll"
+
+[node name="TestTimeControl" type="Control" parent="Add All Test Button Here/VBoxContainer" unique_id=345158452]
+layout_mode = 2
+script = ExtResource("6_tipki")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Add All Test Button Here/VBoxContainer/TestTimeControl" unique_id=1047382116]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 64.0
+offset_right = 42.0
+offset_bottom = 120.0
+
+[node name="1x" type="Button" parent="Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=796483348]
+layout_mode = 2
+text = "1x"
+
+[node name="3x" type="Button" parent="Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=1223904331]
+layout_mode = 2
+text = "3x"
+
+[node name="5x" type="Button" parent="Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=844362990]
+layout_mode = 2
+text = "5x"
+
+[node name="10x" type="Button" parent="Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=1814170363]
+layout_mode = 2
+text = "10x"
+
+[node name="BetterNotDoIt" type="Button" parent="Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=374795977]
+layout_mode = 2
 
 [node name="EmployeePanel" parent="." unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
 visible = false
@@ -144,6 +178,6 @@ offset_top = 365.0
 offset_right = 1144.0
 offset_bottom = 725.0
 
-[connection signal="pressed" from="Add All Test Button Here/HireFire/VBoxContainer/NormalRecruitBtn" to="Add All Test Button Here/HireFire" method="_on_normal_recruit"]
-[connection signal="pressed" from="Add All Test Button Here/HireFire/VBoxContainer/HeadhuntBtn" to="Add All Test Button Here/HireFire" method="_on_headhunt_recruit"]
-[connection signal="pressed" from="Add All Test Button Here/HireFire/VBoxContainer/FireAllBtn" to="Add All Test Button Here/HireFire" method="_on_fire_all_btn_pressed"]
+[connection signal="pressed" from="Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/NormalRecruitBtn" to="Add All Test Button Here/VBoxContainer/HireFire" method="_on_normal_recruit"]
+[connection signal="pressed" from="Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/HeadhuntBtn" to="Add All Test Button Here/VBoxContainer/HireFire" method="_on_headhunt_recruit"]
+[connection signal="pressed" from="Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/FireAllBtn" to="Add All Test Button Here/VBoxContainer/HireFire" method="_on_fire_all_btn_pressed"]
