@@ -17,9 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-
 Gamemanager="*uid://0pdlqvhlsfj"
-
 EmployeeManager="*uid://cmvj2olibob0u"
 
 [display]
