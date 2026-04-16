@@ -30,6 +30,7 @@ window/stretch/mode="canvas_items"
 [global_group]
 
 employee_panel=""
+office_panel=""
 
 [physics]
 
