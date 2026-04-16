@@ -42,16 +42,35 @@ func _on_button_clicked(button_node: Node) -> void:
 	current_target_office.change_function(new_type)
 	hide()
 
-## --- 核心：被 Office.gd 通过 call_group 调用 ---
 func open_panel(office: Office) -> void:
-	# 记录是谁叫我打开的
 	current_target_office = office
-	
-	# 显示面板
 	show()
 	
-	# 这里的逻辑可以扩展：比如根据办公室当前功能，让对应的按钮变成高亮状态
-
+	for child in buttons_container.get_children():
+		# 确保是我们要处理的按钮脚本
+		if not "office_type" in child:
+			continue
+			
+		# 1. 默认状态：先全部解禁，恢复亮度
+		child.disabled = false
+		child.modulate = Color(1, 1, 1, 1)
+		
+		# 2. 核心判定：只针对“全场唯一”的类型进行检查
+		var type_to_check = child.office_type
+		var already_exists = false
+		
+		if type_to_check == Gamemanager.OfficeType.RECRUITMENT:
+			already_exists = OfficeManager.has_recruitment_office
+		elif type_to_check == Gamemanager.OfficeType.BULLETIN_BOARD:
+			already_exists = OfficeManager.has_bulletin_board
+		
+		# 3. 执行禁用：
+		# 如果该功能已在全场存在，且【当前点击的办公室】并不是正在担任这个功能的那个
+		if already_exists and current_target_office.current_type != type_to_check:
+			child.disabled = true
+			child.modulate = Color(0.3, 0.3, 0.3, 1) # 变灰
+			print("禁用按钮: ", child.name, " 因为唯一建筑 ", type_to_check, " 已存在")
+		
 func on_type_selected(new_type: Gamemanager.OfficeType) -> void:
 	if current_target_office == null:
 		return

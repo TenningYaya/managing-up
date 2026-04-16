@@ -22,16 +22,8 @@ func _ready() -> void:
 	add_to_group("offices")
 	set_deferred("mouse_filter", Control.MOUSE_FILTER_STOP)
 	_update_visuals()
-
-# 替代 TextureButton 的 pressed 信号
-#func _gui_input(event: InputEvent) -> void:
-	#if event is InputEventMouseButton:
-		## 判断是鼠标左键且是按下动作
-		#if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			#_on_office_clicked()
-			## 标记事件已处理，防止穿透
-			#accept_event()
-
+	
+	
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		# 如果当前已经点中了某个 UI（比如面板），就不再触发办公室逻辑
@@ -39,23 +31,24 @@ func _input(event: InputEvent) -> void:
 		
 		var m_pos = get_global_mouse_position()
 		if get_global_rect().has_point(m_pos):
-			# 只有当办公室是可见的，且没有被面板盖住时才执行
-			print("【强行拦截】点到了办公室: ", name)
 			_on_office_clicked()
 			get_viewport().set_input_as_handled()
 			
 # 点击事件
 func _on_office_clicked() -> void:
-	print("--- 准备发送信号 ---")
-	print("当前点击的节点名字: ", name)
 	get_tree().call_group("office_panel", "open_panel", self)
-	print("信号已发送给 office_panel 组")
 
 # 切换功能的核心函数
 func change_function(new_type: Gamemanager.OfficeType) -> void:
 	if current_type == new_type:
 		return
 	
+	# --- 最终防线：检查唯一性 ---
+	if new_type == Gamemanager.OfficeType.RECRUITMENT and OfficeManager.has_recruitment_office:
+		return
+	if new_type == Gamemanager.OfficeType.BULLETIN_BOARD and OfficeManager.has_bulletin_board:
+		return
+		
 	# 1. 卸载旧逻辑
 	if logic_node != null:
 		logic_node.cleanup()
@@ -71,6 +64,10 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 			logic_node = PantryLogic.new()
 		Gamemanager.OfficeType.MEETING_ROOM:
 			logic_node = MeetingRoomLogic.new()
+		Gamemanager.OfficeType.RECRUITMENT:
+			logic_node = RecruitmentOfficeLogic.new()
+		Gamemanager.OfficeType.BULLETIN_BOARD:
+			logic_node = BulletinBoardLogic.new()
 	
 	# 4. 激活新逻辑
 	if logic_node != null:
