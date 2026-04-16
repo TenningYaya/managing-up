@@ -33,8 +33,6 @@ func _on_button_clicked(button_node: Node) -> void:
 	# 直接从按钮节点身上拿你在 Inspector 里选好的那个 type
 	var new_type = button_node.office_type
 	
-	print("面板识别到按钮配置类型: ", new_type)
-	
 	# 如果点的是取消（假设你给取消按钮配的 type 是 NONE）
 	if new_type == Gamemanager.OfficeType.NONE and "Cancel" in button_node.name:
 		hide()
@@ -53,41 +51,10 @@ func open_panel(office: Office) -> void:
 	show()
 	
 	# 这里的逻辑可以扩展：比如根据办公室当前功能，让对应的按钮变成高亮状态
-	print("面板已打开，正在配置: ", office.name, " 当前功能: ", office.current_type)
-
-## --- 按钮点击处理 ---
-#func _on_any_function_button_pressed(btn_name: String) -> void:
-	#if current_target_office == null:
-		#return
-	#
-	## 根据按钮的名字来匹配 Gamemanager 里的枚举类型
-	## 注意：这里的名字要和你场景树里按钮的名字对上
-	#var new_type = Gamemanager.OfficeType.NONE
-	#
-	#if "Pantry" in btn_name:
-		#new_type = Gamemanager.OfficeType.PANTRY
-	#elif "Meeting" in btn_name:
-		#new_type = Gamemanager.OfficeType.MEETING_ROOM
-	#elif "Recruit" in btn_name:
-		#new_type = Gamemanager.OfficeType.RECRUITMENT
-	#elif "Bulletin" in btn_name:
-		#new_type = Gamemanager.OfficeType.BULLETIN_BOARD
-	#elif "Cancel" in btn_name:
-		## 如果是取消按钮，直接隐藏面板即可
-		#hide()
-		#return
-#
-	## 调用办公室的切换功能函数
-	#current_target_office.change_function(new_type)
-	#
-	## 切换完功能后，通常会关闭面板
-	#hide()
 
 func on_type_selected(new_type: Gamemanager.OfficeType) -> void:
 	if current_target_office == null:
 		return
-		
-	print("面板收到类型选择信号，类型编号: ", new_type)
 	
 	# 既然类型已经是匹配好的枚举，直接传给办公室就行！
 	current_target_office.change_function(new_type)

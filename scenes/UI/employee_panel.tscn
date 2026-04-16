@@ -3,9 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://b70dtrr3021wm" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Map inventory/Map/Map Close/5.png" id="1_kp28t"]
 [ext_resource type="Script" uid="uid://bpk1q1i0i3xmm" path="res://scripts/UI/sidebar/employee_panel.gd" id="1_sl25x"]
 [ext_resource type="PackedScene" uid="uid://8o18jsagw05c" path="res://scenes/sidebar/employee_panel/employee_ability_slider.tscn" id="2_sl25x"]
-[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/normal_button.tscn" id="3_r7cc6"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="3_r7cc6"]
 [ext_resource type="Texture2D" uid="uid://db3dnhkb3b0xc" path="res://assets/progress bar/progress bar most rounded under.png" id="4_bfpbm"]
-[ext_resource type="PackedScene" uid="uid://5sdsush0erlr" path="res://scenes/UI/popup_window.tscn" id="4_e3e08"]
+[ext_resource type="PackedScene" uid="uid://5sdsush0erlr" path="res://scenes/UI/custom/popup_window.tscn" id="4_e3e08"]
 [ext_resource type="Texture2D" uid="uid://dwaqo62o1yx1u" path="res://assets/progress bar/progress bar most rounded over.png" id="5_fq3kw"]
 [ext_resource type="Texture2D" uid="uid://bbt1nylq8pmni" path="res://assets/progress bar/progress bar most rounded progress cinnamon.png" id="6_p7uvh"]
 
