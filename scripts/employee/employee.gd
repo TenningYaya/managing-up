@@ -229,7 +229,7 @@ func _calculate_interrupted_kpi() -> void:
 	if not is_working:
 		return
 
-	var progress_ratio := clamp(work_elapsed / _get_actual_work_duration(), 0.0, 1.0)
+	var progress_ratio : float = clamp(work_elapsed / _get_actual_work_duration(), 0.0, 1.0)
 	var partial_reward := int(round(reward_per_cycle * progress_ratio * interrupted_reward_ratio))
 
 	is_working = false
