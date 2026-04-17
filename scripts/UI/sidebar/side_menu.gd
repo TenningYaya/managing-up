@@ -1,8 +1,8 @@
 extends Control
 
 # --- 设置参数 ---
-@export var open_x: float = 1570  # 展开时的 X 坐标
-@export var close_x: float = 1840 # 收起时的 X 坐标
+@export var open_x: float = 1500  # 展开时的 X 坐标
+@export var close_x: float = 1780 # 收起时的 X 坐标
 
 var is_open: bool = false         # 记录当前状态
 var last_clicked_button: BaseButton = null # 记录上一次点的是哪个按钮
@@ -24,17 +24,24 @@ func _ready():
 # --- 按钮信号连接 ---
 func _on_general_pressed():
 	# 目前 General 还没做页面，我们先只切换菜单状态
-	handle_tab_click($VBoxContainer/General, null)
+	handle_tab_click($HBoxContainer/VBoxContainer2/General, null)
 
 func _on_hire_pressed():
-	handle_tab_click($VBoxContainer/Hire, recruitment_page)
+	handle_tab_click($HBoxContainer/VBoxContainer2/Hire, recruitment_page)
 
 func _on_upgrades_pressed():
-	handle_tab_click($VBoxContainer/Upgrades, updates_page)
+	handle_tab_click($HBoxContainer/VBoxContainer2/Upgrades, updates_page)
 
 func _on_settings_pressed():
 	# 点击设置时，传入设置页面
-	handle_tab_click($VBoxContainer/Settings, settings_page)
+	handle_tab_click($HBoxContainer/VBoxContainer2/Settings, settings_page)
+
+func _on_tutorial_pressed():
+	handle_tab_click($HBoxContainer/VBoxContainer/Tutorial, null)
+
+func _on_warehouse_pressed():
+	handle_tab_click($HBoxContainer/VBoxContainer/warehouse, null)
+
 
 # --- 核心逻辑函数 ---
 func handle_tab_click(current_button: BaseButton, target_page: Control):
