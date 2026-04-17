@@ -37,6 +37,10 @@ func _ready() -> void:
 	hide() 
 	popup_window.hide()
 	
+	progress_bar.min_value = 0
+	progress_bar.max_value = 100
+	progress_bar.value = 0
+	
 	click_blocker.gui_input.connect(_on_click_blocker_input)
 	
 	# 绑定底部按钮事件
@@ -54,7 +58,8 @@ func _ready() -> void:
 func open_panel(employee: Employee) -> void:
 	if employee == null:
 		return
-		
+	
+	_disconnect_current_employee()
 	current_employee = employee
 	
 	# 刷新文本
@@ -77,11 +82,20 @@ func open_panel(employee: Employee) -> void:
 	# 刷新按钮状态
 	_update_dispatch_button()
 	
+	_refresh_progress_bar()
+	
+	_connect_current_employee()
+	
 	popup_window.hide()
 	show()
 
+	print("[EmployeePanel] open_panel -> ", employee.employee_name)
+	print("[EmployeePanel] 初始进度 -> ", progress_bar.value)
+
 func close_panel() -> void:
+	_disconnect_current_employee()
 	current_employee = null
+	progress_bar.value = 0
 	hide()
 
 func _on_click_blocker_input(event: InputEvent) -> void:
@@ -89,9 +103,87 @@ func _on_click_blocker_input(event: InputEvent) -> void:
 		close_panel()
 
 # ==========================================
-# 4. 外派与调入逻辑
+# 4. 进度条联动
+# ==========================================
+func _connect_current_employee() -> void:
+	if current_employee == null:
+		return
+
+	if not current_employee.work_progress_changed.is_connected(_on_work_progress_changed):
+		current_employee.work_progress_changed.connect(_on_work_progress_changed)
+
+	if not current_employee.work_started.is_connected(_on_work_started):
+		current_employee.work_started.connect(_on_work_started)
+
+	if not current_employee.work_stopped.is_connected(_on_work_stopped):
+		current_employee.work_stopped.connect(_on_work_stopped)
+
+	if not current_employee.work_cycle_completed.is_connected(_on_work_cycle_completed):
+		current_employee.work_cycle_completed.connect(_on_work_cycle_completed)
+
+	if not current_employee.tree_exiting.is_connected(_on_current_employee_tree_exiting):
+		current_employee.tree_exiting.connect(_on_current_employee_tree_exiting)
+
+	print("[EmployeePanel] 已连接进度信号 -> ", current_employee.employee_name)
+
+
+func _disconnect_current_employee() -> void:
+	if current_employee == null:
+		return
+
+	if current_employee.work_progress_changed.is_connected(_on_work_progress_changed):
+		current_employee.work_progress_changed.disconnect(_on_work_progress_changed)
+
+	if current_employee.work_started.is_connected(_on_work_started):
+		current_employee.work_started.disconnect(_on_work_started)
+
+	if current_employee.work_stopped.is_connected(_on_work_stopped):
+		current_employee.work_stopped.disconnect(_on_work_stopped)
+
+	if current_employee.work_cycle_completed.is_connected(_on_work_cycle_completed):
+		current_employee.work_cycle_completed.disconnect(_on_work_cycle_completed)
+
+	if current_employee.tree_exiting.is_connected(_on_current_employee_tree_exiting):
+		current_employee.tree_exiting.disconnect(_on_current_employee_tree_exiting)
+
+
+func _refresh_progress_bar() -> void:
+	if current_employee == null:
+		progress_bar.value = 0
+		return
+
+	progress_bar.value = current_employee.get_work_progress_percent()
+
+
+func _on_work_progress_changed(progress_percent: float) -> void:
+	progress_bar.value = progress_percent
+
+
+func _on_work_started() -> void:
+	progress_bar.value = 0
+	print("[EmployeePanel] 员工开始工作")
+
+
+func _on_work_stopped() -> void:
+	progress_bar.value = 0
+	print("[EmployeePanel] 员工停止工作")
+
+
+func _on_work_cycle_completed(_reward_amount: int) -> void:
+	progress_bar.value = 0
+	print("[EmployeePanel] 一轮工作完成，进度归零")
+
+
+func _on_current_employee_tree_exiting() -> void:
+	current_employee = null
+	progress_bar.value = 0
+	hide()
+# ==========================================
+# 5. 外派与调入逻辑
 # ==========================================
 func _update_dispatch_button() -> void:
+	if current_employee == null:
+		return
 	if current_employee.current_seat != null:
 		dispatch_btn_label.text = "Dispatch"
 	else:
@@ -103,13 +195,15 @@ func _on_dispatch_pressed() -> void:
 	if current_employee.current_seat != null:
 		current_employee.current_seat.clear_occupant()
 		current_employee.current_seat = null
+		# 员工被从工位拿下来时，立即停止显示进度
+		progress_bar.value = 0
 	else:
 		print("请直接拖拽员工到工位上！")
 		
 	_update_dispatch_button()
 
 # ==========================================
-# 5. 优化(开除)弹窗逻辑
+# 6. 优化(开除)弹窗逻辑
 # ==========================================
 func _on_fire_pressed() -> void:
 # 在显示弹窗前，动态设置一下文本（利用你写的 set 属性）

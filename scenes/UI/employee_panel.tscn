@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dwaqo62o1yx1u" path="res://assets/progress bar/progress bar most rounded over.png" id="5_fq3kw"]
 [ext_resource type="Texture2D" uid="uid://bbt1nylq8pmni" path="res://assets/progress bar/progress bar most rounded progress cinnamon.png" id="6_p7uvh"]
 
-[node name="EmployeePanel" type="Control" unique_id=1048843880]
+[node name="EmployeePanel" type="Control" unique_id=1048843880 groups=["employee_panel", "office_panel"]]
 z_index = 100
 layout_mode = 3
 anchors_preset = 0
