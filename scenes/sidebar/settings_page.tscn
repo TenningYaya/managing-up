@@ -1,0 +1,157 @@
+[gd_scene format=3 uid="uid://cef1cc6y8xrd6"]
+
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="1_wtuay"]
+[ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="2_nb64h"]
+[ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="3_utjtj"]
+
+[sub_resource type="GDScript" id="GDScript_nb64h"]
+script/source = "extends Control
+
+# 假设你的 BGM 在音频总线（Bus）的第 1 条，音效在第 2 条
+# 你可以在编辑器最下方的 Audio 面板里查看或添加
+var bgm_bus_index = AudioServer.get_bus_index(\"Master\") 
+const CONFIRM_DIALOG = preload(\"res://scenes/sidebar/confirm_dialog.tscn\")
+
+func _on_bgm_slider_value_changed(value):
+	# value 通常是 0 到 100，我们需要把它转成音量分贝
+	# linear_to_db 是 Godot 自带的函数
+	AudioServer.set_bus_volume_db(bgm_bus_index, linear_to_db(value / 100.0))
+
+func _on_fullscreen_toggled(toggled_on):
+	# 使用“屏幕管家”切换全屏
+	if toggled_on:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+
+func _on_npc_name_toggled(toggled_on):
+	# 这里你可以设置一个全局变量，或者发一个信号给你的游戏主逻辑
+	print(\"NPC名字显示状态：\", toggled_on)
+
+func _on_save_button_pressed():
+	# 这里执行保存逻辑（比如存入文件）
+	# 然后我们可以通过代码告诉侧边栏：“我点完了，你可以收起来了”
+	# 为了简单，我们先只打印一句话
+	print(\"设置已保存！\")
+
+func _on_save__quit_pressed() -> void:
+		# 1. 创建对话框的“分身”
+	var dialog_instance = CONFIRM_DIALOG.instantiate()
+
+	# 2. 把它加入到当前正在运行的场景中
+	# 如果你的 ConfirmDialog 场景大小已经是 1920 * 360 且小框已居中，
+	# 那么它一出现就会刚好在整个游戏画面的正中间。
+	get_tree().root.add_child(dialog_instance)
+"
+
+[node name="SettingsPage" type="Control" unique_id=517570582]
+custom_minimum_size = Vector2(270, 360)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = SubResource("GDScript_nb64h")
+
+[node name="settings" type="Label" parent="." unique_id=1529637247]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 40.0
+offset_right = 271.0
+offset_bottom = 69.0
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 34
+text = "SETTINGS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Master Volume" type="Label" parent="." unique_id=1343181224]
+layout_mode = 0
+offset_top = 81.115
+offset_right = 270.0
+offset_bottom = 98.115036
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "     Music Volume"
+
+[node name="HSlider" type="HSlider" parent="Master Volume" unique_id=134444878]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 27.470001
+offset_right = 242.0
+offset_bottom = 43.47
+
+[node name="Sound Effects Volume" type="Label" parent="." unique_id=1658383066]
+layout_mode = 0
+offset_top = 144.28
+offset_right = 270.0
+offset_bottom = 161.28004
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "     Sound Effects Volume"
+
+[node name="HSlider" type="HSlider" parent="Sound Effects Volume" unique_id=863553752]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 27.470001
+offset_right = 242.0
+offset_bottom = 43.47
+
+[node name="Show NPC Names" type="HBoxContainer" parent="." unique_id=1839800091]
+layout_mode = 0
+offset_top = 206.26
+offset_right = 270.0
+offset_bottom = 230.26
+
+[node name="Label" type="Label" parent="Show NPC Names" unique_id=966059228]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "     Show NPC Names"
+
+[node name="CheckBox" type="CheckBox" parent="Show NPC Names" unique_id=824457907]
+layout_mode = 2
+
+[node name="Always on Top" type="HBoxContainer" parent="." unique_id=185401597]
+layout_mode = 0
+offset_top = 241.145
+offset_right = 270.0
+offset_bottom = 265.14505
+
+[node name="Label" type="Label" parent="Always on Top" unique_id=1259048178]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "     Always on Top"
+
+[node name="CheckBox" type="CheckBox" parent="Always on Top" unique_id=1503150479]
+layout_mode = 2
+
+[node name="Save & Quit" type="TextureButton" parent="." unique_id=882618050]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 300.0
+offset_right = 210.0
+offset_bottom = 335.0
+texture_normal = ExtResource("2_nb64h")
+texture_pressed = ExtResource("3_utjtj")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Save & Quit" unique_id=216568039]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -42.0
+offset_top = -9.5
+offset_right = 44.0
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "save&quit"
+
+[connection signal="pressed" from="Save & Quit" to="." method="_on_save__quit_pressed"]

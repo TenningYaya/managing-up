@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://ceijke56lupl5"]
+
+[ext_resource type="Texture2D" uid="uid://b70dtrr3021wm" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Map inventory/Map/Map Close/5.png" id="1_847bp"]
+[ext_resource type="Script" uid="uid://donumjvunaopo" path="res://scripts/UI/currency_ui.gd" id="1_rsm8o"]
+[ext_resource type="Texture2D" uid="uid://3kwbra45xfrt" path="res://assets/UI/KPI.png" id="2_mpmo8"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_mpmo8"]
+[ext_resource type="Texture2D" uid="uid://by503gabl5w2d" path="res://assets/UI/dollar.png" id="3_rsm8o"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_612sf"]
+atlas = ExtResource("1_847bp")
+region = Rect2(152.8, 103.44001, 300.8, 302.8)
+
+[node name="CurrencyUI" type="Control" unique_id=1716905617]
+z_index = 10
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_rsm8o")
+
+[node name="ColorRect" type="TextureRect" parent="." unique_id=2111463290]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_612sf")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect" unique_id=957892761]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/MarginContainer" unique_id=2133731858]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="KPI" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer" unique_id=1068948929]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/MarginContainer/VBoxContainer/KPI" unique_id=1332007542]
+custom_minimum_size = Vector2(40, 10)
+layout_mode = 2
+texture = ExtResource("2_mpmo8")
+expand_mode = 1
+
+[node name="KPILabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/KPI" unique_id=827264810]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_fonts/font = ExtResource("3_mpmo8")
+theme_override_font_sizes/font_size = 33
+text = "0"
+
+[node name="KPI2" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer" unique_id=1184325363]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/MarginContainer/VBoxContainer/KPI2" unique_id=50550798]
+custom_minimum_size = Vector2(40, 10)
+layout_mode = 2
+texture = ExtResource("3_rsm8o")
+expand_mode = 1
+
+[node name="DollarLabel" type="Label" parent="ColorRect/MarginContainer/VBoxContainer/KPI2" unique_id=2101163746]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.73333335, 0.39607844, 1)
+theme_override_fonts/font = ExtResource("3_mpmo8")
+theme_override_font_sizes/font_size = 33
+text = "0"

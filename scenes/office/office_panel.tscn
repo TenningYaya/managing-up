@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://duispsomfw47v"]
+
+[ext_resource type="PackedScene" uid="uid://bh0062hnotklq" path="res://scenes/UI/change_office_button.tscn" id="1_kpljw"]
+[ext_resource type="Script" uid="uid://dukdaecvcphbo" path="res://scripts/office/office_panel.gd" id="1_mixia"]
+[ext_resource type="Texture2D" uid="uid://dlcfrb1rbk12b" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/0.png" id="2_mixia"]
+[ext_resource type="Texture2D" uid="uid://c2bhltrmpscm5" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/5.png" id="3_dvne8"]
+[ext_resource type="Texture2D" uid="uid://0egbjch7bqrf" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/4.png" id="4_l2t2v"]
+[ext_resource type="Texture2D" uid="uid://b8bg8h0vakies" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/4.png" id="5_e55uw"]
+
+[node name="OfficePanel" type="Control" unique_id=1437560562]
+custom_minimum_size = Vector2(270, 360)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_mixia")
+
+[node name="Background" type="TextureRect" parent="." unique_id=534803045]
+custom_minimum_size = Vector2(270, 360)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Background" unique_id=1786972547]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer" unique_id=389843594]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/MarginContainer/VBoxContainer" unique_id=1401466]
+layout_mode = 2
+text = "Office Panel"
+
+[node name="HSeparator" type="HSeparator" parent="Background/MarginContainer/VBoxContainer" unique_id=1679675622]
+layout_mode = 2
+
+[node name="ChangeOfficeButton" parent="Background/MarginContainer/VBoxContainer" unique_id=959548433 instance=ExtResource("1_kpljw")]
+layout_mode = 2
+office_type = 1
+button_text = "pantry"
+normal_icon = ExtResource("2_mixia")
+
+[node name="ChangeOfficeButton2" parent="Background/MarginContainer/VBoxContainer" unique_id=2030963439 instance=ExtResource("1_kpljw")]
+layout_mode = 2
+office_type = 2
+button_text = "会议室"
+normal_icon = ExtResource("3_dvne8")
+
+[node name="ChangeOfficeButton3" parent="Background/MarginContainer/VBoxContainer" unique_id=2129935784 instance=ExtResource("1_kpljw")]
+layout_mode = 2
+office_type = 3
+button_text = "猎头"
+normal_icon = ExtResource("4_l2t2v")
+
+[node name="ChangeOfficeButton4" parent="Background/MarginContainer/VBoxContainer" unique_id=277010416 instance=ExtResource("1_kpljw")]
+layout_mode = 2
+office_type = 4
+button_text = "公告栏"
+normal_icon = ExtResource("5_e55uw")
