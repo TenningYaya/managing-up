@@ -9,34 +9,23 @@
 [ext_resource type="Texture2D" uid="uid://dwaqo62o1yx1u" path="res://assets/progress bar/progress bar most rounded over.png" id="5_fq3kw"]
 [ext_resource type="Texture2D" uid="uid://bbt1nylq8pmni" path="res://assets/progress bar/progress bar most rounded progress cinnamon.png" id="6_p7uvh"]
 
-[node name="EmployeePanel" type="Control" unique_id=310638514]
-layout_mode = 3
-anchors_preset = 0
+[node name="EmployeePanel" type="CanvasLayer" unique_id=1329495967]
 script = ExtResource("1_sl25x")
 
-[node name="ClickBlocker" type="ColorRect" parent="." unique_id=386440601]
-layout_mode = 0
-offset_right = 1941.0
-offset_bottom = 1096.0
-color = Color(1, 1, 1, 0)
-
 [node name="PanelBg" type="Panel" parent="." unique_id=1968908939]
-z_index = 100
 custom_minimum_size = Vector2(270, 360)
-layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1648.0
-offset_top = 716.0
-offset_right = 1918.0
-offset_bottom = 1076.0
+offset_left = -270.0
+offset_top = -360.0
 grow_horizontal = 0
 grow_vertical = 0
 
 [node name="BackgroundImage" type="TextureRect" parent="PanelBg" unique_id=1393985823]
+visible = false
 layout_mode = 0
 offset_left = -130.00006
 offset_top = -133.0
