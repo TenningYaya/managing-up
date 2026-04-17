@@ -47,6 +47,7 @@ func toggle_mode():
 		# 界面切换
 		$FullGameMode.hide()
 		$StickyNote.show()
+		$CanvasLayer.hide()
 		
 		# 缩小窗口并置顶
 		DisplayServer.window_set_size(Vector2i(270, 360))
@@ -55,6 +56,7 @@ func toggle_mode():
 		# --- 回到游戏模式 ---
 		$StickyNote.hide()
 		$FullGameMode.show()
+		$CanvasLayer.show()
 		
 		# 恢复尺寸、位置并取消置顶
 		DisplayServer.window_set_size(original_size)

@@ -124,69 +124,7 @@ offset_top = 761.0
 offset_right = 1033.0
 offset_bottom = 861.0
 
-[node name="Add All Test Button Here" type="Control" parent="FullGameMode" unique_id=1584317131]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="FullGameMode/Add All Test Button Here" unique_id=1337094133]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="HireFire" type="Control" parent="FullGameMode/Add All Test Button Here/VBoxContainer" unique_id=1513030298]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-script = ExtResource("5_o6xl0")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire" unique_id=900182918]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="NormalRecruitBtn" type="Button" parent="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=743225544]
-layout_mode = 2
-text = "NormalRecruit"
-
-[node name="HeadhuntBtn" type="Button" parent="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=1609376755]
-layout_mode = 2
-text = "HeadHunt"
-
-[node name="FireAllBtn" type="Button" parent="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=1047602332]
-layout_mode = 2
-text = "FireAll"
-
-[node name="TestTimeControl" type="Control" parent="FullGameMode/Add All Test Button Here/VBoxContainer" unique_id=345158452]
-layout_mode = 2
-script = ExtResource("6_tipki")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="FullGameMode/Add All Test Button Here/VBoxContainer/TestTimeControl" unique_id=1047382116]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 64.0
-offset_right = 42.0
-offset_bottom = 120.0
-
-[node name="1x" type="Button" parent="FullGameMode/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=796483348]
-layout_mode = 2
-text = "1x"
-
-[node name="3x" type="Button" parent="FullGameMode/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=1223904331]
-layout_mode = 2
-text = "3x"
-
-[node name="5x" type="Button" parent="FullGameMode/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=844362990]
-layout_mode = 2
-text = "5x"
-
-[node name="10x" type="Button" parent="FullGameMode/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=1814170363]
-layout_mode = 2
-text = "10x"
-
-[node name="BetterNotDoIt" type="Button" parent="FullGameMode/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=374795977]
-layout_mode = 2
-
-[node name="EmployeePanel" parent="FullGameMode" unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
+[node name="EmployeePanel" parent="FullGameMode" unique_id=1329495967 instance=ExtResource("5_tbgi4")]
 layout_mode = 0
 offset_left = 1922.0
 offset_top = 1082.0
@@ -213,7 +151,7 @@ limit_left = -9999899
 limit_top = 540
 limit_right = 10000101
 limit_bottom = 540
-position_smoothing_enabled = true
+position_smoothing_speed = 10.0
 script = ExtResource("13_a8y0u")
 
 [node name="StickyNote" parent="." unique_id=616207233 instance=ExtResource("11_ya4ey")]
@@ -241,7 +179,70 @@ offset_right = 146.0
 offset_bottom = 112.0
 button_text = "All Coworkers"
 
-[connection signal="pressed" from="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/NormalRecruitBtn" to="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire" method="_on_test_normal_gen_pressed"]
-[connection signal="pressed" from="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/HeadhuntBtn" to="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire" method="_on_test_headhunt_1x_pressed"]
-[connection signal="pressed" from="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/FireAllBtn" to="FullGameMode/Add All Test Button Here/VBoxContainer/HireFire" method="_on_clear_all_test"]
+[node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here" unique_id=1337094133]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HireFire" type="Control" parent="CanvasLayer/Add All Test Button Here/VBoxContainer" unique_id=1513030298]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+script = ExtResource("5_o6xl0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" unique_id=900182918]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="NormalRecruitBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=743225544]
+layout_mode = 2
+text = "NormalRecruit"
+
+[node name="HeadhuntBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=1609376755]
+layout_mode = 2
+text = "HeadHunt"
+
+[node name="FireAllBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=1047602332]
+layout_mode = 2
+text = "FireAll"
+
+[node name="TestTimeControl" type="Control" parent="CanvasLayer/Add All Test Button Here/VBoxContainer" unique_id=345158452]
+layout_mode = 2
+script = ExtResource("6_tipki")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl" unique_id=1047382116]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 64.0
+offset_right = 42.0
+offset_bottom = 120.0
+
+[node name="1x" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=796483348]
+layout_mode = 2
+text = "1x"
+
+[node name="3x" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=1223904331]
+layout_mode = 2
+text = "3x"
+
+[node name="5x" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=844362990]
+layout_mode = 2
+text = "5x"
+
+[node name="10x" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=1814170363]
+layout_mode = 2
+text = "10x"
+
+[node name="BetterNotDoIt" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=374795977]
+layout_mode = 2
+
 [connection signal="pressed" from="CanvasLayer/CurrencyUI/AllCoworkers" to="CanvasLayer/CurrencyUI" method="_on_all_coworkers_pressed"]
+[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/NormalRecruitBtn" to="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" method="_on_test_normal_gen_pressed"]
+[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/HeadhuntBtn" to="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" method="_on_test_headhunt_1x_pressed"]
+[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/FireAllBtn" to="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" method="_on_clear_all_test"]
