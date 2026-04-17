@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://ceijke56lupl5" path="res://scenes/UI/currency_ui.tscn" id="11_trceg"]
 [ext_resource type="PackedScene" uid="uid://bbi44ww2puf63" path="res://scenes/UI/sticky_note.tscn" id="11_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="12_a8y0u"]
+[ext_resource type="Script" uid="uid://c2stthjkcu8gc" path="res://scripts/UI/camera_2d.gd" id="13_a8y0u"]
 
 [node name="Main" type="Control" unique_id=480960145]
 layout_mode = 3
@@ -228,6 +229,15 @@ offset_top = 77.0
 offset_right = 146.0
 offset_bottom = 112.0
 button_text = "All Coworkers"
+
+[node name="Camera2D" type="Camera2D" parent="FullGameMode" unique_id=380816209]
+position = Vector2(959.16, 0)
+limit_left = -9999899
+limit_top = 540
+limit_right = 10000101
+limit_bottom = 540
+position_smoothing_enabled = true
+script = ExtResource("13_a8y0u")
 
 [node name="StickyNote" parent="." unique_id=616207233 instance=ExtResource("11_ya4ey")]
 layout_mode = 0
