@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://c8d4rax1ise3l" path="res://scenes/sidebar/employee_panel/employee_warehouse.tscn" id="6_tefeu"]
 [ext_resource type="Script" uid="uid://bo4d6sxmvchpt" path="res://scripts/test/test_time_control.gd" id="6_tipki"]
 [ext_resource type="PackedScene" uid="uid://duispsomfw47v" path="res://scenes/office/office_panel.tscn" id="9_85g3d"]
-[ext_resource type="PackedScene" uid="uid://6py6ljmq7wln" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.tscn" id="10_choun"]
 
 [node name="Main" type="Control" unique_id=480960145]
 layout_mode = 3
@@ -180,6 +179,7 @@ layout_mode = 2
 
 [node name="EmployeePanel" parent="." unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
 visible = false
+layout_mode = 0
 
 [node name="EmployeeWarehouse" parent="." unique_id=1330516969 instance=ExtResource("6_tefeu")]
 layout_mode = 0
@@ -194,13 +194,6 @@ offset_left = 598.0
 offset_top = 273.0
 offset_right = 868.0
 offset_bottom = 633.0
-
-[node name="RecruitmentPanel" parent="." unique_id=463444191 instance=ExtResource("10_choun")]
-layout_mode = 0
-offset_left = 1183.0
-offset_top = 363.0
-offset_right = 1453.0
-offset_bottom = 723.0
 
 [connection signal="pressed" from="Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/NormalRecruitBtn" to="Add All Test Button Here/VBoxContainer/HireFire" method="_on_test_normal_gen_pressed"]
 [connection signal="pressed" from="Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/HeadhuntBtn" to="Add All Test Button Here/VBoxContainer/HireFire" method="_on_test_headhunt_1x_pressed"]

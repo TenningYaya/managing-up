@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://6py6ljmq7wln"]
 
 [ext_resource type="PackedScene" uid="uid://xhipxj2sgn8d" path="res://scenes/sidebar/recruitment_panel/resume_viewer.tscn" id="1_pfe0p"]
-[ext_resource type="Script" uid="uid://bp8mfdq83mc24" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.gd" id="1_tvhvr"]
+[ext_resource type="Script" uid="uid://bp8mfdq83mc24" path="res://scripts/UI/recruitment_panel.gd" id="1_tvhvr"]
 
 [node name="RecruitmentPanel" type="Control" unique_id=463444191]
 custom_minimum_size = Vector2(270, 360)
