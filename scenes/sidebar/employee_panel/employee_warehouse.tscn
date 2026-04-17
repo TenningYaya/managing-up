@@ -14,6 +14,7 @@ card_scene = ExtResource("2_fdhm7")
 layout_mode = 0
 offset_right = 270.0
 offset_bottom = 360.0
+mouse_filter = 2
 color = Color(0.40893582, 0.82403606, 0.9084133, 1)
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1335615631]
@@ -23,6 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 0
 horizontal_scroll_mode = 0
 
 [node name="GridContainer" type="GridContainer" parent="ScrollContainer" unique_id=182124426]

@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://xhipxj2sgn8d" path="res://scenes/sidebar/recruitment_panel/resume_viewer.tscn" id="1_pfe0p"]
 [ext_resource type="Script" uid="uid://bp8mfdq83mc24" path="res://scripts/UI/sidebar/recruitment_panel.gd" id="1_tvhvr"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="3_rapbc"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvhvr"]
 
@@ -11,6 +12,8 @@
 custom_minimum_size = Vector2(270, 360)
 layout_mode = 3
 anchors_preset = 0
+offset_right = 270.0
+offset_bottom = 360.0
 script = ExtResource("1_tvhvr")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=925658414]
@@ -18,9 +21,10 @@ custom_minimum_size = Vector2(270, 360)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+theme_override_constants/separation = 10
 
 [node name="NormalPanel" type="PanelContainer" parent="VBoxContainer" unique_id=1525425988]
-custom_minimum_size = Vector2(0, 170)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_tvhvr")
 
@@ -39,7 +43,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="HeadhuntPanel" type="PanelContainer" parent="VBoxContainer" unique_id=966763050]
-custom_minimum_size = Vector2(0, 170)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rapbc")
@@ -78,5 +82,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
+[node name="AllCoworkers" parent="VBoxContainer" unique_id=2048579194 instance=ExtResource("3_rapbc")]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+button_text = "All Coworkers"
+
 [connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BtnHire1" to="." method="_on_hire_1_pressed"]
 [connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BtnHire10" to="." method="_on_hire_10_pressed"]
+[connection signal="pressed" from="VBoxContainer/AllCoworkers" to="." method="_on_all_coworkers_pressed"]

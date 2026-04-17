@@ -34,6 +34,14 @@ offset_right = 964.0
 offset_bottom = 1089.0
 mouse_filter = 2
 
+[node name="ColorRect" type="ColorRect" parent="FullGameMode/Background" unique_id=1435522868]
+layout_mode = 0
+offset_left = -961.0
+offset_top = -8.0
+offset_right = 951.0
+offset_bottom = 352.0
+color = Color(0.5938448, 0.5118887, 0.35490102, 1)
+
 [node name="WholeAlignment" type="HBoxContainer" parent="FullGameMode/Background" unique_id=905224424]
 layout_mode = 1
 anchors_preset = 15
@@ -190,7 +198,7 @@ offset_top = 1082.0
 offset_right = 1922.0
 offset_bottom = 1082.0
 
-[node name="EmployeeWarehouse" parent="FullGameMode" unique_id=1330516969 instance=ExtResource("6_tefeu")]
+[node name="EmployeeWarehouse" parent="FullGameMode" unique_id=1330516969 groups=["employee_warehouse"] instance=ExtResource("6_tefeu")]
 layout_mode = 0
 offset_left = 1066.0
 offset_top = 257.0

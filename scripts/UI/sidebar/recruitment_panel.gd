@@ -147,3 +147,16 @@ func _on_hire_1_pressed():
 func _on_hire_10_pressed():
 	print("【手动实锤】招 10 次按钮按下")
 	_execute_headhunt(10)
+
+
+func _on_all_coworkers_pressed() -> void:
+	# 直接去组里抓人，不需要声明 @onready 变量，也不需要知道路径
+	var warehouse = get_tree().get_first_node_in_group("employee_warehouse")
+	
+	if warehouse:
+		warehouse.show()
+		# 如果你还想顺便调用它的刷新逻辑，可以写：
+		# if warehouse.has_method("refresh_list"): warehouse.refresh_list()
+		print("【组检测成功】已打开员工仓库")
+	else:
+		push_error("找不着 warehouse_group 组！请检查 EmployeeWarehouse 是否已加组。")

@@ -9,6 +9,7 @@ func _ready() -> void:
 	# 这一行必须有，且 EmployeeManager 必须是 Autoload 的单例名
 	EmployeeManager.employee_added.connect(_on_employee_hired)
 	EmployeeManager.employee_removed.connect(_on_employee_fired)
+	hide()
 	
 func _on_employee_hired(new_employee: Employee) -> void:
 	var card_instance = card_scene.instantiate()
@@ -34,3 +35,15 @@ func add_employee_to_warehouse(new_employee_data: Employee):
 	
 	# 3. 把卡片塞进网格里 (它会自动排到正确的位置)
 	grid.add_child(card_instance)
+	
+func _input(event: InputEvent) -> void:
+	if visible and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# 直接判定当前脚本所在的这个节点（根节点）
+		if not get_global_rect().has_point(event.global_position):
+			print("【精简判定】点击了仓库实体外，关闭面板")
+			hide()
+
+# 刚才在 recruitment_panel 里留空的按钮方法
+func open_warehouse():
+	show()
+	# 可以在这里刷新一遍显示，确保数据最新

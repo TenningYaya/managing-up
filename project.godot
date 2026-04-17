@@ -36,6 +36,7 @@ window/per_pixel_transparency/allowed=true
 
 employee_panel=""
 office_panel=""
+employee_warehouse=""
 
 [input]
 
