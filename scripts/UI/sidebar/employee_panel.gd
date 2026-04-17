@@ -65,10 +65,14 @@ func open_panel(employee: Employee) -> void:
 		Employee.Rarity.SR: rarity_label.text = "SR"
 		Employee.Rarity.SSR: rarity_label.text = "SSR"
 	
-	# 调用我们刚写的 EmployeeAbility 组件函数来赋值
 	efficiency_bar.set_value(employee.efficiency)
 	quality_bar.set_value(employee.quality)
 	experience_bar.set_value(employee.experience)
+	
+	# 2. 顺手改颜色（让 UI 更专业）
+	efficiency_bar.set_bar_color(Color.SKY_BLUE)    # 效率：红
+	quality_bar.set_bar_color(Color.YELLOW)      # 质量：蓝
+	experience_bar.set_bar_color(Color.PALE_GREEN)  # 经验：绿
 	
 	# 刷新按钮状态
 	_update_dispatch_button()
@@ -109,7 +113,7 @@ func _on_dispatch_pressed() -> void:
 # ==========================================
 func _on_fire_pressed() -> void:
 # 在显示弹窗前，动态设置一下文本（利用你写的 set 属性）
-	popup_window.title_text = "Are you sure to fire " + current_employee.employee_name + " 吗？"
+	popup_window.title_text = "Are you sure to fire " + current_employee.employee_name + " ？"
 	popup_window.confirm_label = "Sure"
 	popup_window.cancel_label = "Wait"
 	popup_window.show()
@@ -124,9 +128,15 @@ func execute_fire_employee() -> void:
 		# 2. 返还资源的逻辑 (GDD: SR和SSR返还少量美金)
 		if current_employee.rarity == Employee.Rarity.SR or current_employee.rarity == Employee.Rarity.SSR:
 			print("退还了少量美金！")
-			
+		
+		EmployeeManager.employee_removed.emit(current_employee)
+		
+		# 3. 从 Manager 的主列表中移除（如果有的话）
+		EmployeeManager.my_employees.erase(current_employee)
+		
 		# 3. 删除员工实例
 		current_employee.queue_free()
+		current_employee = null
 		
 	popup_window.hide()
 	close_panel()

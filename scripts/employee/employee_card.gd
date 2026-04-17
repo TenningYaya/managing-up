@@ -2,6 +2,8 @@
 
 extends Control
 
+signal card_clicked(employee_data: Employee) # 定义信号，把员工数据传出去
+
 # 节点引用 (根据上面的结构定位)
 @onready var name_label = $VBoxContainer/NameLabel
 @onready var avatar_img = $VBoxContainer/AvatarArea/Avatar
@@ -12,8 +14,11 @@ extends Control
 @onready var qual_bar = $VBoxContainer/StatsBars/QualityBar
 @onready var exp_bar = $VBoxContainer/StatsBars/ExperienceBar
 
+var my_employee_data: Employee
+
 func setup_card(employee_data: Employee) -> void:
 	if employee_data == null: return
+	my_employee_data = employee_data
 	
 	# 1. 设置名字
 	name_label.text = employee_data.employee_name
@@ -43,3 +48,9 @@ func setup_card(employee_data: Employee) -> void:
 	
 	exp_bar.max_value = 10
 	exp_bar.value = employee_data.experience
+
+func _gui_input(event: InputEvent):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		print("点中了员工：", my_employee_data.employee_name)
+		card_clicked.emit(my_employee_data) # 发射信号
+		accept_event() # 拦截点击，防止触发仓库的“点击空白处关闭”

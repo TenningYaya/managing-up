@@ -157,6 +157,5 @@ func _on_all_coworkers_pressed() -> void:
 		warehouse.show()
 		# 如果你还想顺便调用它的刷新逻辑，可以写：
 		# if warehouse.has_method("refresh_list"): warehouse.refresh_list()
-		print("【组检测成功】已打开员工仓库")
 	else:
 		push_error("找不着 warehouse_group 组！请检查 EmployeeWarehouse 是否已加组。")

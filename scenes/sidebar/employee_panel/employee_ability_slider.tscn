@@ -1,12 +1,21 @@
 [gd_scene format=3 uid="uid://8o18jsagw05c"]
 
 [ext_resource type="Script" uid="uid://dylsdiexkf4qm" path="res://scripts/UI/custom/label_slider.gd" id="1_u116b"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_tdgr8"]
 
 [node name="LabelSlider" type="HBoxContainer" unique_id=1543880291]
 script = ExtResource("1_u116b")
 
 [node name="Label" type="Label" parent="." unique_id=261480415]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tdgr8")
+theme_override_font_sizes/font_size = 20
+text = "Attribute"
 
-[node name="HSlider" type="HSlider" parent="." unique_id=359559550]
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=138648447]
+custom_minimum_size = Vector2(100, 16)
 layout_mode = 2
+max_value = 10.0
+step = 1.0
+show_percentage = false

@@ -23,3 +23,9 @@ func _on_dollar_updated(new_value):
 func update_labels():
 	$ColorRect/MarginContainer/VBoxContainer/KPI/KPILabel.text = str(Gamemanager.kpi)
 	$ColorRect/MarginContainer/VBoxContainer/KPI2/DollarLabel.text = str(Gamemanager.dollar)
+
+func _on_all_coworkers_pressed() -> void:
+	var warehouse = get_tree().get_first_node_in_group("employee_warehouse")
+	
+	if warehouse:
+		warehouse.show()

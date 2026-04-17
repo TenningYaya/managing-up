@@ -76,12 +76,15 @@ layout_mode = 2
 
 [node name="EfficiencyBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=1543880291 instance=ExtResource("2_sl25x")]
 layout_mode = 2
+ability_name = "Efficiency"
 
 [node name="QualityBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=922107843 instance=ExtResource("2_sl25x")]
 layout_mode = 2
+ability_name = "Quality"
 
 [node name="ExperienceBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=1321981527 instance=ExtResource("2_sl25x")]
 layout_mode = 2
+ability_name = "Experience"
 
 [node name="ProgressBar" type="TextureProgressBar" parent="PanelBg/EmployeePage/Information" unique_id=159914970]
 custom_minimum_size = Vector2(220, 15)
