@@ -15,7 +15,7 @@ region = Rect2(0, 192, 96, 66)
 atlas = ExtResource("1_bfrbe")
 region = Rect2(606, 1194, 36, 30)
 
-[node name="DeskSet_Level1" type="Control" unique_id=1449933388]
+[node name="DeskSet" type="Control" unique_id=1449933388]
 custom_minimum_size = Vector2(86.4, 86.4)
 layout_mode = 3
 anchors_preset = 0
