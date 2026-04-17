@@ -47,12 +47,23 @@ func setup_employee(new_rarity: Rarity) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		_start_drag()
-		accept_event()
-
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_start_drag()
+			accept_event()
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			print("【右键实锤】在 _gui_input 里抓到了！")
+			_on_employee_clicked()
+			accept_event() # 告诉系统，右键我也处理了
 
 func _input(event: InputEvent) -> void:
+	## 1. 判定右键点击（打开面板）
+	#if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		#_on_employee_clicked()
+		## 如果你想在右键点击时也停止拖拽，可以加一行 _end_drag()，但通常不需要
+		#return
+
+	# 2. 以下是原有的左键拖拽逻辑
 	if not dragging:
 		return
 
@@ -60,14 +71,14 @@ func _input(event: InputEvent) -> void:
 		global_position = get_global_mouse_position() - drag_offset
 
 	elif event is InputEventMouseButton:
+		# 这里依然保持 MOUSE_BUTTON_LEFT，因为它是负责结束“左键拖拽”的
 		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-			var drag_distance := global_position.distance_to(drag_start_position)
-
-			if drag_distance < 5.0:
-				_on_employee_clicked()
-
+			var _drag_distance := global_position.distance_to(drag_start_position)
+			
+			# 注意：这里删除了原有的 _on_employee_clicked() 判定
+			# 现在的逻辑是：左键松开只负责放下员工，不再负责打开面板
+			
 			_end_drag()
-
 
 func _draw() -> void:
 	if dragging:
@@ -91,15 +102,19 @@ func _process(delta: float) -> void:
 
 
 func _on_employee_clicked() -> void:
-	var panel = get_tree().get_first_node_in_group("employee_panel")
-	if panel and panel.has_method("open_panel"):
-		panel.open_panel(self)
+	# 1. 优先尝试通过组查找（这是性能最好、最推荐的方式）
+	var target_panel = get_tree().get_first_node_in_group("employee_panel")
+	
+	# 2. 如果组里没找到（比如你还没来得及加组），则尝试直接找节点名字
+	if not target_panel:
+		target_panel = get_tree().root.find_child("EmployeePanel", true, false)
+	
+	# 3. 核心执行逻辑
+	if target_panel and target_panel.has_method("open_panel"):
+		target_panel.open_panel(self)
 	else:
-		var fallback_panel = get_tree().root.find_child("EmployeePanel", true, false)
-		if fallback_panel and fallback_panel.has_method("open_panel"):
-			fallback_panel.open_panel(self)
-		else:
-			print("警告：未找到 EmployeePanel，或它没有 open_panel() 方法")
+		# 如果还是找不到，用 push_error 提醒，这比普通的 print 更容易在调试时被发现
+		push_error("错误：找不到 EmployeePanel。请检查：1.面板是否在场景里 2.是否加了'employee_panel'组")
 
 
 func _start_drag() -> void:

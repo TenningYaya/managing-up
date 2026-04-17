@@ -1,10 +1,11 @@
-extends CanvasLayer # 如果你的根节点是 Control，这里改成 extends Control
+#employee_panel.gd
+extends Control
 class_name EmployeePanel
 
 # ==========================================
 # 1. 节点引用 (严格对应截图层级)
 # ==========================================
-#@onready var click_blocker: ColorRect = $ClickBlocker
+@onready var click_blocker: ColorRect = $ClickBlocker
 
 # --- 员工信息部分 ---
 @onready var figure: TextureRect = $PanelBg/EmployeePage/NameCard/Figure
@@ -36,8 +37,7 @@ func _ready() -> void:
 	hide() 
 	popup_window.hide()
 	
-	# 绑定透明背景的点击关闭事件
-	#click_blocker.gui_input.connect(_on_click_blocker_input)
+	click_blocker.gui_input.connect(_on_click_blocker_input)
 	
 	# 绑定底部按钮事件
 	dispatch_btn.pressed.connect(_on_dispatch_pressed)
@@ -50,9 +50,7 @@ func _ready() -> void:
 	
 	# 当 PopupWindow 发出 canceled 信号时，执行取消逻辑（可选）
 	popup_window.canceled.connect(cancel_fire_employee)
-# ==========================================
-# 3. 核心：打开与刷新面板
-# ==========================================
+
 func open_panel(employee: Employee) -> void:
 	if employee == null:
 		return
@@ -82,9 +80,9 @@ func close_panel() -> void:
 	current_employee = null
 	hide()
 
-#func _on_click_blocker_input(event: InputEvent) -> void:
-	#if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		#close_panel()
+func _on_click_blocker_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		close_panel()
 
 # ==========================================
 # 4. 外派与调入逻辑

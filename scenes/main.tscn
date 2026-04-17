@@ -102,7 +102,15 @@ offset_left = 671.0
 offset_top = 760.0
 offset_right = 771.0
 offset_bottom = 860.0
-snap_distance = 60.0
+employee_name = null
+rarity = null
+efficiency = null
+quality = null
+experience = null
+snap_distance = null
+base_work_duration = null
+reward_per_cycle = null
+interrupted_reward_ratio = null
 
 [node name="Employee2" parent="employees" unique_id=198408591 instance=ExtResource("3_sugp2")]
 layout_mode = 0
@@ -110,7 +118,15 @@ offset_left = 933.0
 offset_top = 761.0
 offset_right = 1033.0
 offset_bottom = 861.0
-snap_distance = 60.0
+employee_name = null
+rarity = null
+efficiency = null
+quality = null
+experience = null
+snap_distance = null
+base_work_duration = null
+reward_per_cycle = null
+interrupted_reward_ratio = null
 
 [node name="SideMenu" parent="." unique_id=1012173253 instance=ExtResource("4_jyhfs")]
 z_index = 3
@@ -179,7 +195,7 @@ text = "10x"
 layout_mode = 2
 
 [node name="EmployeePanel" parent="." unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
-visible = false
+layout_mode = 0
 
 [node name="EmployeeWarehouse" parent="." unique_id=1330516969 instance=ExtResource("6_tefeu")]
 layout_mode = 0
