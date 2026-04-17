@@ -2,7 +2,7 @@ extends Control
 
 # --- 设置参数 ---
 @export var open_x: float = 1500  # 展开时的 X 坐标
-@export var close_x: float = 1780 # 收起时的 X 坐标
+@export var close_x: float = 1770 # 收起时的 X 坐标
 
 var is_open: bool = false         # 记录当前状态
 var last_clicked_button: BaseButton = null # 记录上一次点的是哪个按钮
@@ -75,9 +75,19 @@ func hide_all_pages():
 
 func toggle_menu(should_open: bool):
 	is_open = should_open
-	var target_x = open_x if is_open else close_x
+	
+	# 获取当前屏幕的宽度，这样即使换了分辨率也不会出错
+	var screen_width = get_viewport_rect().size.x
+	
+	# 自动计算目标 X 坐标
+	# 展开时：屏幕宽度 - 整个菜单宽度 (420)
+	# 收起时：屏幕宽度 - 按钮宽度 (150)
+	var target_x = screen_width - 420 if is_open else screen_width - 150
+	
 	var tween = create_tween()
+	# 使用 TRANS_QUART 依然会让滑动看起来很 Chill
 	tween.tween_property(self, "position:x", target_x, 0.3).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+
 
 # --- 点击外部收起 ---
 func _input(event: InputEvent):

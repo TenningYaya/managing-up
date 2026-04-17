@@ -30,7 +30,7 @@ layout_mode = 1
 anchors_preset = 0
 
 [node name="Background" type="Panel" parent="FullGameMode" unique_id=1323558881]
-layout_mode = 1
+layout_mode = 0
 offset_left = 964.0
 offset_top = 729.0
 offset_right = 964.0
