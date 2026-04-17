@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bu0iqmw12h5aj" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/UI Buttons/7.png" id="9_w6w8c"]
 [ext_resource type="Texture2D" uid="uid://dl4n8288fmagk" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Icons/7.png" id="10_eak2a"]
 [ext_resource type="PackedScene" uid="uid://72jjpffy66yt" path="res://scenes/sidebar/upgrades_page.tscn" id="12_pe520"]
+[ext_resource type="PackedScene" uid="uid://6py6ljmq7wln" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.tscn" id="13_o8m4t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hbk5s"]
 atlas = ExtResource("2_qlopi")
@@ -152,7 +153,13 @@ offset_right = 270.0
 offset_bottom = 360.0
 
 [node name="UpgradesPage" parent="Content" unique_id=1808630414 instance=ExtResource("12_pe520")]
+visible = false
 layout_mode = 0
+
+[node name="RecruitmentPanel" parent="Content" unique_id=463444191 instance=ExtResource("13_o8m4t")]
+layout_mode = 0
+offset_right = 270.0
+offset_bottom = 360.0
 
 [connection signal="pressed" from="VBoxContainer/General" to="." method="_on_general_pressed"]
 [connection signal="pressed" from="VBoxContainer/Hire" to="." method="_on_hire_pressed"]

@@ -11,8 +11,10 @@ script = ExtResource("1_lxgr6")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=13999434]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -99.0
+offset_top = -54.0
+offset_right = 100.0
+offset_bottom = 51.0
 
 [node name="LeftArrow" type="Button" parent="HBoxContainer" unique_id=1047870306]
 layout_mode = 2

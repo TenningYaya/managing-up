@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://6py6ljmq7wln"]
 
 [ext_resource type="PackedScene" uid="uid://xhipxj2sgn8d" path="res://scenes/sidebar/recruitment_panel/resume_viewer.tscn" id="1_pfe0p"]
-[ext_resource type="Script" uid="uid://bp8mfdq83mc24" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.gd" id="1_tvhvr"]
+[ext_resource type="Script" uid="uid://bp8mfdq83mc24" path="res://scripts/UI/sidebar/recruitment_panel.gd" id="1_tvhvr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvhvr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rapbc"]
 
 [node name="RecruitmentPanel" type="Control" unique_id=463444191]
 custom_minimum_size = Vector2(270, 360)
@@ -18,6 +22,7 @@ offset_bottom = 40.0
 [node name="NormalPanel" type="PanelContainer" parent="VBoxContainer" unique_id=1525425988]
 custom_minimum_size = Vector2(0, 170)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_tvhvr")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/NormalPanel" unique_id=1537953311]
 layout_mode = 2
@@ -25,14 +30,19 @@ layout_mode = 2
 [node name="LblEmpty" type="Label" parent="VBoxContainer/NormalPanel/MarginContainer" unique_id=1417925560]
 layout_mode = 2
 text = "No resume exists"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="NormalViewer" parent="VBoxContainer/NormalPanel/MarginContainer" unique_id=931473494 instance=ExtResource("1_pfe0p")]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="HeadhuntPanel" type="PanelContainer" parent="VBoxContainer" unique_id=966763050]
 custom_minimum_size = Vector2(0, 170)
 layout_mode = 2
 mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rapbc")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HeadhuntPanel" unique_id=871685800]
 layout_mode = 2
@@ -41,6 +51,8 @@ mouse_filter = 2
 [node name="LblLocked" type="Label" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1511075694]
 layout_mode = 2
 text = "开设猎头办公室后解锁"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BoxIdle" type="HBoxContainer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1511652835]
 layout_mode = 2
@@ -63,6 +75,8 @@ layout_mode = 2
 
 [node name="HeadViewer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=74954453 instance=ExtResource("1_pfe0p")]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BtnHire1" to="." method="_on_hire_1_pressed"]
 [connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BtnHire10" to="." method="_on_hire_10_pressed"]

@@ -37,7 +37,6 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="BackgroundImage" type="TextureRect" parent="PanelBg" unique_id=1393985823]
-visible = false
 layout_mode = 0
 offset_left = -130.00006
 offset_top = -133.0
