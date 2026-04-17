@@ -8,17 +8,17 @@ signal work_cycle_completed(reward_amount: int)
 
 enum Rarity { R, SR, SSR }
 
-var employee_name: String = "Marry"
-var rarity: Rarity = Rarity.R
+@export var employee_name: String = "Marry"
+@export var rarity: Rarity = Rarity.R
 
-var efficiency: int = 1
-var quality: int = 1
-var experience: int = 1
+@export var efficiency: int = 1
+@export var quality: int = 1
+@export var experience: int = 1
 
 @export var snap_distance: float = 60.0
 @export var base_work_duration: float = 10.0
 @export var reward_per_cycle: int = 50
-@export var interrupted_reward_ratio: float = 0.5
+@export_range(0.0, 1.0, 0.05) var interrupted_reward_ratio: float = 0.5
 
 var dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
@@ -36,7 +36,9 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	z_index = 1
 	randomize()
-	employee_name = name
+
+	if employee_name == "" or employee_name == "Marry":
+		employee_name = name
 
 
 func setup_employee(new_rarity: Rarity) -> void:
@@ -69,7 +71,7 @@ func _input(event: InputEvent) -> void:
 
 func _draw() -> void:
 	if dragging:
-		var my_center = size / 2.0
+		var my_center := size / 2.0
 		draw_circle(my_center, 8.0, Color.AQUA)
 		draw_arc(my_center, snap_distance, 0.0, TAU, 32, Color.AQUA, 1.0)
 
@@ -89,8 +91,6 @@ func _process(delta: float) -> void:
 
 
 func _on_employee_clicked() -> void:
-	print("点击了同事: ", employee_name)
-
 	var panel = get_tree().get_first_node_in_group("employee_panel")
 	if panel and panel.has_method("open_panel"):
 		panel.open_panel(self)
@@ -110,7 +110,7 @@ func _start_drag() -> void:
 	z_index = 100
 
 	if current_seat != null:
-		_calculate_interrupted_kpi()
+		_calculate_interrupted_reward()
 		current_seat.clear_occupant()
 		current_seat = null
 
@@ -145,7 +145,7 @@ func snap_to_seat(seat: DeskSeat, animated: bool = true) -> void:
 		tween.finished.connect(_on_snap_finished)
 	else:
 		global_position = target_pos
-		_start_production_timer()
+		_start_work()
 
 
 func _return_to_start() -> void:
@@ -183,7 +183,71 @@ func _find_valid_seat() -> DeskSeat:
 
 
 func _on_snap_finished() -> void:
-	_start_production_timer()
+	_start_work()
+
+
+func _start_work() -> void:
+	is_working = true
+	work_elapsed = 0.0
+	work_progress_changed.emit(0.0)
+	work_started.emit()
+	print(employee_name, " 开始工作")
+
+
+func _stop_work(reset_progress: bool = true) -> void:
+	is_working = false
+
+	if reset_progress:
+		work_elapsed = 0.0
+		work_progress_changed.emit(0.0)
+
+	work_stopped.emit()
+
+
+func _calculate_interrupted_reward() -> void:
+	if not is_working:
+		return
+
+	var actual_duration: float = _get_actual_work_duration()
+	var progress_ratio: float = clampf(work_elapsed / actual_duration, 0.0, 1.0)
+	var partial_reward: int = int(round(reward_per_cycle * progress_ratio * interrupted_reward_ratio))
+
+	_stop_work(true)
+
+	if partial_reward > 0:
+		var gm: Node = _get_game_manager()
+		if gm != null and gm.has_method("add_kpi"):
+			gm.add_kpi(partial_reward)
+			print(employee_name, " 工作被打断，结算部分收益: ", partial_reward)
+
+
+func get_work_progress_percent() -> float:
+	var duration: float = _get_actual_work_duration()
+	if duration <= 0.0:
+		return 0.0
+
+	return clampf(work_elapsed / duration * 100.0, 0.0, 100.0)
+
+
+func _get_actual_work_duration() -> float:
+	var speed_bonus: float = float(efficiency - 1) * 0.6
+	return maxf(2.0, base_work_duration - speed_bonus)
+
+
+func _finish_one_work_cycle() -> void:
+	var gm := _get_game_manager()
+	if gm != null and gm.has_method("add_kpi"):
+		gm.add_kpi(reward_per_cycle)
+
+	print(employee_name, " 完成一轮工作，获得: ", reward_per_cycle)
+
+	work_cycle_completed.emit(reward_per_cycle)
+	work_elapsed = 0.0
+	work_progress_changed.emit(0.0)
+
+
+func _get_game_manager() -> Node:
+	return get_tree().root.get_node_or_null("Gamemanager")
 
 
 func _generate_attributes() -> void:
@@ -215,58 +279,3 @@ func _generate_attributes() -> void:
 		elif stat_to_increase == 2 and experience < 10:
 			experience += 1
 			remaining_points -= 1
-
-
-func _start_production_timer() -> void:
-	is_working = true
-	work_elapsed = 0.0
-	work_progress_changed.emit(0.0)
-	work_started.emit()
-	print(employee_name, " 开始工作")
-
-
-func _calculate_interrupted_kpi() -> void:
-	if not is_working:
-		return
-
-	var progress_ratio : float = clamp(work_elapsed / _get_actual_work_duration(), 0.0, 1.0)
-	var partial_reward := int(round(reward_per_cycle * progress_ratio * interrupted_reward_ratio))
-
-	is_working = false
-	work_elapsed = 0.0
-	work_progress_changed.emit(0.0)
-	work_stopped.emit()
-
-	if partial_reward > 0:
-		var manager = _get_employee_manager()
-		if manager != null and manager.has_method("add_money"):
-			manager.add_money(partial_reward)
-			print(employee_name, " 工作被打断，结算部分收益: ", partial_reward)
-
-
-func get_work_progress_percent() -> float:
-	var duration := _get_actual_work_duration()
-	if duration <= 0.0:
-		return 0.0
-	return clamp(work_elapsed / duration * 100.0, 0.0, 100.0)
-
-
-func _get_actual_work_duration() -> float:
-	var speed_bonus := float(efficiency - 1) * 0.6
-	return max(2.0, base_work_duration - speed_bonus)
-
-
-func _finish_one_work_cycle() -> void:
-	var manager = _get_employee_manager()
-	if manager != null and manager.has_method("add_money"):
-		manager.add_money(reward_per_cycle)
-
-	print(employee_name, " 完成一轮工作，获得: ", reward_per_cycle)
-
-	work_cycle_completed.emit(reward_per_cycle)
-	work_elapsed = 0.0
-	work_progress_changed.emit(0.0)
-
-
-func _get_employee_manager() -> Node:
-	return get_tree().root.get_node_or_null("EmployeeManager")
