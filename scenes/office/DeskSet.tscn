@@ -1,18 +1,18 @@
 [gd_scene format=3 uid="uid://dfnm7sh1rtiky"]
 
-[ext_resource type="Texture2D" uid="uid://doy2ulgdnmxi7" path="res://assets/Office Tileset/Office Tileset All 48x48.png" id="1_bfrbe"]
-[ext_resource type="Script" uid="uid://q7tpt6us2ywy" path="res://scripts/office/seat.gd" id="1_jwd3b"]
+[ext_resource type="Script" uid="uid://q7tpt6us2ywy" path="res://scripts/office/seat.gd" id="1_qny2q"]
+[ext_resource type="Texture2D" uid="uid://doy2ulgdnmxi7" path="res://assets/Office Tileset/Office Tileset All 48x48.png" id="2_65dcs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_72mnh"]
-atlas = ExtResource("1_bfrbe")
+atlas = ExtResource("2_65dcs")
 region = Rect2(6, 879, 36, 39)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bef2k"]
-atlas = ExtResource("1_bfrbe")
+atlas = ExtResource("2_65dcs")
 region = Rect2(0, 192, 96, 66)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7b6jb"]
-atlas = ExtResource("1_bfrbe")
+atlas = ExtResource("2_65dcs")
 region = Rect2(606, 1194, 36, 30)
 
 [node name="DeskSet" type="Control" unique_id=1449933388]
@@ -22,7 +22,7 @@ anchors_preset = 0
 offset_left = 1.0
 offset_right = 87.4
 offset_bottom = 86.4
-script = ExtResource("1_jwd3b")
+script = ExtResource("1_qny2q")
 
 [node name="Chair" type="TextureRect" parent="." unique_id=1881372552]
 layout_mode = 0
@@ -67,3 +67,8 @@ offset_top = 43.2
 offset_right = 44.2
 offset_bottom = 44.2
 mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=558371051]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
