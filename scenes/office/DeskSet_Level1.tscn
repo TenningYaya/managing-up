@@ -19,8 +19,9 @@ region = Rect2(606, 1194, 36, 30)
 custom_minimum_size = Vector2(86.4, 86.4)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 60.0
-offset_bottom = 60.0
+offset_left = 1.0
+offset_right = 87.4
+offset_bottom = 86.4
 script = ExtResource("1_jwd3b")
 
 [node name="Chair" type="TextureRect" parent="." unique_id=1881372552]
