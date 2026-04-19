@@ -6,7 +6,7 @@ var last_mouse_pos = Vector2.ZERO
 func _input(event: InputEvent) -> void:
 	# 1. 判定按下中键（或者左键，你可以根据需求改）
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_MIDDLE or event.button_index == MOUSE_BUTTON_LEFT:
+		if event.button_index == MOUSE_BUTTON_MIDDLE:
 			if event.pressed:
 				dragging = true
 				last_mouse_pos = event.global_position
