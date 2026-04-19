@@ -15,6 +15,18 @@ region = Rect2(0, 192, 96, 66)
 atlas = ExtResource("2_65dcs")
 region = Rect2(606, 1194, 36, 30)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_qny2q"]
+atlas = ExtResource("2_65dcs")
+region = Rect2(108, 1365, 27, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65dcs"]
+atlas = ExtResource("2_65dcs")
+region = Rect2(633, 927, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mtvfd"]
+atlas = ExtResource("2_65dcs")
+region = Rect2(441, 1275, 63, 45)
+
 [node name="DeskSet" type="Control" unique_id=1449933388]
 custom_minimum_size = Vector2(86.4, 86.4)
 layout_mode = 3
@@ -42,6 +54,7 @@ texture = SubResource("AtlasTexture_bef2k")
 expand_mode = 1
 
 [node name="Computer" type="TextureRect" parent="." unique_id=1888207587]
+visible = false
 z_index = 2
 layout_mode = 0
 offset_left = 27.0
@@ -68,7 +81,35 @@ offset_right = 44.2
 offset_bottom = 44.2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=558371051]
+[node name="Plant" type="TextureRect" parent="." unique_id=2113325948]
+z_index = 2
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 1.0
+offset_top = -6.0
+offset_right = 19.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_qny2q")
+expand_mode = 1
+
+[node name="CoffeeCup" type="TextureRect" parent="." unique_id=558371051]
+z_index = 2
+layout_mode = 0
+offset_left = 65.0
+offset_top = 42.0
+offset_right = 81.0
+offset_bottom = 58.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_65dcs")
+expand_mode = 1
+
+[node name="AdvancedComputer" type="TextureRect" parent="." unique_id=318501407]
+z_index = 2
+layout_mode = 0
+offset_left = 19.0
+offset_top = 30.0
+offset_right = 61.0
+offset_bottom = 60.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_mtvfd")
+expand_mode = 1
