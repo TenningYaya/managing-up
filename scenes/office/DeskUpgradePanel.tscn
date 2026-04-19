@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://im2qyo8akr0"]
+
+[ext_resource type="Texture2D" uid="uid://bhdgpy4vms7ux" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Pixel Map Base/0.png" id="1_gjmr1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_huekl"]
+atlas = ExtResource("1_gjmr1")
+region = Rect2(27.300018, 48.45536, 299.99997, 293.75705)
+
+[node name="DeskUpgradePanel" type="Control" unique_id=567798841]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="background" type="TextureRect" parent="." unique_id=540256161]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_huekl")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=341647563]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LevelLabel" type="Label" parent="VBoxContainer" unique_id=626621390]
+layout_mode = 2
+
+[node name="CostLabel" type="Label" parent="VBoxContainer" unique_id=1345129960]
+layout_mode = 2
+
+[node name="UpgradeButton" type="Button" parent="VBoxContainer" unique_id=1713162187]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="." unique_id=683683131]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
