@@ -2,6 +2,8 @@
 # 建议在项目设置里设为 Autoload，名字叫 RecruitmentManager
 extends Node
 
+signal new_resumes_arrived
+
 # 数据池：所有新简历都存在这里
 var normal_pool: Array[Employee] = []
 var headhunt_pool: Array[Employee] = []
@@ -25,7 +27,7 @@ func auto_generate_normal():
 	
 	var new_emp = _create_data(rarity)
 	normal_pool.append(new_emp)
-	print("人事部收到一份新简历")
+	new_resumes_arrived.emit()
 
 # --- 核心业务：猎头招聘 (玩家触发) ---
 func start_headhunt(amount: int, duration: float):
@@ -43,7 +45,7 @@ func _on_headhunt_finished():
 		if roll <= 0.02: rarity = Employee.Rarity.SSR
 		elif roll <= 0.17: rarity = Employee.Rarity.SR
 		headhunt_pool.append(_create_data(rarity))
-	print("猎头招聘完成，收到 ", _pending_amount, " 份简历")
+	new_resumes_arrived.emit()
 
 # --- 辅助：创建数据 ---
 func _create_data(rarity) -> Employee:

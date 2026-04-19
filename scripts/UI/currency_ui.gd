@@ -28,4 +28,5 @@ func _on_all_coworkers_pressed() -> void:
 	var warehouse = get_tree().get_first_node_in_group("employee_warehouse")
 	
 	if warehouse:
+		warehouse.refresh_display()
 		warehouse.show()
