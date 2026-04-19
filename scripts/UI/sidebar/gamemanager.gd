@@ -1,6 +1,7 @@
 # gamemanager.gd
 extends Node
 
+signal request_employee_drop(data)
 # 1. 定义信号，用来告诉 UI 刷新数字
 signal kpi_changed(new_value)
 signal dollar_changed(new_value)
@@ -27,6 +28,12 @@ enum OfficeType {
 	RECRUITMENT,    # 招聘办公室
 	BULLETIN_BOARD  # 公告栏
 }
+
+
+func hire_employee(data):
+	print("Gamemanager.hire_employee called with: ", data)
+	request_employee_drop.emit(data)
+	print("request_employee_drop emitted")
 
 func _ready() -> void:
 	# 游戏启动时，广播一下初始资金和 KPI，让 UI 显示正确

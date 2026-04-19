@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://sclbpjras5bi"]
+
+[ext_resource type="Script" uid="uid://cfcx88ve00apd" path="res://employee_drop_area.gd" id="1_mvy5v"]
+
+[node name="EmployeeDropArea" type="Control" unique_id=1860369934]
+custom_minimum_size = Vector2(300, 360)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 360.0
+script = ExtResource("1_mvy5v")
+
+[node name="Skylight" type="Marker2D" parent="." unique_id=1484661661]
+position = Vector2(150, 0)
+
+[node name="EmployeeContainer" type="Control" parent="." unique_id=898007098]
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 360.0

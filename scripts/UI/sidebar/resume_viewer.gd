@@ -60,9 +60,24 @@ func _on_right_pressed():
 		_update_display()
 
 func _on_hire_pressed():
-	# 把当前这个人发给主系统去扣钱入职
-	on_hire_attempted.emit(current_resumes[current_index])
+	print("Hire button pressed")
+	print("current_resumes size: ", current_resumes.size())
+	print("current_index: ", current_index)
 
+	if current_resumes.is_empty():
+		print("ERROR: current_resumes is empty, cannot hire")
+		return
+
+	if current_index < 0 or current_index >= current_resumes.size():
+		print("ERROR: current_index out of range: ", current_index)
+		return
+
+	var emp = current_resumes[current_index]
+	print("Current employee: ", emp)
+
+	on_hire_attempted.emit(emp)
+	Gamemanager.hire_employee(emp)
+	
 func _on_reject_pressed():
 	# 抬走下一个，直接删除并更新
 	var rejected_emp = current_resumes.pop_at(current_index)

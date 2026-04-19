@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cwnvgk0s3ybnf" path="res://scenes/office/office.tscn" id="1_0wfyh"]
 [ext_resource type="Script" uid="uid://bnamtfeokv64i" path="res://scenes/main.gd" id="1_choun"]
 [ext_resource type="PackedScene" uid="uid://s6hqcjwc8g78" path="res://scenes/office/DeskSlot.tscn" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://sclbpjras5bi" path="res://scenes/employee/employee_drop_area.tscn" id="3_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://c3fnuyvl23qfl" path="res://scenes/employee/employee.tscn" id="3_sugp2"]
 [ext_resource type="PackedScene" uid="uid://bin62t7m5b1o0" path="res://scenes/sidebar/side_menu.tscn" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://bonpcggpr1rvm" path="res://scripts/UI/sidebar/recruitment_test.gd" id="5_o6xl0"]
@@ -78,6 +79,9 @@ alignment = 1
 layout_mode = 2
 
 [node name="NewRoom4" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=2005734672 instance=ExtResource("1_0wfyh")]
+layout_mode = 2
+
+[node name="EmployeeDropArea" parent="FullGameMode/Background/WholeAlignment" unique_id=1860369934 instance=ExtResource("3_jkv2x")]
 layout_mode = 2
 
 [node name="DeskRow" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=1158104807]
