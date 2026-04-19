@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://sclbpjras5bi"]
 
 [ext_resource type="Script" uid="uid://cfcx88ve00apd" path="res://employee_drop_area.gd" id="1_mvy5v"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_p5omb"]
 
 [node name="EmployeeDropArea" type="Control" unique_id=1860369934]
 custom_minimum_size = Vector2(300, 360)
@@ -13,7 +14,37 @@ script = ExtResource("1_mvy5v")
 [node name="Skylight" type="Marker2D" parent="." unique_id=1484661661]
 position = Vector2(150, 0)
 
+[node name="DropBounds" type="ColorRect" parent="." unique_id=517052637]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -113.0
+offset_top = -307.0
+offset_right = 106.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 0.16078432)
+
 [node name="EmployeeContainer" type="Control" parent="." unique_id=898007098]
 anchors_preset = 0
 offset_right = 300.0
 offset_bottom = 360.0
+
+[node name="HintLabel" type="Label" parent="." unique_id=971615627]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 19.0
+offset_right = 237.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_p5omb")
+text = "Waiting area full. Extra hires are sent to the warehouse."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="HintTimer" type="Timer" parent="." unique_id=1059826637]
