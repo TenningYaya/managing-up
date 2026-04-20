@@ -1,50 +1,48 @@
 extends Control
 class_name UpgradePanel
 
-@onready var level_label: Label = $VBoxContainer/LevelLabel
-@onready var cost_label: Label = $VBoxContainer/CostLabel
-@onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
-@onready var close_button: Button = $CloseButton # 如果你有的话
+@onready var level_label = $VBoxContainer/LevelLabel
+@onready var cost_label = $VBoxContainer/CostLabel
+@onready var upgrade_button = $VBoxContainer/UpgradeButton
 
-var current_target_slot: Control = null
-var upgrade_cost: int = 0
+var target_slot: Control = null
+var current_cost: int = 0
 
-# 假设你有一个全局脚本 Global 或者 GameManager 来存当前 KPI
-# var current_kpi: int = Global.current_kpi 
+func _ready():
+	upgrade_button.pressed.connect(_on_upgrade_pressed)
+	# 如果有 CloseButton，也要连上 hide()
 
-func _ready() -> void:
-	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
-	if close_button:
-		close_button.pressed.connect(hide)
-
-# 当点击 DeskSlot 时调用这个函数来显示面板
-func open_panel(slot: Control, current_kpi: int) -> void:
-	current_target_slot = slot
+# 当玩家点击某组桌子时，调用这个方法打开面板
+func open(slot: Control):
+	target_slot = slot
+	var lvl = target_slot.slot_level
 	
-	# 获取目标工位的当前等级
-	var current_level = slot.get_current_level()
-	level_label.text = "当前等级: " + str(current_level)
+	level_label.text = "当前等级: " + str(lvl)
 	
-	if current_level >= 4:
+	if lvl >= 4:
 		cost_label.text = "已满级"
 		upgrade_button.disabled = true
 	else:
-		# 假设升级花费是根据等级计算的，比如 1->2 要 100，2->3 要 200
-		upgrade_cost = current_level * 100 
-		cost_label.text = "升级需要: " + str(upgrade_cost) + " KPI"
+		current_cost = get_upgrade_cost(lvl)
+		cost_label.text = "需要: " + str(current_cost) + " KPI"
 		
-		# 如果 KPI 不够，按钮置灰 (disabled)
-		upgrade_button.disabled = (current_kpi < upgrade_cost)
-	
+		# 调用你的 Gamemanager 检查 KPI 够不够 
+		upgrade_button.disabled = not Gamemanager.has_enough_kpi(current_cost)
+		
 	show()
 
-func _on_upgrade_button_pressed() -> void:
-	if current_target_slot and current_target_slot.get_current_level() < 4:
-		# 这里应该调用全局脚本扣除 KPI
-		# Global.current_kpi -= upgrade_cost
-		
-		# 让工位升级
-		current_target_slot.upgrade_slot()
-		
-		# 刷新面板显示，或者升级完直接关闭面板
-		hide()
+# 根据当前等级计算下一级的花费，数值你可以自己调
+func get_upgrade_cost(level: int) -> int:
+	match level:
+		1: return 200
+		2: return 500
+		3: return 1000
+		_: return 0
+
+func _on_upgrade_pressed():
+	if target_slot and target_slot.slot_level < 4:
+		# 真正扣除 KPI [cite: 4]
+		if Gamemanager.spend_kpi(current_cost):
+			target_slot.upgrade_all()
+			# 升级完刷新一下面板状态，或者你也可以直接 hide() 关闭它
+			open(target_slot)

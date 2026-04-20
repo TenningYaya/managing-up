@@ -13,7 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://bbi44ww2puf63" path="res://scenes/UI/sticky_note.tscn" id="11_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="12_a8y0u"]
 [ext_resource type="Script" uid="uid://c2stthjkcu8gc" path="res://scripts/UI/camera_2d.gd" id="13_a8y0u"]
-[ext_resource type="Script" uid="uid://bx1cavexc0whx" path="res://scripts/test/test_currency.gd" id="14_a8y0u"]
+[ext_resource type="Script" path="res://scripts/test/test_currency.gd" id="14_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://im2qyo8akr0" path="res://scenes/office/DeskUpgradePanel.tscn" id="15_jkv2x"]
 
 [node name="Main" type="Control" unique_id=480960145]
 layout_mode = 3
@@ -263,6 +264,9 @@ text = "KPI0"
 [node name="USD0" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestCurrency/VBoxContainer" unique_id=1638793315]
 layout_mode = 2
 text = "USD0"
+
+[node name="DeskUpgradePanel" parent="CanvasLayer" unique_id=567798841 instance=ExtResource("15_jkv2x")]
+visible = false
 
 [connection signal="pressed" from="CanvasLayer/CurrencyUI/AllCoworkers" to="CanvasLayer/CurrencyUI" method="_on_all_coworkers_pressed"]
 [connection signal="pressed" from="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/Normal*10" to="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" method="_on_normal_10_pressed"]
