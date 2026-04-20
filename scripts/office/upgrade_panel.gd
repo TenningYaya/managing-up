@@ -4,12 +4,14 @@ class_name UpgradePanel
 @onready var level_label = $VBoxContainer/LevelLabel
 @onready var cost_label = $VBoxContainer/CostLabel
 @onready var upgrade_button = $VBoxContainer/UpgradeButton
+@onready var close_button = $VBoxContainer/CloseButton
 
 var target_slot: Control = null
 var current_cost: int = 0
 
 func _ready():
 	upgrade_button.pressed.connect(_on_upgrade_pressed)
+	close_button.pressed.connect(hide)
 	# 如果有 CloseButton，也要连上 hide()
 
 # 当玩家点击某组桌子时，调用这个方法打开面板
@@ -18,7 +20,7 @@ func open(slot: Control):
 	var lvl = target_slot.slot_level
 	
 	level_label.text = "当前等级: " + str(lvl)
-	
+	global_position = slot.global_position + (slot.size / 2.0) - (size / 2.0)
 	if lvl >= 4:
 		cost_label.text = "已满级"
 		upgrade_button.disabled = true
