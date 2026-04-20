@@ -67,6 +67,13 @@ func show_page(page: Control):
 	hide_all_pages()
 	if page:
 		page.visible = true
+		if page == warehouse_page:
+			# 确保仓库脚本里有我们之前写的这两个方法
+			if warehouse_page.has_method("refresh_display"):
+				warehouse_page.refresh_display()
+			
+			if warehouse_page.has_method("refresh_all_card_icons"):
+				warehouse_page.refresh_all_card_icons()
 
 func hide_all_pages():
 	# 以后有了其他页面，也要在这里加一句隐藏代码

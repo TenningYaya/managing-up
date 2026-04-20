@@ -6,6 +6,15 @@ extends Control
 @onready var grid = $ScrollContainer/GridContainer
 @onready var sort_menu: OptionButton = $SortMenu
 
+@onready var select_toggle_btn = $Select # 仓库右上的“选择”按钮
+@onready var bottom_op_bar = $BottomOperationBar     # 底部三个按钮的容器
+@onready var bulk_optimize_btn = $BottomOperationBar/Fire
+@onready var bulk_recall_btn = $BottomOperationBar/Recall
+@onready var bulk_dispatch_btn = $BottomOperationBar/Dispatch
+
+var is_selection_mode: bool = false
+var selected_employees: Array[Employee] = []
+
 func _ready() -> void:
 	# 这一行必须有，且 EmployeeManager 必须是 Autoload 的单例名
 	EmployeeManager.employee_added.connect(_on_employee_hired)
@@ -23,6 +32,47 @@ func _ready() -> void:
 	refresh_display()
 	hide()
 	
+	select_toggle_btn.pressed.connect(_toggle_selection_mode)
+	
+	# 绑定批量按钮
+	bulk_optimize_btn.pressed.connect(_on_bulk_optimize_pressed)
+	bulk_recall_btn.pressed.connect(_on_bulk_recall_pressed)
+	bulk_dispatch_btn.pressed.connect(_on_bulk_dispatch_pressed)
+	
+	# 初始化 UI 状态
+	bottom_op_bar.hide()
+	_update_bulk_buttons_state()
+	
+	Gamemanager.request_employee_drop.connect(_on_map_needs_refresh)
+	EmployeeManager.employee_removed.connect(_on_map_needs_refresh)
+
+func _on_map_needs_refresh(_data = null):
+	# 给 0.1 秒等节点树删干净，然后全体起立！
+	get_tree().create_timer(0.1).timeout.connect(refresh_all_card_icons)
+
+func refresh_all_card_icons():
+	# 仓库统一指挥：所有卡片，现在，立刻，更新图标！
+	for card in grid.get_children():
+		if card.has_method("update_on_map_status"):
+			card.update_on_map_status()
+			
+# 切换选择模式
+func _toggle_selection_mode():
+	is_selection_mode = !is_selection_mode
+	selected_employees.clear()
+	
+	# 通知所有名片进入/退出选择模式
+	for card in grid.get_children():
+		if card.has_method("set_selection_mode"):
+			card.set_selection_mode(is_selection_mode)
+	
+	bottom_op_bar.visible = is_selection_mode
+	_update_bulk_buttons_state()
+	
+	var btn_label = select_toggle_btn.get_node("Label")
+	if btn_label:
+		btn_label.text = "Cancel" if is_selection_mode else "Select"
+	
 func _on_employee_hired(new_employee: Employee) -> void:
 	var card_instance = card_scene.instantiate()
 	# 【关键修改】：先加进 GridContainer
@@ -36,13 +86,12 @@ func _on_employee_hired(new_employee: Employee) -> void:
 		refresh_display()
 		
 func _on_card_selected(emp_data: Employee):
-	# 利用我们之前学到的“组检测”大法，直接喊出面板
-	var panel = get_tree().get_first_node_in_group("employee_panel")
-	if panel:
-		panel.open_panel(emp_data)
-		# hide() # 可选：如果你希望点开详情后，仓库自动关掉，就加这一行
+	if is_selection_mode:
+		_toggle_employee_selection(emp_data)
 	else:
-		push_error("仓库：找不着员工面板！")
+		# 原有的打开面板逻辑
+		var panel = get_tree().get_first_node_in_group("employee_panel")
+		if panel: panel.open_panel(emp_data)
 		
 func _on_employee_fired(fired_employee: Employee) -> void:
 	# 在网格里找到对应名字的名片，然后删除
@@ -102,3 +151,114 @@ func refresh_display():
 
 func _on_sort_selected(_index: int):
 	refresh_display()
+
+func _toggle_employee_selection(emp: Employee):
+	if selected_employees.has(emp):
+		selected_employees.erase(emp)
+	else:
+		selected_employees.append(emp)
+	
+	# 刷新名片的选中视觉效果
+	for card in grid.get_children():
+		if card.name == emp.employee_name:
+			card.is_selected = selected_employees.has(emp)
+			break
+			
+	_update_bulk_buttons_state()
+
+func _update_bulk_buttons_state():
+	var has_selection = selected_employees.size() > 0
+	
+	# 设置禁用状态
+	bulk_optimize_btn.disabled = !has_selection
+	bulk_recall_btn.disabled = !has_selection
+	bulk_dispatch_btn.disabled = !has_selection
+	
+	# 加个视觉反馈：不能点的时候变半透明
+	var alpha = 1.0 if has_selection else 0.5
+	bulk_optimize_btn.modulate.a = alpha
+	bulk_recall_btn.modulate.a = alpha
+	bulk_dispatch_btn.modulate.a = alpha
+
+# ================= 批量操作业务逻辑 =================
+
+func _on_bulk_recall_pressed():
+	print("批量收回员工，数量：", selected_employees.size())
+	
+	for emp in selected_employees:
+		# --- A. 清理工位 ---
+		if emp.current_seat != null:
+			emp.current_seat.clear_occupant()
+			emp.current_seat = null
+			
+		# --- B. 寻找并清理地图实体 ---
+		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
+		for node in dropped_nodes:
+			if node.name == emp.employee_name:
+				# 🚨 【核心修复 1】：先手动踢出组！
+				# 否则在当前帧，名片自查时依然能通过组名找到这个“还没死透”的小人
+				node.remove_from_group("dropped_employee")
+				node.queue_free()
+				break
+	
+	# --- C. 退出模式 ---
+	_toggle_selection_mode() 
+	
+	# 🚨 【核心修复 2】：手动触发刷新通知！
+	# 因为这里是批量操作，循环结束后喊一嗓子，让所有名片整齐划一地重检图标
+	_on_map_needs_refresh()
+
+# 2. 批量 Dispatch (派遣)
+func _on_bulk_dispatch_pressed():
+	print("批量派遣员工，数量：", selected_employees.size())
+	for emp in selected_employees:
+		# 只有不在地图上的才发信号
+		if not _check_emp_on_map(emp):
+			Gamemanager.request_employee_drop.emit(emp)
+	_toggle_selection_mode()
+	_on_map_needs_refresh()
+
+# 3. 批量优化 (开除)
+func _on_bulk_optimize_pressed():
+	# 借用一下 EmployeePanel 的 PopupWindow (或者你自己再做一个通用的)
+	var panel = get_tree().get_first_node_in_group("employee_panel")
+	if panel:
+		var popup = panel.popup_window
+		popup.title_text = "Optimize these " + str(selected_employees.size()) + " employees?"
+		# 这里需要注意：execute_fire 现在是针对单人的，批量需要重新连接信号
+		if popup.confirmed.is_connected(panel.execute_fire_employee):
+			popup.confirmed.disconnect(panel.execute_fire_employee)
+		
+		# 连接批量开除方法
+		if not popup.confirmed.is_connected(_execute_bulk_fire):
+			popup.confirmed.connect(_execute_bulk_fire, CONNECT_ONE_SHOT)
+		popup.show()
+
+func _execute_bulk_fire():
+	# 倒序删除防止索引出问题（虽然这里是用的数据引用）
+	var to_fire = selected_employees.duplicate()
+	for emp in to_fire:
+		# 逻辑完全复用单人开除：
+		if emp.current_seat != null: emp.current_seat.clear_occupant()
+		
+		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
+		for node in dropped_nodes:
+			if node.name == emp.employee_name:
+				node.queue_free()
+				break
+				
+		EmployeeManager.employee_removed.emit(emp)
+		EmployeeManager.my_employees.erase(emp)
+		emp.queue_free()
+	
+	selected_employees.clear()
+	_toggle_selection_mode()
+	refresh_display() # 刷新仓库列表
+
+# 辅助判定（逻辑同 Panel）
+func _check_emp_on_map(emp: Employee) -> bool:
+	if emp.current_seat != null: return true
+	var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
+	for node in dropped_nodes:
+		if node.name == emp.employee_name: return true
+	return false

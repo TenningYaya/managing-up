@@ -233,7 +233,7 @@ func _on_dispatch_pressed() -> void:
 		print("把员工扔进地图：", current_employee.employee_name)
 		# 发送你同学写的掉落信号
 		Gamemanager.request_employee_drop.emit(current_employee)
-		
+	
 	# 刷新按钮文字
 	_update_dispatch_button()
 # ==========================================

@@ -72,15 +72,12 @@ func spawn_and_drop(employee_data):
 	new_emp.global_position = skylight.global_position
 
 	var target_global_pos = get_random_drop_position(new_emp)
-	#target_global_pos += Vector2(-50, -50)
 	
 	var tween = create_tween()
-	# 删掉之前那一串复杂的加减法转换，直接用 target_global_pos
+	# 直接 tween 到这个位置，不要再手动加 Vector2(-50,-50) 了
 	tween.tween_property(new_emp, "global_position", target_global_pos, 0.6) \
 		.set_trans(Tween.TRANS_BOUNCE) \
 		.set_ease(Tween.EASE_OUT)
-
-	print("员工已掉落到 DropArea: ", employee_data.employee_name)
 	
 #func spawn_and_drop(employee_data):
 	#if employee_data == null:
@@ -112,36 +109,40 @@ func spawn_and_drop(employee_data):
 	#tween.tween_property(new_emp, "position", target_pos, 0.6) \
 		#.set_trans(Tween.TRANS_BOUNCE) \
 		#.set_ease(Tween.EASE_OUT)
-func get_random_drop_position(emp_node: Control) -> Vector2:
-	# 1. 明确告诉系统，这两个变量是 Vector2
+func get_random_drop_position(_emp_node: Control) -> Vector2:
 	var rect_pos: Vector2 = drop_bounds.global_position
 	var rect_size: Vector2 = drop_bounds.size
 	
-	# 2. 同样明确声明类型为 Vector2 和 float
-	var best_global_pos: Vector2 = rect_pos
+	# 【微调点 1】：内缩边距。值越大，员工越往中间集中，不会出界。
+	# 建议设为 60-80 左右。
+	var padding: float = 20.0 
+	
+	# 【微调点 2】：这是你之前用来抵消坐标偏离的修正值
+	var offset_fix := Vector2(-50, -50)
+
+	var best_global_pos: Vector2 = rect_pos + rect_size / 2.0
 	var best_score: float = -1.0
 
-	# 2. 尝试多次采样（采样次数越多，分布越均匀）
 	for i in range(DROP_CANDIDATE_COUNT):
-		# 在全局范围内随机选一个点
+		# 在内缩后的安全区内随机选点
 		var candidate_global = Vector2(
-			randf_range(rect_pos.x, rect_pos.x + rect_size.x),
-			randf_range(rect_pos.y, rect_pos.y + rect_size.y)
+			randf_range(rect_pos.x + padding, rect_pos.x + rect_size.x - padding),
+			randf_range(rect_pos.y + padding, rect_pos.y + rect_size.y - padding)
 		)
 
-		# 计算这个全局点离现有员工的距离
-		var score = get_distance_to_nearest_employee(candidate_global)
+		# 重点：计算间距时，必须用“加上偏移后”的实际落点去比对
+		var actual_test_pos = candidate_global + offset_fix
+		var score = get_distance_to_nearest_employee(actual_test_pos)
 
-		# 如果离得够远，直接就是它了
+		# 如果离得够远，直接录用这个点
 		if score >= MIN_EMPLOYEE_SPACING:
-			return candidate_global
+			return actual_test_pos
 
-		# 否则，记住目前为止最空旷的点
 		if score > best_score:
 			best_score = score
-			best_global_pos = candidate_global
+			best_global_pos = actual_test_pos
 
-	return best_global_pos + Vector2(-50, -50)
+	return best_global_pos
 	
 #func get_random_drop_position(emp_node: Control) -> Vector2:
 	#var bounds_pos = drop_bounds.position

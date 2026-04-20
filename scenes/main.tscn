@@ -11,9 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://duispsomfw47v" path="res://scenes/office/office_panel.tscn" id="9_85g3d"]
 [ext_resource type="PackedScene" uid="uid://ceijke56lupl5" path="res://scenes/UI/currency_ui.tscn" id="11_trceg"]
 [ext_resource type="PackedScene" uid="uid://bbi44ww2puf63" path="res://scenes/UI/sticky_note.tscn" id="11_ya4ey"]
-[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="12_a8y0u"]
 [ext_resource type="Script" uid="uid://c2stthjkcu8gc" path="res://scripts/UI/camera_2d.gd" id="13_a8y0u"]
-[ext_resource type="Script" path="res://scripts/test/test_currency.gd" id="14_a8y0u"]
+[ext_resource type="Script" uid="uid://bx1cavexc0whx" path="res://scripts/test/test_currency.gd" id="14_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://im2qyo8akr0" path="res://scenes/office/DeskUpgradePanel.tscn" id="15_jkv2x"]
 
 [node name="Main" type="Control" unique_id=480960145]
@@ -150,17 +149,9 @@ offset_bottom = 1080.0
 
 [node name="CurrencyUI" parent="CanvasLayer" unique_id=1716905617 instance=ExtResource("11_trceg")]
 offset_left = 5.0
-offset_top = 598.0
+offset_top = 648.0
 offset_right = 155.0
-offset_bottom = 668.0
-
-[node name="AllCoworkers" parent="CanvasLayer/CurrencyUI" unique_id=2048579194 instance=ExtResource("12_a8y0u")]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 77.0
-offset_right = 146.0
-offset_bottom = 112.0
-button_text = "All Coworkers"
+offset_bottom = 718.0
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
 layout_mode = 3
@@ -168,108 +159,108 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="VBoxContainer" type="HBoxContainer" parent="CanvasLayer/Add All Test Button Here" unique_id=410798175]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Add All Test Button Here" unique_id=410798175]
 layout_mode = 0
-offset_right = 40.0
+offset_left = 187.0
+offset_right = 495.0
 offset_bottom = 108.0
 
-[node name="HireFire" type="Control" parent="CanvasLayer/Add All Test Button Here/VBoxContainer" unique_id=1513030298]
+[node name="HireFire" type="Control" parent="CanvasLayer/Add All Test Button Here/HBoxContainer" unique_id=1513030298]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 script = ExtResource("5_o6xl0")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" unique_id=900182918]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" unique_id=900182918]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Normal*10" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=775958522]
+[node name="Normal*10" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer" unique_id=775958522]
 layout_mode = 2
 text = "NormalRecruit10"
 
-[node name="NormalRecruitBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=743225544]
+[node name="NormalRecruitBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer" unique_id=743225544]
 layout_mode = 2
 text = "NormalRecruit"
 
-[node name="HeadhuntBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=1609376755]
+[node name="HeadhuntBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer" unique_id=1609376755]
 layout_mode = 2
 text = "HeadHunt"
 
-[node name="FireAllBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer" unique_id=1047602332]
+[node name="FireAllBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer" unique_id=1047602332]
 layout_mode = 2
 text = "FireAll"
 
-[node name="TestTimeControl" type="Control" parent="CanvasLayer/Add All Test Button Here/VBoxContainer" unique_id=345158452]
+[node name="TestTimeControl" type="Control" parent="CanvasLayer/Add All Test Button Here/HBoxContainer" unique_id=345158452]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 script = ExtResource("6_tipki")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl" unique_id=1047382116]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestTimeControl" unique_id=1047382116]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 148.0
 
-[node name="1x" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=796483348]
+[node name="1x" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestTimeControl/VBoxContainer" unique_id=796483348]
 layout_mode = 2
 text = "1x"
 
-[node name="3x" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=1223904331]
+[node name="3x" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestTimeControl/VBoxContainer" unique_id=1223904331]
 layout_mode = 2
 text = "3x"
 
-[node name="5x" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=844362990]
+[node name="5x" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestTimeControl/VBoxContainer" unique_id=844362990]
 layout_mode = 2
 text = "5x"
 
-[node name="10x" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=1814170363]
+[node name="10x" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestTimeControl/VBoxContainer" unique_id=1814170363]
 layout_mode = 2
 text = "10x"
 
-[node name="BetterNotDoIt" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestTimeControl/VBoxContainer" unique_id=374795977]
+[node name="BetterNotDoIt" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestTimeControl/VBoxContainer" unique_id=374795977]
 layout_mode = 2
 
-[node name="TestCurrency" type="Control" parent="CanvasLayer/Add All Test Button Here/VBoxContainer" unique_id=947981425]
+[node name="TestCurrency" type="Control" parent="CanvasLayer/Add All Test Button Here/HBoxContainer" unique_id=947981425]
 layout_mode = 2
 script = ExtResource("14_a8y0u")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestCurrency" unique_id=1037085036]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestCurrency" unique_id=1037085036]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="KPI+100" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestCurrency/VBoxContainer" unique_id=1958699581]
+[node name="KPI+100" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestCurrency/VBoxContainer" unique_id=1958699581]
 layout_mode = 2
 text = "KPI+100"
 
-[node name="KPI+1000" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestCurrency/VBoxContainer" unique_id=1821514059]
+[node name="KPI+1000" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestCurrency/VBoxContainer" unique_id=1821514059]
 layout_mode = 2
 text = "KPI+1000"
 
-[node name="KPI+1000000" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestCurrency/VBoxContainer" unique_id=2103993833]
+[node name="KPI+1000000" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestCurrency/VBoxContainer" unique_id=2103993833]
 layout_mode = 2
 text = "KPI+1000000"
 
-[node name="USD+100" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestCurrency/VBoxContainer" unique_id=553263433]
+[node name="USD+100" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestCurrency/VBoxContainer" unique_id=553263433]
 layout_mode = 2
 text = "USD+100"
 
-[node name="USD+10000" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestCurrency/VBoxContainer" unique_id=818026037]
+[node name="USD+10000" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestCurrency/VBoxContainer" unique_id=818026037]
 layout_mode = 2
 text = "USD+10000"
 
-[node name="KPI0" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestCurrency/VBoxContainer" unique_id=147442531]
+[node name="KPI0" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestCurrency/VBoxContainer" unique_id=147442531]
 layout_mode = 2
 text = "KPI0"
 
-[node name="USD0" type="Button" parent="CanvasLayer/Add All Test Button Here/VBoxContainer/TestCurrency/VBoxContainer" unique_id=1638793315]
+[node name="USD0" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestCurrency/VBoxContainer" unique_id=1638793315]
 layout_mode = 2
 text = "USD0"
 
 [node name="DeskUpgradePanel" parent="CanvasLayer" unique_id=567798841 instance=ExtResource("15_jkv2x")]
 visible = false
 
-[connection signal="pressed" from="CanvasLayer/CurrencyUI/AllCoworkers" to="CanvasLayer/CurrencyUI" method="_on_all_coworkers_pressed"]
-[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/Normal*10" to="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" method="_on_normal_10_pressed"]
-[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/NormalRecruitBtn" to="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" method="_on_test_normal_gen_pressed"]
-[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/HeadhuntBtn" to="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" method="_on_test_headhunt_1x_pressed"]
-[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire/VBoxContainer/FireAllBtn" to="CanvasLayer/Add All Test Button Here/VBoxContainer/HireFire" method="_on_clear_all_test"]
+[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer/Normal*10" to="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" method="_on_normal_10_pressed"]
+[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer/NormalRecruitBtn" to="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" method="_on_test_normal_gen_pressed"]
+[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer/HeadhuntBtn" to="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" method="_on_test_headhunt_1x_pressed"]
+[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer/FireAllBtn" to="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" method="_on_clear_all_test"]
