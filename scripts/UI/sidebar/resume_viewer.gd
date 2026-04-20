@@ -46,7 +46,14 @@ func _update_display() -> void:
 	hire_btn.text = "花 %d KPI 雇佣" % cost_kpi
 	
 	# 更新箭头显示状态
-	left_arrow.visible = (current_index > 0)
+	if current_index > 0:
+		left_arrow.modulate.a = 1.0     # 完全显示
+		left_arrow.disabled = false     # 可以点击
+		left_arrow.mouse_filter = Control.MOUSE_FILTER_STOP
+	else:
+		left_arrow.modulate.a = 0.0     # 完全透明，但依然“占据位置”
+		left_arrow.disabled = true      # 防止玩家点到透明按钮
+		left_arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE # 让鼠标点不着它
 	right_arrow.visible = (current_index < current_resumes.size() - 1)
 
 func _on_left_pressed():
@@ -76,7 +83,6 @@ func _on_hire_pressed():
 	print("Current employee: ", emp)
 
 	on_hire_attempted.emit(emp)
-	Gamemanager.hire_employee(emp)
 	
 func _on_reject_pressed():
 	# 抬走下一个，直接删除并更新

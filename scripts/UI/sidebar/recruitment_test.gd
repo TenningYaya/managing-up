@@ -12,3 +12,9 @@ func _on_test_headhunt_1x_pressed():
 func _on_clear_all_test():
 	RecruitmentManager.normal_pool.clear()
 	RecruitmentManager.headhunt_pool.clear()
+
+func _on_normal_10_pressed() -> void:
+	# 1. 跑 10 次循环
+	for i in range(10):
+		# 注意：这里我们调用原本写好的单次生成逻辑
+		RecruitmentManager.auto_generate_normal()

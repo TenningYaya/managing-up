@@ -13,6 +13,7 @@ var last_clicked_button: BaseButton = null # 记录上一次点的是哪个按�
 @onready var settings_page = $Content/SettingsPage
 @onready var updates_page = $Content/UpgradesPage
 @onready var recruitment_page = $Content/RecruitmentPanel
+@onready var warehouse_page = $Content/EmployeeWarehouse
 
 func _ready():
 	# 初始时，菜单躲在屏幕右侧
@@ -40,7 +41,7 @@ func _on_tutorial_pressed():
 	handle_tab_click($HBoxContainer/VBoxContainer/Tutorial, null)
 
 func _on_warehouse_pressed():
-	handle_tab_click($HBoxContainer/VBoxContainer/warehouse, null)
+	handle_tab_click($HBoxContainer/VBoxContainer/warehouse, warehouse_page)
 
 
 # --- 核心逻辑函数 ---
@@ -72,6 +73,7 @@ func hide_all_pages():
 	settings_page.visible = false
 	updates_page.visible = false
 	recruitment_page.visible = false
+	warehouse_page.visible = false
 
 func toggle_menu(should_open: bool):
 	is_open = should_open

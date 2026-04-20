@@ -11,6 +11,7 @@ extends Control
 @onready var headhunt_viewer = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadViewer
 @onready var countdown_label = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/LblCountdown
 
+var last_normal_count: int = -1
 var last_headhunt_state: int = -1
 var last_office_status: bool = false
 
@@ -46,29 +47,60 @@ func _process(_delta):
 
 # ================= 核心：数据下发与同步 =================
 func _on_new_resumes_arrived():
-	# 普通招聘：如果有数据，且 Viewer 当前是空的，就塞一份【复印件】进去
-	if RecruitmentManager.normal_pool.size() > 0 and normal_viewer.current_resumes.is_empty():
-		normal_viewer.load_resumes(RecruitmentManager.normal_pool.duplicate()) # 这里的 duplicate 治好了吃简历 Bug
+	# --- 普通招聘的补货逻辑 ---
+	if RecruitmentManager.normal_pool.size() > 0:
+		# 哪怕 Viewer 里已经有人了，我们也把全量数据同步过去
+		# 这样 Viewer 内部会自动把新出来的 9 个人加到数组末尾
+		normal_viewer.load_resumes(RecruitmentManager.normal_pool.duplicate())
 	_update_normal_ui()
 	
-	# 猎头招聘：如果状态是 READY 且 Viewer 是空的，塞一份【复印件】进去
-	if RecruitmentManager.current_state == RecruitmentManager.State.READY and headhunt_viewer.current_resumes.is_empty():
+	# --- 猎头招聘的补货逻辑 ---
+	if RecruitmentManager.current_state == RecruitmentManager.State.READY:
 		if RecruitmentManager.headhunt_pool.size() > 0:
-			headhunt_viewer.load_resumes(RecruitmentManager.headhunt_pool.duplicate()) # 同上
+			headhunt_viewer.load_resumes(RecruitmentManager.headhunt_pool.duplicate())
 	_update_headhunt_ui()
 
 # ================= 雇佣与拒绝逻辑 =================
+#func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
+	#var cost = (emp.efficiency + emp.quality + emp.experience) * 10
+	#if Gamemanager.spend_kpi(cost):
+		#EmployeeManager.hire_employee(emp)
+		#
+		## 1. 划掉原件里的人
+		#pool.erase(emp) 
+		#
+		## 2. 告诉 Viewer：雇佣成功，你可以把复印件里的人删了并翻页了
+		#viewer.remove_current_success() 
 func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
+	# 1. 计算所需 KPI
 	var cost = (emp.efficiency + emp.quality + emp.experience) * 10
+	
+	# 2. 检查并扣钱
 	if Gamemanager.spend_kpi(cost):
-		EmployeeManager.hire_employee(emp)
+		print("【招聘中心】扣款成功 (", cost, " KPI)。准备空投员工: ", emp.employee_name)
 		
-		# 1. 划掉原件里的人
-		pool.erase(emp) 
+		# 🚨 关键：呼叫天窗掉落系统！
+		# 不要在这里写 EmployeeManager.hire_employee，
+		# 也不要写 Gamemanager.hire_employee，
+		# 只发这一个信号，剩下的交给 DropArea 处理。
+		Gamemanager.request_employee_drop.emit(emp)
 		
-		# 2. 告诉 Viewer：雇佣成功，你可以把复印件里的人删了并翻页了
+		# 3. 把这张“简历复印件”从当前的 Viewer 列表里移除并翻页
 		viewer.remove_current_success() 
-
+		
+		# 4. 把这个“员工原件”从全局简历池里彻底划掉
+		pool.erase(emp)
+		
+		# 5. 强制触发一次数量检测，确保 UI 状态更新
+		if pool == RecruitmentManager.normal_pool:
+			last_normal_count = pool.size()
+			_update_normal_ui()
+			
+	else:
+		# 钱不够时的处理
+		print("【招聘中心】KPI 不足！需要: ", cost, " 当前仅有: ", Gamemanager.kpi)
+		# 你可以这里调用一个 UI 飘窗提示：UI.show_message("KPI 不足！")
+		
 # 对应 Viewer 的 _on_reject_pressed 信号
 func _reject_from_pool(emp: Employee, pool: Array):
 	# Viewer 内部已经把复印件删了，我们只需要在这里悄悄把原件也删了即可

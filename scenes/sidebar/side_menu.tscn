@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dl4n8288fmagk" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Icons/7.png" id="10_eak2a"]
 [ext_resource type="PackedScene" uid="uid://72jjpffy66yt" path="res://scenes/sidebar/upgrades_page.tscn" id="12_pe520"]
 [ext_resource type="PackedScene" uid="uid://6py6ljmq7wln" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.tscn" id="13_o8m4t"]
+[ext_resource type="PackedScene" uid="uid://c8d4rax1ise3l" path="res://scenes/sidebar/employee_panel/employee_warehouse.tscn" id="16_t7yv8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hbk5s"]
 atlas = ExtResource("2_qlopi")
@@ -243,6 +244,9 @@ visible = false
 layout_mode = 0
 
 [node name="RecruitmentPanel" parent="Content" unique_id=463444191 instance=ExtResource("13_o8m4t")]
+layout_mode = 0
+
+[node name="EmployeeWarehouse" parent="Content" unique_id=1330516969 instance=ExtResource("16_t7yv8")]
 layout_mode = 0
 
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]

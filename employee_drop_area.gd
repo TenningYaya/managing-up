@@ -38,12 +38,16 @@ func _on_hire_received(employee_data):
 
 	spawn_and_drop(employee_data)
 
+#func get_drop_area_employee_count() -> int:
+	#var count := 0
+	#for child in employee_container.get_children():
+		#if child.is_in_group("dropped_employee"):
+			#count += 1
+	#return count
 func get_drop_area_employee_count() -> int:
-	var count := 0
-	for child in employee_container.get_children():
-		if child.is_in_group("dropped_employee"):
-			count += 1
-	return count
+	# 直接去全地图抓取带有 "dropped_employee" 标签的人
+	var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
+	return dropped_nodes.size()
 
 func spawn_and_drop(employee_data):
 	if employee_data == null: return
@@ -67,16 +71,14 @@ func spawn_and_drop(employee_data):
 	# 2. 因为换了父节点，必须用 global_position (全局坐标)
 	new_emp.global_position = skylight.global_position
 
-	# 3. 计算掉落目标点并转换为全局坐标
-	var local_target_pos = get_random_drop_position(new_emp)
-	var global_target_pos = drop_bounds.global_position + (local_target_pos - drop_bounds.position)
-
-	# 4. 播放动画，注意操作的是 global_position
+	var target_global_pos = get_random_drop_position(new_emp)
+	#target_global_pos += Vector2(-50, -50)
+	
 	var tween = create_tween()
-	tween.tween_property(new_emp, "global_position", global_target_pos, 0.6) \
+	# 删掉之前那一串复杂的加减法转换，直接用 target_global_pos
+	tween.tween_property(new_emp, "global_position", target_global_pos, 0.6) \
 		.set_trans(Tween.TRANS_BOUNCE) \
 		.set_ease(Tween.EASE_OUT)
-	# ==============================
 
 	print("员工已掉落到 DropArea: ", employee_data.employee_name)
 	
@@ -110,62 +112,124 @@ func spawn_and_drop(employee_data):
 	#tween.tween_property(new_emp, "position", target_pos, 0.6) \
 		#.set_trans(Tween.TRANS_BOUNCE) \
 		#.set_ease(Tween.EASE_OUT)
-
 func get_random_drop_position(emp_node: Control) -> Vector2:
-	var bounds_pos = drop_bounds.position
-	var bounds_size = drop_bounds.size
-	var emp_size = emp_node.size
+	# 1. 明确告诉系统，这两个变量是 Vector2
+	var rect_pos: Vector2 = drop_bounds.global_position
+	var rect_size: Vector2 = drop_bounds.size
+	
+	# 2. 同样明确声明类型为 Vector2 和 float
+	var best_global_pos: Vector2 = rect_pos
+	var best_score: float = -1.0
 
-	var min_x = bounds_pos.x
-	var max_x = bounds_pos.x + max(bounds_size.x - emp_size.x, 0.0)
-
-	var min_y = bounds_pos.y
-	var max_y = bounds_pos.y + max(bounds_size.y - emp_size.y, 0.0)
-
-	# 如果区域太小，直接返回左上角
-	if max_x <= min_x or max_y <= min_y:
-		return Vector2(min_x, min_y)
-
-	var best_pos := Vector2(min_x, min_y)
-	var best_score := -1.0
-
-	# 多次随机候选，选一个“离现有员工最远”的位置
+	# 2. 尝试多次采样（采样次数越多，分布越均匀）
 	for i in range(DROP_CANDIDATE_COUNT):
-		var candidate = Vector2(
-			randf_range(min_x, max_x),
-			randf_range(min_y, max_y)
+		# 在全局范围内随机选一个点
+		var candidate_global = Vector2(
+			randf_range(rect_pos.x, rect_pos.x + rect_size.x),
+			randf_range(rect_pos.y, rect_pos.y + rect_size.y)
 		)
 
-		var score = get_distance_to_nearest_employee(candidate)
+		# 计算这个全局点离现有员工的距离
+		var score = get_distance_to_nearest_employee(candidate_global)
 
-		# 如果已经足够分散，直接用这个点
+		# 如果离得够远，直接就是它了
 		if score >= MIN_EMPLOYEE_SPACING:
-			return candidate
+			return candidate_global
 
-		# 否则先记住当前最优解
+		# 否则，记住目前为止最空旷的点
 		if score > best_score:
 			best_score = score
-			best_pos = candidate
+			best_global_pos = candidate_global
 
-	return best_pos
+	return best_global_pos + Vector2(-50, -50)
+	
+#func get_random_drop_position(emp_node: Control) -> Vector2:
+	#var bounds_pos = drop_bounds.position
+	#var bounds_size = drop_bounds.size
+	#var emp_size = emp_node.size
+#
+	#var min_x = bounds_pos.x
+	#var max_x = bounds_pos.x + max(bounds_size.x - emp_size.x, 0.0)
+#
+	#var min_y = bounds_pos.y
+	#var max_y = bounds_pos.y + max(bounds_size.y - emp_size.y, 0.0)
+#
+	## 如果区域太小，直接返回左上角
+	#if max_x <= min_x or max_y <= min_y:
+		#return Vector2(min_x, min_y)
+#
+	#var best_pos := Vector2(min_x, min_y)
+	#var best_score := -1.0
+#
+	## 多次随机候选，选一个“离现有员工最远”的位置
+	#for i in range(DROP_CANDIDATE_COUNT):
+		#var candidate = Vector2(
+			#randf_range(min_x, max_x),
+			#randf_range(min_y, max_y)
+		#)
+#
+		#var score = get_distance_to_nearest_employee(candidate)
+#
+		## 如果已经足够分散，直接用这个点
+		#if score >= MIN_EMPLOYEE_SPACING:
+			#return candidate
+#
+		## 否则先记住当前最优解
+		#if score > best_score:
+			#best_score = score
+			#best_pos = candidate
+#
+	#return best_pos
 
-func get_distance_to_nearest_employee(pos: Vector2) -> float:
+#func get_distance_to_nearest_employee(pos: Vector2) -> float:
+	#var nearest_distance := INF
+	#var has_employee := false
+#
+	#for child in employee_container.get_children():
+		#if child.is_in_group("dropped_employee"):
+			#has_employee = true
+			#var dist = pos.distance_to(child.position)
+			#if dist < nearest_distance:
+				#nearest_distance = dist
+#
+	## 如果当前还没有别的员工，返回一个超大值
+	#if not has_employee:
+		#return INF
+#
+	#return nearest_distance
+#func get_distance_to_nearest_employee(pos: Vector2) -> float:
+	#var nearest_distance := INF
+	#var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
+	#
+	## 如果当前还没有别的员工，直接返回超大值
+	#if dropped_nodes.is_empty():
+		#return INF
+#
+	## 遍历所有在场上的小人算距离
+	#for child in dropped_nodes:
+		## 因为小人现在可能在不同的层级，用 global_position 计算距离最准
+		#var dist = pos.distance_to(child.global_position)
+		#if dist < nearest_distance:
+			#nearest_distance = dist
+#
+	#return nearest_distance
+
+func get_distance_to_nearest_employee(check_pos: Vector2) -> float:
 	var nearest_distance := INF
-	var has_employee := false
-
-	for child in employee_container.get_children():
-		if child.is_in_group("dropped_employee"):
-			has_employee = true
-			var dist = pos.distance_to(child.position)
-			if dist < nearest_distance:
-				nearest_distance = dist
-
-	# 如果当前还没有别的员工，返回一个超大值
-	if not has_employee:
+	# 关键：直接抓取全地图所有在场员工
+	var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
+	
+	if dropped_nodes.is_empty():
 		return INF
 
-	return nearest_distance
+	for emp in dropped_nodes:
+		# 强制使用全局坐标进行距离计算
+		var dist = check_pos.distance_to(emp.global_position)
+		if dist < nearest_distance:
+			nearest_distance = dist
 
+	return nearest_distance
+		
 func send_to_warehouse(employee_data):
 	if employee_data == null:
 		push_error("send_to_warehouse 收到空员工数据")
