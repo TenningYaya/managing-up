@@ -181,27 +181,61 @@ func _on_current_employee_tree_exiting() -> void:
 # ==========================================
 # 5. 外派与调入逻辑
 # ==========================================
-func _update_dispatch_button() -> void:
+
+# 核心判定：同事是不是在地图上（不管是在工位还是在地上乱跑）
+func _is_employee_on_map() -> bool:
 	if current_employee == null:
-		return
+		return false
+		
+	# 1. 在工位上？算在地图上
 	if current_employee.current_seat != null:
-		dispatch_btn_label.text = "Dispatch"
-	else:
+		return true
+		
+	# 2. 在地上跑？去 dropped_employee 组里找他的名字
+	var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
+	for node in dropped_nodes:
+		if node.name == current_employee.employee_name:
+			return true
+			
+	return false
+
+func _update_dispatch_button() -> void:
+	if current_employee == null: return
+	
+	if _is_employee_on_map():
 		dispatch_btn_label.text = "Recall"
+	else:
+		dispatch_btn_label.text = "Dispatch"
 
 func _on_dispatch_pressed() -> void:
 	if current_employee == null: return
 	
-	if current_employee.current_seat != null:
-		current_employee.current_seat.clear_occupant()
-		current_employee.current_seat = null
-		# 员工被从工位拿下来时，立即停止显示进度
-		progress_bar.value = 0
-	else:
-		print("请直接拖拽员工到工位上！")
+	if _is_employee_on_map():
+		# ======= 【调回 (Recall) 逻辑】 =======
+		print("把员工从地图收回仓库：", current_employee.employee_name)
 		
+		# 1. 如果在工位上，让他从工位上下来
+		if current_employee.current_seat != null:
+			current_employee.current_seat.clear_occupant()
+			current_employee.current_seat = null
+			
+		# 2. 找到地图上的“实体小人”并让他消失
+		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
+		for node in dropped_nodes:
+			if node.name == current_employee.employee_name:
+				node.queue_free() # 销毁地图上的小人节点
+				break # 找到了就不用往下找了
+				
+		progress_bar.value = 0
+		
+	else:
+		# ======= 【派遣 (Dispatch) 逻辑】 =======
+		print("把员工扔进地图：", current_employee.employee_name)
+		# 发送你同学写的掉落信号
+		Gamemanager.request_employee_drop.emit(current_employee)
+		
+	# 刷新按钮文字
 	_update_dispatch_button()
-
 # ==========================================
 # 6. 优化(开除)弹窗逻辑
 # ==========================================
@@ -212,23 +246,32 @@ func _on_fire_pressed() -> void:
 	popup_window.cancel_label = "Wait"
 	popup_window.show()
 
-# ⚠️ 注意：你需要将你的 PopupWindow 里的“确认”按钮信号连接到这个函数！
 func execute_fire_employee() -> void:
 	if current_employee != null:
-		# 1. 腾出工位
+		# 1. 腾出工位（如果是坐在工位上的，先清空工位状态）
 		if current_employee.current_seat != null:
 			current_employee.current_seat.clear_occupant()
 		
-		# 2. 返还资源的逻辑 (GDD: SR和SSR返还少量美金)
+		# 2. 【核心新增】：清理地图上的实体（自由走动的小人）
+		# 必须在 current_employee 被删掉前执行，因为我们要用它的名字做对比
+		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
+		for node in dropped_nodes:
+			if node.name == current_employee.employee_name:
+				print("[EmployeePanel] 正在清理地图实体: ", node.name)
+				node.queue_free() # 让小人从地图上消失
+				break # 找到了就停，节省性能
+		
+		# 3. 返还资源的逻辑
 		if current_employee.rarity == Employee.Rarity.SR or current_employee.rarity == Employee.Rarity.SSR:
 			print("退还了少量美金！")
 		
+		# 4. 通知其他系统（如仓库、UI）员工已离职
 		EmployeeManager.employee_removed.emit(current_employee)
 		
-		# 3. 从 Manager 的主列表中移除（如果有的话）
+		# 5. 从 Manager 的主列表中移除
 		EmployeeManager.my_employees.erase(current_employee)
 		
-		# 3. 删除员工实例
+		# 6. 【最后一步】：删除员工数据实例
 		current_employee.queue_free()
 		current_employee = null
 		

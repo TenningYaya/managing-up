@@ -112,12 +112,15 @@ ignore_texture_size = false
 button_text = "Fire"
 
 [node name="PopupWindow" parent="PanelBg" unique_id=1050921675 instance=ExtResource("4_e3e08")]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -827.0
+offset_top = -318.0
+offset_right = -827.0
+offset_bottom = -318.0
 grow_horizontal = 2
 grow_vertical = 2

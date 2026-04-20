@@ -30,10 +30,8 @@ func show_full_hint():
 func _on_hint_timer_timeout():
 	hint_label.hide()
 func _on_hire_received(employee_data):
-	print("收到新雇佣员工: ", employee_data)
 
 	if get_drop_area_employee_count() >= MAX_DROP_EMPLOYEES:
-		print("DropArea 已满，员工不掉落，改为送进仓库")
 		send_to_warehouse(employee_data)
 		show_full_hint()
 		return
@@ -48,36 +46,70 @@ func get_drop_area_employee_count() -> int:
 	return count
 
 func spawn_and_drop(employee_data):
-	if employee_data == null:
-		push_error("spawn_and_drop 收到空员工数据")
-		return
-
-	# 先登记到总员工系统（防止重复添加）
+	if employee_data == null: return
 	EmployeeManager.hire_employee(employee_data)
 
 	var new_emp = EMPLOYEE_SCENE.instantiate()
 	new_emp.add_to_group("dropped_employee")
-	employee_container.add_child(new_emp)
+	new_emp.name = employee_data.employee_name
 
-	# 如果你的员工场景有 setup / setup_card / bind_data 之类的方法，这里先接上
-	if new_emp.has_method("setup"):
-		new_emp.setup(employee_data)
-	elif new_emp.has_method("setup_card"):
-		new_emp.setup_card(employee_data)
+	# ======= 🛠️ 关键修改区 =======
+	# 1. 找到专门放员工的父节点，把新员工加进去
+	var main_employees_node = get_tree().root.find_child("employees", true, false)
+	if main_employees_node:
+		main_employees_node.add_child(new_emp)
+	else:
+		employee_container.add_child(new_emp) # 备用防报错
 
-	# 从天窗起始
-	new_emp.position = skylight.position
+	if new_emp.has_method("setup"): new_emp.setup(employee_data)
+	elif new_emp.has_method("setup_card"): new_emp.setup_card(employee_data)
 
-	# 在 DropBounds 范围内更均匀地选择落点
-	var target_pos = get_random_drop_position(new_emp)
-	print("随机掉落终点: ", target_pos)
+	# 2. 因为换了父节点，必须用 global_position (全局坐标)
+	new_emp.global_position = skylight.global_position
 
+	# 3. 计算掉落目标点并转换为全局坐标
+	var local_target_pos = get_random_drop_position(new_emp)
+	var global_target_pos = drop_bounds.global_position + (local_target_pos - drop_bounds.position)
+
+	# 4. 播放动画，注意操作的是 global_position
 	var tween = create_tween()
-	tween.tween_property(new_emp, "position", target_pos, 0.6) \
+	tween.tween_property(new_emp, "global_position", global_target_pos, 0.6) \
 		.set_trans(Tween.TRANS_BOUNCE) \
 		.set_ease(Tween.EASE_OUT)
+	# ==============================
 
 	print("员工已掉落到 DropArea: ", employee_data.employee_name)
+	
+#func spawn_and_drop(employee_data):
+	#if employee_data == null:
+		#push_error("spawn_and_drop 收到空员工数据")
+		#return
+#
+	## 先登记到总员工系统（防止重复添加）
+	#EmployeeManager.hire_employee(employee_data)
+#
+	#var new_emp = EMPLOYEE_SCENE.instantiate()
+	#new_emp.add_to_group("dropped_employee")
+	#employee_container.add_child(new_emp)
+	#new_emp.name = employee_data.employee_name
+#
+	## 如果你的员工场景有 setup / setup_card / bind_data 之类的方法，这里先接上
+	#if new_emp.has_method("setup"):
+		#new_emp.setup(employee_data)
+	#elif new_emp.has_method("setup_card"):
+		#new_emp.setup_card(employee_data)
+#
+	## 从天窗起始
+	#new_emp.position = skylight.position
+#
+	## 在 DropBounds 范围内更均匀地选择落点
+	#var target_pos = get_random_drop_position(new_emp)
+	#print("随机掉落终点: ", target_pos)
+#
+	#var tween = create_tween()
+	#tween.tween_property(new_emp, "position", target_pos, 0.6) \
+		#.set_trans(Tween.TRANS_BOUNCE) \
+		#.set_ease(Tween.EASE_OUT)
 
 func get_random_drop_position(emp_node: Control) -> Vector2:
 	var bounds_pos = drop_bounds.position

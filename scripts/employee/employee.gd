@@ -52,18 +52,10 @@ func _gui_input(event: InputEvent) -> void:
 			_start_drag()
 			accept_event()
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
-			print("【右键实锤】在 _gui_input 里抓到了！")
 			_on_employee_clicked()
 			accept_event() # 告诉系统，右键我也处理了
 
 func _input(event: InputEvent) -> void:
-	## 1. 判定右键点击（打开面板）
-	#if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		#_on_employee_clicked()
-		## 如果你想在右键点击时也停止拖拽，可以加一行 _end_drag()，但通常不需要
-		#return
-
-	# 2. 以下是原有的左键拖拽逻辑
 	if not dragging:
 		return
 
@@ -118,6 +110,10 @@ func _on_employee_clicked() -> void:
 
 
 func _start_drag() -> void:
+	var tweens = get_tree().get_processed_tweens()
+	for t in tweens:
+		t.kill()
+		
 	dragging = true
 	drag_offset = get_global_mouse_position() - global_position
 	drag_start_position = global_position

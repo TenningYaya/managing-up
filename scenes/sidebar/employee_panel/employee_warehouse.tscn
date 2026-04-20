@@ -17,6 +17,11 @@ offset_bottom = 360.0
 mouse_filter = 2
 color = Color(0.40893582, 0.82403606, 0.9084133, 1)
 
+[node name="SortMenu" type="OptionButton" parent="." unique_id=1432117635]
+layout_mode = 0
+offset_right = 87.0
+offset_bottom = 20.0
+
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1335615631]
 layout_mode = 1
 anchors_preset = 15
@@ -35,8 +40,3 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 5
 theme_override_constants/v_separation = 5
 columns = 3
-
-[node name="SortMenu" type="OptionButton" parent="." unique_id=1432117635]
-layout_mode = 0
-offset_right = 87.0
-offset_bottom = 20.0

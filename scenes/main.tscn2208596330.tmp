@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bnamtfeokv64i" path="res://scenes/main.gd" id="1_choun"]
 [ext_resource type="PackedScene" uid="uid://s6hqcjwc8g78" path="res://scenes/office/DeskSlot.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://sclbpjras5bi" path="res://scenes/employee/employee_drop_area.tscn" id="3_jkv2x"]
+[ext_resource type="PackedScene" uid="uid://c3fnuyvl23qfl" path="res://scenes/employee/employee.tscn" id="3_sugp2"]
 [ext_resource type="PackedScene" uid="uid://bin62t7m5b1o0" path="res://scenes/sidebar/side_menu.tscn" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://bonpcggpr1rvm" path="res://scripts/UI/sidebar/recruitment_test.gd" id="5_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://cjfjfj4l46h23" path="res://scenes/UI/employee_panel.tscn" id="5_tbgi4"]
@@ -112,6 +113,20 @@ offset_right = 329.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Employee" parent="FullGameMode/employees" unique_id=1834787427 instance=ExtResource("3_sugp2")]
+layout_mode = 0
+offset_left = 671.0
+offset_top = 760.0
+offset_right = 771.0
+offset_bottom = 860.0
+
+[node name="Employee2" parent="FullGameMode/employees" unique_id=198408591 instance=ExtResource("3_sugp2")]
+layout_mode = 0
+offset_left = 933.0
+offset_top = 761.0
+offset_right = 1033.0
+offset_bottom = 861.0
 
 [node name="EmployeePanel" parent="FullGameMode" unique_id=1329495967 instance=ExtResource("5_tbgi4")]
 layout_mode = 0
