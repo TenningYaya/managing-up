@@ -51,34 +51,39 @@ func get_drop_area_employee_count() -> int:
 
 func spawn_and_drop(employee_data):
 	if employee_data == null: return
-	EmployeeManager.hire_employee(employee_data)
+	
+	# 🚨 重要：employee_data 本身已经是一个通过 instantiate() 出来的节点了
+	var new_emp = employee_data 
+	
+	# 加入组，方便仓库识别
+	if not new_emp.is_in_group("dropped_employee"):
+		new_emp.add_to_group("dropped_employee")
 
-	var new_emp = EMPLOYEE_SCENE.instantiate()
-	new_emp.add_to_group("dropped_employee")
-	new_emp.name = employee_data.employee_name
-
-	# ======= 🛠️ 关键修改区 =======
-	# 1. 找到专门放员工的父节点，把新员工加进去
+	# 1. 把它加入场景树
 	var main_employees_node = get_tree().root.find_child("employees", true, false)
 	if main_employees_node:
-		main_employees_node.add_child(new_emp)
+		# 如果它还没爹，就 add_child；如果已经有爹了，就 reparent
+		if new_emp.get_parent():
+			new_emp.reparent(main_employees_node)
+		else:
+			main_employees_node.add_child(new_emp)
 	else:
-		employee_container.add_child(new_emp) # 备用防报错
+		if not new_emp.get_parent():
+			employee_container.add_child(new_emp)
 
-	if new_emp.has_method("setup"): new_emp.setup(employee_data)
-	elif new_emp.has_method("setup_card"): new_emp.setup_card(employee_data)
-
-	# 2. 因为换了父节点，必须用 global_position (全局坐标)
+	# 2. 既然它已经在 RecruitmentManager 里跑过 setup_employee 了，
+	# 这里的属性已经是 Alice15 的真实属性了，不需要再跑一遍！
+	
+	# 3. 设置位置并开始空投
 	new_emp.global_position = skylight.global_position
 
 	var target_global_pos = get_random_drop_position(new_emp)
 	
 	var tween = create_tween()
-	# 直接 tween 到这个位置，不要再手动加 Vector2(-50,-50) 了
 	tween.tween_property(new_emp, "global_position", target_global_pos, 0.6) \
 		.set_trans(Tween.TRANS_BOUNCE) \
 		.set_ease(Tween.EASE_OUT)
-	
+		
 #func spawn_and_drop(employee_data):
 	#if employee_data == null:
 		#push_error("spawn_and_drop 收到空员工数据")

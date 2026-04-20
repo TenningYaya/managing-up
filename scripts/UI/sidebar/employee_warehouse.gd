@@ -11,6 +11,7 @@ extends Control
 @onready var bulk_optimize_btn = $BottomOperationBar/Fire
 @onready var bulk_recall_btn = $BottomOperationBar/Recall
 @onready var bulk_dispatch_btn = $BottomOperationBar/Dispatch
+@onready var bulk_fire_popup = $BulkFirePopup
 
 var is_selection_mode: bool = false
 var selected_employees: Array[Employee] = []
@@ -111,10 +112,19 @@ func add_employee_to_warehouse(new_employee_data: Employee):
 	grid.add_child(card_instance)
 	
 func _input(event: InputEvent) -> void:
-	if visible and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		# 直接判定当前脚本所在的这个节点（根节点）
+	# 如果仓库本来就没开，或者现在正弹着确认窗，直接无视点击逻辑
+	if not visible or (bulk_fire_popup and bulk_fire_popup.visible):
+		return
+
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# 判定点击是否在仓库外面
 		if not get_global_rect().has_point(event.global_position):
+			# 还有一个关键：如果点的是弹窗区域，也不准缩回去
+			if bulk_fire_popup and bulk_fire_popup.get_global_rect().has_point(event.global_position):
+				return
+				
 			hide()
+			# 如果你有侧边栏状态，记得这里也要同步重置（可选）
 
 # 刚才在 recruitment_panel 里留空的按钮方法
 func open_warehouse():
@@ -220,40 +230,58 @@ func _on_bulk_dispatch_pressed():
 
 # 3. 批量优化 (开除)
 func _on_bulk_optimize_pressed():
-	# 借用一下 EmployeePanel 的 PopupWindow (或者你自己再做一个通用的)
-	var panel = get_tree().get_first_node_in_group("employee_panel")
-	if panel:
-		var popup = panel.popup_window
-		popup.title_text = "Optimize these " + str(selected_employees.size()) + " employees?"
-		# 这里需要注意：execute_fire 现在是针对单人的，批量需要重新连接信号
-		if popup.confirmed.is_connected(panel.execute_fire_employee):
-			popup.confirmed.disconnect(panel.execute_fire_employee)
-		
-		# 连接批量开除方法
-		if not popup.confirmed.is_connected(_execute_bulk_fire):
-			popup.confirmed.connect(_execute_bulk_fire, CONNECT_ONE_SHOT)
-		popup.show()
+	if selected_employees.is_empty(): return
+	
+	# 1. 设置弹窗内容
+	bulk_fire_popup.title_text = "Optimize these " + str(selected_employees.size()) + " employees?"
+	bulk_fire_popup.confirm_label = "Fire"
+	bulk_fire_popup.cancel_label = "Cancel"
+	
+	# 2. 连接信号（因为是专属弹窗，_ready里连一次就行，或者这里用简易连接）
+	# 稳妥起见，先断开旧连接防止重复
+	if bulk_fire_popup.confirmed.is_connected(_execute_bulk_fire):
+		bulk_fire_popup.confirmed.disconnect(_execute_bulk_fire)
+	
+	bulk_fire_popup.confirmed.connect(_execute_bulk_fire, CONNECT_ONE_SHOT)
+	
+	# 3. 显示弹窗
+	bulk_fire_popup.show()
 
 func _execute_bulk_fire():
-	# 倒序删除防止索引出问题（虽然这里是用的数据引用）
+	print("执行批量开除...")
+	
+	# 复制一份列表防止循环中数据变动
 	var to_fire = selected_employees.duplicate()
+	
 	for emp in to_fire:
-		# 逻辑完全复用单人开除：
-		if emp.current_seat != null: emp.current_seat.clear_occupant()
-		
+		# 1. 地图实体处理（先退组，再销毁）
 		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
 		for node in dropped_nodes:
 			if node.name == emp.employee_name:
+				node.remove_from_group("dropped_employee")
 				node.queue_free()
 				break
-				
+		
+		# 2. 工位处理
+		if emp.current_seat != null:
+			emp.current_seat.clear_occupant()
+			emp.current_seat = null
+			
+		# 3. 管理器移除
 		EmployeeManager.employee_removed.emit(emp)
 		EmployeeManager.my_employees.erase(emp)
+		
+		# 4. 数据销毁
 		emp.queue_free()
 	
+	# 5. UI 清理工作
 	selected_employees.clear()
-	_toggle_selection_mode()
-	refresh_display() # 刷新仓库列表
+	_toggle_selection_mode() # 退出多选模式
+	refresh_display()       # 重新生成列表
+	_on_map_needs_refresh() # 统一刷一遍 OnMapIcon
+	
+	# 6. 记得关掉弹窗
+	bulk_fire_popup.hide()
 
 # 辅助判定（逻辑同 Panel）
 func _check_emp_on_map(emp: Employee) -> bool:

@@ -161,17 +161,14 @@ func _on_work_progress_changed(progress_percent: float) -> void:
 
 func _on_work_started() -> void:
 	progress_bar.value = 0
-	print("[EmployeePanel] 员工开始工作")
 
 
 func _on_work_stopped() -> void:
 	progress_bar.value = 0
-	print("[EmployeePanel] 员工停止工作")
 
 
 func _on_work_cycle_completed(_reward_amount: int) -> void:
 	progress_bar.value = 0
-	print("[EmployeePanel] 一轮工作完成，进度归零")
 
 
 func _on_current_employee_tree_exiting() -> void:

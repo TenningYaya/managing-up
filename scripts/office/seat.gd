@@ -102,3 +102,15 @@ func _apply_upgrade_visuals() -> void:
 	if upgrade_level >= 4:
 		if plant != null:
 			plant.visible = true
+
+# 获取效率加成
+func get_efficiency_buff() -> int:
+	if upgrade_level >= 2:
+		return 2
+	return 0
+
+# 获取质量加成
+func get_quality_buff() -> int:
+	if upgrade_level >= 3:
+		return 2
+	return 0

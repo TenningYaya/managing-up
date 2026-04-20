@@ -1,12 +1,12 @@
 extends Control
 class_name Employee
 
+enum Rarity { R, SR, SSR }
+
 signal work_progress_changed(progress_percent: float)
 signal work_started()
 signal work_stopped()
 signal work_cycle_completed(reward_amount: int)
-
-enum Rarity { R, SR, SSR }
 
 @export var employee_name: String = "Marry"
 @export var rarity: Rarity = Rarity.R
@@ -15,21 +15,31 @@ enum Rarity { R, SR, SSR }
 @export var quality: int = 1
 @export var experience: int = 1
 
-@export var snap_distance: float = 60.0
-@export var base_work_duration: float = 10.0
-@export var reward_per_cycle: int = 50
-@export_range(0.0, 1.0, 0.05) var interrupted_reward_ratio: float = 0.5
-
-var dragging: bool = false
-var drag_offset: Vector2 = Vector2.ZERO
-
 var current_seat: DeskSeat = null
 var drag_start_seat: DeskSeat = null
+var dragging: bool = false
+var drag_offset: Vector2 = Vector2.ZERO
 var drag_start_position: Vector2 = Vector2.ZERO
 
 var is_working: bool = false
 var work_elapsed: float = 0.0
 
+#当前生产时间计算公式为
+#current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
+#对应GDD：
+#同事的最终文件生产时间 =（基础文件生产时间-（同事工作效率+同事工作效率补正）*减幅基数*（80-120随机数）%）
+
+var base_kpi_value: int = 50
+var base_file_production_time: float = 600.0 # 基础文件生产时间
+var base_reduction_time: int = 30 # 减幅基数
+
+var current_cycle_duration: float = 10.0
+var current_desk_eff_buff: int = 0
+var current_desk_qual_buff: int = 0
+
+@export var snap_distance: float = 60.0
+@export var reward_per_cycle: int = 50
+@export_range(0.0, 1.0, 0.05) var interrupted_reward_ratio: float = 0.5
 
 func _ready() -> void:
 	add_to_group("employees")
@@ -37,14 +47,12 @@ func _ready() -> void:
 	z_index = 1
 	randomize()
 
-	if employee_name == "" or employee_name == "Marry":
+	if employee_name == "":
 		employee_name = name
-
 
 func setup_employee(new_rarity: Rarity) -> void:
 	rarity = new_rarity
 	_generate_attributes()
-
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
@@ -67,8 +75,8 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 			var _drag_distance := global_position.distance_to(drag_start_position)
 			
-			# 注意：这里删除了原有的 _on_employee_clicked() 判定
-			# 现在的逻辑是：左键松开只负责放下员工，不再负责打开面板
+			if _drag_distance < 5.0:
+				_speed_up_work() # 触发加速！
 			
 			_end_drag()
 
@@ -77,7 +85,6 @@ func _draw() -> void:
 		var my_center := size / 2.0
 		draw_circle(my_center, 8.0, Color.AQUA)
 		draw_arc(my_center, snap_distance, 0.0, TAU, 32, Color.AQUA, 1.0)
-
 
 func _process(delta: float) -> void:
 	if dragging:
@@ -90,7 +97,7 @@ func _process(delta: float) -> void:
 		work_progress_changed.emit(progress)
 
 		if progress >= 100.0:
-			_finish_one_work_cycle()
+			_finish_and_generate_file()
 
 
 func _on_employee_clicked() -> void:
@@ -107,7 +114,6 @@ func _on_employee_clicked() -> void:
 	else:
 		# 如果还是找不到，用 push_error 提醒，这比普通的 print 更容易在调试时被发现
 		push_error("错误：找不到 EmployeePanel。请检查：1.面板是否在场景里 2.是否加了'employee_panel'组")
-
 
 func _start_drag() -> void:
 	var tweens = get_tree().get_processed_tweens()
@@ -198,13 +204,31 @@ func _on_snap_finished() -> void:
 
 
 func _start_work() -> void:
+	if is_working: return # 防止重复触发
+	
+	print(employee_name, " 坐到了工位上，准备开工")
+	
+	# 🌟 这里只负责状态切换和总信号
 	is_working = true
+	work_started.emit() 
+	
+	# 🚀 剩下的脏活累活（算属性、算时间）全交给循环函数
+	_start_new_work_cycle()
+
+func _start_new_work_cycle():
+	# 1. 重置当前进度计时
 	work_elapsed = 0.0
 	work_progress_changed.emit(0.0)
-	work_started.emit()
-	print(employee_name, " 开始工作")
-
-
+	
+	# 2. 抓取最新的属性（调用我们刚才写的聚合器）
+	var final_eff = get_final_efficiency()
+	var random_factor = randf_range(0.8, 1.2)
+	
+	# 3. 锁定这一轮的时长
+	current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
+	
+	print("新周期开始：效率 ", final_eff, " 预计耗时 ", current_cycle_duration)
+	
 func _stop_work(reset_progress: bool = true) -> void:
 	is_working = false
 
@@ -219,30 +243,28 @@ func _calculate_interrupted_reward() -> void:
 	if not is_working:
 		return
 
-	var actual_duration: float = _get_actual_work_duration()
-	var progress_ratio: float = clampf(work_elapsed / actual_duration, 0.0, 1.0)
-	var partial_reward: int = int(round(reward_per_cycle * progress_ratio * interrupted_reward_ratio))
+	# 1. 计算当前进度 (0.0 - 1.0)
+	var progress_ratio = clampf(work_elapsed / current_cycle_duration, 0.0, 1.0)
+	
+	# 2. 根据 GDD 公式：保底价值 * 进度 * 50%
+	# 假设打断时一律按 Gray 质量（100% 价值基数）计算
+	var partial_reward: int = int(base_kpi_value * progress_ratio * 0.5)
 
-	_stop_work(true)
+	# 3. 停止工作并重置进度
+	_stop_work(true) 
 
 	if partial_reward > 0:
-		var gm: Node = _get_game_manager()
-		if gm != null and gm.has_method("add_kpi"):
+		var gm = _get_game_manager()
+		if gm and gm.has_method("add_kpi"):
 			gm.add_kpi(partial_reward)
-			print(employee_name, " 工作被打断，结算部分收益: ", partial_reward)
+			print(employee_name, " 工作被打断，结算补偿 KPI: ", partial_reward)
 
 
 func get_work_progress_percent() -> float:
-	var duration: float = _get_actual_work_duration()
-	if duration <= 0.0:
+	# 只认我们新算的、存在变量里的那个“当前周期时长”
+	if current_cycle_duration <= 0.0:
 		return 0.0
-
-	return clampf(work_elapsed / duration * 100.0, 0.0, 100.0)
-
-
-func _get_actual_work_duration() -> float:
-	var speed_bonus: float = float(efficiency - 1) * 0.6
-	return maxf(2.0, base_work_duration - speed_bonus)
+	return clampf(work_elapsed / current_cycle_duration * 100.0, 0.0, 100.0)
 
 
 func _finish_one_work_cycle() -> void:
@@ -290,3 +312,90 @@ func _generate_attributes() -> void:
 		elif stat_to_increase == 2 and experience < 10:
 			experience += 1
 			remaining_points -= 1
+
+func _finish_and_generate_file():
+	# ======= 1. 计算文件质量 =======
+	var init_score = randf_range(1.0, 100.0)
+	var total_qual = quality + current_desk_qual_buff
+	
+	# 最终评分 = 初始评分 * (100 + 质量*2)%
+	var final_score = init_score * (1.0 + (total_qual * 2.0) / 100.0)
+	
+	var kpi_multiplier = 1.0
+	var dollar_reward = 1 # 默认灰、绿都是 1
+	var file_grade = "Gray"
+	
+	# 评级判定
+	if final_score >= 95.0:
+		file_grade = "Gold"
+		kpi_multiplier = 2.0
+		dollar_reward = 3
+	elif final_score >= 71.0:
+		file_grade = "Blue"
+		kpi_multiplier = 1.5
+		dollar_reward = 2
+	elif final_score >= 31.0:
+		file_grade = "Green"
+		kpi_multiplier = 1.2
+		dollar_reward = 1
+		
+	# ======= 2. 兑换 KPI =======
+	# base_kpi_value 是你设定的基准值，比如 50
+	var final_kpi = int(base_kpi_value * kpi_multiplier)
+	Gamemanager.add_kpi(final_kpi)
+	
+	# ======= 3. 概率获得美金 =======
+	# 概率 = (1 + 0.5 * 经验)%
+	var dollar_chance = (1.0 + 0.5 * experience) / 100.0
+	if randf() <= dollar_chance:
+		Gamemanager.add_dollar(dollar_reward)
+		print("爆美金了！品质：", file_grade, " 数量：", dollar_reward)
+
+	# 结算完毕，开启下一轮
+	_start_new_work_cycle()
+
+func _speed_up_work() -> void:
+	# 只有在工作状态下点击才有效
+	if not is_working:
+		return
+		
+	# ✅ 使用当前这一轮锁定的总时长
+	var total_duration = current_cycle_duration
+	
+	# GDD公式：减少最终生产时间 * 2%
+	var speed_up_amount = total_duration * 0.02
+	
+	# 增加已工作的时间，相当于减少了剩余时间
+	work_elapsed += speed_up_amount
+	
+	print(employee_name, " 被老板敲打了一下，工作进度增加了: ", speed_up_amount, " 秒")
+	
+	# 检查是否点满了
+	if get_work_progress_percent() >= 100.0:
+		# 🚨 注意：如果你已经写好了阶段三，这里建议调用新的结算函数
+		if has_method("_finish_and_generate_file"):
+			_finish_and_generate_file()
+		else:
+			_finish_one_work_cycle()
+
+func get_final_efficiency() -> int:
+	var total = efficiency
+	
+	# 来源 1：工位补正
+	if current_seat and current_seat.has_method("get_efficiency_buff"):
+		total += current_seat.get_efficiency_buff()
+		
+	# 来源 2：未来的技能补正 (预留位置)
+	# total += skill_manager.get_buff("efficiency")
+	
+	# 来源 3：未来的全公司 Buff (预留位置)
+	# total += Gamemanager.global_efficiency_bonus
+	
+	return total
+
+# 获取当前的最终工作质量
+func get_final_quality() -> int:
+	var total = quality
+	if current_seat and current_seat.has_method("get_quality_buff"):
+		total += current_seat.get_quality_buff()
+	return total

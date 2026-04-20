@@ -5,13 +5,13 @@
 [ext_resource type="PackedScene" uid="uid://s6hqcjwc8g78" path="res://scenes/office/DeskSlot.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://sclbpjras5bi" path="res://scenes/employee/employee_drop_area.tscn" id="3_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://bin62t7m5b1o0" path="res://scenes/sidebar/side_menu.tscn" id="4_jyhfs"]
-[ext_resource type="Script" uid="uid://bonpcggpr1rvm" path="res://scripts/UI/sidebar/recruitment_test.gd" id="5_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://cjfjfj4l46h23" path="res://scenes/UI/employee_panel.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cjfjfj4l46h23" path="res://scenes/sidebar/employee_panel/employee_panel.tscn" id="5_tbgi4"]
 [ext_resource type="Script" uid="uid://bo4d6sxmvchpt" path="res://scripts/test/test_time_control.gd" id="6_tipki"]
 [ext_resource type="PackedScene" uid="uid://duispsomfw47v" path="res://scenes/office/office_panel.tscn" id="9_85g3d"]
 [ext_resource type="PackedScene" uid="uid://ceijke56lupl5" path="res://scenes/UI/currency_ui.tscn" id="11_trceg"]
 [ext_resource type="PackedScene" uid="uid://bbi44ww2puf63" path="res://scenes/UI/sticky_note.tscn" id="11_ya4ey"]
 [ext_resource type="Script" uid="uid://c2stthjkcu8gc" path="res://scripts/UI/camera_2d.gd" id="13_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://btou2tsygvjc0" path="res://scenes/employee/test_hirefire.tscn" id="13_jkv2x"]
 [ext_resource type="Script" uid="uid://bx1cavexc0whx" path="res://scripts/test/test_currency.gd" id="14_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://im2qyo8akr0" path="res://scenes/office/DeskUpgradePanel.tscn" id="15_jkv2x"]
 
@@ -165,32 +165,6 @@ offset_left = 187.0
 offset_right = 495.0
 offset_bottom = 108.0
 
-[node name="HireFire" type="Control" parent="CanvasLayer/Add All Test Button Here/HBoxContainer" unique_id=1513030298]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-script = ExtResource("5_o6xl0")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" unique_id=900182918]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Normal*10" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer" unique_id=775958522]
-layout_mode = 2
-text = "NormalRecruit10"
-
-[node name="NormalRecruitBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer" unique_id=743225544]
-layout_mode = 2
-text = "NormalRecruit"
-
-[node name="HeadhuntBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer" unique_id=1609376755]
-layout_mode = 2
-text = "HeadHunt"
-
-[node name="FireAllBtn" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer" unique_id=1047602332]
-layout_mode = 2
-text = "FireAll"
-
 [node name="TestTimeControl" type="Control" parent="CanvasLayer/Add All Test Button Here/HBoxContainer" unique_id=345158452]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
@@ -257,10 +231,10 @@ text = "KPI0"
 layout_mode = 2
 text = "USD0"
 
+[node name="TestHirefire" parent="CanvasLayer/Add All Test Button Here" unique_id=388695962 instance=ExtResource("13_jkv2x")]
+layout_mode = 1
+offset_left = 480.0
+offset_right = 590.0
+
 [node name="DeskUpgradePanel" parent="CanvasLayer" unique_id=567798841 instance=ExtResource("15_jkv2x")]
 visible = false
-
-[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer/Normal*10" to="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" method="_on_normal_10_pressed"]
-[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer/NormalRecruitBtn" to="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" method="_on_test_normal_gen_pressed"]
-[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer/HeadhuntBtn" to="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" method="_on_test_headhunt_1x_pressed"]
-[connection signal="pressed" from="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire/VBoxContainer/FireAllBtn" to="CanvasLayer/Add All Test Button Here/HBoxContainer/HireFire" method="_on_clear_all_test"]

@@ -13,6 +13,8 @@ enum State { IDLE, RECRUITING, READY }
 var current_state = State.IDLE
 var headhunt_time_left: float = 0.0
 
+@onready var employee_scene = preload("res://scenes/employee/employee.tscn")
+
 func _process(delta):
 	if current_state == State.RECRUITING:
 		headhunt_time_left -= delta
@@ -49,7 +51,8 @@ func _on_headhunt_finished():
 
 # --- 辅助：创建数据 ---
 func _create_data(rarity) -> Employee:
-	var e = Employee.new()
+	var e = employee_scene.instantiate() as Employee
+	
 	e.employee_name = ["Bob", "Alice", "David"].pick_random() + str(randi()%100)
 	e.setup_employee(rarity)
 	return e
