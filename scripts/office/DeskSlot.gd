@@ -4,10 +4,11 @@ class_name DeskSlot
 var slot_level: int = 1
 
 @onready var grid_container = $CenterContainer/GridContainer
-@onready var click_area = $ClickArea # 你刚才加的那个透明按钮
+@onready var upgrade_trigger_btn = $UpgradeTriggerBtn # 左下角新添加的小按钮
 
 func _ready():
-	click_area.pressed.connect(_on_slot_clicked)
+	# 连接新按钮的点击信号
+	upgrade_trigger_btn.pressed.connect(_on_slot_clicked)
 
 func _on_slot_clicked():
 	# 从场景树里找到刚刚写好的那个升级面板

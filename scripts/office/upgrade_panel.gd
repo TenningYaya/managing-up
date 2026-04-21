@@ -12,7 +12,12 @@ var current_cost: int = 0
 func _ready():
 	upgrade_button.pressed.connect(_on_upgrade_pressed)
 	close_button.pressed.connect(hide)
-	# 如果有 CloseButton，也要连上 hide()
+
+# 使用 _process 每帧更新面板位置，实现跟随效果
+func _process(_delta):
+	# 只有当面板显示着，且目标桌子存在时才更新位置
+	if visible and is_instance_valid(target_slot):
+		global_position = target_slot.global_position + (target_slot.size / 2.0) - (size / 2.0)
 
 # 当玩家点击某组桌子时，调用这个方法打开面板
 func open(slot: Control):
@@ -20,7 +25,7 @@ func open(slot: Control):
 	var lvl = target_slot.slot_level
 	
 	level_label.text = "当前等级: " + str(lvl)
-	global_position = slot.global_position + (slot.size / 2.0) - (size / 2.0)
+	
 	if lvl >= 4:
 		cost_label.text = "已满级"
 		upgrade_button.disabled = true
@@ -43,8 +48,8 @@ func get_upgrade_cost(level: int) -> int:
 
 func _on_upgrade_pressed():
 	if target_slot and target_slot.slot_level < 4:
-		# 真正扣除 KPI [cite: 4]
+		# 真正扣除 KPI 
 		if Gamemanager.spend_kpi(current_cost):
 			target_slot.upgrade_all()
-			# 升级完刷新一下面板状态，或者你也可以直接 hide() 关闭它
+			# 升级完刷新一下面板状态
 			open(target_slot)

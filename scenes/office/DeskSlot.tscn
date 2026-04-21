@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c4kcga8k3qdlx" path="res://scripts/office/DeskSlot.gd" id="1_fqahj"]
 [ext_resource type="PackedScene" uid="uid://dfnm7sh1rtiky" path="res://scenes/office/DeskSet.tscn" id="1_ohn7j"]
+[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_pfl3o"]
 
 [node name="DeskSlot" type="Control" unique_id=974996053]
 custom_minimum_size = Vector2(262, 328)
@@ -41,11 +42,19 @@ layout_mode = 2
 [node name="DeskSet(6)" parent="CenterContainer/GridContainer" unique_id=1128279081 instance=ExtResource("1_ohn7j")]
 layout_mode = 2
 
-[node name="ClickArea" type="Button" parent="." unique_id=1443254142]
+[node name="UpgradeTriggerBtn" type="TextureButton" parent="." unique_id=1124786311]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 2
+anchor_top = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-flat = true
+offset_top = -40.0
+offset_right = 30.0
+offset_bottom = -10.0
+grow_vertical = 0
+texture_normal = ExtResource("3_pfl3o")
+texture_pressed = ExtResource("3_pfl3o")
+texture_hover = ExtResource("3_pfl3o")
+texture_disabled = ExtResource("3_pfl3o")
+texture_focused = ExtResource("3_pfl3o")
+ignore_texture_size = true
+stretch_mode = 0
