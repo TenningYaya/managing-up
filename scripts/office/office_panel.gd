@@ -61,8 +61,8 @@ func open_panel(office: Office) -> void:
 		
 		if type_to_check == Gamemanager.OfficeType.RECRUITMENT:
 			already_exists = OfficeManager.has_recruitment_office
-		elif type_to_check == Gamemanager.OfficeType.BULLETIN_BOARD:
-			already_exists = OfficeManager.has_bulletin_board
+		elif type_to_check == Gamemanager.OfficeType.CULTURE_CENTER:
+			already_exists = OfficeManager.has_culture_center
 		
 		# 3. 执行禁用：
 		# 如果该功能已在全场存在，且【当前点击的办公室】并不是正在担任这个功能的那个

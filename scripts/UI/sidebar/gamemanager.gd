@@ -7,7 +7,7 @@ signal kpi_changed(new_value)
 signal dollar_changed(new_value)
 
 var has_recruitment_office: bool = false
-var has_bulletin_board: bool = false
+var has_culture_center: bool = false
 
 # 2. 定义变量 (自带 setter 广播)
 var kpi: int = 1000:
@@ -26,7 +26,7 @@ enum OfficeType {
 	PANTRY,         # 茶水间
 	MEETING_ROOM,   # 会议室
 	RECRUITMENT,    # 招聘办公室
-	BULLETIN_BOARD  # 公告栏
+	CULTURE_CENTER  # 企业文化室
 }
 
 

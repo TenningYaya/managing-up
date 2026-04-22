@@ -2,6 +2,7 @@
 extends Node
 class_name OfficeLogic
 
+
 # 保存对办公室本体的引用，方便获取它的位置或状态
 var my_office: Control
 
