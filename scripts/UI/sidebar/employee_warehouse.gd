@@ -82,6 +82,9 @@ func _on_employee_hired(new_employee: Employee) -> void:
 	card_instance.setup_card(new_employee)
 	card_instance.name = new_employee.employee_name 
 	
+	if card_instance.has_method("update_on_map_status"):
+		card_instance.update_on_map_status()
+		
 	card_instance.card_clicked.connect(_on_card_selected)
 	if visible:
 		refresh_display()
@@ -155,6 +158,8 @@ func refresh_display():
 		grid.add_child(card)
 		card.setup_card(emp)
 		card.name = emp.employee_name
+		if card.has_method("update_on_map_status"):
+			card.update_on_map_status()
 		# 别忘了连信号
 		if not card.card_clicked.is_connected(_on_card_selected):
 			card.card_clicked.connect(_on_card_selected)
@@ -197,25 +202,26 @@ func _on_bulk_recall_pressed():
 	
 	for emp in selected_employees:
 		# --- A. 清理工位 ---
-		if emp.current_seat != null:
+		if emp.get("current_seat") != null:
 			emp.current_seat.clear_occupant()
 			emp.current_seat = null
 			
-		# --- B. 寻找并清理地图实体 ---
-		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
-		for node in dropped_nodes:
-			if node.name == emp.employee_name:
-				# 🚨 【核心修复 1】：先手动踢出组！
-				# 否则在当前帧，名片自查时依然能通过组名找到这个“还没死透”的小人
-				node.remove_from_group("dropped_employee")
-				node.queue_free()
-				break
+		# --- B. 施加封印（直接收回地图实体）---
+		# 因为 emp 就是地图上的那个实体，不需要去遍历查找！
+		if emp.has_method("set_inactive"):
+			emp.set_inactive()
+		else:
+			# 如果你还没在 Employee.gd 里写 set_inactive，就直接在这里写保底逻辑：
+			emp.visible = false
+			emp.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			emp.process_mode = PROCESS_MODE_DISABLED
+			if emp.is_in_group("dropped_employee"):
+				emp.remove_from_group("dropped_employee")
+			if emp.get_parent():
+				emp.get_parent().remove_child(emp)
 	
-	# --- C. 退出模式 ---
+	# --- C. 退出模式并刷新 ---
 	_toggle_selection_mode() 
-	
-	# 🚨 【核心修复 2】：手动触发刷新通知！
-	# 因为这里是批量操作，循环结束后喊一嗓子，让所有名片整齐划一地重检图标
 	_on_map_needs_refresh()
 
 # 2. 批量 Dispatch (派遣)
@@ -225,6 +231,9 @@ func _on_bulk_dispatch_pressed():
 		# 只有不在地图上的才发信号
 		if not _check_emp_on_map(emp):
 			Gamemanager.request_employee_drop.emit(emp)
+			emp.visible = true
+			emp.mouse_filter = Control.MOUSE_FILTER_STOP
+			emp.process_mode = PROCESS_MODE_INHERIT
 	_toggle_selection_mode()
 	_on_map_needs_refresh()
 
@@ -249,44 +258,39 @@ func _on_bulk_optimize_pressed():
 
 func _execute_bulk_fire():
 	print("执行批量开除...")
-	
-	# 复制一份列表防止循环中数据变动
 	var to_fire = selected_employees.duplicate()
 	
 	for emp in to_fire:
-		# 1. 地图实体处理（先退组，再销毁）
-		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
-		for node in dropped_nodes:
-			if node.name == emp.employee_name:
-				node.remove_from_group("dropped_employee")
-				node.queue_free()
-				break
-		
-		# 2. 工位处理
-		if emp.current_seat != null:
+		# 1. 工位处理：如果有座位，先让座位空出来
+		if emp.get("current_seat") != null:
 			emp.current_seat.clear_occupant()
 			emp.current_seat = null
 			
-		# 3. 管理器移除
+		# 2. 系统记录移除：通知仓库和管理器
 		EmployeeManager.employee_removed.emit(emp)
 		EmployeeManager.my_employees.erase(emp)
 		
-		# 4. 数据销毁
-		emp.queue_free()
+		# 3. 彻底销毁：这一行会同时把地图上的小人、仓库的数据、内存的对象全部物理抹除
+		if is_instance_valid(emp):
+			emp.queue_free()
 	
-	# 5. UI 清理工作
+	# 4. UI 刷新
 	selected_employees.clear()
-	_toggle_selection_mode() # 退出多选模式
-	refresh_display()       # 重新生成列表
-	_on_map_needs_refresh() # 统一刷一遍 OnMapIcon
-	
-	# 6. 记得关掉弹窗
+	_toggle_selection_mode()
+	refresh_display()       # 重新生成列表，已开除的人就不会出现了
+	_on_map_needs_refresh() # 刷新剩下的人的小绿标
 	bulk_fire_popup.hide()
 
 # 辅助判定（逻辑同 Panel）
 func _check_emp_on_map(emp: Employee) -> bool:
-	if emp.current_seat != null: return true
-	var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
-	for node in dropped_nodes:
-		if node.name == emp.employee_name: return true
+	if emp == null: return false
+	
+	# 判定 1：有工位
+	if emp.get("current_seat") != null: 
+		return true
+		
+	# 判定 2：在掉落组里且在树里
+	if emp.is_in_group("dropped_employee") and emp.is_inside_tree():
+		return true
+		
 	return false

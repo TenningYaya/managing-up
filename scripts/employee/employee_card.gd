@@ -78,20 +78,21 @@ func _gui_input(event: InputEvent):
 func set_selection_mode(active: bool):
 	if not active:
 		is_selected = false
-
+		
 func update_on_map_status(employee_data_override: Employee = null):
 	# 如果没传参数，就用自己存的数据
 	var data = employee_data_override if employee_data_override else my_employee_data
 	if data == null: return
 	
 	var is_on_map = false
-	if data.current_seat != null:
-		is_on_map = true
-	else:
-		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
-		for node in dropped_nodes:
-			if node.name == data.employee_name:
-				is_on_map = true
-				break
 	
+	# 条件 1：如果他有座位，那肯定在地图上（工位上）
+	if data.get("current_seat") != null:
+		is_on_map = true
+		
+	# 条件 2：如果没有座位，但他在“掉落组”里，并且确实“在场景树里” (is_inside_tree)
+	elif data.is_in_group("dropped_employee") and data.is_inside_tree():
+		is_on_map = true
+		
+	# 控制绿标显示
 	on_map_icon.visible = is_on_map

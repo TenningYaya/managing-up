@@ -30,6 +30,8 @@ class_name EmployeePanel
 # 当前正在查看的员工数据引用
 var current_employee: Employee = null
 
+# --- buff部分 ---
+@onready var buffs_container: Container = $PanelBg/EmployeePage/Information/Buffs
 # ==========================================
 # 2. 初始化
 # ==========================================
@@ -83,7 +85,7 @@ func open_panel(employee: Employee) -> void:
 	_update_dispatch_button()
 	
 	_refresh_progress_bar()
-	
+	_refresh_buffs()
 	_connect_current_employee()
 	
 	popup_window.hide()
@@ -179,20 +181,17 @@ func _on_current_employee_tree_exiting() -> void:
 # 5. 外派与调入逻辑
 # ==========================================
 
-# 核心判定：同事是不是在地图上（不管是在工位还是在地上乱跑）
 func _is_employee_on_map() -> bool:
 	if current_employee == null:
 		return false
 		
 	# 1. 在工位上？算在地图上
-	if current_employee.current_seat != null:
+	if current_employee.get("current_seat") != null:
 		return true
 		
-	# 2. 在地上跑？去 dropped_employee 组里找他的名字
-	var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
-	for node in dropped_nodes:
-		if node.name == current_employee.employee_name:
-			return true
+	# 2. 没在工位，但在掉落组里，且确实在场景里？算在地图上
+	if current_employee.is_in_group("dropped_employee") and current_employee.is_inside_tree():
+		return true
 			
 	return false
 
@@ -212,23 +211,33 @@ func _on_dispatch_pressed() -> void:
 		print("把员工从地图收回仓库：", current_employee.employee_name)
 		
 		# 1. 如果在工位上，让他从工位上下来
-		if current_employee.current_seat != null:
+		if current_employee.get("current_seat") != null:
 			current_employee.current_seat.clear_occupant()
 			current_employee.current_seat = null
 			
-		# 2. 找到地图上的“实体小人”并让他消失
-		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
-		for node in dropped_nodes:
-			if node.name == current_employee.employee_name:
-				node.queue_free() # 销毁地图上的小人节点
-				break # 找到了就不用往下找了
+		# 2. 直接对他施加封印（不需要去地图上找了！）
+		if current_employee.has_method("set_inactive"):
+			current_employee.set_inactive()
+		else:
+			# 保底逻辑
+			current_employee.visible = false
+			current_employee.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			current_employee.process_mode = Node.PROCESS_MODE_DISABLED
+			if current_employee.is_in_group("dropped_employee"):
+				current_employee.remove_from_group("dropped_employee")
+			if current_employee.get_parent():
+				current_employee.get_parent().remove_child(current_employee)
 				
 		progress_bar.value = 0
 		
 	else:
 		# ======= 【派遣 (Dispatch) 逻辑】 =======
 		print("把员工扔进地图：", current_employee.employee_name)
-		# 发送你同学写的掉落信号
+		# 🚨 【核心修复点】：如果他还在内存的某个角落挂着父节点
+		# 必须先解绑，DropArea 那边的 add_child 才能成功
+		if current_employee.get_parent():
+			current_employee.get_parent().remove_child(current_employee)
+		
 		Gamemanager.request_employee_drop.emit(current_employee)
 	
 	# 刷新按钮文字
@@ -245,30 +254,24 @@ func _on_fire_pressed() -> void:
 
 func execute_fire_employee() -> void:
 	if current_employee != null:
-		# 1. 腾出工位（如果是坐在工位上的，先清空工位状态）
-		if current_employee.current_seat != null:
+		# 1. 腾出工位
+		if current_employee.get("current_seat") != null:
 			current_employee.current_seat.clear_occupant()
 		
-		# 2. 【核心新增】：清理地图上的实体（自由走动的小人）
-		# 必须在 current_employee 被删掉前执行，因为我们要用它的名字做对比
-		var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
-		for node in dropped_nodes:
-			if node.name == current_employee.employee_name:
-				print("[EmployeePanel] 正在清理地图实体: ", node.name)
-				node.queue_free() # 让小人从地图上消失
-				break # 找到了就停，节省性能
+		# （这里原本有去地图找名字并 queue_free 的逻辑，直接删掉！
+		# 因为最后一步的 current_employee.queue_free() 会自动把地图上的他一起带走）
 		
-		# 3. 返还资源的逻辑
+		# 2. 返还资源的逻辑
 		if current_employee.rarity == Employee.Rarity.SR or current_employee.rarity == Employee.Rarity.SSR:
 			print("退还了少量美金！")
 		
-		# 4. 通知其他系统（如仓库、UI）员工已离职
+		# 3. 通知其他系统员工已离职
 		EmployeeManager.employee_removed.emit(current_employee)
 		
-		# 5. 从 Manager 的主列表中移除
+		# 4. 从 Manager 的主列表中移除
 		EmployeeManager.my_employees.erase(current_employee)
 		
-		# 6. 【最后一步】：删除员工数据实例
+		# 5. 【最后一步】：彻底销毁员工数据和地图实体
 		current_employee.queue_free()
 		current_employee = null
 		
@@ -278,3 +281,66 @@ func execute_fire_employee() -> void:
 # ⚠️ 注意：你需要将你的 PopupWindow 里的“取消”按钮信号连接到这个函数！
 func cancel_fire_employee() -> void:
 	popup_window.hide()
+
+# ==========================================
+# 7. Buff 显示逻辑
+# ==========================================
+func _refresh_buffs() -> void:
+	# 1. 每次打开面板前，先把旧的 Buff 标签清空，防止无限叠加
+	for child in buffs_container.get_children():
+		child.queue_free()
+		
+	if current_employee == null:
+		return
+		
+	var has_any_buff = false
+		
+	# 2. 检查是否有【工位 Buff】
+	if current_employee.get("current_seat") != null:
+		var seat = current_employee.current_seat
+		var eff_buff = 0
+		var qual_buff = 0
+		
+		# 读取工位的增益（使用你之前写好的接口）
+		if seat.has_method("get_efficiency_buff"):
+			eff_buff = seat.get_efficiency_buff()
+		if seat.has_method("get_quality_buff"):
+			qual_buff = seat.get_quality_buff()
+			
+		# 如果工位确实提供了 Buff，就生成一条标签
+		if eff_buff > 0 or qual_buff > 0:
+			var desc = "当前工位提供:\n"
+			if eff_buff > 0: desc += "效率 +" + str(eff_buff) + " "
+			if qual_buff > 0: desc += "质量 +" + str(qual_buff)
+			
+			# 调用添加标签的函数 (显示的名字, 悬停的解释)
+			_add_buff_label("办公桌增益", desc)
+			has_any_buff = true
+			
+	# 3. 未来如果有【办公室 Buff】或【技能 Buff】，继续在这里写 if 追加即可...
+	# if current_employee.has_skill_buff(): ...
+	
+	# 4. 如果什么 Buff 都没有，显示一句提示（可选）
+	if not has_any_buff:
+		_add_buff_label("无增益", "该员工当前没有任何状态加成")
+
+
+# 动态生成一条 Buff 标签的辅助函数
+func _add_buff_label(buff_name: String, hover_description: String) -> void:
+	var label = Label.new()
+	label.text = "✦ " + buff_name
+	
+	# 🚨 【核心魔法】：Godot 原生悬停提示！
+	label.tooltip_text = hover_description
+	
+	# 必须开启鼠标阻挡，否则悬停提示弹不出来
+	label.mouse_filter = Control.MOUSE_FILTER_STOP 
+	
+	# （可选）给 Buff 换个显眼的颜色
+	if buff_name != "无增益":
+		label.add_theme_color_override("font_color", Color.GREEN_YELLOW)
+	else:
+		label.add_theme_color_override("font_color", Color.GRAY)
+		
+	# 把生成好的标签塞进容器里
+	buffs_container.add_child(label)

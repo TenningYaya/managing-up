@@ -52,29 +52,30 @@ func get_drop_area_employee_count() -> int:
 func spawn_and_drop(employee_data):
 	if employee_data == null: return
 	
-	# 🚨 重要：employee_data 本身已经是一个通过 instantiate() 出来的节点了
+	# 登记入职
+	EmployeeManager.hire_employee(employee_data) 
+	
 	var new_emp = employee_data 
 	
-	# 加入组，方便仓库识别
+	# 🌟 解冻员工（如果是从 Recall 状态回来的）
+	new_emp.visible = true
+	new_emp.process_mode = Node.PROCESS_MODE_INHERIT
+	new_emp.mouse_filter = Control.MOUSE_FILTER_STOP
+	
 	if not new_emp.is_in_group("dropped_employee"):
 		new_emp.add_to_group("dropped_employee")
 
-	# 1. 把它加入场景树
+	# 1. 把它加入场景树 (使用安全挂载)
 	var main_employees_node = get_tree().root.find_child("employees", true, false)
-	if main_employees_node:
-		# 如果它还没爹，就 add_child；如果已经有爹了，就 reparent
-		if new_emp.get_parent():
-			new_emp.reparent(main_employees_node)
-		else:
-			main_employees_node.add_child(new_emp)
-	else:
-		if not new_emp.get_parent():
-			employee_container.add_child(new_emp)
-
-	# 2. 既然它已经在 RecruitmentManager 里跑过 setup_employee 了，
-	# 这里的属性已经是 Alice15 的真实属性了，不需要再跑一遍！
+	var target_parent = main_employees_node if main_employees_node else employee_container
 	
-	# 3. 设置位置并开始空投
+	if new_emp.get_parent():
+		if new_emp.get_parent() != target_parent:
+			new_emp.reparent(target_parent) # 已经在树里了，用移交
+	else:
+		target_parent.add_child(new_emp) # 不在树里，用添加
+
+	# 2. 设置位置并空投
 	new_emp.global_position = skylight.global_position
 
 	var target_global_pos = get_random_drop_position(new_emp)
