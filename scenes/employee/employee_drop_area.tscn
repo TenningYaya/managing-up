@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://sclbpjras5bi"]
 
-[ext_resource type="Script" uid="uid://cfcx88ve00apd" path="res://employee_drop_area.gd" id="1_mvy5v"]
+[ext_resource type="Script" uid="uid://cfcx88ve00apd" path="res://scripts/employee_drop_area.gd" id="1_mvy5v"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_p5omb"]
 
 [node name="EmployeeDropArea" type="Control" unique_id=1860369934]
