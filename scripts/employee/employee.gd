@@ -75,7 +75,7 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 			var _drag_distance := global_position.distance_to(drag_start_position)
 			
-			if _drag_distance < 5.0:
+			if _drag_distance < 10.0:
 				_speed_up_work() # 触发加速！
 			
 			_end_drag()
