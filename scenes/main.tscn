@@ -123,10 +123,10 @@ offset_bottom = 714.0
 
 [node name="OfficePanel" parent="FullGameMode" unique_id=1437560562 groups=["office_panel"] instance=ExtResource("9_85g3d")]
 layout_mode = 0
-offset_left = 675.0
-offset_top = 233.0
-offset_right = 945.0
-offset_bottom = 593.0
+offset_left = 452.0
+offset_top = 720.0
+offset_right = 722.0
+offset_bottom = 1080.0
 
 [node name="Camera2D" type="Camera2D" parent="FullGameMode" unique_id=380816209]
 position = Vector2(959.16, 0)
@@ -239,3 +239,9 @@ offset_right = 590.0
 
 [node name="DeskUpgradePanel" parent="CanvasLayer" unique_id=567798841 instance=ExtResource("15_jkv2x")]
 visible = false
+
+[node name="WindowContainer" type="Control" parent="CanvasLayer" unique_id=448663972]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

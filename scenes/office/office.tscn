@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_7m821"]
 [ext_resource type="Texture2D" uid="uid://c2bhltrmpscm5" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/5.png" id="4_j6fj6"]
 [ext_resource type="Texture2D" uid="uid://0egbjch7bqrf" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/4.png" id="5_4aho4"]
-[ext_resource type="Texture2D" uid="uid://b8bg8h0vakies" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/4.png" id="6_y0aq1"]
+[ext_resource type="Texture2D" uid="uid://lmahrrg3htrb" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/3.png" id="6_8d8gp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_88o6m"]
 texture = ExtResource("1_88o6m")
@@ -53,7 +53,7 @@ tex_empty = ExtResource("3_7m821")
 tex_pantry = ExtResource("3_4houj")
 tex_meeting = ExtResource("4_j6fj6")
 tex_recruitment = ExtResource("5_4aho4")
-tex_bulletin = ExtResource("6_y0aq1")
+tex_culture = ExtResource("6_8d8gp")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1834985146]
 visible = false

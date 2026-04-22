@@ -8,7 +8,7 @@ class_name Office
 @export var tex_pantry: Texture2D
 @export var tex_meeting: Texture2D
 @export var tex_recruitment: Texture2D
-@export var tex_bulletin: Texture2D
+@export var tex_culture: Texture2D
 
 # 引用下方的子节点用来换图
 @onready var texture_display: TextureRect = $TextureRect
@@ -46,7 +46,7 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 	# --- 最终防线：检查唯一性 ---
 	if new_type == Gamemanager.OfficeType.RECRUITMENT and OfficeManager.has_recruitment_office:
 		return
-	if new_type == Gamemanager.OfficeType.BULLETIN_BOARD and OfficeManager.has_bulletin_board:
+	if new_type == Gamemanager.OfficeType.CULTURE_CENTER and OfficeManager.has_culture_center:
 		return
 		
 	# 1. 卸载旧逻辑
@@ -66,8 +66,8 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 			logic_node = MeetingRoomLogic.new()
 		Gamemanager.OfficeType.RECRUITMENT:
 			logic_node = RecruitmentOfficeLogic.new()
-		Gamemanager.OfficeType.BULLETIN_BOARD:
-			logic_node = BulletinBoardLogic.new()
+		Gamemanager.OfficeType.CULTURE_CENTER:
+			logic_node = CultureCenterLogic.new()
 	
 	# 4. 激活新逻辑
 	if logic_node != null:
@@ -84,7 +84,7 @@ func _update_visuals() -> void:
 		Gamemanager.OfficeType.PANTRY: target_tex = tex_pantry
 		Gamemanager.OfficeType.MEETING_ROOM: target_tex = tex_meeting
 		Gamemanager.OfficeType.RECRUITMENT: target_tex = tex_recruitment
-		Gamemanager.OfficeType.BULLETIN_BOARD: target_tex = tex_bulletin
+		Gamemanager.OfficeType.CULTURE_CENTER: target_tex = tex_culture
 		_: target_tex = tex_empty
 	
 	# 修改 TextureRect 的贴图

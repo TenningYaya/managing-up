@@ -385,8 +385,7 @@ func get_final_efficiency() -> int:
 	if current_seat and current_seat.has_method("get_efficiency_buff"):
 		total += current_seat.get_efficiency_buff()
 		
-	# 来源 2：未来的技能补正 (预留位置)
-	# total += skill_manager.get_buff("efficiency")
+	total += OfficeManager.culture_experience
 	
 	# 来源 3：未来的全公司 Buff (预留位置)
 	# total += Gamemanager.global_efficiency_bonus
@@ -398,4 +397,18 @@ func get_final_quality() -> int:
 	var total = quality
 	if current_seat and current_seat.has_method("get_quality_buff"):
 		total += current_seat.get_quality_buff()
+	total += OfficeManager.culture_quality
+	
+	## 来源 C：零食增益（之后茶水间会用到）
+	#if has_method("get_snack_eff_bonus"): # 预留
+		#total += get_snack_eff_bonus()
+	
+	return total
+	
+func get_final_experience() -> int:
+	var total = experience
+	
+	# 来源 B：🌟 企业文化洗脑
+	total += OfficeManager.culture_experience
+	
 	return total
