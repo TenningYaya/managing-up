@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://72jjpffy66yt" path="res://scenes/sidebar/upgrades_page.tscn" id="12_pe520"]
 [ext_resource type="PackedScene" uid="uid://6py6ljmq7wln" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.tscn" id="13_o8m4t"]
 [ext_resource type="PackedScene" uid="uid://c8d4rax1ise3l" path="res://scenes/sidebar/employee_panel/employee_warehouse.tscn" id="16_t7yv8"]
+[ext_resource type="PackedScene" uid="uid://bc1pi0j86er70" path="res://scenes/sidebar/general_page.tscn" id="17_weqg3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hbk5s"]
 atlas = ExtResource("2_qlopi")
@@ -250,6 +251,9 @@ layout_mode = 0
 layout_mode = 0
 offset_right = 270.0
 offset_bottom = 360.0
+
+[node name="GeneralPage" parent="Content" unique_id=1546440415 instance=ExtResource("17_weqg3")]
+layout_mode = 0
 
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/warehouse" to="." method="_on_warehouse_pressed"]
