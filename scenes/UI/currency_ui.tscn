@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ceijke56lupl5"]
 
 [ext_resource type="Texture2D" uid="uid://b70dtrr3021wm" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Map inventory/Map/Map Close/5.png" id="1_847bp"]
-[ext_resource type="Script" uid="uid://donumjvunaopo" path="res://scripts/UI/currency_ui.gd" id="1_rsm8o"]
+[ext_resource type="Script" uid="uid://donumjvunaopo" path="res://scripts/UI/ingame/currency_ui.gd" id="1_rsm8o"]
 [ext_resource type="Texture2D" uid="uid://3kwbra45xfrt" path="res://assets/UI/KPI.png" id="2_mpmo8"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_mpmo8"]
 [ext_resource type="Texture2D" uid="uid://by503gabl5w2d" path="res://assets/UI/dollar.png" id="3_rsm8o"]

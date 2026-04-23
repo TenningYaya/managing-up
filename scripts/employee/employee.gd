@@ -6,23 +6,23 @@ enum Rarity { R, SR, SSR }
 signal work_progress_changed(progress_percent: float)
 signal work_started()
 signal work_stopped()
-signal work_cycle_completed(reward_amount: int)
 
+#——————————员工信息————————————
 @export var employee_name: String = "Marry"
 @export var rarity: Rarity = Rarity.R
-
 @export var efficiency: int = 1
 @export var quality: int = 1
 @export var experience: int = 1
 
+#——————————员工状态————————————
 var current_seat: DeskSeat = null
 var drag_start_seat: DeskSeat = null
 var dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
 var drag_start_position: Vector2 = Vector2.ZERO
-
 var is_working: bool = false
 var work_elapsed: float = 0.0
+var _move_tween: Tween = null
 
 #当前生产时间计算公式为
 #current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
@@ -30,16 +30,16 @@ var work_elapsed: float = 0.0
 #同事的最终文件生产时间 =（基础文件生产时间-（同事工作效率+同事工作效率补正）*减幅基数*（80-120随机数）%）
 
 var base_kpi_value: int = 50
-var base_file_production_time: float = 600.0 # 基础文件生产时间
+var base_file_production_time: float = 30.0 # 基础文件生产时间
 var base_reduction_time: int = 30 # 减幅基数
-
 var current_cycle_duration: float = 10.0
 var current_desk_eff_buff: int = 0
 var current_desk_qual_buff: int = 0
 
 @export var snap_distance: float = 60.0
-@export var reward_per_cycle: int = 50
 @export_range(0.0, 1.0, 0.05) var interrupted_reward_ratio: float = 0.5
+
+const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
 
 func _ready() -> void:
 	add_to_group("employees")
@@ -116,10 +116,12 @@ func _on_employee_clicked() -> void:
 		push_error("错误：找不到 EmployeePanel。请检查：1.面板是否在场景里 2.是否加了'employee_panel'组")
 
 func _start_drag() -> void:
-	var tweens = get_tree().get_processed_tweens()
-	for t in tweens:
-		t.kill()
-		
+	if _move_tween:
+		_move_tween.kill()
+		_move_tween = null
+	
+	_clear_all_vfx()
+	
 	dragging = true
 	drag_offset = get_global_mouse_position() - global_position
 	drag_start_position = global_position
@@ -131,6 +133,10 @@ func _start_drag() -> void:
 		current_seat.clear_occupant()
 		current_seat = null
 
+func _clear_all_vfx() -> void:
+	for child in get_children():
+		if child is FileVFX: # 这里用到你脚本里定义的 class_name
+			child.queue_free()
 
 func _end_drag() -> void:
 	dragging = false
@@ -157,13 +163,16 @@ func snap_to_seat(seat: DeskSeat, animated: bool = true) -> void:
 	var target_pos := seat.get_snap_global_position() - size / 2.0
 
 	if animated:
-		var tween := create_tween()
-		tween.tween_property(self, "global_position", target_pos, 0.12)
-		tween.finished.connect(_on_snap_finished)
+		# 🌟 如果之前有正在跑的位移动画，先手动停掉它
+		if _move_tween:
+			_move_tween.kill()
+		
+		_move_tween = create_tween()
+		_move_tween.tween_property(self, "global_position", target_pos, 0.12)
+		_move_tween.finished.connect(_on_snap_finished)
 	else:
 		global_position = target_pos
 		_start_work()
-
 
 func _return_to_start() -> void:
 	if drag_start_seat != null:
@@ -238,7 +247,6 @@ func _stop_work(reset_progress: bool = true) -> void:
 
 	work_stopped.emit()
 
-
 func _calculate_interrupted_reward() -> void:
 	if not is_working:
 		return
@@ -265,19 +273,6 @@ func get_work_progress_percent() -> float:
 	if current_cycle_duration <= 0.0:
 		return 0.0
 	return clampf(work_elapsed / current_cycle_duration * 100.0, 0.0, 100.0)
-
-
-func _finish_one_work_cycle() -> void:
-	var gm := _get_game_manager()
-	if gm != null and gm.has_method("add_kpi"):
-		gm.add_kpi(reward_per_cycle)
-
-	print(employee_name, " 完成一轮工作，获得: ", reward_per_cycle)
-
-	work_cycle_completed.emit(reward_per_cycle)
-	work_elapsed = 0.0
-	work_progress_changed.emit(0.0)
-
 
 func _get_game_manager() -> Node:
 	return get_tree().root.get_node_or_null("Gamemanager")
@@ -316,13 +311,15 @@ func _generate_attributes() -> void:
 func _finish_and_generate_file():
 	# ======= 1. 计算文件质量 =======
 	var init_score = randf_range(1.0, 100.0)
-	var total_qual = quality + current_desk_qual_buff
+	
+	# 🌟 修复：必须调用这个，才能把办公室的 Buff 全算进去！
+	var total_qual = get_final_quality() 
 	
 	# 最终评分 = 初始评分 * (100 + 质量*2)%
 	var final_score = init_score * (1.0 + (total_qual * 2.0) / 100.0)
 	
 	var kpi_multiplier = 1.0
-	var dollar_reward = 1 # 默认灰、绿都是 1
+	var dollar_reward = 1 
 	var file_grade = "Gray"
 	
 	# 评级判定
@@ -340,19 +337,36 @@ func _finish_and_generate_file():
 		dollar_reward = 1
 		
 	# ======= 2. 兑换 KPI =======
-	# base_kpi_value 是你设定的基准值，比如 50
 	var final_kpi = int(base_kpi_value * kpi_multiplier)
-	Gamemanager.add_kpi(final_kpi)
+	
+	var gm = _get_game_manager()
+	if gm and gm.has_method("add_kpi"):
+		gm.add_kpi(final_kpi)
 	
 	# ======= 3. 概率获得美金 =======
-	# 概率 = (1 + 0.5 * 经验)%
 	var dollar_chance = (1.0 + 0.5 * experience) / 100.0
 	if randf() <= dollar_chance:
-		Gamemanager.add_dollar(dollar_reward)
+		if gm and gm.has_method("add_dollar"):
+			gm.add_dollar(dollar_reward)
 		print("爆美金了！品质：", file_grade, " 数量：", dollar_reward)
+
+	# 🌟 新增：触发头顶冒出动画
+	_spawn_file_vfx(file_grade)
 
 	# 结算完毕，开启下一轮
 	_start_new_work_cycle()
+
+# 生成特效的函数
+func _spawn_file_vfx(grade: String) -> void:
+	var vfx = FILE_VFX_SCENE.instantiate()
+	add_child(vfx) # 把特效挂在员工身上
+	
+	# 设置初始位置：员工头顶正上方
+	# 假设员工 size.y 是高度，往上挪一点
+	vfx.position = Vector2((size.x - 32) / 2.0, -20.0)
+	
+	# 调用特效自己的播放逻辑
+	vfx.play_vfx(grade)
 
 func _speed_up_work() -> void:
 	# 只有在工作状态下点击才有效
@@ -372,11 +386,8 @@ func _speed_up_work() -> void:
 	
 	# 检查是否点满了
 	if get_work_progress_percent() >= 100.0:
-		# 🚨 注意：如果你已经写好了阶段三，这里建议调用新的结算函数
-		if has_method("_finish_and_generate_file"):
-			_finish_and_generate_file()
-		else:
-			_finish_one_work_cycle()
+		_finish_and_generate_file()
+
 
 func get_final_efficiency() -> int:
 	var total = efficiency
