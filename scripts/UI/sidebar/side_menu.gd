@@ -14,6 +14,7 @@ var last_clicked_button: BaseButton = null # 记录上一次点的是哪个按�
 @onready var updates_page = $Content/UpgradesPage
 @onready var recruitment_page = $Content/RecruitmentPanel
 @onready var warehouse_page = $Content/EmployeeWarehouse
+@onready var general_page = $Content/GeneralPage
 
 func _ready():
 	# 初始时，菜单躲在屏幕右侧
@@ -24,8 +25,7 @@ func _ready():
 
 # --- 按钮信号连接 ---
 func _on_general_pressed():
-	# 目前 General 还没做页面，我们先只切换菜单状态
-	handle_tab_click($HBoxContainer/VBoxContainer2/General, null)
+	handle_tab_click($HBoxContainer/VBoxContainer2/General, general_page)
 
 func _on_hire_pressed():
 	handle_tab_click($HBoxContainer/VBoxContainer2/Hire, recruitment_page)
@@ -81,6 +81,7 @@ func hide_all_pages():
 	updates_page.visible = false
 	recruitment_page.visible = false
 	warehouse_page.visible = false
+	general_page.visible = false
 
 func toggle_menu(should_open: bool):
 	is_open = should_open
