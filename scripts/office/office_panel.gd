@@ -3,85 +3,97 @@ extends Control
 # 用于保存当前正在操作的那个办公室实例
 var current_target_office: Office = null
 
+# 🌟 新增：引用面板的底图，用于判断鼠标是不是点在它外面
+@onready var background: TextureRect = $Background 
+
+# 🌟 新增：记录打开面板的时间，防止当前帧点击误触发关闭
+var _open_time: int = 0
+
 # 这里的路径请根据你实际的节点树修改
-# 假设你的按钮都在 VBoxContainer 下
 @onready var buttons_container: VBoxContainer = $Background/MarginContainer/VBoxContainer
 
+
 func _ready() -> void:
-	# 1. 初始状态先隐藏自己
 	hide()
-	
-	# 2. 自动连接目录下所有按钮的信号
-	# 这样你就不用一个一个去编辑器里连信号了
 	_setup_buttons()
+
+# 🌟 新增：核心交互逻辑 - 检测区域外点击
+func _input(event: InputEvent) -> void:
+	# 只有面板显示时才检测
+	if not visible:
+		return
+		
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			# 保护：如果是刚刚打开面板（同一帧或 0.1 秒内），不执行关闭
+			if Time.get_ticks_msec() - _open_time < 100:
+				return
+				
+			# 判定：如果点击位置不在 background 的矩形区域内
+			var mouse_pos = get_global_mouse_position()
+			if not background.get_global_rect().has_point(mouse_pos):
+				print("[OfficePanel] 点击了外部，自动关闭")
+				close_panel()
+				# 如果你不希望点击到外面的办公室，可以取消下面这行的注释：
+				# get_viewport().set_input_as_handled()
 
 func _setup_buttons() -> void:
 	for child in buttons_container.get_children():
-		# 确保这个 child 确实是我们那个带脚本的按钮
-		if child.has_method("_on_pressed"): # 或者 if child is ChangeOfficeButton
-			# 核心修改：直接连接按钮点击，不需要 bind 名字了
-			# 我们可以让按钮自己处理点击，面板只负责“收听”
+		if child.has_method("_on_pressed"):
 			if not child.pressed.is_connected(_on_button_clicked):
-				# 我们把 child 传过去，这样就能拿到它身上的 office_type
 				child.pressed.connect(_on_button_clicked.bind(child))
 
-# 新的统一处理函数
 func _on_button_clicked(button_node: Node) -> void:
 	if current_target_office == null:
 		return
 		
-	# 直接从按钮节点身上拿你在 Inspector 里选好的那个 type
 	var new_type = button_node.office_type
 	
-	# 如果点的是取消（假设你给取消按钮配的 type 是 NONE）
 	if new_type == Gamemanager.OfficeType.NONE and "Cancel" in button_node.name:
-		hide()
+		close_panel() # 统一调用 close_panel
 		return
 		
-	# 直接调用切换
 	current_target_office.change_function(new_type)
-	hide()
+	close_panel() # 统一调用 close_panel
 
 func open_panel(office: Office) -> void:
 	current_target_office = office
-	show()
 	
+	# 🌟 记录打开瞬间的时间点
+	_open_time = Time.get_ticks_msec()
+	
+	# 刷新按钮禁用状态
+	_refresh_buttons()
+	
+	show()
+
+# 提取出来的刷新逻辑，方便调用
+func _refresh_buttons() -> void:
 	for child in buttons_container.get_children():
-		# 确保是我们要处理的按钮脚本
 		if not "office_type" in child:
 			continue
-			
-		# 1. 默认状态：先全部解禁，恢复亮度
 		child.disabled = false
 		child.modulate = Color(1, 1, 1, 1)
 		
-		# 2. 核心判定：只针对“全场唯一”的类型进行检查
 		var type_to_check = child.office_type
 		var already_exists = false
-		
 		if type_to_check == Gamemanager.OfficeType.RECRUITMENT:
 			already_exists = OfficeManager.has_recruitment_office
 		elif type_to_check == Gamemanager.OfficeType.CULTURE_CENTER:
 			already_exists = OfficeManager.has_culture_center
 		
-		# 3. 执行禁用：
-		# 如果该功能已在全场存在，且【当前点击的办公室】并不是正在担任这个功能的那个
 		if already_exists and current_target_office.current_type != type_to_check:
 			child.disabled = true
-			child.modulate = Color(0.3, 0.3, 0.3, 1) # 变灰
-			print("禁用按钮: ", child.name, " 因为唯一建筑 ", type_to_check, " 已存在")
-		
-func on_type_selected(new_type: Gamemanager.OfficeType) -> void:
-	if current_target_office == null:
-		return
-	
-	# 既然类型已经是匹配好的枚举，直接传给办公室就行！
-	current_target_office.change_function(new_type)
-	
-	# 操作完隐藏面板
-	hide()
-	
-# 点击面板以外或者点击关闭按钮时可以手动调用
+			child.modulate = Color(0.3, 0.3, 0.3, 1)
+
+# 🌟 统一关闭函数，清理引用
 func close_panel() -> void:
 	current_target_office = null
 	hide()
+
+# 这个函数目前与 _on_button_clicked 功能重复，可以根据需要保留或删除
+func on_type_selected(new_type: Gamemanager.OfficeType) -> void:
+	if current_target_office == null:
+		return
+	current_target_office.change_function(new_type)
+	close_panel()

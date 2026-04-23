@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c2bhltrmpscm5" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/5.png" id="4_j6fj6"]
 [ext_resource type="Texture2D" uid="uid://0egbjch7bqrf" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/4.png" id="5_4aho4"]
 [ext_resource type="Texture2D" uid="uid://lmahrrg3htrb" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/3.png" id="6_8d8gp"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="8_2u0tt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_88o6m"]
 texture = ExtResource("1_88o6m")
@@ -68,3 +69,12 @@ offset_bottom = 139.0
 mouse_filter = 2
 texture = ExtResource("3_7m821")
 expand_mode = 1
+
+[node name="ManageButton" parent="." unique_id=2048579194 instance=ExtResource("8_2u0tt")]
+visible = false
+layout_mode = 0
+offset_left = 78.0
+offset_top = 86.0
+offset_right = 218.0
+offset_bottom = 121.0
+button_text = "Culture"

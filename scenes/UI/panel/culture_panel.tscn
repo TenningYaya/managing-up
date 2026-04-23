@@ -7,6 +7,10 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 465.0
+offset_top = 693.0
+offset_right = 465.0
+offset_bottom = 693.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_42fho")
@@ -15,7 +19,7 @@ script = ExtResource("1_42fho")
 layout_mode = 0
 offset_right = 274.0
 offset_bottom = 373.0
-color = Color(0.61769116, 0.81180215, 0.93698454, 1)
+color = Color(0.92366534, 0.73956615, 0.618449, 1)
 
 [node name="Background" type="TextureRect" parent="." unique_id=1310240839]
 custom_minimum_size = Vector2(270, 360)
@@ -40,9 +44,12 @@ layout_mode = 2
 
 [node name="EffButton" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=1378556752]
 layout_mode = 2
+text = "+2Efficiency"
 
 [node name="QualButton" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=2077549557]
 layout_mode = 2
+text = "+2Quality"
 
 [node name="ExpButton" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=1657558665]
 layout_mode = 2
+text = "+2Experience"

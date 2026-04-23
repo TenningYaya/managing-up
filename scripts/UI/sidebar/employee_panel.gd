@@ -317,12 +317,15 @@ func _refresh_buffs() -> void:
 			_add_buff_label("办公桌增益", desc)
 			has_any_buff = true
 			
-	# 3. 未来如果有【办公室 Buff】或【技能 Buff】，继续在这里写 if 追加即可...
-	# if current_employee.has_skill_buff(): ...
-	
+	if OfficeManager.culture_efficiency > 0:
+		_add_buff_label("企业文化", "全公司效率 +" + str(OfficeManager.culture_efficiency))
+	if OfficeManager.culture_experience > 0:
+		_add_buff_label("企业文化", "全公司效率 +" + str(OfficeManager.culture_experience))
+	if OfficeManager.culture_quality > 0:
+		_add_buff_label("企业文化", "全公司效率 +" + str(OfficeManager.culture_quality))
 	# 4. 如果什么 Buff 都没有，显示一句提示（可选）
-	if not has_any_buff:
-		_add_buff_label("无增益", "该员工当前没有任何状态加成")
+	#if not has_any_buff:
+		#_add_buff_label("无增益", "该员工当前没有任何状态加成")
 
 
 # 动态生成一条 Buff 标签的辅助函数

@@ -12,6 +12,7 @@ class_name Office
 
 # 引用下方的子节点用来换图
 @onready var texture_display: TextureRect = $TextureRect
+@onready var manage_btn: TextureButton = $ManageButton
 
 # 核心数据
 # 注意：确保你的单例名大小写一致，如果是 Gamemanager 就用 Gamemanager
@@ -23,20 +24,24 @@ func _ready() -> void:
 	set_deferred("mouse_filter", Control.MOUSE_FILTER_STOP)
 	_update_visuals()
 	
-	
-func _input(event: InputEvent) -> void:
+func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		# 如果当前已经点中了某个 UI（比如面板），就不再触发办公室逻辑
-		# get_viewport().gui_get_focus_owner() 或者检查全局 UI 状态
 		
-		var m_pos = get_global_mouse_position()
-		if get_global_rect().has_point(m_pos):
-			_on_office_clicked()
-			get_viewport().set_input_as_handled()
-			
+		# 🌟 保底防误触：如果鼠标确实点在了暴露的管理按钮上，直接退出
+		# (其实只要管理按钮的 Mouse Filter 是 Stop，这一步连写都不用写，
+		# 因为按钮会把点击吃掉，_gui_input 根本就不会触发。但加上更保险)
+		if manage_btn and manage_btn.visible:
+			if manage_btn.get_global_rect().has_point(get_global_mouse_position()):
+				return 
+		
+		# 正常触发打开功能面板
+		_on_office_clicked()
+		
 # 点击事件
 func _on_office_clicked() -> void:
+	print("【测试】触发了打开普通办公室面板！")
 	get_tree().call_group("office_panel", "open_panel", self)
+	
 
 # 切换功能的核心函数
 func change_function(new_type: Gamemanager.OfficeType) -> void:

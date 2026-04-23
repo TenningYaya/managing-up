@@ -1,3 +1,4 @@
+#ui_manager.gd
 extends Node
 
 # --- 预载常用的 UI 场景，省去每次都写路径的麻烦 ---

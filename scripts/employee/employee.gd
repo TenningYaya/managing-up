@@ -385,7 +385,7 @@ func get_final_efficiency() -> int:
 	if current_seat and current_seat.has_method("get_efficiency_buff"):
 		total += current_seat.get_efficiency_buff()
 		
-	total += OfficeManager.culture_experience
+	total += OfficeManager.culture_efficiency
 	
 	# 来源 3：未来的全公司 Buff (预留位置)
 	# total += Gamemanager.global_efficiency_bonus
