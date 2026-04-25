@@ -1,3 +1,4 @@
+#folder_vfx.gd
 extends TextureRect
 class_name FileVFX
 

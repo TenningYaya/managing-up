@@ -59,7 +59,7 @@ custom_minimum_size = Vector2(100, 100)
 layout_mode = 3
 anchors_preset = 0
 offset_left = -54.0
-offset_top = -30.0
+offset_top = -39.0
 offset_right = 46.0
 offset_bottom = 70.0
 script = ExtResource("1_ldasa")
@@ -71,7 +71,7 @@ offset_bottom = 40.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1107805164]
 texture_filter = 1
-position = Vector2(49, -11)
+position = Vector2(54, -2)
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_yengm")
 animation = &"idle"

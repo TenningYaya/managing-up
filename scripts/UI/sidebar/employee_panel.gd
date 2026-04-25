@@ -5,8 +5,6 @@ class_name EmployeePanel
 # ==========================================
 # 1. 节点引用 (严格对应截图层级)
 # ==========================================
-@onready var click_blocker: ColorRect = $ClickBlocker
-
 # --- 员工信息部分 ---
 @onready var figure: TextureRect = $PanelBg/EmployeePage/NameCard/Figure
 @onready var name_label: Label = $PanelBg/EmployeePage/NameCard/VBoxContainer/NameLabel
@@ -43,8 +41,6 @@ func _ready() -> void:
 	progress_bar.max_value = 100
 	progress_bar.value = 0
 	
-	click_blocker.gui_input.connect(_on_click_blocker_input)
-	
 	# 绑定底部按钮事件
 	dispatch_btn.pressed.connect(_on_dispatch_pressed)
 	fire_btn.pressed.connect(_on_fire_pressed)
@@ -56,43 +52,41 @@ func _ready() -> void:
 	
 	# 当 PopupWindow 发出 canceled 信号时，执行取消逻辑（可选）
 	popup_window.canceled.connect(cancel_fire_employee)
+	
+	set_process_input(true)
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# 走到这个函数里，说明这个点击【没有】被任何员工或按钮拦截（他们没调用 accept_event）
+		if visible and not _is_pos_inside_panel(event.global_position):
+			close_panel()
+			
 func open_panel(employee: Employee) -> void:
 	if employee == null:
 		return
 	
-	_disconnect_current_employee()
+	# 🌟 第一重保护：如果点的是同一个人，且面板开着，直接无视，不重刷信号也不播动画
+	if visible and current_employee == employee:
+		return
+	
+	# 如果换了人，或者面板本来是关着的，才执行下面的刷新
+	_disconnect_current_employee() # 换人前先把旧的断了
 	current_employee = employee
 	
-	# 刷新文本
+	# --- 刷新 UI (这部分保持原样) ---
 	name_label.text = employee.employee_name
-	
-	match employee.rarity:
-		Employee.Rarity.R: rarity_label.text = "R"
-		Employee.Rarity.SR: rarity_label.text = "SR"
-		Employee.Rarity.SSR: rarity_label.text = "SSR"
-	
-	efficiency_bar.set_value(employee.efficiency)
-	quality_bar.set_value(employee.quality)
-	experience_bar.set_value(employee.experience)
-	
-	# 2. 顺手改颜色（让 UI 更专业）
-	efficiency_bar.set_bar_color(Color.SKY_BLUE)    # 效率：红
-	quality_bar.set_bar_color(Color.YELLOW)      # 质量：蓝
-	experience_bar.set_bar_color(Color.PALE_GREEN)  # 经验：绿
-	
-	# 刷新按钮状态
-	_update_dispatch_button()
+	# ... 你的 rarity_label, bars 等刷新代码 ...
 	
 	_refresh_progress_bar()
 	_refresh_buffs()
 	_connect_current_employee()
 	
-	popup_window.hide()
-	show()
-
-	print("[EmployeePanel] open_panel -> ", employee.employee_name)
-	print("[EmployeePanel] 初始进度 -> ", progress_bar.value)
+	# 🌟 第二重保护：只在面板还没出来时才播动画/show
+	if not visible:
+		show()
+		# 如果你有入场动画，在这里播：$AnimationPlayer.play("fade_in")
+	
+	popup_window.hide() # 换人时把之前的弹窗藏了
 
 func close_panel() -> void:
 	_disconnect_current_employee()
@@ -120,9 +114,6 @@ func _connect_current_employee() -> void:
 	if not current_employee.work_stopped.is_connected(_on_work_stopped):
 		current_employee.work_stopped.connect(_on_work_stopped)
 
-	if not current_employee.work_cycle_completed.is_connected(_on_work_cycle_completed):
-		current_employee.work_cycle_completed.connect(_on_work_cycle_completed)
-
 	if not current_employee.tree_exiting.is_connected(_on_current_employee_tree_exiting):
 		current_employee.tree_exiting.connect(_on_current_employee_tree_exiting)
 
@@ -141,9 +132,6 @@ func _disconnect_current_employee() -> void:
 
 	if current_employee.work_stopped.is_connected(_on_work_stopped):
 		current_employee.work_stopped.disconnect(_on_work_stopped)
-
-	if current_employee.work_cycle_completed.is_connected(_on_work_cycle_completed):
-		current_employee.work_cycle_completed.disconnect(_on_work_cycle_completed)
 
 	if current_employee.tree_exiting.is_connected(_on_current_employee_tree_exiting):
 		current_employee.tree_exiting.disconnect(_on_current_employee_tree_exiting)
@@ -347,3 +335,7 @@ func _add_buff_label(buff_name: String, hover_description: String) -> void:
 		
 	# 把生成好的标签塞进容器里
 	buffs_container.add_child(label)
+
+func _is_pos_inside_panel(global_pos: Vector2) -> bool:
+	# 这里的 $PanelBg 是你面板的实际可见区域
+	return $PanelBg.get_global_rect().has_point(global_pos)

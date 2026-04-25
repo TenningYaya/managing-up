@@ -7,7 +7,7 @@ extends Control
 @onready var sr_emp_label = $"VBoxContainer/SR employee"
 @onready var ssr_emp_label = $"VBoxContainer/SSR employee"
 
-func _process(delta):
+func _process(_delta):
 	# 如果面板不可见，就不要在后台空跑计算，节省性能
 	if not visible:
 		return
@@ -37,7 +37,7 @@ func _process(delta):
 	ssr_emp_label.text = "SSR EMPLOYEE: " + str(ssr_count)
 
 func _format_time(seconds: float) -> String:
-	var mins = int(seconds) / 60
+	var mins = int(seconds / 60.0)
 	var secs = int(seconds) % 60
 	# 格式化为 "12m 34s"
 	return str(mins) + "m " + str(secs) + "s"

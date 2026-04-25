@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cj4whnoknitr7"]
+
+[ext_resource type="Script" uid="uid://chosierm4mfab" path="res://scripts/UI/custom/speech_bubble.gd" id="1_xann1"]
+[ext_resource type="Texture2D" uid="uid://ciogial2diqsq" path="res://assets/UI/ingame/chat_bubble.png" id="2_s31fi"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ufe56"]
+texture = ExtResource("2_s31fi")
+texture_margin_left = 80.0
+texture_margin_top = 100.0
+texture_margin_right = 80.0
+texture_margin_bottom = 130.0
+
+[node name="SpeechBubble" type="Node2D" unique_id=1971912639]
+script = ExtResource("1_xann1")
+
+[node name="BubblePanel" type="PanelContainer" parent="." unique_id=1448288359]
+offset_right = 240.0
+offset_bottom = 275.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ufe56")
+
+[node name="TextLabel" type="Label" parent="BubblePanel" unique_id=542354644]
+layout_mode = 2
+theme_override_colors/font_color = Color(6.180691e-05, 6.180692e-05, 6.180691e-05, 1)
+theme_override_font_sizes/font_size = 64
+text = "Hello"

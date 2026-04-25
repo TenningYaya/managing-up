@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://de8re1j4y4nwj"
-path="res://.godot/imported/Gemini_Generated_Image_7yv2ky7yv2ky7yv2.png-a058df1f8a4dc58e4d2bcaf629a2429f.ctex"
+uid="uid://ciogial2diqsq"
+path="res://.godot/imported/chat_bubble.png-b8b32a9ac71c5b4add76b1ef3158d937.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/UI/Gemini_Generated_Image_7yv2ky7yv2ky7yv2.png"
-dest_files=["res://.godot/imported/Gemini_Generated_Image_7yv2ky7yv2ky7yv2.png-a058df1f8a4dc58e4d2bcaf629a2429f.ctex"]
+source_file="res://assets/UI/ingame/chat_bubble.png"
+dest_files=["res://.godot/imported/chat_bubble.png-b8b32a9ac71c5b4add76b1ef3158d937.ctex"]
 
 [params]
 

@@ -20,9 +20,15 @@ var drag_start_seat: DeskSeat = null
 var dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
 var drag_start_position: Vector2 = Vector2.ZERO
+var is_pressing: bool = false
+var drag_start_mouse_pos: Vector2 = Vector2.ZERO
 var is_working: bool = false
 var work_elapsed: float = 0.0
+@export var snap_distance: float = 60.0
+
+#——————————动画————————————
 var _move_tween: Tween = null
+var _active_bubble: SpeechBubble = null
 
 #当前生产时间计算公式为
 #current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
@@ -30,16 +36,15 @@ var _move_tween: Tween = null
 #同事的最终文件生产时间 =（基础文件生产时间-（同事工作效率+同事工作效率补正）*减幅基数*（80-120随机数）%）
 
 var base_kpi_value: int = 50
-var base_file_production_time: float = 30.0 # 基础文件生产时间
+var base_file_production_time: float = 600.0 # 基础文件生产时间
 var base_reduction_time: int = 30 # 减幅基数
 var current_cycle_duration: float = 10.0
 var current_desk_eff_buff: int = 0
 var current_desk_qual_buff: int = 0
-
-@export var snap_distance: float = 60.0
 @export_range(0.0, 1.0, 0.05) var interrupted_reward_ratio: float = 0.5
 
 const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
+const SPEECH_BUBBLE_SCENE = preload("res://scenes/UI/custom/speech_bubble.tscn")
 
 func _ready() -> void:
 	add_to_group("employees")
@@ -55,30 +60,44 @@ func setup_employee(new_rarity: Rarity) -> void:
 	_generate_attributes()
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed:
+	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			_start_drag()
-			accept_event()
-		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			if event.pressed:
+				# 1. 鼠标按下：记录位置，打上标记，但不立刻中断工作
+				is_pressing = true
+				drag_start_mouse_pos = get_global_mouse_position()
+				drag_start_position = global_position
+				drag_offset = drag_start_mouse_pos - global_position
+				accept_event()
+			else:
+				# 2. 鼠标松开：在这里做最终判决！
+				if is_pressing:
+					is_pressing = false
+					if dragging:
+						# 如果已经进入拖拽状态，正常走吸附逻辑
+						_end_drag()
+					else:
+						# 如果到松开为止都没触发拖拽，那就是在原地点击！
+						_speed_up_work()
+					accept_event()
+					
+		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			_on_employee_clicked()
-			accept_event() # 告诉系统，右键我也处理了
+			accept_event()
 
 func _input(event: InputEvent) -> void:
-	if not dragging:
-		return
-
-	if event is InputEventMouseMotion:
-		global_position = get_global_mouse_position() - drag_offset
-
-	elif event is InputEventMouseButton:
-		# 这里依然保持 MOUSE_BUTTON_LEFT，因为它是负责结束“左键拖拽”的
-		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-			var _drag_distance := global_position.distance_to(drag_start_position)
-			
-			if _drag_distance < 5.0:
-				_speed_up_work() # 触发加速！
-			
-			_end_drag()
+	# 只有在鼠标左键按住的状态下，才处理位移
+	if is_pressing and event is InputEventMouseMotion:
+		# 如果还没进入拖拽状态，算一下鼠标偏离了按下点多远
+		if not dragging:
+			var move_dist = get_global_mouse_position().distance_to(drag_start_mouse_pos)
+			if move_dist > 10.0:
+				# 🌟 移动超过 10 像素，这才是真拖拽，立刻触发中断工作和拿起的逻辑
+				_start_drag()
+		
+		# 如果已经在拖拽中了，就让员工跟着鼠标走
+		if dragging:
+			global_position = get_global_mouse_position() - drag_offset
 
 func _draw() -> void:
 	if dragging:
@@ -384,6 +403,15 @@ func _speed_up_work() -> void:
 	
 	print(employee_name, " 被老板敲打了一下，工作进度增加了: ", speed_up_amount, " 秒")
 	
+	var random_texts = [
+		"总感觉怪怪的你再改改",
+		"快打包了什么时候做完啊",
+		"老师这就是成图了吗"
+	]
+	var chosen_text = random_texts[randi() % random_texts.size()]
+	# 触发冒气泡！
+	_spawn_speech_bubble(chosen_text)
+	
 	# 检查是否点满了
 	if get_work_progress_percent() >= 100.0:
 		_finish_and_generate_file()
@@ -423,3 +451,20 @@ func get_final_experience() -> int:
 	total += OfficeManager.culture_experience
 	
 	return total
+
+func _spawn_speech_bubble(text_content: String) -> void:
+	# 🌟 打断机制：如果头上已经有一个气泡了，直接把它干掉
+	if is_instance_valid(_active_bubble):
+		_active_bubble.kill_bubble()
+		
+	_active_bubble = SPEECH_BUBBLE_SCENE.instantiate()
+	add_child(_active_bubble)
+	_active_bubble.scale = Vector2(0.3, 0.3)
+	# 设置层级，保证盖住员工和后面的东西
+	_active_bubble.z_index = 4 
+	
+	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
+	_active_bubble.position = Vector2(-50, -70)
+	
+	# 呼叫接口，播放内容
+	_active_bubble.pop_up(text_content)

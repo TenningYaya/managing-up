@@ -15,14 +15,6 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_sl25x")
 
-[node name="ClickBlocker" type="ColorRect" parent="." unique_id=144496805]
-layout_mode = 0
-offset_left = -1999.0
-offset_top = -1202.0
-offset_right = 1944.0
-offset_bottom = 1124.0
-color = Color(1, 1, 1, 0)
-
 [node name="PanelBg" type="Panel" parent="." unique_id=1968908939]
 custom_minimum_size = Vector2(270, 360)
 layout_mode = 1
