@@ -36,7 +36,7 @@ var _active_bubble: SpeechBubble = null
 #同事的最终文件生产时间 =（基础文件生产时间-（同事工作效率+同事工作效率补正）*减幅基数*（80-120随机数）%）
 
 var base_kpi_value: int = 50
-var base_file_production_time: float = 600.0 # 基础文件生产时间
+var base_file_production_time: float = 6.0 # 基础文件生产时间
 var base_reduction_time: int = 30 # 减幅基数
 var current_cycle_duration: float = 10.0
 var current_desk_eff_buff: int = 0
@@ -45,6 +45,7 @@ var current_desk_qual_buff: int = 0
 
 const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
 const SPEECH_BUBBLE_SCENE = preload("res://scenes/UI/custom/speech_bubble.tscn")
+const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
 
 func _ready() -> void:
 	add_to_group("employees")
@@ -371,7 +372,7 @@ func _finish_and_generate_file():
 
 	# 🌟 新增：触发头顶冒出动画
 	_spawn_file_vfx(file_grade)
-
+	
 	# 结算完毕，开启下一轮
 	_start_new_work_cycle()
 
@@ -382,10 +383,27 @@ func _spawn_file_vfx(grade: String) -> void:
 	
 	# 设置初始位置：员工头顶正上方
 	# 假设员工 size.y 是高度，往上挪一点
-	vfx.position = Vector2((size.x - 32) / 2.0, -20.0)
+	vfx.position = Vector2((size.x - 22) / 2.0, -20.0)
 	
 	# 调用特效自己的播放逻辑
 	vfx.play_vfx(grade)
+	
+	_spawn_dollar_vfx(vfx)
+
+func _spawn_dollar_vfx(vfx) -> void:
+# 实例化并播放特效
+	var burst_vfx = DOLLAR_BURST_VFX_SCENE.instantiate()
+
+	# 🌟 关键：加在 Main 场景下，而不是员工下，防止员工移动带跑了特效轨迹
+	get_tree().root.add_child(burst_vfx)
+	
+	# 特效初始位置：文件夹图标的位置（即员工头顶）
+	# 记得换算成全局坐标
+	burst_vfx.global_position = vfx.global_position
+	
+	# 播放！
+	if burst_vfx.has_method("play_burst_vfx"):
+		burst_vfx.play_burst_vfx()
 
 func _speed_up_work() -> void:
 	# 只有在工作状态下点击才有效
@@ -454,14 +472,15 @@ func get_final_experience() -> int:
 
 func _spawn_speech_bubble(text_content: String) -> void:
 	# 🌟 打断机制：如果头上已经有一个气泡了，直接把它干掉
-	if is_instance_valid(_active_bubble):
-		_active_bubble.kill_bubble()
+	#if is_instance_valid(_active_bubble):
+		#_active_bubble.kill_bubble()
 		
 	_active_bubble = SPEECH_BUBBLE_SCENE.instantiate()
 	add_child(_active_bubble)
+	
 	_active_bubble.scale = Vector2(0.3, 0.3)
 	# 设置层级，保证盖住员工和后面的东西
-	_active_bubble.z_index = 4 
+	_active_bubble.z_index = 3 
 	
 	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
 	_active_bubble.position = Vector2(-50, -70)

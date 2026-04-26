@@ -9,7 +9,7 @@ var gold_tex = preload("res://assets/UI/ingame/folder_golden.png")
 
 func play_vfx(grade: String) -> void:
 	self.custom_minimum_size = Vector2(32, 32)
-	self.size = Vector2(32, 32) # 确保实时生效
+	self.size = Vector2(40, 40) # 确保实时生效
 	# 1. 根据传入的等级，改变自身外观
 	match grade:
 		"Gold":

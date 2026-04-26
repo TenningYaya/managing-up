@@ -55,11 +55,25 @@ func _ready() -> void:
 	
 	set_process_input(true)
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
+	# 只处理鼠标左键按下
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		# 走到这个函数里，说明这个点击【没有】被任何员工或按钮拦截（他们没调用 accept_event）
-		if visible and not _is_pos_inside_panel(event.global_position):
-			close_panel()
+		if not visible: 
+			return
+		
+		# 1. 如果点在面板内部，绝对不能关
+		if _is_pos_inside_panel(event.global_position):
+			return
+		
+		# 2. 如果点在任何一个员工身上，也绝对不能关
+		# 因为员工自己的 _gui_input 会去调用 open_panel()，如果这里关了就会冲突
+		if _is_pos_on_any_employee(event.global_position):
+			print("[Panel] 点击在员工身上，保持面板开启")
+			return
+		
+		# 3. 只有点在既不是面板、也不是员工的“纯空白地带”，才执行关闭
+		print("[Panel] 点击了空白处，关闭面板")
+		close_panel()
 			
 func open_panel(employee: Employee) -> void:
 	if employee == null:
@@ -72,6 +86,28 @@ func open_panel(employee: Employee) -> void:
 	# 如果换了人，或者面板本来是关着的，才执行下面的刷新
 	_disconnect_current_employee() # 换人前先把旧的断了
 	current_employee = employee
+	
+	# ==========================================
+	# 🚨 【这里是之前丢失的“三维”刷新代码】
+	# ==========================================
+	name_label.text = employee.employee_name
+	
+	# 刷新稀有度
+	match employee.rarity:
+		Employee.Rarity.R: rarity_label.text = "R"
+		Employee.Rarity.SR: rarity_label.text = "SR"
+		Employee.Rarity.SSR: rarity_label.text = "SSR"
+	
+	# 🌟 刷新属性条（确保你的节点引用名和这里一致）
+	efficiency_bar.set_value(employee.efficiency)
+	quality_bar.set_value(employee.quality)
+	experience_bar.set_value(employee.experience)
+	
+	# 顺便设置颜色（如果你需要的话）
+	efficiency_bar.set_bar_color(Color.SKY_BLUE)
+	quality_bar.set_bar_color(Color.YELLOW)
+	experience_bar.set_bar_color(Color.PALE_GREEN)
+	# ==========================================
 	
 	# --- 刷新 UI (这部分保持原样) ---
 	name_label.text = employee.employee_name
@@ -339,3 +375,13 @@ func _add_buff_label(buff_name: String, hover_description: String) -> void:
 func _is_pos_inside_panel(global_pos: Vector2) -> bool:
 	# 这里的 $PanelBg 是你面板的实际可见区域
 	return $PanelBg.get_global_rect().has_point(global_pos)
+
+func _is_pos_on_any_employee(global_pos: Vector2) -> bool:
+	# 遍历所有在 "employees" 组里的节点
+	var all_employees = get_tree().get_nodes_in_group("employees")
+	for emp in all_employees:
+		if emp is Control:
+			# 检查鼠标位置是否在员工的矩形范围内
+			if emp.get_global_rect().has_point(global_pos):
+				return true
+	return false

@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b6g2gu7oe2r5q"]
+
+[ext_resource type="Script" uid="uid://y2usywbksv3m" path="res://scripts/UI/ingame/dollar_bust_vfx.gd" id="1_bqnir"]
+[ext_resource type="Texture2D" uid="uid://b414yl7jw2fnp" path="res://assets/UI/ingame/dollar.png" id="2_hech7"]
+
+[node name="DollarBust" type="Node2D" unique_id=1750076469]
+script = ExtResource("1_bqnir")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1045935183]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_hech7")
