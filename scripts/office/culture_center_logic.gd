@@ -4,6 +4,7 @@ extends OfficeLogic
 class_name CultureCenterLogic
 
 var manage_btn: Button
+var cur_type: CultureType = CultureType.NONE # 变量名也给你缩了
 
 enum CultureType { 
 	NONE, 
@@ -11,8 +12,6 @@ enum CultureType {
 	QUAL_UP, # 质量+2
 	EXP_UP   # 经验+2
 }
-
-var cur_type: CultureType = CultureType.NONE # 变量名也给你缩了
 
 func setup(office: Control) -> void:
 	super.setup(office)

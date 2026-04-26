@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c2bhltrmpscm5" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/5.png" id="3_dvne8"]
 [ext_resource type="Texture2D" uid="uid://0egbjch7bqrf" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/4.png" id="4_l2t2v"]
 [ext_resource type="Texture2D" uid="uid://lmahrrg3htrb" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/3.png" id="6_mixia"]
+[ext_resource type="PackedScene" uid="uid://b2l7mr7bb5b41" path="res://scenes/UI/panel/culture_panel.tscn" id="7_dvne8"]
 
 [node name="OfficePanel" type="Control" unique_id=1437560562]
 custom_minimum_size = Vector2(270, 360)
@@ -25,41 +26,51 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="MarginContainer" type="MarginContainer" parent="Background" unique_id=1786972547]
+[node name="TabContainer" type="TabContainer" parent="Background" unique_id=515328770]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 273.0
+offset_bottom = 376.0
+current_tab = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer" unique_id=389843594]
+[node name="Office" type="MarginContainer" parent="Background/TabContainer" unique_id=1786972547]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/TabContainer/Office" unique_id=389843594]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Background/MarginContainer/VBoxContainer" unique_id=1401466]
+[node name="Label" type="Label" parent="Background/TabContainer/Office/VBoxContainer" unique_id=1401466]
 layout_mode = 2
 text = "Office Panel"
 
-[node name="HSeparator" type="HSeparator" parent="Background/MarginContainer/VBoxContainer" unique_id=1679675622]
+[node name="HSeparator" type="HSeparator" parent="Background/TabContainer/Office/VBoxContainer" unique_id=1679675622]
 layout_mode = 2
 
-[node name="ChangeOfficeButton" parent="Background/MarginContainer/VBoxContainer" unique_id=959548433 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton" parent="Background/TabContainer/Office/VBoxContainer" unique_id=959548433 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 1
 button_text = "pantry"
 normal_icon = ExtResource("2_mixia")
 
-[node name="ChangeOfficeButton2" parent="Background/MarginContainer/VBoxContainer" unique_id=2030963439 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton2" parent="Background/TabContainer/Office/VBoxContainer" unique_id=2030963439 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 2
 button_text = "Meeting"
 normal_icon = ExtResource("3_dvne8")
 
-[node name="ChangeOfficeButton3" parent="Background/MarginContainer/VBoxContainer" unique_id=2129935784 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton3" parent="Background/TabContainer/Office/VBoxContainer" unique_id=2129935784 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 3
 button_text = "Headhunt"
 normal_icon = ExtResource("4_l2t2v")
 
-[node name="ChangeOfficeButton4" parent="Background/MarginContainer/VBoxContainer" unique_id=277010416 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton4" parent="Background/TabContainer/Office/VBoxContainer" unique_id=277010416 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 4
 button_text = "Cullture"
 normal_icon = ExtResource("6_mixia")
+
+[node name="Culture" parent="Background/TabContainer" unique_id=1580029639 instance=ExtResource("7_dvne8")]
+layout_mode = 2
+metadata/_tab_index = 1

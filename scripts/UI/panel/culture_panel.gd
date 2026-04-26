@@ -41,9 +41,6 @@ func open_panel(logic_ref: CultureCenterLogic) -> void:
 func close_panel() -> void:
 	hide()
 	linked_logic = null
-	
-	# 既然面板是由 UIManager 动态生成的，关掉时直接销毁自己即可，不留内存垃圾
-	queue_free()
 
 func _on_click_blocker_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

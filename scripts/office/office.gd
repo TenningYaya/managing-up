@@ -22,6 +22,9 @@ var logic_node: OfficeLogic = null
 func _ready() -> void:
 	add_to_group("offices")
 	set_deferred("mouse_filter", Control.MOUSE_FILTER_STOP)
+	if manage_btn:
+		manage_btn.pressed.connect(_on_manage_btn_pressed)
+		
 	_update_visuals()
 	
 func _gui_input(event: InputEvent) -> void:
@@ -39,9 +42,16 @@ func _gui_input(event: InputEvent) -> void:
 		
 # 点击事件
 func _on_office_clicked() -> void:
-	print("【测试】触发了打开普通办公室面板！")
-	get_tree().call_group("office_panel", "open_panel", self)
-	
+	print("[Office] 点击主体，打开选型页签")
+	var panel = get_tree().get_first_node_in_group("office_panel")
+	if panel:
+		panel.open_panel(self, false) # 第二个参数为 false，去第一页
+
+func _on_manage_btn_pressed() -> void:
+	print("[Office] 点击管理按钮，打开文化页签")
+	var panel = get_tree().get_first_node_in_group("office_panel")
+	if panel:
+		panel.open_panel(self, true) # 第二个参数为 true，去第二页
 
 # 切换功能的核心函数
 func change_function(new_type: Gamemanager.OfficeType) -> void:
