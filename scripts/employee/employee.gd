@@ -2,6 +2,7 @@ extends Control
 class_name Employee
 
 enum Rarity { R, SR, SSR }
+enum SnackBuff { NONE, MILK_TEA, CAKE, SAUSAGE }
 
 signal work_progress_changed(progress_percent: float)
 signal work_started()
@@ -14,7 +15,7 @@ signal work_stopped()
 @export var quality: int = 1
 @export var experience: int = 1
 
-#——————————员工状态————————————
+#——————————位移————————————
 var current_seat: DeskSeat = null
 var drag_start_seat: DeskSeat = null
 var dragging: bool = false
@@ -26,23 +27,26 @@ var is_working: bool = false
 var work_elapsed: float = 0.0
 @export var snap_distance: float = 60.0
 
-#——————————动画————————————
-var _move_tween: Tween = null
-var _active_bubble: SpeechBubble = null
-
+#——————————生产逻辑————————————
 #当前生产时间计算公式为
 #current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
 #对应GDD：
 #同事的最终文件生产时间 =（基础文件生产时间-（同事工作效率+同事工作效率补正）*减幅基数*（80-120随机数）%）
-
 var base_kpi_value: int = 50
 var base_file_production_time: float = 6.0 # 基础文件生产时间
 var base_reduction_time: int = 30 # 减幅基数
 var current_cycle_duration: float = 10.0
-var current_desk_eff_buff: int = 0
-var current_desk_qual_buff: int = 0
 @export_range(0.0, 1.0, 0.05) var interrupted_reward_ratio: float = 0.5
 
+#——————————buff————————————
+var current_desk_eff_buff: int = 0
+var current_desk_qual_buff: int = 0
+var current_snack_buff: SnackBuff = SnackBuff.NONE
+signal buff_status_changed
+
+#——————————动画————————————
+var _move_tween: Tween = null
+var _active_bubble: SpeechBubble = null
 const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
 const SPEECH_BUBBLE_SCENE = preload("res://scenes/UI/custom/speech_bubble.tscn")
 const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
@@ -245,6 +249,7 @@ func _start_work() -> void:
 	_start_new_work_cycle()
 
 func _start_new_work_cycle():
+	_try_get_snack_buff()
 	# 1. 重置当前进度计时
 	work_elapsed = 0.0
 	work_progress_changed.emit(0.0)
@@ -264,7 +269,8 @@ func _stop_work(reset_progress: bool = true) -> void:
 	if reset_progress:
 		work_elapsed = 0.0
 		work_progress_changed.emit(0.0)
-
+		
+	_clear_snack_buff()
 	work_stopped.emit()
 
 func _calculate_interrupted_reward() -> void:
@@ -372,7 +378,7 @@ func _finish_and_generate_file():
 
 	# 🌟 新增：触发头顶冒出动画
 	_spawn_file_vfx(file_grade)
-	
+	_clear_snack_buff()
 	# 结算完毕，开启下一轮
 	_start_new_work_cycle()
 
@@ -436,38 +442,37 @@ func _speed_up_work() -> void:
 
 
 func get_final_efficiency() -> int:
-	var total = efficiency
-	
+	var total = efficiency	
 	# 来源 1：工位补正
 	if current_seat and current_seat.has_method("get_efficiency_buff"):
 		total += current_seat.get_efficiency_buff()
-		
+	# 来源 2：文化补正
 	total += OfficeManager.culture_efficiency
-	
-	# 来源 3：未来的全公司 Buff (预留位置)
-	# total += Gamemanager.global_efficiency_bonus
-	
+	# 来源 3：零食补正
+	if current_snack_buff == SnackBuff.MILK_TEA:
+		total += 3
 	return total
 
 # 获取当前的最终工作质量
 func get_final_quality() -> int:
 	var total = quality
+	# 来源 1：工位补正
 	if current_seat and current_seat.has_method("get_quality_buff"):
 		total += current_seat.get_quality_buff()
+	# 来源 2：文化补正	
 	total += OfficeManager.culture_quality
-	
-	## 来源 C：零食增益（之后茶水间会用到）
-	#if has_method("get_snack_eff_bonus"): # 预留
-		#total += get_snack_eff_bonus()
-	
+	# 来源 3：零食补正
+	if current_snack_buff == SnackBuff.CAKE:
+		total += 3
 	return total
 	
 func get_final_experience() -> int:
-	var total = experience
-	
-	# 来源 B：🌟 企业文化洗脑
+	var total = experience	
+	# 来源 1：文化补正
 	total += OfficeManager.culture_experience
-	
+	# 来源 2：零食补正
+	if current_snack_buff == SnackBuff.SAUSAGE:
+		total += 3
 	return total
 
 func _spawn_speech_bubble(text_content: String) -> void:
@@ -487,3 +492,31 @@ func _spawn_speech_bubble(text_content: String) -> void:
 	
 	# 呼叫接口，播放内容
 	_active_bubble.pop_up(text_content)
+
+func _try_get_snack_buff() -> void:
+	# 条件判定：如果已经在吃、或者在摸鱼、或者零食名额满了，就不发
+	if current_snack_buff != SnackBuff.NONE: return
+	# if is_slacking: return # 假设你有这个摸鱼变量
+	if not OfficeManager.can_dispense_snack(): return
+	
+	# 50% 概率触发
+	if randf() > 0.5: return 
+	
+	# 成功获取！占领一个名额
+	OfficeManager.active_snack_buffs += 1
+	
+	# 随机抽一种零食 (1, 2, 3 代表奶茶, 蛋糕, 烤肠)
+	var random_buff = randi() % 3 + 1 
+	current_snack_buff = random_buff as SnackBuff
+	buff_status_changed.emit()
+	
+	print(name, " 抢到了零食！当前吃零食人数: ", OfficeManager.active_snack_buffs)
+	# TODO: 这里可以播放一个头顶冒出奶茶/蛋糕图标的特效
+
+# 3. 🌟 清理逻辑：工作结束、中断、或者员工被解雇时调用
+func _clear_snack_buff() -> void:
+	if current_snack_buff != SnackBuff.NONE:
+		OfficeManager.active_snack_buffs -= 1
+		current_snack_buff = SnackBuff.NONE
+		buff_status_changed.emit()
+		print(name, " 消化完零食了。")

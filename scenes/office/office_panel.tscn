@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b2l7mr7bb5b41" path="res://scenes/UI/panel/culture_panel.tscn" id="7_dvne8"]
 
 [node name="OfficePanel" type="Control" unique_id=1437560562]
+z_index = 100
 custom_minimum_size = Vector2(270, 360)
 layout_mode = 3
 anchors_preset = 0

@@ -152,7 +152,8 @@ func _connect_current_employee() -> void:
 
 	if not current_employee.tree_exiting.is_connected(_on_current_employee_tree_exiting):
 		current_employee.tree_exiting.connect(_on_current_employee_tree_exiting)
-
+	if not current_employee.buff_status_changed.is_connected(_refresh_buffs):
+		current_employee.buff_status_changed.connect(_refresh_buffs)
 	print("[EmployeePanel] 已连接进度信号 -> ", current_employee.employee_name)
 
 
@@ -171,7 +172,8 @@ func _disconnect_current_employee() -> void:
 
 	if current_employee.tree_exiting.is_connected(_on_current_employee_tree_exiting):
 		current_employee.tree_exiting.disconnect(_on_current_employee_tree_exiting)
-
+	if current_employee.buff_status_changed.is_connected(_refresh_buffs):
+		current_employee.buff_status_changed.disconnect(_refresh_buffs)
 
 func _refresh_progress_bar() -> void:
 	if current_employee == null:
@@ -341,17 +343,29 @@ func _refresh_buffs() -> void:
 			_add_buff_label("办公桌增益", desc)
 			has_any_buff = true
 			
+	# 3. 检查是否有【文化 Buff】		
 	if OfficeManager.culture_efficiency > 0:
 		_add_buff_label("企业文化", "全公司效率 +" + str(OfficeManager.culture_efficiency))
 	if OfficeManager.culture_experience > 0:
 		_add_buff_label("企业文化", "全公司效率 +" + str(OfficeManager.culture_experience))
 	if OfficeManager.culture_quality > 0:
 		_add_buff_label("企业文化", "全公司效率 +" + str(OfficeManager.culture_quality))
-	# 4. 如果什么 Buff 都没有，显示一句提示（可选）
+	# 4. 检查是否有【零食 Buff】	
+	if current_employee.get("current_snack_buff") != null:
+		var snack = current_employee.current_snack_buff
+		
+		# 利用你在 Employee.gd 里定义的枚举
+		# 这里注意：如果 Employee.gd 里枚举没加 class_name，可能需要用 employee.SnackBuff
+		match snack:
+			1: # MILK_TEA (对应你定义的 1: 奶茶)
+				_add_buff_label("奶茶增益", "茶水间供应：本次产出效率 +3")
+			2: # CAKE (对应你定义的 2: 蛋糕)
+				_add_buff_label("蛋糕增益", "茶水间供应：本次产出质量 +3")
+			3: # SAUSAGE (对应你定义的 3: 烤肠)
+				_add_buff_label("烤肠增益", "茶水间供应：本次产出经验 +3")
+		# 4. 如果什么 Buff 都没有，显示一句提示（可选）
 	#if not has_any_buff:
 		#_add_buff_label("无增益", "该员工当前没有任何状态加成")
-
-
 # 动态生成一条 Buff 标签的辅助函数
 func _add_buff_label(buff_name: String, hover_description: String) -> void:
 	var label = Label.new()
