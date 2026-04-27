@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://ckixbf70nlf2x"]
+
+[ext_resource type="Script" uid="uid://bq35mgt2iylto" path="res://scripts/UI/custom/SlackingBubble.gd" id="1_b3leo"]
+[ext_resource type="Texture2D" uid="uid://ciogial2diqsq" path="res://assets/UI/ingame/chat_bubble.png" id="2_du1jm"]
+
+[node name="SlackingBubble" type="Control" unique_id=1519871688]
+z_index = 2
+layout_mode = 3
+anchors_preset = 0
+offset_right = 50.0
+offset_bottom = 50.0
+script = ExtResource("1_b3leo")
+
+[node name="bubble" type="TextureRect" parent="." unique_id=330969923]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_du1jm")
+expand_mode = 1
+
+[node name="icon" type="TextureRect" parent="bubble" unique_id=1197355421]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -13.0
+offset_top = -15.0
+offset_right = 12.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Timer" type="Timer" parent="." unique_id=2068783200]

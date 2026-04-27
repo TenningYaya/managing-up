@@ -8,6 +8,11 @@ signal work_progress_changed(progress_percent: float)
 signal work_started()
 signal work_stopped()
 
+#----------摸鱼气泡喵-----------
+var is_slacking: bool = false
+var active_slacking_bubble = null
+const SLACKING_BUBBLE_SCENE = preload("res://scenes/UI/custom/SlackingBubble.tscn")
+
 #——————————员工信息————————————
 @export var employee_name: String = "Marry"
 @export var rarity: Rarity = Rarity.R
@@ -82,8 +87,11 @@ func _gui_input(event: InputEvent) -> void:
 						# 如果已经进入拖拽状态，正常走吸附逻辑
 						_end_drag()
 					else:
-						# 如果到松开为止都没触发拖拽，那就是在原地点击！
-						_speed_up_work()
+					# 如果到松开为止都没触发拖拽，那就是在原地点击！
+						if is_slacking and is_instance_valid(active_slacking_bubble):
+							active_slacking_bubble.resolve(true)
+						else:
+							_speed_up_work()
 					accept_event()
 					
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
@@ -380,6 +388,26 @@ func _finish_and_generate_file():
 	_spawn_file_vfx(file_grade)
 	_clear_snack_buff()
 	# 结算完毕，开启下一轮
+	if randf() <= 0.02:
+		is_slacking = true
+		is_working = false
+		active_slacking_bubble = SLACKING_BUBBLE_SCENE.instantiate()
+		add_child(active_slacking_bubble)
+		# 根据你的气泡大小微调一下生成的y轴坐标，确保刚好悬浮在头顶
+		active_slacking_bubble.position = Vector2((size.x - 50) / 2.0, -80.0) 
+		active_slacking_bubble.slacking_resolved.connect(_on_slacking_resolved)
+	else:
+		_start_new_work_cycle()
+
+func _on_slacking_resolved(by_click: bool) -> void:
+	is_slacking = false
+	is_working = true
+	
+	if by_click:
+		var reward_amount = randi_range(1, 2)
+		Gamemanager.add_dollar(reward_amount)
+		print(employee_name, " 结束摸鱼被抓包，你成功榨取了美金: ", reward_amount)
+			
 	_start_new_work_cycle()
 
 # 生成特效的函数
