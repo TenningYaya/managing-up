@@ -14,10 +14,16 @@ func _ready():
 	close_button.pressed.connect(hide)
 
 # 使用 _process 每帧更新面板位置，实现跟随效果
+# 使用 _process 每帧更新面板位置，实现跟随效果
 func _process(_delta):
 	# 只有当面板显示着，且目标桌子存在时才更新位置
 	if visible and is_instance_valid(target_slot):
-		global_position = target_slot.global_position + (target_slot.size / 2.0) - (size / 2.0)
+		# 关键修改：获取目标桌子在屏幕上的实际显示坐标（考虑了摄像机移动和缩放的偏移）
+		var target_screen_pos = target_slot.get_global_transform_with_canvas().origin
+		
+		# 使用转换后的屏幕坐标来重新计算面板位置
+		global_position = target_screen_pos + (target_slot.size / 2.0) - (size / 2.0)
+		
 
 # 当玩家点击某组桌子时，调用这个方法打开面板
 func open(slot: Control):
