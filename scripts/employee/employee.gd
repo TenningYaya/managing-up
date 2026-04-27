@@ -269,8 +269,6 @@ func _start_new_work_cycle():
 	# 3. 锁定这一轮的时长
 	current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
 	
-	print("新周期开始：效率 ", final_eff, " 预计耗时 ", current_cycle_duration)
-	
 func _stop_work(reset_progress: bool = true) -> void:
 	is_working = false
 
