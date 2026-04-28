@@ -7,9 +7,10 @@ extends Control
 # （⚠️ 记得把下面的 $路径 换成你新场景里真实的节点路径）
 @onready var name_label: Label = $HBoxContainer/VBoxContainer/NameLabel
 @onready var rarity_label: Label = $HBoxContainer/AvatarArea/RarityLabel
-@onready var eff_bar: ProgressBar = $HBoxContainer/VBoxContainer/StatsBars/ExperienceBar
+@onready var eff_bar: ProgressBar = $HBoxContainer/VBoxContainer/StatsBars/EfficiencyBar
 @onready var qual_bar: ProgressBar = $HBoxContainer/VBoxContainer/StatsBars/QualityBar
 @onready var exp_bar: ProgressBar = $HBoxContainer/VBoxContainer/StatsBars/ExperienceBar
+@onready var hire_price_label: Label = $HBoxContainer/VBoxContainer/HirePriceLabel
 
 # 提供给 ResumeViewer 调用的接口
 func setup(employee_data: Employee) -> void:
@@ -40,3 +41,10 @@ func setup(employee_data: Employee) -> void:
 	
 	exp_bar.max_value = 10
 	exp_bar.value = employee_data.experience
+	
+	var total_stats = employee_data.efficiency + employee_data.quality + employee_data.experience
+	var cost_kpi = total_stats * 10
+	
+	# 将计算结果填入那个 1000 KPI 的位置
+	if hire_price_label:
+		hire_price_label.text = str(cost_kpi) + " KPI"
