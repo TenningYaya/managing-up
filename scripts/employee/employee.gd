@@ -49,6 +49,11 @@ var current_desk_qual_buff: int = 0
 var current_snack_buff: SnackBuff = SnackBuff.NONE
 signal buff_status_changed
 
+#——————————美术资源————————————
+@onready var visual_anchor = $VisualAnchor
+var visual_component: Node = null # 用来存放装载进来的视觉场景
+var portrait_texture: Texture2D = null # 存放拿到的头像
+
 #——————————动画————————————
 var _move_tween: Tween = null
 var _active_bubble: SpeechBubble = null

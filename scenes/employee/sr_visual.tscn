@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://cqc0h4xpq1ucw"]
+
+[ext_resource type="Script" uid="uid://dowkpt6ikt0a1" path="res://scripts/employee/sr_visual.gd" id="1_uejui"]
+[ext_resource type="Texture2D" uid="uid://rfjsm3afg812" path="res://assets/figures/1.char SR/characters/char1.png" id="2_mmcof"]
+[ext_resource type="Texture2D" uid="uid://q4cpx0lg1ods" path="res://assets/figures/1.char SR/characters/char2.png" id="3_48wic"]
+[ext_resource type="Texture2D" uid="uid://cljrlrv2ike6m" path="res://assets/figures/1.char SR/eyes/eyes.png" id="3_mmcof"]
+[ext_resource type="Texture2D" uid="uid://c1s2dgkhejkfa" path="res://assets/figures/1.char SR/characters/char3.png" id="4_c0kfj"]
+[ext_resource type="Texture2D" uid="uid://c5a1d8byg7omr" path="res://assets/figures/1.char SR/characters/char4.png" id="5_un4vt"]
+[ext_resource type="Texture2D" uid="uid://bcen4hiuq3t62" path="res://assets/figures/1.char SR/characters/char5.png" id="6_qusjs"]
+[ext_resource type="Texture2D" uid="uid://cordeldrq76le" path="res://assets/figures/1.char SR/characters/char6.png" id="7_vi70u"]
+[ext_resource type="Texture2D" uid="uid://ditxnyxugap07" path="res://assets/figures/1.char SR/characters/char7.png" id="8_3nv6k"]
+[ext_resource type="Texture2D" uid="uid://crfkv4vxtdj03" path="res://assets/figures/1.char SR/characters/char8.png" id="9_ujswb"]
+[ext_resource type="Texture2D" uid="uid://cq4k2gacwc6ur" path="res://assets/figures/1.char SR/clothes/dress .png" id="10_c0kfj"]
+[ext_resource type="Texture2D" uid="uid://ctsta6qyfuxiq" path="res://assets/figures/1.char SR/hair/bob .png" id="11_nc5v7"]
+[ext_resource type="Texture2D" uid="uid://bjugwub6dicqj" path="res://assets/figures/1.char SR/hair/braids.png" id="12_lpiy5"]
+[ext_resource type="Texture2D" uid="uid://bj0x1lh53mia0" path="res://assets/figures/1.char SR/hair/buzzcut.png" id="13_1pebh"]
+[ext_resource type="Texture2D" uid="uid://cfjumw7yec4gi" path="res://assets/figures/1.char SR/hair/curly.png" id="14_aci0q"]
+[ext_resource type="Texture2D" uid="uid://cvnmyxhy2w2aq" path="res://assets/figures/1.char SR/hair/emo.png" id="15_1sr55"]
+[ext_resource type="Texture2D" uid="uid://cyn8c03cq8hr3" path="res://assets/figures/1.char SR/hair/extra_long.png" id="16_pmx2p"]
+[ext_resource type="Texture2D" uid="uid://cufqcpm1vwvsa" path="res://assets/figures/1.char SR/hair/extra_long_skirt.png" id="17_t16hf"]
+[ext_resource type="Texture2D" uid="uid://b07n1ukikr1wg" path="res://assets/figures/1.char SR/hair/french_curl.png" id="18_20kw5"]
+[ext_resource type="Texture2D" uid="uid://eseowwjo51t5" path="res://assets/figures/1.char SR/hair/gentleman.png" id="19_ixcai"]
+[ext_resource type="Texture2D" uid="uid://dp3p01skbwpmf" path="res://assets/figures/1.char SR/hair/long_straight .png" id="20_gpjop"]
+[ext_resource type="Texture2D" uid="uid://boeg2ofti17h5" path="res://assets/figures/1.char SR/hair/long_straight_skirt.png" id="21_w6k5j"]
+[ext_resource type="Texture2D" uid="uid://dy4rnoivttme3" path="res://assets/figures/1.char SR/hair/midiwave.png" id="22_as58k"]
+[ext_resource type="Texture2D" uid="uid://brv13na5vmwew" path="res://assets/figures/1.char SR/hair/ponytail .png" id="23_sy7hi"]
+[ext_resource type="Texture2D" uid="uid://basaf7uenuw64" path="res://assets/figures/1.char SR/hair/spacebuns.png" id="24_u8fk0"]
+[ext_resource type="Texture2D" uid="uid://d26ulv8sya5a1" path="res://assets/figures/1.char SR/hair/wavy.png" id="25_7oyj2"]
+
+[sub_resource type="Animation" id="Animation_nc5v7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_lpiy5"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1pebh"]
+_data = {
+&"RESET": SubResource("Animation_nc5v7"),
+&"idle": SubResource("Animation_lpiy5")
+}
+
+[node name="SrVisual" type="Node2D" unique_id=609203685]
+texture_filter = 1
+script = ExtResource("1_uejui")
+body_skins = Array[Texture2D]([ExtResource("2_mmcof"), ExtResource("3_48wic"), ExtResource("4_c0kfj"), ExtResource("5_un4vt"), ExtResource("6_qusjs"), ExtResource("7_vi70u"), ExtResource("8_3nv6k"), ExtResource("9_ujswb")])
+clothes_pool = Array[Texture2D]([ExtResource("10_c0kfj")])
+clothes_color_counts = Array[int]([10])
+hair_textures = Array[Texture2D]([ExtResource("11_nc5v7"), ExtResource("12_lpiy5"), ExtResource("13_1pebh"), ExtResource("14_aci0q"), ExtResource("15_1sr55"), ExtResource("16_pmx2p"), ExtResource("17_t16hf"), ExtResource("18_20kw5"), ExtResource("19_ixcai"), ExtResource("20_gpjop"), ExtResource("21_w6k5j"), ExtResource("22_as58k"), ExtResource("23_sy7hi"), ExtResource("24_u8fk0"), ExtResource("25_7oyj2")])
+
+[node name="Body" type="Sprite2D" parent="." unique_id=718598502]
+texture = ExtResource("2_mmcof")
+hframes = 5
+region_enabled = true
+region_rect = Rect2(0, 256, 160, 32)
+
+[node name="Eyes" type="Sprite2D" parent="." unique_id=367460134]
+visible = false
+texture = ExtResource("3_mmcof")
+region_enabled = true
+region_rect = Rect2(32, 96, 0, 0)
+
+[node name="Clothes" type="Sprite2D" parent="." unique_id=2146590574]
+
+[node name="Hair" type="Sprite2D" parent="." unique_id=47210730]
+
+[node name="Acc" type="Sprite2D" parent="." unique_id=1434867254]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=297607943]
+libraries/ = SubResource("AnimationLibrary_1pebh")
+autoplay = &"idle"

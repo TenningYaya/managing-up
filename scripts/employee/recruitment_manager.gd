@@ -14,6 +14,7 @@ var current_state = State.IDLE
 var headhunt_time_left: float = 0.0
 
 @onready var employee_scene = preload("res://scenes/employee/employee.tscn")
+var sr_visual_scene = preload("res://scenes/employee/sr_visual.tscn")
 
 func _ready():
 	# 🌟 别忘了在这里初始化一下，否则名字库是空的
@@ -53,9 +54,16 @@ func _on_headhunt_finished():
 		headhunt_pool.append(_create_data(rarity))
 	new_resumes_arrived.emit()
 
-# --- 辅助：创建数据 ---
 func _create_data(rarity) -> Employee:
 	var e = employee_scene.instantiate() as Employee
+	var visual_instance = sr_visual_scene.instantiate()
+	
+	# 🌟 必须先 add_child！
+	e.add_child(visual_instance) 
+	e.visual_component = visual_instance
+	
+	# 🌟 这时候再 setup_visual，里面的 body 就不是空了
+	visual_instance.setup_visual(randi(), {})
 	
 	e.employee_name = NameBank.get_random_name()
 	e.setup_employee(rarity)
