@@ -148,10 +148,10 @@ offset_bottom = 1080.0
 [node name="SideMenu" parent="CanvasLayer" unique_id=1012173253 instance=ExtResource("4_jyhfs")]
 
 [node name="CurrencyUI" parent="CanvasLayer" unique_id=1716905617 instance=ExtResource("11_trceg")]
-offset_left = 5.0
-offset_top = 648.0
-offset_right = 155.0
-offset_bottom = 718.0
+offset_left = 513.0
+offset_top = 746.0
+offset_right = 663.0
+offset_bottom = 816.0
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
 layout_mode = 3
