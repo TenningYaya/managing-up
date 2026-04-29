@@ -42,6 +42,11 @@ func setup_card(employee_data: Employee) -> void:
 	name_label.text = employee_data.employee_name
 	print(name_label.text)
 	
+	if employee_data.portrait:
+		avatar_img.texture = employee_data.portrait
+		# 自动处理头发、衣服等层叠
+		_update_avatar_layers(employee_data.portrait)
+		
 	# 2. 设置头像和等级悬浮标
 	match employee_data.rarity:
 		Employee.Rarity.R: 
@@ -96,3 +101,30 @@ func update_on_map_status(employee_data_override: Employee = null):
 		
 	# 控制绿标显示
 	on_map_icon.visible = is_on_map
+
+# ---------------------------------------------------------
+# 统一层叠显示逻辑 (建议把这段拷贝到所有需要显示员工头像的脚本里)
+# ---------------------------------------------------------
+func _update_avatar_layers(main_tex: Texture2D):
+	_set_or_clear_layer(main_tex, "hair_tex", "hair_rect", "HairLayer")
+	_set_or_clear_layer(main_tex, "clothes_tex", "clothes_rect", "ClothesLayer")
+
+func _set_or_clear_layer(main_tex: Texture2D, tex_key: String, rect_key: String, layer_name: String):
+	var layer = avatar_img.get_node_or_null(layer_name)
+	
+	if main_tex.has_meta(tex_key):
+		if not layer:
+			layer = TextureRect.new()
+			layer.name = layer_name
+			layer.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			layer.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			avatar_img.add_child(layer)
+		
+		var atlas = AtlasTexture.new()
+		atlas.atlas = main_tex.get_meta(tex_key)
+		atlas.region = main_tex.get_meta(rect_key)
+		layer.texture = atlas
+	elif layer:
+		layer.texture = null

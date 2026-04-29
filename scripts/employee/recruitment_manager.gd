@@ -65,6 +65,8 @@ func _create_data(rarity) -> Employee:
 	# 🌟 这时候再 setup_visual，里面的 body 就不是空了
 	visual_instance.setup_visual(randi(), {})
 	
+	e.portrait = visual_instance.generate_portrait_texture()
+	
 	e.employee_name = NameBank.get_random_name()
 	e.setup_employee(rarity)
 	return e

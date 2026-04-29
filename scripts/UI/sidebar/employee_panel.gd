@@ -109,6 +109,10 @@ func open_panel(employee: Employee) -> void:
 	experience_bar.set_bar_color(Color.PALE_GREEN)
 	# ==========================================
 	
+	if employee.portrait:
+		figure.texture = employee.portrait
+		_update_figure_layers(employee.portrait)
+		
 	# --- 刷新 UI (这部分保持原样) ---
 	name_label.text = employee.employee_name
 	# ... 你的 rarity_label, bars 等刷新代码 ...
@@ -399,3 +403,29 @@ func _is_pos_on_any_employee(global_pos: Vector2) -> bool:
 			if emp.get_global_rect().has_point(global_pos):
 				return true
 	return false
+
+func _update_figure_layers(main_tex: Texture2D):
+	# 这里的 figure 就是你 @onready 好的那个 TextureRect ($PanelBg/EmployeePage/NameCard/Figure)
+	_set_or_clear_layer(main_tex, "hair_tex", "hair_rect", "HairLayer")
+	_set_or_clear_layer(main_tex, "clothes_tex", "clothes_rect", "ClothesLayer")
+
+func _set_or_clear_layer(main_tex: Texture2D, tex_key: String, rect_key: String, layer_name: String):
+	var layer = figure.get_node_or_null(layer_name)
+	
+	if main_tex.has_meta(tex_key):
+		if not layer:
+			layer = TextureRect.new()
+			layer.name = layer_name
+			# 关键：让子层叠节点完全覆盖父节点(Figure)
+			layer.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			layer.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			figure.add_child(layer)
+		
+		var atlas = AtlasTexture.new()
+		atlas.atlas = main_tex.get_meta(tex_key)
+		atlas.region = main_tex.get_meta(rect_key)
+		layer.texture = atlas
+	elif layer:
+		layer.texture = null

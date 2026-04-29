@@ -41,6 +41,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Avatar" type="TextureRect" parent="VBoxContainer/AvatarArea" unique_id=1061742900]
+texture_filter = 1
 layout_mode = 2
 texture = ExtResource("3_fd3x5")
 expand_mode = 1

@@ -38,6 +38,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Avatar" type="TextureRect" parent="HBoxContainer/AvatarArea" unique_id=2123735855]
+texture_filter = 1
 layout_mode = 2
 texture = ExtResource("1_prp3l")
 expand_mode = 1

@@ -51,8 +51,8 @@ signal buff_status_changed
 
 #——————————美术资源————————————
 @onready var visual_anchor = $VisualAnchor
-var visual_component: Node = null # 用来存放装载进来的视觉场景
-var portrait_texture: Texture2D = null # 存放拿到的头像
+var visual_component: Node2D # 挂载的 sr_visual 实例
+var portrait: Texture2D      # 核心：生成的静态立绘
 
 #——————————动画————————————
 var _move_tween: Tween = null

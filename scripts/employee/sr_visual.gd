@@ -103,3 +103,50 @@ func _apply_region(sprite: Sprite2D, act: Dictionary, color_idx: int, total_colo
 	
 	sprite.region_rect = Rect2(color_idx * group_w, act.y, act.w * act.f, 32)
 	sprite.hframes = act.f
+
+# 这个函数专门给 RecruitmentManager 调用
+func generate_portrait_texture() -> Texture2D:
+	# 确保节点已初始化 (处理 @onready 还没触发的情况)
+	if body == null: body = get_node("Body")
+	if clothes == null: clothes = get_node("Clothes")
+	if hair == null: hair = get_node("Hair")
+
+	# 定义 idle 第一帧
+	var rect = Rect2(0, 256, 32, 32) 
+	
+	# 如果你想要最简单且美术通用的方案：
+	# 我们可以返回一个 AtlasTexture，但 AtlasTexture 只能存一张图。
+	# 为了“封装成一张图”，最轻量的办法是返回 Body 的 Texture，
+	# 然后让 UI 的统一接口去处理层叠。
+	# 或者，如果你一定要它是“一张真正的图”，就用下面的渲染逻辑：
+	return _get_combined_atlas_view(rect)
+
+func _get_combined_atlas_view(rect: Rect2) -> Texture2D:
+	# 这里我们依然返回 Body 的 Atlas 作为代表，
+	# 但我们将颜色索引和 Texture 信息存入 meta，方便 UI 自动读取
+	var atlas = AtlasTexture.new()
+	atlas.atlas = body.texture
+	atlas.region = rect
+	
+	# 把层叠信息“藏”在 texture 里的 meta 中，这样它就像一张带数据的图
+	atlas.set_meta("hair_tex", hair.texture)
+	atlas.set_meta("hair_rect", _get_hair_rect({"y":256, "w":32, "h":32}))
+	atlas.set_meta("clothes_tex", clothes.texture)
+	atlas.set_meta("clothes_rect", _get_clothes_rect({"y":256, "w":32, "h":32}))
+	
+	return atlas
+
+# 内部工具：计算头发的裁剪区域（带颜色偏移）
+func _get_hair_rect(act: Dictionary) -> Rect2:
+	if not hair.texture: return Rect2()
+	var h_idx = hair.get_meta("color_idx", 0)
+	var group_w = hair.texture.get_width() / hair_color_count
+	return Rect2(h_idx * group_w, act.y, act.w, act.h)
+
+# 内部工具：计算衣服的裁剪区域
+func _get_clothes_rect(act: Dictionary) -> Rect2:
+	if not clothes.texture: return Rect2()
+	var c_idx = clothes.get_meta("color_idx", 0)
+	var c_total = clothes.get_meta("total_colors", 1)
+	var group_w = clothes.texture.get_width() / c_total
+	return Rect2(c_idx * group_w, act.y, act.w, act.h)
