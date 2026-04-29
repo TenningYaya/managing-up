@@ -15,6 +15,7 @@ var headhunt_time_left: float = 0.0
 
 @onready var employee_scene = preload("res://scenes/employee/employee.tscn")
 var sr_visual_scene = preload("res://scenes/employee/sr_visual.tscn")
+var ssr_visual_scene = preload("res://scenes/employee/ssr_visual.tscn")
 
 func _ready():
 	# 🌟 别忘了在这里初始化一下，否则名字库是空的
@@ -57,6 +58,7 @@ func _on_headhunt_finished():
 func _create_data(rarity) -> Employee:
 	var e = employee_scene.instantiate() as Employee
 	var visual_instance = sr_visual_scene.instantiate()
+	
 	
 	# 🌟 必须先 add_child！
 	e.add_child(visual_instance) 

@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://cye6ve7shgm2l"]
+
+[ext_resource type="Script" uid="uid://bjmyydk4olqdk" path="res://scripts/employee/ssr_visual.gd" id="1_2wxww"]
+[ext_resource type="Texture2D" uid="uid://bjthyaqxs3ajw" path="res://assets/figures/character SSR/Office_Boss_Idle_black.png" id="2_rji6d"]
+[ext_resource type="Texture2D" uid="uid://cxeeuc2l1mll7" path="res://assets/figures/character SSR/Office_Boss_Idle_blue.png" id="3_nwlo5"]
+[ext_resource type="Texture2D" uid="uid://bjfpiumrouwdt" path="res://assets/figures/character SSR/Office_Boss_Idle_brown.png" id="4_0bnyd"]
+[ext_resource type="Texture2D" uid="uid://do6li0s4ymkx3" path="res://assets/figures/character SSR/Office_Boss_Idle_darkGreen.png" id="5_gqaca"]
+[ext_resource type="Texture2D" uid="uid://bdr0kybfbwloy" path="res://assets/figures/character SSR/Office_Boss_Idle_green.png" id="6_3eac3"]
+[ext_resource type="Texture2D" uid="uid://b6y0j4kt7kadf" path="res://assets/figures/character SSR/Office_Boss_Idle_lightBlue.png" id="7_kg0yu"]
+[ext_resource type="Texture2D" uid="uid://c382ilg7qctqv" path="res://assets/figures/character SSR/Office_Boss_Idle_orange.png" id="8_11be2"]
+[ext_resource type="Texture2D" uid="uid://17cwe7f8h2yk" path="res://assets/figures/character SSR/Office_Boss_Idle_pink.png" id="9_1fyof"]
+[ext_resource type="Texture2D" uid="uid://f4l07eqysmfi" path="res://assets/figures/character SSR/Office_Boss_Idle_pruple.png" id="10_wh0ok"]
+[ext_resource type="Texture2D" uid="uid://bk3ndm8dyhe46" path="res://assets/figures/character SSR/Office_Boss_Idle_red.png" id="11_4xewb"]
+[ext_resource type="Texture2D" uid="uid://co1qxfei8e1ch" path="res://assets/figures/character SSR/Office_Boss_Idle_white.png" id="12_xq5fj"]
+[ext_resource type="Texture2D" uid="uid://vguyao4mwlrd" path="res://assets/figures/character SSR/Office_Boss_Idle_yellow.png" id="13_1c5my"]
+
+[sub_resource type="Animation" id="Animation_2wxww"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_b6h3g"]
+resource_name = "idle"
+length = 0.46666667
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0009999999, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 2, 3, 4, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_g2faj"]
+_data = {
+&"RESET": SubResource("Animation_2wxww"),
+&"idle": SubResource("Animation_b6h3g")
+}
+
+[node name="SsrVisual" type="Node2D" unique_id=1096731518]
+script = ExtResource("1_2wxww")
+ssr_skins = Array[Texture2D]([ExtResource("2_rji6d"), ExtResource("3_nwlo5"), ExtResource("4_0bnyd"), ExtResource("5_gqaca"), ExtResource("6_3eac3"), ExtResource("7_kg0yu"), ExtResource("8_11be2"), ExtResource("9_1fyof"), ExtResource("10_wh0ok"), ExtResource("11_4xewb"), ExtResource("12_xq5fj"), ExtResource("13_1c5my")])
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1502791674]
+texture = ExtResource("2_rji6d")
+hframes = 6
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1557398401]
+libraries/ = SubResource("AnimationLibrary_g2faj")
+autoplay = &"idle"
