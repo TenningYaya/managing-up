@@ -70,6 +70,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1107805164]
+visible = false
 texture_filter = 1
 position = Vector2(54, -2)
 scale = Vector2(4, 4)

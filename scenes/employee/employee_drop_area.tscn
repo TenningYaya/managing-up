@@ -22,7 +22,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -113.0
-offset_top = -307.0
+offset_top = -277.0
 offset_right = 106.0
 offset_bottom = -16.0
 grow_horizontal = 2
@@ -35,6 +35,7 @@ offset_right = 300.0
 offset_bottom = 360.0
 
 [node name="HintLabel" type="Label" parent="." unique_id=971615627]
+z_index = 12
 layout_mode = 0
 offset_left = 55.0
 offset_top = 19.0
