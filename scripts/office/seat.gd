@@ -12,6 +12,7 @@ signal upgrade_level_changed(new_level: int)
 @onready var coffee_cup: CanvasItem = get_node_or_null("CoffeeCup") as CanvasItem
 @onready var advanced_computer: CanvasItem = get_node_or_null("AdvancedComputer") as CanvasItem
 @onready var plant: CanvasItem = get_node_or_null("Plant") as CanvasItem
+@onready var meeting_icon: CanvasItem = get_node_or_null("MeetingIcon") as CanvasItem
 
 var occupant: Control = null
 
@@ -114,3 +115,7 @@ func get_quality_buff() -> int:
 	if upgrade_level >= 3:
 		return 2
 	return 0
+
+func set_meeting_state(is_meeting: bool) -> void:
+	if meeting_icon != null:
+		meeting_icon.visible = is_meeting

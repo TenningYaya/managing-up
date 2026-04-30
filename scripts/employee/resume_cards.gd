@@ -51,42 +51,7 @@ func setup(employee_data: Employee) -> void:
 		hire_price_label.text = str(cost_kpi) + " KPI"
 		
 	if employee_data.portrait:
-		# 1. 无论什么级别，先显示主体（身体）
-		avatar_img.texture = employee_data.portrait
-		
-		# 2. 自动化层叠处理：检查是否有头发和衣服的 Meta 数据
-		# 这样即使是同学做的 UI，只要用了这个逻辑，就能自动兼容你的多层随机小人
-		_update_avatar_layers(employee_data.portrait)
-	
-func _update_avatar_layers(main_tex: Texture2D):
-	# 查找或创建层叠节点（避免在编辑器里手动摆放一堆空的 TextureRect）
-	# 如果你已经在场景里摆好了 Hair 和 Clothes 节点，可以直接 get_node
-	var hair_layer = avatar_img.get_node_or_null("Hair")
-	var cloth_layer = avatar_img.get_node_or_null("Clothes")
-
-	# 处理头发层
-	if main_tex.has_meta("hair_tex"):
-		if not hair_layer: # 如果没有就动态建一个，省去美术手动加节点的麻烦
-			hair_layer = _create_layer_node("Hair")
-		
-		var atlas = AtlasTexture.new()
-		atlas.atlas = main_tex.get_meta("hair_tex")
-		atlas.region = main_tex.get_meta("hair_rect")
-		hair_layer.texture = atlas
-	elif hair_layer:
-		hair_layer.texture = null # 没头发就清空
-
-	# 处理衣服层
-	if main_tex.has_meta("clothes_tex"):
-		if not cloth_layer:
-			cloth_layer = _create_layer_node("Clothes")
-			
-		var atlas = AtlasTexture.new()
-		atlas.atlas = main_tex.get_meta("clothes_tex")
-		atlas.region = main_tex.get_meta("clothes_rect")
-		cloth_layer.texture = atlas
-	elif cloth_layer:
-		cloth_layer.texture = null
+		AvatarHelper.apply_portrait(avatar_img, employee_data.portrait)
 
 # 动态创建层叠节点的工具函数
 func _create_layer_node(layer_name: String) -> TextureRect:

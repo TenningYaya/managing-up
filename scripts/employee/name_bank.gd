@@ -12,9 +12,14 @@ static func load_names():
 	last_names = FileAccess.get_file_as_string("res://data/last_names.txt").split("\n", false)
 
 static func get_random_name() -> String:
+	#if first_names.is_empty() or last_names.is_empty():
+		#return "Angela Baby" # 保底名字
+	#var first = Array(first_names).pick_random()
+	#var last = Array(last_names).pick_random()
+	#
+	#return first + " " + last
 	if first_names.is_empty() or last_names.is_empty():
 		return "Angela Baby" # 保底名字
 	var first = Array(first_names).pick_random()
-	var last = Array(last_names).pick_random()
 	
-	return first + " " + last
+	return first

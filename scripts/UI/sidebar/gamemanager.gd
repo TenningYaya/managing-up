@@ -12,12 +12,12 @@ var has_culture_center: bool = false
 var total_hits: int = 0
 var total_time: float = 0.0
 
-var kpi: int = 1000:
+var kpi: int = 10000:
 	set(value):
 		kpi = value
 		kpi_changed.emit(kpi)
 
-var dollar: int = 1000:
+var dollar: int = 10000:
 	set(value):
 		dollar = value
 		dollar_changed.emit(dollar)

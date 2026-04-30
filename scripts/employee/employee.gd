@@ -7,6 +7,7 @@ enum SnackBuff { NONE, MILK_TEA, CAKE, SAUSAGE }
 signal work_progress_changed(progress_percent: float)
 signal work_started()
 signal work_stopped()
+signal buff_status_changed
 
 #----------摸鱼气泡喵-----------
 var is_slacking: bool = false
@@ -47,7 +48,10 @@ var current_cycle_duration: float = 10.0
 var current_desk_eff_buff: int = 0
 var current_desk_qual_buff: int = 0
 var current_snack_buff: SnackBuff = SnackBuff.NONE
-signal buff_status_changed
+var is_in_meeting: bool = false
+var meet_buff_eff: int = 0
+var meet_buff_qual: int = 0
+var meet_buff_exp: int = 0
 
 #——————————美术资源————————————
 @onready var visual_anchor = $VisualAnchor
@@ -179,13 +183,28 @@ func _end_drag() -> void:
 	dragging = false
 	z_index = 1
 
+	# ==========================================
+	# 🌟 新增：优先检测是不是扔进了会议室
+	# ==========================================
+	var offices = get_tree().get_nodes_in_group("offices")
+	for office in offices:
+		# 判断这个办公室当前是不是会议室，并且加载了逻辑
+		if office.current_type == Gamemanager.OfficeType.MEETING_ROOM and office.logic_node != null:
+			# 判断鼠标松开时，是不是在会议室的框框里
+			if office.get_global_rect().has_point(get_global_mouse_position()):
+				if office.logic_node.can_drop_employee(self):
+					office.logic_node.drop_employee(self)
+					return # 成功进入会议室，直接结束判定！
+
+	# ==========================================
+	# 如果没扔进会议室，正常走找工位的逻辑
+	# ==========================================
 	var target_seat := _find_valid_seat()
 
 	if target_seat != null:
 		snap_to_seat(target_seat, true)
 	else:
 		_return_to_start()
-
 
 func snap_to_seat(seat: DeskSeat, animated: bool = true) -> void:
 	if seat == null:
@@ -263,6 +282,13 @@ func _start_work() -> void:
 
 func _start_new_work_cycle():
 	_try_get_snack_buff()
+	
+	if is_in_meeting:
+		meet_buff_qual = randi_range(1, 3)
+		meet_buff_exp = randi_range(1, 3)
+		# 可以在这里加个打印，方便你观察数值波动
+		buff_status_changed.emit()
+		
 	# 1. 重置当前进度计时
 	work_elapsed = 0.0
 	work_progress_changed.emit(0.0)
@@ -385,11 +411,15 @@ func _finish_and_generate_file():
 	if randf() <= dollar_chance:
 		if gm and gm.has_method("add_dollar"):
 			gm.add_dollar(dollar_reward)
-		print("爆美金了！品质：", file_grade, " 数量：", dollar_reward)
 
 	# 🌟 新增：触发头顶冒出动画
 	_spawn_file_vfx(file_grade)
 	_clear_snack_buff()
+	
+	if is_in_meeting:
+		_start_new_work_cycle()
+		return # 直接结束，不走下面的摸鱼随机数
+		
 	# 结算完毕，开启下一轮
 	if randf() <= 0.02:
 		is_slacking = true
@@ -482,7 +512,11 @@ func get_final_efficiency() -> int:
 	# 来源 3：零食补正
 	if current_snack_buff == SnackBuff.MILK_TEA:
 		total += 3
-	return total
+	# 来源 4：会议室补正
+	total += meet_buff_eff
+	
+	# 🌟 极度重要：确保效率被扣后，最低不能小于 1，否则会导致除数为 0 或反向工作！
+	return maxi(1, total)
 
 # 获取当前的最终工作质量
 func get_final_quality() -> int:
@@ -495,6 +529,8 @@ func get_final_quality() -> int:
 	# 来源 3：零食补正
 	if current_snack_buff == SnackBuff.CAKE:
 		total += 3
+	# 来源 4：会议室补正
+	total += meet_buff_qual
 	return total
 	
 func get_final_experience() -> int:
@@ -504,6 +540,8 @@ func get_final_experience() -> int:
 	# 来源 2：零食补正
 	if current_snack_buff == SnackBuff.SAUSAGE:
 		total += 3
+	# 来源 3：会议室补正
+	total += meet_buff_exp
 	return total
 
 func _spawn_speech_bubble(text_content: String) -> void:
@@ -551,3 +589,60 @@ func _clear_snack_buff() -> void:
 		current_snack_buff = SnackBuff.NONE
 		buff_status_changed.emit()
 		print(name, " 消化完零食了。")
+
+# ==========================================
+# 会议室核心逻辑
+# ==========================================
+func enter_meeting() -> void:
+	is_in_meeting = true
+	
+	# 1. 进度从零开始 (需求：被拖入时清零)
+	work_elapsed = 0.0
+	work_progress_changed.emit(0.0)
+	
+	# 2. 结算会议 Buff (效率-1，其余+ 1~3)
+	meet_buff_eff = -1
+	meet_buff_qual = 0
+	meet_buff_exp = 0
+	
+	# 3. 🌟 霸占原来的工位！
+	# 因为你拖拽时 _start_drag 已经清空了 current_seat，这里我们要强行抢回来
+	if drag_start_seat != null:
+		current_seat = drag_start_seat
+		current_seat.set_occupant(self)
+		
+		# 通知工位变身（显示“会议中”标签）
+		if current_seat.has_method("set_meeting_state"):
+			current_seat.set_meeting_state(true)
+			
+		# 把隐形的员工物理位置对齐回工位，防止乱飘挡住别人的鼠标点击
+		global_position = current_seat.get_snap_global_position() - size / 2.0
+			
+	# 4. 隐藏真身，开启后台摸黑工作模式
+	if visual_component:
+		visual_component.hide()
+	
+	is_working = true
+	_start_new_work_cycle() # 带上新 Buff 重新计算本轮时长
+	print(employee_name, " 进入会议室。当前最终效率: ", get_final_efficiency(), " (基础: ", efficiency, " 会议加成: ", meet_buff_eff, ")")
+
+func exit_meeting() -> void:
+	is_in_meeting = false
+	
+	# 1. 进度再次清零 (需求：解散会议时清零)
+	work_elapsed = 0.0
+	work_progress_changed.emit(0.0)
+	
+	# 2. 清除会议 Buff
+	meet_buff_eff = 0
+	meet_buff_qual = 0
+	meet_buff_exp = 0
+	
+	# 3. 恢复工位状态和真身
+	if current_seat != null and current_seat.has_method("set_meeting_state"):
+		current_seat.set_meeting_state(false)
+		
+	if visual_component:
+		visual_component.show()
+		
+	_start_new_work_cycle() # 恢复正常速度继续搬砖

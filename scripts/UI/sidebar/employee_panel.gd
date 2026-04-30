@@ -110,8 +110,8 @@ func open_panel(employee: Employee) -> void:
 	# ==========================================
 	
 	if employee.portrait:
-		figure.texture = employee.portrait
-		_update_figure_layers(employee.portrait)
+		# 🌟 改成这一句：直接把立绘节点(figure)交给 Helper 处理
+		AvatarHelper.apply_portrait(figure, employee.portrait)
 		
 	# --- 刷新 UI (这部分保持原样) ---
 	name_label.text = employee.employee_name
@@ -324,6 +324,25 @@ func _refresh_buffs() -> void:
 		return
 		
 	var has_any_buff = false
+	
+	# ==========================================
+	# 🌟 重点：在这里增加会议 Buff 的动态展示
+	# ==========================================
+	if current_employee.is_in_meeting:
+		# 我们把那一串跳动的随机数直接打在标签上
+		var q_val = current_employee.meet_buff_qual
+		var e_val = current_employee.meet_buff_exp
+		var eff_val = current_employee.meet_buff_eff
+		
+		# 构造一个看起来就很专业的 Buff 描述
+		var meeting_text = "会议头脑风暴中"
+		var details = "本轮加成：\n"
+		details += "✨ 质量 + " + str(q_val) + "\n"
+		details += "📈 经验 + " + str(e_val) + "\n"
+		details += "⏳ 效率 " + str(eff_val) + " (会议开销)"
+		
+		_add_buff_label(meeting_text, details)
+		has_any_buff = true
 		
 	# 2. 检查是否有【工位 Buff】
 	if current_employee.get("current_seat") != null:
@@ -403,29 +422,3 @@ func _is_pos_on_any_employee(global_pos: Vector2) -> bool:
 			if emp.get_global_rect().has_point(global_pos):
 				return true
 	return false
-
-func _update_figure_layers(main_tex: Texture2D):
-	# 这里的 figure 就是你 @onready 好的那个 TextureRect ($PanelBg/EmployeePage/NameCard/Figure)
-	_set_or_clear_layer(main_tex, "hair_tex", "hair_rect", "HairLayer")
-	_set_or_clear_layer(main_tex, "clothes_tex", "clothes_rect", "ClothesLayer")
-
-func _set_or_clear_layer(main_tex: Texture2D, tex_key: String, rect_key: String, layer_name: String):
-	var layer = figure.get_node_or_null(layer_name)
-	
-	if main_tex.has_meta(tex_key):
-		if not layer:
-			layer = TextureRect.new()
-			layer.name = layer_name
-			# 关键：让子层叠节点完全覆盖父节点(Figure)
-			layer.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			layer.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-			layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			figure.add_child(layer)
-		
-		var atlas = AtlasTexture.new()
-		atlas.atlas = main_tex.get_meta(tex_key)
-		atlas.region = main_tex.get_meta(rect_key)
-		layer.texture = atlas
-	elif layer:
-		layer.texture = null

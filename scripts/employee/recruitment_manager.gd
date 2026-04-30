@@ -19,7 +19,7 @@ var _pending_amount = 0
 @onready var visual_scenes = {
 	Employee.Rarity.R: preload("res://scenes/employee/sr_visual.tscn"),
 	Employee.Rarity.SR: preload("res://scenes/employee/sr_visual.tscn"),
-	Employee.Rarity.SSR: preload("res://scenes/employee/ssr_visual.tscn")
+	Employee.Rarity.SSR: preload("res://scenes/employee/sr_visual.tscn")
 }
 
 func _ready():
@@ -63,17 +63,26 @@ func _on_headhunt_finished():
 
 func _create_data(rarity: Employee.Rarity) -> Employee:
 	var e = employee_scene.instantiate() as Employee
-	
-	# 直接从字典里拿对应等级的场景（如果没有配置会直接报错阻断，符合你的要求）
 	var visual_scene = visual_scenes[rarity]
 	var visual_instance = visual_scene.instantiate()
 	
 	e.add_child(visual_instance) 
 	e.visual_component = visual_instance
 	
-	visual_instance.setup_visual(randi(), {})
+	# 🌟 防弹衣 1：如果对方写了 setup_visual 才调用
+	if visual_instance.has_method("setup_visual"):
+		visual_instance.setup_visual(randi(), {})
 	
-	e.portrait = visual_instance.generate_portrait_texture()
+	# 🌟 防弹衣 2：如果对方写了生成头像的方法，就拿过来；没有就给个保底或者空着
+	if visual_instance.has_method("generate_portrait_texture"):
+		e.portrait = visual_instance.generate_portrait_texture()
+	else:
+		# 比如你同学可以直接在节点上放一个 @export var default_portrait: Texture2D
+		if "default_portrait" in visual_instance:
+			e.portrait = visual_instance.default_portrait
+		else:
+			print("警告：该级别的员工缺少头像数据！")
+	
 	e.employee_name = NameBank.get_random_name()
 	e.setup_employee(rarity)
 	

@@ -26,6 +26,8 @@ func _ready() -> void:
 		manage_btn.pressed.connect(_on_manage_btn_pressed)
 		
 	_update_visuals()
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
 	
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -105,3 +107,21 @@ func _update_visuals() -> void:
 	# 修改 TextureRect 的贴图
 	if texture_display:
 		texture_display.texture = target_tex
+
+func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
+	if logic_node and logic_node.has_method("can_drop_employee"):
+		return logic_node.can_drop_employee(data)
+	return false
+
+func _drop_data(at_position: Vector2, data: Variant) -> void:
+	if logic_node and logic_node.has_method("drop_employee"):
+		logic_node.drop_employee(data)
+
+# 转发悬停信号
+func _on_mouse_entered() -> void:
+	if logic_node and logic_node.has_method("on_mouse_entered"):
+		logic_node.on_mouse_entered()
+
+func _on_mouse_exited() -> void:
+	if logic_node and logic_node.has_method("on_mouse_exited"):
+		logic_node.on_mouse_exited(get_global_mouse_position())

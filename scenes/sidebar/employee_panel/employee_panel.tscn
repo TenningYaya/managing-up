@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b70dtrr3021wm" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Map inventory/Map/Map Close/5.png" id="1_kp28t"]
 [ext_resource type="Script" uid="uid://bpk1q1i0i3xmm" path="res://scripts/UI/sidebar/employee_panel.gd" id="1_sl25x"]
 [ext_resource type="PackedScene" uid="uid://8o18jsagw05c" path="res://scenes/sidebar/employee_panel/employee_ability_slider.tscn" id="2_sl25x"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_ajc7u"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="3_r7cc6"]
 [ext_resource type="Texture2D" uid="uid://db3dnhkb3b0xc" path="res://assets/progress bar/progress bar most rounded under.png" id="4_bfpbm"]
 [ext_resource type="PackedScene" uid="uid://5sdsush0erlr" path="res://scenes/UI/custom/popup_window.tscn" id="4_e3e08"]
@@ -40,25 +41,31 @@ texture = ExtResource("1_kp28t")
 [node name="EmployeePage" type="VBoxContainer" parent="PanelBg" unique_id=949899160]
 layout_mode = 0
 offset_left = 24.0
-offset_top = 8.0
+offset_top = -15.0
 offset_right = 245.0
-offset_bottom = 123.0
+offset_bottom = 225.0
 
 [node name="NameCard" type="HBoxContainer" parent="PanelBg/EmployeePage" unique_id=49617231]
 layout_mode = 2
 
 [node name="Figure" type="TextureRect" parent="PanelBg/EmployeePage/NameCard" unique_id=998923836]
-custom_minimum_size = Vector2(100, 120)
+texture_filter = 1
+custom_minimum_size = Vector2(100, 110)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelBg/EmployeePage/NameCard" unique_id=2005388425]
 layout_mode = 2
+alignment = 1
 
 [node name="NameLabel" type="Label" parent="PanelBg/EmployeePage/NameCard/VBoxContainer" unique_id=845513077]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ajc7u")
+theme_override_font_sizes/font_size = 20
 
 [node name="RarityLabel" type="Label" parent="PanelBg/EmployeePage/NameCard/VBoxContainer" unique_id=648543535]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ajc7u")
+theme_override_font_sizes/font_size = 20
 
 [node name="Information" type="VBoxContainer" parent="PanelBg/EmployeePage" unique_id=2130907609]
 layout_mode = 2

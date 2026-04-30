@@ -78,3 +78,44 @@ offset_top = 86.0
 offset_right = 218.0
 offset_bottom = 121.0
 button_text = "Culture"
+
+[node name="AvatarSlots" type="GridContainer" parent="." unique_id=1681342943]
+layout_mode = 0
+offset_left = 34.0
+offset_top = -30.0
+offset_right = 252.0
+offset_bottom = 114.0
+columns = 3
+
+[node name="Slot1" type="CenterContainer" parent="AvatarSlots" unique_id=949021389]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+
+[node name="Slot2" type="CenterContainer" parent="AvatarSlots" unique_id=146305324]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+
+[node name="Slot3" type="CenterContainer" parent="AvatarSlots" unique_id=935378993]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+
+[node name="Slot4" type="CenterContainer" parent="AvatarSlots" unique_id=656589062]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+
+[node name="Slot5" type="CenterContainer" parent="AvatarSlots" unique_id=5985643]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+
+[node name="Slot6" type="CenterContainer" parent="AvatarSlots" unique_id=1718508961]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+
+[node name="DismissButton" parent="." unique_id=1204181230 instance=ExtResource("8_2u0tt")]
+visible = false
+layout_mode = 0
+offset_left = 74.0
+offset_top = -53.0
+offset_right = 214.0
+offset_bottom = -18.0
+button_text = "Dismiss"

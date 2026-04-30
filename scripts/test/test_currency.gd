@@ -39,8 +39,6 @@ func _bind_button_logic(btn: Node):
 func _clear_kpi():
 	Gamemanager.kpi = 0
 	# 如果你有刷新 UI 的信号，记得手动触发一下或者确保 Gamemanager 内部会处理
-	print("KPI 已归零")
 
 func _clear_dollar():
 	Gamemanager.dollar = 0
-	print("美金已归零")

@@ -142,7 +142,7 @@ func _get_hair_rect(act: Dictionary) -> Rect2:
 	var h_idx = hair.get_meta("color_idx", 0)
 	var group_w = hair.texture.get_width() / hair_color_count
 	return Rect2(h_idx * group_w, act.y, act.w, act.h)
-
+	
 # 内部工具：计算衣服的裁剪区域
 func _get_clothes_rect(act: Dictionary) -> Rect2:
 	if not clothes.texture: return Rect2()
