@@ -4,6 +4,7 @@ extends Node
 signal request_employee_drop(data)
 signal kpi_changed(new_value)
 signal dollar_changed(new_value)
+signal level_changed(new_level)
 
 var has_recruitment_office: bool = false
 var has_culture_center: bool = false
@@ -12,6 +13,11 @@ var has_culture_center: bool = false
 var total_hits: int = 0
 var total_time: float = 0.0
 
+var player_level: int = 1:
+	set(value):
+		player_level = value
+		level_changed.emit(player_level)
+		
 var kpi: int = 10000:
 	set(value):
 		kpi = value
@@ -33,7 +39,8 @@ enum OfficeType {
 func _ready() -> void:
 	call_deferred("emit_signal", "dollar_changed", dollar)
 	call_deferred("emit_signal", "kpi_changed", kpi)
-
+	call_deferred("emit_signal", "level_changed", player_level)
+	
 # 每一帧自动更新游戏总时长
 func _process(delta: float) -> void:
 	total_time += delta

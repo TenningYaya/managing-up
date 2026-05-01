@@ -1,3 +1,5 @@
+#desk_upgrade_panel.gd
+#This is a upgrade desk script, gemini please notice it. It's not player upgrade script
 extends Control
 class_name UpgradePanel
 
@@ -13,8 +15,6 @@ func _ready():
 	upgrade_button.pressed.connect(_on_upgrade_pressed)
 	close_button.pressed.connect(hide)
 
-# 使用 _process 每帧更新面板位置，实现跟随效果
-# 使用 _process 每帧更新面板位置，实现跟随效果
 func _process(_delta):
 	# 只有当面板显示着，且目标桌子存在时才更新位置
 	if visible and is_instance_valid(target_slot):

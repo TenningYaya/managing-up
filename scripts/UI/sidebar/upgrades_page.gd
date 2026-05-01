@@ -124,17 +124,22 @@ func _on_upgrade_button_pressed():
 		
 	var cost = UPGRADE_DATA[current_level]["cost"]
 
-	# 尝试扣除KPI
+	# 尝试从全局 Gamemanager 扣除 KPI
 	if Gamemanager.spend_kpi(cost):
 		print("升级成功！扣除 KPI: ", cost)
-		# 升级成功，提升当前等级
+		
+		# 1. 提升面板自己的显示等级
 		current_level += 1
 		
-		# TODO: 这里可以补充通知GameManager玩家已经升级的代码
-		# 例如: GameManager.player_level = current_level 
+		# 🌟 关键修复：同步给全局 Gamemanager！！！
+		# 注意：这里要确保 Gamemanager 里的变量名是 player_level
+		Gamemanager.player_level = current_level 
 		
-		# 重新刷新UI
+		# 🌟 关键修复：手动让 Gamemanager 发射信号（如果你在 Gamemanager 里没写 setter 的话）
+		if Gamemanager.has_signal("level_changed"):
+			Gamemanager.level_changed.emit(Gamemanager.player_level)
+		
+		# 3. 重新刷新面板UI
 		update_ui()
 	else:
-		# 理论上按钮disabled时点不到这里，加一层防误触保护
 		print("升级失败，KPI不足！")

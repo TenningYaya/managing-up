@@ -3,7 +3,7 @@
 extends OfficeLogic
 class_name CultureCenterLogic
 
-var manage_btn: Button
+var manage_btn: TextureButton
 var cur_type: CultureType = CultureType.NONE # 变量名也给你缩了
 
 enum CultureType { 
@@ -18,16 +18,18 @@ func setup(office: Control) -> void:
 	my_office = office
 	OfficeManager.has_culture_center = true
 	
-	var btn = my_office.manage_btn 
+	if manage_btn:
+		print("[Debug] 正在为文化室绑定按钮信号: ", manage_btn.name)
+	# 🌟 修正 1：不要用 var btn，直接赋值给脚本顶部那个 manage_btn 变量！
+	manage_btn = my_office.manage_btn 
 	
 	# 绑定悬停和点击信号
 	my_office.mouse_entered.connect(_on_office_mouse_entered)
 	my_office.mouse_exited.connect(_on_office_mouse_exited)
 	
-	# 为了防止重复绑定报错，绑定前先断开可能残留的信号 (防御性编程)
-	if btn.pressed.is_connected(_on_manage_btn_pressed):
-		btn.pressed.disconnect(_on_manage_btn_pressed)
-	btn.pressed.connect(_on_manage_btn_pressed)
+	if manage_btn.pressed.is_connected(_on_manage_btn_pressed):
+		manage_btn.pressed.disconnect(_on_manage_btn_pressed)
+	manage_btn.pressed.connect(_on_manage_btn_pressed)
 	
 func switch_culture(type: CultureType) -> void:
 	if cur_type == type: return
@@ -83,4 +85,9 @@ func _on_office_mouse_exited() -> void:
 
 func _on_manage_btn_pressed() -> void:
 	print("【测试】点击了制定文化按钮！")
-	UiManager.open_culture_panel(self)
+	
+	# 🌟 修正 2：用回你 office 里原来正确的写法，通过组去找面板
+	var panel = get_tree().get_first_node_in_group("office_panel")
+	if panel:
+		# 🌟 修正 3：极度重要！传过去的一定要是 my_office（办公室本体），绝不能是 self！
+		panel.open_panel(my_office, true)

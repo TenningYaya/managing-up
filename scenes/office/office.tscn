@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cum4hn5xxinhk" path="res://assets/Office Tileset/Office VX Ace/A5 Office Floors & Walls.png" id="1_88o6m"]
 [ext_resource type="Script" uid="uid://bdo3f6tfs8bk2" path="res://scripts/office/office.gd" id="1_d5yd0"]
+[ext_resource type="Texture2D" uid="uid://dqg31jvjk4fa0" path="res://assets/UI/ingame/in_meeting.png" id="2_sf0ao"]
 [ext_resource type="Texture2D" uid="uid://dlcfrb1rbk12b" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/0.png" id="3_4houj"]
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_7m821"]
 [ext_resource type="Texture2D" uid="uid://c2bhltrmpscm5" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/5.png" id="4_j6fj6"]
@@ -50,6 +51,7 @@ offset_top = -9.0
 offset_right = 288.0
 offset_bottom = 150.0
 script = ExtResource("1_d5yd0")
+tex_locked = ExtResource("2_sf0ao")
 tex_empty = ExtResource("3_7m821")
 tex_pantry = ExtResource("3_4houj")
 tex_meeting = ExtResource("4_j6fj6")
@@ -69,15 +71,6 @@ offset_bottom = 139.0
 mouse_filter = 2
 texture = ExtResource("3_7m821")
 expand_mode = 1
-
-[node name="ManageButton" parent="." unique_id=2048579194 instance=ExtResource("8_2u0tt")]
-visible = false
-layout_mode = 0
-offset_left = 78.0
-offset_top = 86.0
-offset_right = 218.0
-offset_bottom = 121.0
-button_text = "Culture"
 
 [node name="AvatarSlots" type="GridContainer" parent="." unique_id=1681342943]
 layout_mode = 0
@@ -110,6 +103,15 @@ layout_mode = 2
 [node name="Slot6" type="CenterContainer" parent="AvatarSlots" unique_id=1718508961]
 custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
+
+[node name="ManageButton" parent="." unique_id=2048579194 instance=ExtResource("8_2u0tt")]
+visible = false
+layout_mode = 0
+offset_left = 78.0
+offset_top = 86.0
+offset_right = 218.0
+offset_bottom = 121.0
+button_text = "Culture"
 
 [node name="DismissButton" parent="." unique_id=1204181230 instance=ExtResource("8_2u0tt")]
 visible = false

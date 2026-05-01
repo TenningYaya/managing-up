@@ -67,9 +67,11 @@ alignment = 1
 
 [node name="NewRoom1" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow1" unique_id=1395701316 instance=ExtResource("1_0wfyh")]
 layout_mode = 2
+unlock_at_level = 3
 
 [node name="NewRoom2" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow1" unique_id=282060098 instance=ExtResource("1_0wfyh")]
 layout_mode = 2
+unlock_at_level = 4
 
 [node name="OfficeRow2" type="VBoxContainer" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=909741960]
 layout_mode = 2
@@ -81,6 +83,7 @@ layout_mode = 2
 
 [node name="NewRoom4" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=2005734672 instance=ExtResource("1_0wfyh")]
 layout_mode = 2
+unlock_at_level = 2
 
 [node name="EmployeeDropArea" parent="FullGameMode/Background/WholeAlignment" unique_id=1860369934 instance=ExtResource("3_jkv2x")]
 layout_mode = 2

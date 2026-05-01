@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://im2qyo8akr0"]
 
 [ext_resource type="Texture2D" uid="uid://bhdgpy4vms7ux" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Pixel Map Base/0.png" id="1_gjmr1"]
-[ext_resource type="Script" uid="uid://cflcypdid5rys" path="res://scripts/office/upgrade_panel.gd" id="1_huekl"]
+[ext_resource type="Script" uid="uid://cflcypdid5rys" path="res://scripts/office/desk_upgrade_panel.gd" id="1_huekl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_huekl"]
 atlas = ExtResource("1_gjmr1")
