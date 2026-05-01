@@ -19,7 +19,7 @@ var _pending_amount = 0
 @onready var visual_scenes = {
 	Employee.Rarity.R: preload("res://scenes/employee/r_visual.tscn"),
 	Employee.Rarity.SR: preload("res://scenes/employee/sr_visual.tscn"),
-	Employee.Rarity.SSR: preload("res://scenes/employee/sr_visual.tscn")
+	Employee.Rarity.SSR: preload("res://scenes/employee/ssr_visual.tscn")
 }
 
 func _ready():

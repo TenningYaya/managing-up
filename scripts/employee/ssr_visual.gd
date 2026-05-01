@@ -4,7 +4,7 @@ extends Node2D
 # ==========================================
 # 1. 节点引用
 # ==========================================
-@onready var sprite: Sprite2D = $Sprite
+@onready var sprite: Sprite2D = $Sprite2D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 # ==========================================
@@ -16,7 +16,7 @@ extends Node2D
 
 func setup_visual(_seed: int, _style_data: Dictionary) -> void:
 	# 确保节点在初始化前已被正确引用（参考 sr_visual 的唤醒逻辑）
-	if sprite == null: sprite = get_node("Sprite")
+	if sprite == null: sprite = get_node("Sprite2D")
 	if anim_player == null: anim_player = get_node("AnimationPlayer")
 	
 	# 保持与 sr_visual 一致的缩放和偏移，确保在工位上的位置统一
@@ -50,7 +50,7 @@ func play_action(_action_name: String) -> void:
 
 # 这个函数专门给 RecruitmentManager 调用，用于生成简历上的头像
 func generate_portrait_texture() -> Texture2D:
-	if sprite == null: sprite = get_node("Sprite")
+	if sprite == null: sprite = get_node("Sprite2D")
 	
 	# 获取第一帧作为静态头像
 	var atlas = AtlasTexture.new()
