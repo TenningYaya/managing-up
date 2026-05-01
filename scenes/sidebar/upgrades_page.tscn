@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://72jjpffy66yt"]
 
 [ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="1_v0of0"]
+[ext_resource type="Script" uid="uid://da0wfxebqnghg" path="res://scripts/UI/sidebar/upgrades_page.gd" id="1_vc4hl"]
 [ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="2_lh86t"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_70tse"]
 [ext_resource type="Texture2D" uid="uid://b343jwsuuh7fn" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Buttons & Holders/13.png" id="4_lh86t"]
@@ -13,6 +14,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 270.0
 offset_bottom = 360.0
+script = ExtResource("1_vc4hl")
 
 [node name="TextureRect" type="ColorRect" parent="." unique_id=1357907453]
 visible = false
@@ -114,7 +116,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 20
 text = "+ STAFF×6"
 autowrap_mode = 2
 
@@ -170,7 +172,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 20
 text = "+ STAFF×6"
 autowrap_mode = 2
 
@@ -226,7 +228,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 20
 text = "+ STAFF×6"
 autowrap_mode = 2
 
@@ -247,6 +249,7 @@ offset_right = 210.0
 offset_bottom = 335.0
 texture_normal = ExtResource("1_v0of0")
 texture_pressed = ExtResource("2_lh86t")
+texture_disabled = ExtResource("2_lh86t")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -265,5 +268,5 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 20
-text = "T0->T1"
+text = "M1->M2"
 horizontal_alignment = 1
