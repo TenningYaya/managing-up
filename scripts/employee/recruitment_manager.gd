@@ -17,7 +17,7 @@ var _pending_amount = 0
 
 # 🌟 字典映射：后期加其他等级（比如 UR），只需在这里加上对应的场景路径
 @onready var visual_scenes = {
-	Employee.Rarity.R: preload("res://scenes/employee/sr_visual.tscn"),
+	Employee.Rarity.R: preload("res://scenes/employee/r_visual.tscn"),
 	Employee.Rarity.SR: preload("res://scenes/employee/sr_visual.tscn"),
 	Employee.Rarity.SSR: preload("res://scenes/employee/sr_visual.tscn")
 }
