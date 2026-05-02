@@ -1,34 +1,63 @@
 # change_office_button.gd
-extends TextureButton # 如果你的根节点是普通的 Button，请改为 extends Button
+extends TextureButton
 
-# --- 在 Inspector 中配置的参数 ---
 @export_group("Settings")
 @export var office_type: Gamemanager.OfficeType = Gamemanager.OfficeType.NONE
 @export var button_text: String = ""
 
 @export_group("Visuals")
-@export var normal_icon: Texture2D # 按钮的常规图标
+@export var normal_icon: Texture2D
 
-# 引用子节点
+# 🌟 新增引用：锁头图标
 @onready var label: Label = $Label
+@onready var lock_icon: TextureRect = $LockIcon # 假设你在预制体里加了这个节点
 
 func _ready() -> void:
-	# 1. 初始化文字显示
 	if label:
 		label.text = button_text
-		# 确保 Label 不会拦截鼠标点击，否则按钮点不到
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
-	# 2. 初始化图标显示 (针对 TextureButton)
 	if normal_icon:
 		texture_normal = normal_icon
 	
-	# 3. 连接点击信号
+	# 初始刷一次状态
+	refresh_status()
 	pressed.connect(_on_pressed)
 
+# 🌟 核心：封装刷新逻辑
+func refresh_status() -> void:
+	# 1. 判定等级解锁 (从 Gamemanager 拿配置)
+	var required_lv = Gamemanager.OFFICE_UNLOCK_LEVELS.get(office_type, 1)
+	var is_level_ok = Gamemanager.player_level >= required_lv
+	
+	# 2. 判定唯一性 (从 OfficeManager 拿状态)
+	var already_exists = false
+	if office_type == Gamemanager.OfficeType.RECRUITMENT:
+		already_exists = OfficeManager.has_recruitment_office
+	elif office_type == Gamemanager.OfficeType.CULTURE_CENTER:
+		already_exists = OfficeManager.has_culture_center
+	
+	# 🌟 重点：如果当前办公室已经选择了这个功能，不应该判定为“重复而禁用”
+	# 所以这里通常配合 Panel 的逻辑，但为了按钮通用，我们可以只管等级
+	
+	# 3. 执行视觉反馈
+	if not is_level_ok:
+		# 等级未达到：重度变暗 + 显示锁头
+		disabled = true
+		modulate = Color(0.3, 0.3, 0.3, 1.0)
+		if lock_icon: lock_icon.show()
+	elif already_exists:
+		# 已存在：中度变暗 + 禁用点击 + 不显锁头
+		disabled = true
+		modulate = Color(0.5, 0.5, 0.5, 1.0)
+		if lock_icon: lock_icon.hide()
+	else:
+		# 正常可用
+		disabled = false
+		modulate = Color(1, 1, 1, 1)
+		if lock_icon: lock_icon.hide()
+
 func _on_pressed() -> void:
-	# 不要只传名字，直接传我们配置好的 type
 	var panel = get_tree().get_first_node_in_group("office_panel")
 	if panel:
-		# 这里我们调用面板的一个新函数，直接传类型
 		panel.on_type_selected(office_type)

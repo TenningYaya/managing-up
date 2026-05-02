@@ -118,24 +118,18 @@ func open_panel(office: Office, open_culture_tab: bool = false) -> void:
 	
 	show()
 	print("面板最终停留在页签：", tab_container.current_tab, " | 来自点击要求：", open_culture_tab)
-# 提取出来的刷新逻辑，方便调用
+
 func _refresh_selection_state() -> void:
 	for child in selection_buttons.get_children():
-		if not "office_type" in child:
-			continue
-		child.disabled = false
-		child.modulate = Color(1, 1, 1, 1)
-		
-		var type_to_check = child.office_type
-		var already_exists = false
-		if type_to_check == Gamemanager.OfficeType.RECRUITMENT:
-			already_exists = OfficeManager.has_recruitment_office
-		elif type_to_check == Gamemanager.OfficeType.CULTURE_CENTER:
-			already_exists = OfficeManager.has_culture_center
-		
-		if already_exists and current_target_office.current_type != type_to_check:
-			child.disabled = true
-			child.modulate = Color(0.3, 0.3, 0.3, 1)
+		# 🌟 核心魔法：如果子节点有 refresh_status 这个函数，就执行它
+		if child.has_method("refresh_status"):
+			child.refresh_status()
+			
+			# 针对“唯一性”在面板层级的特殊修正（可选）：
+			# 如果该按钮代表的功能正是当前办公室的功能，应该让它亮起来，方便玩家切换回来
+			if child.office_type == current_target_office.current_type:
+				child.disabled = false
+				child.modulate = Color(1.2, 1.2, 1.2, 1.0) # 稍微高亮表示当前选中
 
 # 🌟 统一关闭函数，清理引用
 func close_panel() -> void:

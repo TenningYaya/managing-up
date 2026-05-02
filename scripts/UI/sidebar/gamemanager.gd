@@ -6,6 +6,21 @@ signal kpi_changed(new_value)
 signal dollar_changed(new_value)
 signal level_changed(new_level)
 
+enum OfficeType {
+	NONE,
+	PANTRY,
+	MEETING_ROOM,
+	RECRUITMENT,
+	CULTURE_CENTER
+}
+
+const OFFICE_UNLOCK_LEVELS = {
+	OfficeType.PANTRY: 2,          # M2 解锁
+	OfficeType.RECRUITMENT: 3,     # M3 解锁
+	OfficeType.MEETING_ROOM: 4,    # M4 解锁
+	OfficeType.CULTURE_CENTER: 5   # M5 解锁
+}
+
 var has_recruitment_office: bool = false
 var has_culture_center: bool = false
 
@@ -28,13 +43,7 @@ var dollar: int = 10000:
 		dollar = value
 		dollar_changed.emit(dollar)
 
-enum OfficeType {
-	NONE,
-	PANTRY,
-	MEETING_ROOM,
-	RECRUITMENT,
-	CULTURE_CENTER
-}
+
 
 func _ready() -> void:
 	call_deferred("emit_signal", "dollar_changed", dollar)
