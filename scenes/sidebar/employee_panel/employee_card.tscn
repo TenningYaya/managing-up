@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://c73i2bvfodyr2" path="res://scripts/employee/employee_card.gd" id="1_jy2kl"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_l0ibj"]
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_fd3x5"]
+[ext_resource type="Texture2D" uid="uid://ye2744q5h3x2" path="res://assets/UI/employee/工作中 (1).png" id="4_fd3x5"]
+[ext_resource type="Texture2D" uid="uid://clcnucuwiko20" path="res://assets/UI/employee/对勾小.png" id="5_4mhpm"]
 
 [node name="EmployeeCard" type="Control" unique_id=1721669152]
 custom_minimum_size = Vector2(75, 125)
@@ -85,7 +87,7 @@ step = 1.0
 value = 5.0
 show_percentage = false
 
-[node name="OnMapIcon" type="ColorRect" parent="." unique_id=2114718813]
+[node name="OnMapIcon1" type="ColorRect" parent="." unique_id=2114718813]
 visible = false
 layout_mode = 0
 offset_left = 4.0
@@ -94,7 +96,7 @@ offset_right = 25.0
 offset_bottom = 65.0
 color = Color(0.46055603, 0.905966, 0.5721384, 1)
 
-[node name="Checkmark" type="ColorRect" parent="." unique_id=71188001]
+[node name="Checkmark1" type="ColorRect" parent="." unique_id=71188001]
 visible = false
 layout_mode = 0
 offset_left = 52.0
@@ -102,3 +104,22 @@ offset_top = 44.0
 offset_right = 73.0
 offset_bottom = 65.0
 color = Color(1, 0.64705884, 1, 1)
+
+[node name="OnMapIcon" type="TextureRect" parent="." unique_id=496665199]
+visible = false
+layout_mode = 0
+offset_top = 38.0
+offset_right = 31.0
+offset_bottom = 69.0
+texture = ExtResource("4_fd3x5")
+expand_mode = 1
+
+[node name="Checkmark" type="TextureRect" parent="." unique_id=1239875304]
+visible = false
+layout_mode = 0
+offset_left = 49.0
+offset_top = 41.0
+offset_right = 74.0
+offset_bottom = 66.0
+texture = ExtResource("5_4mhpm")
+expand_mode = 1

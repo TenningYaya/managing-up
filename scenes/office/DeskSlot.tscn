@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c4kcga8k3qdlx" path="res://scripts/office/DeskSlot.gd" id="1_fqahj"]
 [ext_resource type="PackedScene" uid="uid://dfnm7sh1rtiky" path="res://scenes/office/DeskSet.tscn" id="1_ohn7j"]
-[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_pfl3o"]
+[ext_resource type="Texture2D" uid="uid://bc0tvvk0fdqit" path="res://assets/UI/ingame/升级.png" id="3_pfl3o"]
 
 [node name="DeskSlot" type="Control" unique_id=974996053]
 custom_minimum_size = Vector2(262, 328)
@@ -47,9 +47,9 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
+offset_top = -57.0
 offset_right = 30.0
-offset_bottom = -10.0
+offset_bottom = -27.0
 grow_vertical = 0
 texture_normal = ExtResource("3_pfl3o")
 texture_pressed = ExtResource("3_pfl3o")
