@@ -43,6 +43,9 @@ var dollar: int = 10000:
 		dollar = value
 		dollar_changed.emit(dollar)
 
+var max_desk_level: int = 1
+var unlocked_desk_slots: int = 1 # 解锁的工位排数
+
 
 
 func _ready() -> void:

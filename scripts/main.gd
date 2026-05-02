@@ -9,6 +9,9 @@ var original_size = Vector2i(1920, 360)
 var is_dragging = false
 var mouse_offset = Vector2i()
 
+# ➕ 新增：获取包含 5排工位 的父节点
+@onready var desk_row = $FullGameMode/Background/WholeAlignment/DeskRow
+
 # --- 2. Initialization ---
 func _ready():
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
@@ -23,6 +26,12 @@ func _ready():
 	set_full_window_clickable()
 
 	print("window mode: ", DisplayServer.window_get_mode())
+
+	# ➕ 新增：监听 Gamemanager 的玩家升级信号
+	Gamemanager.level_changed.connect(_on_player_level_changed)
+	
+	# ➕ 新增：游戏刚启动时，初始化一次桌子的显示状态
+	_update_desk_visibility()
 
 
 # --- 3. 输入监听 ---
@@ -131,3 +140,23 @@ func set_full_window_clickable():
 	])
 
 	DisplayServer.window_set_mouse_passthrough(points)
+
+
+# ================================
+# ✅ 新增：工位显示与隐藏控制逻辑
+# ================================
+
+func _on_player_level_changed(_new_level: int):
+	# 只要玩家升级（level_changed 发出信号），就重新检查并刷新桌子显示
+	_update_desk_visibility()
+
+func _update_desk_visibility():
+	if not desk_row: return 
+	var slots = desk_row.get_children()
+	
+	for i in range(slots.size()):
+		# 🔥 核心修改：直接拿刚刚收到更新的 Gamemanager.player_level 来判断！
+		if i < Gamemanager.player_level:
+			slots[i].visible = true
+		else:
+			slots[i].visible = false

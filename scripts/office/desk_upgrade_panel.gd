@@ -30,16 +30,21 @@ func open(slot: Control):
 	target_slot = slot
 	var lvl = target_slot.slot_level
 	
-	level_label.text = "当前等级: " + str(lvl)
+	level_label.text = "Level " + str(lvl) + " -> Level " + str(lvl + 1)
+	
+	# 获取最高允许等级 
+	var current_max_allowed = Gamemanager.max_desk_level
 	
 	if lvl >= 4:
-		cost_label.text = "已满级"
+		cost_label.text = "MAXED OUT"
+		upgrade_button.disabled = true
+	elif lvl >= current_max_allowed:
+		# 未满级，但受限于玩家等级
+		cost_label.text = "REQUIRE PLAYER M" + str(lvl + 1)
 		upgrade_button.disabled = true
 	else:
 		current_cost = get_upgrade_cost(lvl)
-		cost_label.text = "需要: " + str(current_cost) + " KPI"
-		
-		# 调用你的 Gamemanager 检查 KPI 够不够 
+		cost_label.text = "KPI: " + str(current_cost)
 		upgrade_button.disabled = not Gamemanager.has_enough_kpi(current_cost)
 		
 	show()
