@@ -119,6 +119,7 @@ func open_panel(employee: Employee) -> void:
 	
 	_refresh_progress_bar()
 	_refresh_buffs()
+	_update_dispatch_button()
 	_connect_current_employee()
 	
 	# 🌟 第二重保护：只在面板还没出来时才播动画/show

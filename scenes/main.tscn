@@ -88,6 +88,13 @@ unlock_at_level = 2
 [node name="EmployeeDropArea" parent="FullGameMode/Background/WholeAlignment" unique_id=1860369934 instance=ExtResource("3_jkv2x")]
 layout_mode = 2
 
+[node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1716905617 instance=ExtResource("11_trceg")]
+layout_mode = 0
+offset_left = 75.0
+offset_top = -7.0
+offset_right = 225.0
+offset_bottom = 63.0
+
 [node name="DeskRow" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=1158104807]
 layout_mode = 2
 
@@ -151,12 +158,6 @@ offset_bottom = 1080.0
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2052431275]
 
 [node name="SideMenu" parent="CanvasLayer" unique_id=1012173253 instance=ExtResource("4_jyhfs")]
-
-[node name="CurrencyUI" parent="CanvasLayer" unique_id=1716905617 instance=ExtResource("11_trceg")]
-offset_left = 516.0
-offset_top = 722.0
-offset_right = 666.0
-offset_bottom = 792.0
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
 layout_mode = 3

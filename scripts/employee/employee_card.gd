@@ -16,6 +16,7 @@ signal card_clicked(employee_data: Employee) # 定义信号，把员工数据传
 
 @onready var checkmark = $Checkmark
 @onready var on_map_icon = $OnMapIcon
+@onready var on_drop_area = $OnDropArea
 
 var my_employee_data: Employee
 var is_selected: bool = false : 
@@ -83,19 +84,34 @@ func set_selection_mode(active: bool):
 		is_selected = false
 		
 func update_on_map_status(employee_data_override: Employee = null):
-	# 如果没传参数，就用自己存的数据
 	var data = employee_data_override if employee_data_override else my_employee_data
 	if data == null: return
 	
-	var is_on_map = false
+	# 定义三个状态变量
+	var is_at_seat = false
+	var is_on_drop_area = false
 	
-	# 条件 1：如果他有座位，那肯定在地图上（工位上）
+	# 1. 判定逻辑
+	# 条件 A：如果有座位，说明在工位上
 	if data.get("current_seat") != null:
-		is_on_map = true
+		is_at_seat = true
 		
-	# 条件 2：如果没有座位，但他在“掉落组”里，并且确实“在场景树里” (is_inside_tree)
-	elif data.is_in_group("dropped_employee") and data.is_inside_tree():
-		is_on_map = true
+	# 条件 B：如果没有座位，但他在掉落组且在场景树里，说明在空地上（DropArea）
+	elif data.is_in_group("dropped_employee") and data.is_inside_tree() and data.visible:
+		is_on_drop_area = true
 		
-	# 控制绿标显示
-	on_map_icon.visible = is_on_map
+	# 2. 视觉表现逻辑
+	# 状态一：在工位上
+	if is_at_seat:
+		on_map_icon.visible = true       # 显示 OnMap 图标
+		on_drop_area.visible = false     # 隐藏 OnDropArea 图标
+		
+	# 状态二：在空地上
+	elif is_on_drop_area:
+		on_map_icon.visible = false      # 隐藏 OnMap 图标
+		on_drop_area.visible = true      # 显示 OnDropArea 图标
+		
+	# 状态三：不在场（在仓库）
+	else:
+		on_map_icon.visible = false
+		on_drop_area.visible = false
