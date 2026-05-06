@@ -174,10 +174,7 @@ func _start_drag() -> void:
 		current_seat.clear_occupant()
 		current_seat = null
 
-func _clear_all_vfx() -> void:
-	for child in get_children():
-		if child is FileVFX: # 这里用到你脚本里定义的 class_name
-			child.queue_free()
+
 
 func _end_drag() -> void:
 	dragging = false
@@ -195,10 +192,18 @@ func _end_drag() -> void:
 				if office.logic_node.can_drop_employee(self):
 					office.logic_node.drop_employee(self)
 					return # 成功进入会议室，直接结束判定！
+				else:
+					var angry_texts = [
+						"No seat, no meeting!",
+						"没位置开什么会，先领活！",
+						"没名分的会议我不参加..."
+					]
+					_spawn_speech_bubble(angry_texts[randi() % angry_texts.size()])
+					
+					_return_to_start() # 骂完之后，乖乖弹回去
+					return
 
-	# ==========================================
 	# 如果没扔进会议室，正常走找工位的逻辑
-	# ==========================================
 	var target_seat := _find_valid_seat()
 
 	if target_seat != null:
@@ -439,7 +444,6 @@ func _on_slacking_resolved(by_click: bool) -> void:
 	if by_click:
 		var reward_amount = randi_range(1, 2)
 		Gamemanager.add_dollar(reward_amount)
-		print(employee_name, " 结束摸鱼被抓包，你成功榨取了美金: ", reward_amount)
 			
 	_start_new_work_cycle()
 
@@ -646,3 +650,8 @@ func exit_meeting() -> void:
 		visual_component.show()
 		
 	_start_new_work_cycle() # 恢复正常速度继续搬砖
+
+func _clear_all_vfx() -> void:
+	for child in get_children():
+		if child is FileVFX: # 这里用到你脚本里定义的 class_name
+			child.queue_free()
