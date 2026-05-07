@@ -22,6 +22,7 @@ RecruitmentManager="*uid://ckfwoe41ukywt"
 OfficeManager="*uid://ml2n2ihtwaw5"
 Gamemanager="*uid://0pdlqvhlsfj"
 UiManager="*uid://b28l2m20rhhr4"
+SaveManager="*uid://blecxw437vfjb"
 
 [display]
 

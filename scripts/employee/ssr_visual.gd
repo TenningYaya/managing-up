@@ -15,19 +15,17 @@ extends Node2D
 @export var ssr_skins: Array[Texture2D] = [] 
 
 func setup_visual(_seed: int, _style_data: Dictionary) -> void:
-	# 确保节点在初始化前已被正确引用（参考 sr_visual 的唤醒逻辑）
 	if sprite == null: sprite = get_node("Sprite2D")
 	if anim_player == null: anim_player = get_node("AnimationPlayer")
 	
-	# 保持与 sr_visual 一致的缩放和偏移，确保在工位上的位置统一
 	self.position = Vector2(55, 10)
 	self.scale = Vector2(3.5, 3.5)
 
-	# 随机选择一种 SSR 形象
 	if not ssr_skins.is_empty():
-		sprite.texture = ssr_skins.pick_random()
+		var tex_idx = _style_data.get("tex_idx", randi() % ssr_skins.size())
+		_style_data["tex_idx"] = tex_idx
+		sprite.texture = ssr_skins[tex_idx]
 	
-	# 默认播放待机动画
 	play_action("idle")
 
 # ==========================================

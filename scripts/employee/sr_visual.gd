@@ -35,8 +35,6 @@ func _process(_delta: float) -> void:
 	clothes.frame = current_frame
 
 func setup_visual(_seed: int, _style_data: Dictionary) -> void:
-	# 🌟 核心修复：因为员工在“简历池”里还没上屏幕，@onready 都在装睡！
-	# 我们必须把所有没醒的节点全叫醒，一个都不能少！
 	if body == null: body = get_node("Body")
 	if clothes == null: clothes = get_node("Clothes")
 	if hair == null: hair = get_node("Hair")
@@ -47,26 +45,33 @@ func setup_visual(_seed: int, _style_data: Dictionary) -> void:
 
 	# --- 随机身体 ---
 	if not body_skins.is_empty():
-		body.texture = body_skins.pick_random()
+		var body_idx = _style_data.get("body_idx", randi() % body_skins.size())
+		_style_data["body_idx"] = body_idx
+		body.texture = body_skins[body_idx]
 	
 	# --- 随机衣服 ---
 	if not clothes_pool.is_empty():
-		var cloth_idx = randi() % clothes_pool.size()
+		var cloth_idx = _style_data.get("cloth_idx", randi() % clothes_pool.size())
+		_style_data["cloth_idx"] = cloth_idx
 		clothes.texture = clothes_pool[cloth_idx]
 		
 		var total_colors = clothes_color_counts[cloth_idx] if cloth_idx < clothes_color_counts.size() else 1
-		var selected_color_idx = randi() % total_colors
+		var selected_color_idx = _style_data.get("cloth_color", randi() % total_colors)
+		_style_data["cloth_color"] = selected_color_idx
 		
 		clothes.set_meta("color_idx", selected_color_idx)
 		clothes.set_meta("total_colors", total_colors)
 
-	# --- 随机头发 (14色逻辑) ---
+	# --- 随机头发 ---
 	if not hair_textures.is_empty():
-		hair.texture = hair_textures.pick_random()
-		var h_color_idx = randi() % hair_color_count
+		var hair_idx = _style_data.get("hair_idx", randi() % hair_textures.size())
+		_style_data["hair_idx"] = hair_idx
+		hair.texture = hair_textures[hair_idx]
+		
+		var h_color_idx = _style_data.get("hair_color", randi() % hair_color_count)
+		_style_data["hair_color"] = h_color_idx
 		hair.set_meta("color_idx", h_color_idx)
 
-	# 默认开始站立动作
 	play_action("idle")
 
 

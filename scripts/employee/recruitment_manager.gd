@@ -71,7 +71,7 @@ func _create_data(rarity: Employee.Rarity) -> Employee:
 	
 	# 🌟 防弹衣 1：如果对方写了 setup_visual 才调用
 	if visual_instance.has_method("setup_visual"):
-		visual_instance.setup_visual(randi(), {})
+		visual_instance.setup_visual(randi(), e.dna)
 	
 	# 🌟 防弹衣 2：如果对方写了生成头像的方法，就拿过来；没有就给个保底或者空着
 	if visual_instance.has_method("generate_portrait_texture"):

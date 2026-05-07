@@ -8,21 +8,17 @@ extends Node2D
 
 # 游戏生成员工时，会自动运行这个 setup_visual 函数
 func setup_visual(_seed: int, _style_data: Dictionary) -> void:
-	# 唤醒节点
 	if body == null: body = get_node("Body")
 		
-	# 安全检查：如果箱子里有图片
 	if not r_character_pictures.is_empty():
-		# 随机抽一张图换上
-		body.texture = r_character_pictures.pick_random()
+		# 🌟 基因系统改造
+		var tex_idx = _style_data.get("tex_idx", randi() % r_character_pictures.size())
+		_style_data["tex_idx"] = tex_idx # 保存回字典
 		
-		# 🌟 关键修复：直接告诉引擎怎么切图！
-		# 因为你说有三列（横向3个格子），所以 hframes 填 3
+		body.texture = r_character_pictures[tex_idx]
 		body.hframes = 3  
-		# 因为第一列有4个（竖向最高有4个格子），所以 vframes 填 4
 		body.vframes = 4  
 
-	# 把人物放到合适的位置，并放大一点
 	self.position = Vector2(55, 10)
 	self.scale = Vector2(3.5, 3.5)
 

@@ -14,6 +14,9 @@ var mouse_offset = Vector2i()
 
 # --- 2. Initialization ---
 func _ready():
+	
+	SaveManager.load_game()
+	
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 
 	get_viewport().transparent_bg = true
@@ -32,6 +35,7 @@ func _ready():
 	
 	# ➕ 新增：游戏刚启动时，初始化一次桌子的显示状态
 	_update_desk_visibility()
+	
 
 
 # --- 3. 输入监听 ---

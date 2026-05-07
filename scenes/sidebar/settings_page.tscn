@@ -35,13 +35,43 @@ func _on_save_button_pressed():
 	print(\"设置已保存！\")
 
 func _on_save__quit_pressed() -> void:
-		# 1. 创建对话框的“分身”
+	# 1. 创建对话框
 	var dialog_instance = CONFIRM_DIALOG.instantiate()
 
-	# 2. 把它加入到当前正在运行的场景中
-	# 如果你的 ConfirmDialog 场景大小已经是 1920 * 360 且小框已居中，
-	# 那么它一出现就会刚好在整个游戏画面的正中间。
+	# 2. 设置对话框文字（如果你的对话框脚本支持设置标题和内容）
+	if dialog_instance.has_method(\"set_texts\"):
+		dialog_instance.set_texts(\"保存并退出\", \"确定要保存当前进度并退出游戏吗？\")
+	
+	# 3. 核心：连接“确认”信号到执行函数
+	# 使用 CONNECT_ONE_SHOT 确保信号只触发一次，防止意外重复执行
+	dialog_instance.confirmed.connect(_execute_save_and_quit, CONNECT_ONE_SHOT)
+
+	# 4. 加入场景树显示
 	get_tree().root.add_child(dialog_instance)
+	
+func _execute_save_and_quit() -> void:
+	# 1. 调用全局单例 SaveManager 进行存档
+	# 这样可以确保玩家当前的 KPI、美金、员工位置和办公室状态都被写入 user://savegame.json
+	if SaveManager.has_method(\"save_game\"):
+		SaveManager.save_game()
+		print(\"存档成功...\")
+	else:
+		push_error(\"错误：找不到 SaveManager 或 save_game 方法，请检查 Autoload 设置\")
+
+	# 2. 稍微等待一帧或给个打印反馈（可选），然后彻底退出
+	print(\"正在退出游戏...\")
+	get_tree().quit()
+	
+func _on_delete_saave_pressed() -> void:
+	pass
+
+
+func _on_delete_save_pressed() -> void:
+	# 直接调用全局单例中的删除方法
+	if SaveManager.has_method(\"delete_save\"):
+		SaveManager.delete_save()
+	else:
+		push_error(\"错误：在 SaveManager 中找不到 delete_save 方法\")
 "
 
 [node name="SettingsPage" type="Control" unique_id=517570582]
@@ -154,4 +184,33 @@ theme_override_fonts/font = ExtResource("1_wtuay")
 theme_override_font_sizes/font_size = 20
 text = "save&quit"
 
+[node name="Delete Save" type="TextureButton" parent="." unique_id=458632332]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 341.0
+offset_right = 210.0
+offset_bottom = 376.0
+texture_normal = ExtResource("2_nb64h")
+texture_pressed = ExtResource("3_utjtj")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Delete Save" unique_id=1054084355]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -8.5
+offset_right = 46.0
+offset_bottom = 8.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "Delet Save"
+
 [connection signal="pressed" from="Save & Quit" to="." method="_on_save__quit_pressed"]
+[connection signal="pressed" from="Delete Save" to="." method="_on_delete_save_pressed"]

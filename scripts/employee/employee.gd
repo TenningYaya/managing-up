@@ -21,6 +21,8 @@ const SLACKING_BUBBLE_SCENE = preload("res://scenes/UI/custom/SlackingBubble.tsc
 @export var quality: int = 1
 @export var experience: int = 1
 
+# 🌟 新增：用来存储个人长相和装饰索引的基因库
+var dna: Dictionary = {}
 #——————————位移————————————
 var current_seat: DeskSeat = null
 var drag_start_seat: DeskSeat = null
