@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://btou2tsygvjc0" path="res://scenes/employee/test_hirefire.tscn" id="13_jkv2x"]
 [ext_resource type="Script" uid="uid://bx1cavexc0whx" path="res://scripts/test/test_currency.gd" id="14_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://im2qyo8akr0" path="res://scenes/office/DeskUpgradePanel.tscn" id="15_jkv2x"]
+[ext_resource type="PackedScene" uid="uid://c8d4rax1ise3l" path="res://scenes/sidebar/employee_panel/employee_warehouse.tscn" id="19_0ld40"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dp3eg"]
 texture = ExtResource("2_jbj1t")
@@ -363,3 +364,9 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="EmployeeWarehouse" parent="CanvasLayer" unique_id=1330516969 groups=["employee_warehouse"] instance=ExtResource("19_0ld40")]
+offset_left = 799.0
+offset_top = 324.0
+offset_right = 1069.0
+offset_bottom = 684.0

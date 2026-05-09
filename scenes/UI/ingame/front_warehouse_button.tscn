@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://d17k21r7qmpoh"]
 
+[ext_resource type="Script" uid="uid://ckx4rwnfgdv46" path="res://scenes/UI/ingame/front_warehouse_button.gd" id="1_0vhl8"]
 [ext_resource type="PackedScene" uid="uid://yc8lrfrrdl2y" path="res://scenes/UI/ingame/front_desk.tscn" id="1_8y10v"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_0vhl8"]
 
@@ -12,6 +13,7 @@ custom_minimum_size = Vector2(86.4, 86.4)
 offset_right = 53.0
 offset_bottom = 53.0
 flat = true
+script = ExtResource("1_0vhl8")
 
 [node name="FrontDesk" parent="." unique_id=378970839 instance=ExtResource("1_8y10v")]
 layout_mode = 0
@@ -27,3 +29,5 @@ offset_top = 6.0
 offset_right = 66.0
 offset_bottom = 45.0
 texture = SubResource("AtlasTexture_116x4")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

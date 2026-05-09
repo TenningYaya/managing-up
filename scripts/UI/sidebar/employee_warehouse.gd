@@ -46,7 +46,22 @@ func _ready() -> void:
 	
 	Gamemanager.request_employee_drop.connect(_on_map_needs_refresh)
 	EmployeeManager.employee_removed.connect(_on_map_needs_refresh)
+	
+func _unhandled_input(event: InputEvent) -> void:
+	# 如果仓库本来就没开，或者现在正弹着确认窗，直接无视点击逻辑
+	if not visible or (bulk_fire_popup and bulk_fire_popup.visible):
+		return
 
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# 判定点击是否在仓库外面
+		if not get_global_rect().has_point(event.global_position):
+			# 还有一个关键：如果点的是弹窗区域，也不准缩回去
+			if bulk_fire_popup and bulk_fire_popup.get_global_rect().has_point(event.global_position):
+				return
+				
+			hide()
+			# 如果你有侧边栏状态，记得这里也要同步重置（可选）
+			
 func _on_map_needs_refresh(_data = null):
 	# 给 0.1 秒等节点树删干净，然后全体起立！
 	get_tree().create_timer(0.1).timeout.connect(refresh_all_card_icons)
@@ -114,20 +129,7 @@ func add_employee_to_warehouse(new_employee_data: Employee):
 	# 3. 把卡片塞进网格里 (它会自动排到正确的位置)
 	grid.add_child(card_instance)
 	
-func _input(event: InputEvent) -> void:
-	# 如果仓库本来就没开，或者现在正弹着确认窗，直接无视点击逻辑
-	if not visible or (bulk_fire_popup and bulk_fire_popup.visible):
-		return
 
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		# 判定点击是否在仓库外面
-		if not get_global_rect().has_point(event.global_position):
-			# 还有一个关键：如果点的是弹窗区域，也不准缩回去
-			if bulk_fire_popup and bulk_fire_popup.get_global_rect().has_point(event.global_position):
-				return
-				
-			hide()
-			# 如果你有侧边栏状态，记得这里也要同步重置（可选）
 
 # 刚才在 recruitment_panel 里留空的按钮方法
 func open_warehouse():
