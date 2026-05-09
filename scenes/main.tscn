@@ -366,7 +366,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="EmployeeWarehouse" parent="CanvasLayer" unique_id=1330516969 groups=["employee_warehouse"] instance=ExtResource("19_0ld40")]
-offset_left = 799.0
-offset_top = 324.0
-offset_right = 1069.0
-offset_bottom = 684.0
+offset_left = 788.0
+offset_top = 160.0
+offset_right = 1213.0
+offset_bottom = 687.0

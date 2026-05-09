@@ -4,9 +4,9 @@ extends Control
 # 把你做的卡片 Scene 拖到右侧 Inspector 的这个变量里
 @export var card_scene: PackedScene 
 @onready var grid = $ScrollContainer/GridContainer
-@onready var sort_menu: OptionButton = $SortMenu
+@onready var sort_menu: OptionButton = $VBoxContainer/SortMenu
 
-@onready var select_toggle_btn = $Select # 仓库右上的“选择”按钮
+@onready var select_toggle_btn = $VBoxContainer/Select # 仓库右上的“选择”按钮
 @onready var bottom_op_bar = $BottomOperationBar     # 底部三个按钮的容器
 @onready var bulk_optimize_btn = $BottomOperationBar/Fire
 @onready var bulk_recall_btn = $BottomOperationBar/Recall
@@ -16,6 +16,9 @@ extends Control
 var is_selection_mode: bool = false
 var selected_employees: Array[Employee] = []
 
+var dragging = false
+var drag_offset = Vector2()
+
 func _ready() -> void:
 	# 这一行必须有，且 EmployeeManager 必须是 Autoload 的单例名
 	EmployeeManager.employee_added.connect(_on_employee_hired)
@@ -23,10 +26,10 @@ func _ready() -> void:
 	
 	# 1. 初始化下拉菜单选项
 	sort_menu.clear()
-	sort_menu.add_item("属性总和：从高到低", 0)
-	sort_menu.add_item("属性总和：从低到高", 1)
-	sort_menu.add_item("入职时间：最晚优先", 2)
-	sort_menu.add_item("入职时间：最早优先", 3)
+	sort_menu.add_item("Stats: High", 0)
+	sort_menu.add_item("Stats: Low", 1)
+	sort_menu.add_item("Hire: Newest", 2)
+	sort_menu.add_item("Hire: Oldest", 3)
 	sort_menu.select(0)
 	# 2. 绑定切换事件
 	sort_menu.item_selected.connect(_on_sort_selected)
@@ -46,6 +49,8 @@ func _ready() -> void:
 	
 	Gamemanager.request_employee_drop.connect(_on_map_needs_refresh)
 	EmployeeManager.employee_removed.connect(_on_map_needs_refresh)
+	
+	sort_menu.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	
 func _unhandled_input(event: InputEvent) -> void:
 	# 如果仓库本来就没开，或者现在正弹着确认窗，直接无视点击逻辑
@@ -296,3 +301,12 @@ func _check_emp_on_map(emp: Employee) -> bool:
 		return true
 		
 	return false
+
+func _on_title_bar_gui_input(event: InputEvent):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			dragging = event.pressed
+			drag_offset = get_global_mouse_position() - global_position
+			
+	if event is InputEventMouseMotion and dragging:
+		global_position = get_global_mouse_position() - drag_offset

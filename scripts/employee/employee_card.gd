@@ -30,6 +30,8 @@ func _ready():
 	EmployeeManager.employee_removed.connect(_on_map_changed)
 
 func _on_map_changed(_data = null):
+	if not is_inside_tree() or is_queued_for_deletion():
+		return
 	# 给一点点缓冲时间，等节点彻底 queue_free 掉
 	get_tree().create_timer(0.1).timeout.connect(func():
 		update_on_map_status(my_employee_data)

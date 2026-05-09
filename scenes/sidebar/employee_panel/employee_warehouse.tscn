@@ -5,10 +5,45 @@
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="3_g51u0"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="3_wfpq7"]
 [ext_resource type="PackedScene" uid="uid://5sdsush0erlr" path="res://scenes/UI/custom/popup_window.tscn" id="4_sdgeg"]
+[ext_resource type="StyleBox" uid="uid://cvnmvliyke1f0" path="res://data/UI/indigo_stylebox_hover.tres" id="4_vfn86"]
+[ext_resource type="StyleBox" uid="uid://dixbf21ulxawg" path="res://data/UI/indigo_stylebox_flat.tres" id="5_flfux"]
+[ext_resource type="StyleBox" uid="uid://c2rs0260hq3if" path="res://data/UI/indigo_stylebox_focus.tres" id="6_jfh5p"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="7_8bl1x"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0rffj"]
 atlas = ExtResource("3_g51u0")
 region = Rect2(1680, 464, 160, 160)
+
+[sub_resource type="DPITexture" id="DPITexture_uhtdn"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\"><path fill=\"none\" stroke=\"#b2b2b2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-opacity=\".85\" stroke-width=\"2\" d=\"m2 4 4 4 4-4\"/></svg>
+"
+
+[sub_resource type="Theme" id="Theme_b6rgt"]
+default_font = ExtResource("7_8bl1x")
+OptionButton/colors/font_color = Color(0.9262248, 0.92622477, 0.92622477, 1)
+OptionButton/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+OptionButton/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+OptionButton/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+OptionButton/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+OptionButton/colors/font_outline_color = Color(0, 0, 0, 1)
+OptionButton/colors/font_pressed_color = Color(1, 1, 1, 1)
+OptionButton/constants/arrow_margin = 4
+OptionButton/constants/h_separation = 4
+OptionButton/constants/modulate_arrow = 0
+OptionButton/constants/outline_size = 0
+OptionButton/font_sizes/font_size = 20
+OptionButton/icons/arrow = SubResource("DPITexture_uhtdn")
+OptionButton/styles/disabled = ExtResource("4_vfn86")
+OptionButton/styles/disabled_mirrored = ExtResource("5_flfux")
+OptionButton/styles/focus = ExtResource("6_jfh5p")
+OptionButton/styles/hover = ExtResource("4_vfn86")
+OptionButton/styles/hover_mirrored = ExtResource("4_vfn86")
+OptionButton/styles/normal = ExtResource("5_flfux")
+OptionButton/styles/normal_mirrored = ExtResource("5_flfux")
+OptionButton/styles/pressed = ExtResource("5_flfux")
+OptionButton/styles/pressed_mirrored = ExtResource("5_flfux")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vfn86"]
 
 [node name="EmployeeWarehouse" type="Control" unique_id=1330516969]
 custom_minimum_size = Vector2(270, 360)
@@ -21,8 +56,8 @@ card_scene = ExtResource("2_fdhm7")
 texture_filter = 1
 layout_mode = 0
 offset_left = -12.0
-offset_right = 350.0
-offset_bottom = 393.0
+offset_right = 437.0
+offset_bottom = 539.0
 texture = SubResource("AtlasTexture_0rffj")
 region_rect = Rect2(0, 0, 160, 160)
 patch_margin_left = 32
@@ -38,19 +73,25 @@ offset_bottom = 360.0
 mouse_filter = 2
 color = Color(0.40893582, 0.82403606, 0.9084133, 1)
 
-[node name="SortMenu" type="OptionButton" parent="." unique_id=1432117635]
+[node name="VBoxContainer" type="HBoxContainer" parent="." unique_id=1272892589]
 layout_mode = 0
-offset_left = 25.0
-offset_top = 28.0
-offset_right = 112.0
-offset_bottom = 48.0
+offset_left = 54.0
+offset_top = 29.0
+offset_right = 364.0
+offset_bottom = 69.0
+theme_override_constants/separation = 40
+alignment = 1
 
-[node name="Select" parent="." unique_id=2048579194 instance=ExtResource("3_wfpq7")]
-layout_mode = 0
-offset_left = 184.0
-offset_top = 21.0
-offset_right = 324.0
-offset_bottom = 56.0
+[node name="SortMenu" type="OptionButton" parent="VBoxContainer" unique_id=1432117635]
+custom_minimum_size = Vector2(130, 25)
+layout_mode = 2
+theme = SubResource("Theme_b6rgt")
+theme_override_font_sizes/font_size = 20
+
+[node name="Select" parent="VBoxContainer" unique_id=2048579194 instance=ExtResource("3_wfpq7")]
+clip_contents = true
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
 button_text = "Select"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1335615631]
@@ -58,10 +99,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 21.0
+offset_left = 22.0
 offset_top = 71.0
-offset_right = 43.0
-offset_bottom = -57.0
+offset_right = 139.0
+offset_bottom = 97.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
@@ -71,17 +112,17 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/h_separation = 5
+theme_override_constants/h_separation = 15
 theme_override_constants/v_separation = 5
-columns = 3
+columns = 4
 
 [node name="BottomOperationBar" type="HBoxContainer" parent="." unique_id=1005811720]
 custom_minimum_size = Vector2(270, 0)
 layout_mode = 0
-offset_left = 24.0
-offset_top = 318.0
-offset_right = 310.0
-offset_bottom = 358.0
+offset_left = 68.0
+offset_top = 461.0
+offset_right = 354.0
+offset_bottom = 501.0
 theme_override_constants/separation = 8
 
 [node name="Fire" parent="BottomOperationBar" unique_id=1517868733 instance=ExtResource("3_wfpq7")]
@@ -106,3 +147,11 @@ offset_left = -690.0
 offset_top = 169.0
 offset_right = -690.0
 offset_bottom = 169.0
+
+[node name="TitleBar" type="Panel" parent="." unique_id=809817917]
+layout_mode = 0
+offset_right = 423.0
+offset_bottom = 25.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_vfn86")
+
+[connection signal="gui_input" from="TitleBar" to="." method="_on_title_bar_gui_input"]
