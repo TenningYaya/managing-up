@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://d17k21r7qmpoh"]
+
+[ext_resource type="PackedScene" uid="uid://yc8lrfrrdl2y" path="res://scenes/UI/ingame/front_desk.tscn" id="1_8y10v"]
+[ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_0vhl8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_116x4"]
+atlas = ExtResource("2_0vhl8")
+region = Rect2(80, 835, 32, 26)
+
+[node name="FrontWarehouseButton" type="Button" unique_id=1938687981]
+custom_minimum_size = Vector2(86.4, 86.4)
+offset_right = 53.0
+offset_bottom = 53.0
+flat = true
+
+[node name="FrontDesk" parent="." unique_id=378970839 instance=ExtResource("1_8y10v")]
+layout_mode = 0
+offset_right = 86.4
+offset_bottom = 86.4
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=679190221]
+z_index = 4
+texture_filter = 1
+layout_mode = 0
+offset_left = 18.0
+offset_top = 6.0
+offset_right = 66.0
+offset_bottom = 45.0
+texture = SubResource("AtlasTexture_116x4")

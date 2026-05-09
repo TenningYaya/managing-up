@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bgy17dc4wyb1u"]
+
+[ext_resource type="PackedScene" uid="uid://yc8lrfrrdl2y" path="res://scenes/UI/ingame/front_desk.tscn" id="1_sbhnu"]
+[ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_vyr0d"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kkvm4"]
+atlas = ExtResource("2_vyr0d")
+region = Rect2(176, 835, 32, 26)
+
+[node name="FrontRecruitmentButton" type="Button" unique_id=1065910196]
+custom_minimum_size = Vector2(86.4, 86.4)
+flat = true
+
+[node name="FrontDesk" parent="." unique_id=1313353215 instance=ExtResource("1_sbhnu")]
+layout_mode = 0
+offset_right = 86.4
+offset_bottom = 86.4
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=457663055]
+z_index = 3
+texture_filter = 1
+layout_mode = 0
+offset_left = 20.0
+offset_top = 4.0
+offset_right = 66.0
+offset_bottom = 44.0
+texture = SubResource("AtlasTexture_kkvm4")

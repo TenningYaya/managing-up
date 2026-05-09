@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://bin62t7m5b1o0" path="res://scenes/sidebar/side_menu.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://cjfjfj4l46h23" path="res://scenes/sidebar/employee_panel/employee_panel.tscn" id="5_tbgi4"]
 [ext_resource type="Script" uid="uid://bo4d6sxmvchpt" path="res://scripts/test/test_time_control.gd" id="6_tipki"]
+[ext_resource type="PackedScene" uid="uid://d17k21r7qmpoh" path="res://scenes/UI/ingame/front_warehouse_button.tscn" id="8_dp3eg"]
+[ext_resource type="PackedScene" uid="uid://bgy17dc4wyb1u" path="res://scenes/UI/ingame/front_recruitment_button.tscn" id="9_0ld40"]
 [ext_resource type="PackedScene" uid="uid://duispsomfw47v" path="res://scenes/office/office_panel.tscn" id="9_85g3d"]
 [ext_resource type="PackedScene" uid="uid://ceijke56lupl5" path="res://scenes/UI/currency_ui.tscn" id="11_trceg"]
 [ext_resource type="PackedScene" uid="uid://bbi44ww2puf63" path="res://scenes/UI/sticky_note.tscn" id="11_ya4ey"]
@@ -186,10 +188,10 @@ layout_mode = 2
 
 [node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1716905617 instance=ExtResource("11_trceg")]
 layout_mode = 0
-offset_left = 75.0
-offset_top = -7.0
-offset_right = 225.0
-offset_bottom = 63.0
+offset_left = 72.0
+offset_top = -102.0
+offset_right = 222.0
+offset_bottom = -32.0
 
 [node name="DeskRow" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=1158104807]
 layout_mode = 2
@@ -207,6 +209,20 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="DeskSlot5" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=715536118 instance=ExtResource("2_sugp2")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FullGameMode/Background" unique_id=1047662462]
+layout_mode = 0
+offset_left = -473.0
+offset_top = 16.0
+offset_right = -281.0
+offset_bottom = 102.0
+theme_override_constants/separation = 20
+
+[node name="FrontWarehouseButton" parent="FullGameMode/Background/HBoxContainer" unique_id=1938687981 instance=ExtResource("8_dp3eg")]
+layout_mode = 2
+
+[node name="FrontRecruitmentButton" parent="FullGameMode/Background/HBoxContainer" unique_id=1065910196 instance=ExtResource("9_0ld40")]
 layout_mode = 2
 
 [node name="employees" type="Control" parent="FullGameMode" unique_id=489643899]
@@ -229,6 +245,7 @@ offset_right = 1922.0
 offset_bottom = 714.0
 
 [node name="OfficePanel" parent="FullGameMode" unique_id=1437560562 groups=["office_panel"] instance=ExtResource("9_85g3d")]
+visible = false
 layout_mode = 0
 offset_left = 452.0
 offset_top = 720.0
