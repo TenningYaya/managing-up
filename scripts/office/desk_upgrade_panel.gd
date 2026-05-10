@@ -49,7 +49,6 @@ func open(slot: Control):
 		
 	show()
 
-# 根据当前等级计算下一级的花费，数值你可以自己调
 func get_upgrade_cost(level: int) -> int:
 	match level:
 		1: return 200

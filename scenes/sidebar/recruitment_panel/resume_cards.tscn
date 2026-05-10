@@ -2,35 +2,51 @@
 
 [ext_resource type="Script" uid="uid://cjsr3igbtcrqd" path="res://scripts/employee/resume_cards.gd" id="1_81qgu"]
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_prp3l"]
+[ext_resource type="Texture2D" uid="uid://bc073ucn8x6vx" path="res://data/background/resume_card_normal_bcg.tres" id="2_cph85"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_hlt22"]
+[ext_resource type="Texture2D" uid="uid://cyyqqj8m063ct" path="res://data/background/resume_card_head_bcg.png" id="3_cph85"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y5nwu"]
 
 [node name="ResumeCard" type="Control" unique_id=102445997]
-custom_minimum_size = Vector2(155, 80)
+custom_minimum_size = Vector2(180, 80)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_81qgu")
+normal_bg = ExtResource("2_cph85")
+headhunt_bg = ExtResource("3_cph85")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=81108733]
-visible = false
-layout_mode = 0
-offset_right = 78.0
-offset_bottom = 120.0
-color = Color(1, 0.64705884, 1, 1)
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1693070231]
+modulate = Color(0.9682575, 0.9682575, 0.9682575, 1)
+material = SubResource("ShaderMaterial_y5nwu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -3.0
+offset_right = 50.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_cph85")
+expand_mode = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1055873360]
-custom_minimum_size = Vector2(150, 75)
+custom_minimum_size = Vector2(170, 75)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -77.5
+offset_left = -90.5
 offset_top = -81.0
-offset_right = 76.5
+offset_right = 79.5
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/separation = 10
 
 [node name="AvatarArea" type="MarginContainer" parent="HBoxContainer" unique_id=1780355004]
 custom_minimum_size = Vector2(75, 75)
@@ -39,6 +55,7 @@ size_flags_vertical = 3
 
 [node name="Avatar" type="TextureRect" parent="HBoxContainer/AvatarArea" unique_id=2123735855]
 texture_filter = 1
+custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 texture = ExtResource("1_prp3l")
 expand_mode = 1
@@ -58,6 +75,7 @@ alignment = 1
 
 [node name="NameLabel" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1856881405]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.21779999, 0.32835, 0.66, 1)
 theme_override_fonts/font = ExtResource("2_hlt22")
 theme_override_font_sizes/font_size = 14
 text = "Name"
@@ -66,6 +84,7 @@ vertical_alignment = 1
 
 [node name="HirePriceLabel" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=150548960]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.17622802, 0.52916014, 0.2439537, 1)
 theme_override_fonts/font = ExtResource("2_hlt22")
 theme_override_font_sizes/font_size = 14
 text = "1000 KPI"
@@ -75,7 +94,7 @@ vertical_alignment = 1
 [node name="StatsBars" type="VBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=537865484]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="EfficiencyBar" type="ProgressBar" parent="HBoxContainer/VBoxContainer/StatsBars" unique_id=506775042]
 modulate = Color(0.41472068, 0.7085611, 0.98774415, 1)

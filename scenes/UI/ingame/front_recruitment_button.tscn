@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bgy17dc4wyb1u"]
 
 [ext_resource type="PackedScene" uid="uid://yc8lrfrrdl2y" path="res://scenes/UI/ingame/front_desk.tscn" id="1_sbhnu"]
+[ext_resource type="Script" uid="uid://dl6bqlxtsm4cs" path="res://scripts/UI/ingame/front_recruitment_button.gd" id="1_vyr0d"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_vyr0d"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kkvm4"]
@@ -10,6 +11,7 @@ region = Rect2(176, 835, 32, 26)
 [node name="FrontRecruitmentButton" type="Button" unique_id=1065910196]
 custom_minimum_size = Vector2(86.4, 86.4)
 flat = true
+script = ExtResource("1_vyr0d")
 
 [node name="FrontDesk" parent="." unique_id=1313353215 instance=ExtResource("1_sbhnu")]
 layout_mode = 0

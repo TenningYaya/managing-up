@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://bc073ucn8x6vx"]
+
+[ext_resource type="Texture2D" uid="uid://beopsrlbt8pb1" path="res://assets/background/bcg_resume_card.jpg" id="1_0f3hj"]
+
+[resource]
+atlas = ExtResource("1_0f3hj")
+region = Rect2(0, 216, 612, 206)

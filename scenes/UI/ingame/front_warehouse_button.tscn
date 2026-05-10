@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d17k21r7qmpoh"]
 
-[ext_resource type="Script" uid="uid://ckx4rwnfgdv46" path="res://scenes/UI/ingame/front_warehouse_button.gd" id="1_0vhl8"]
+[ext_resource type="Script" uid="uid://ckx4rwnfgdv46" path="res://scripts/UI/ingame/front_warehouse_button.gd" id="1_0vhl8"]
 [ext_resource type="PackedScene" uid="uid://yc8lrfrrdl2y" path="res://scenes/UI/ingame/front_desk.tscn" id="1_8y10v"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_0vhl8"]
 

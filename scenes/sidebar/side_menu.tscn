@@ -103,6 +103,7 @@ offset_bottom = 62.0
 texture = ExtResource("7_bhcfh")
 
 [node name="warehouse" type="TextureButton" parent="HBoxContainer/VBoxContainer" unique_id=29017858]
+visible = false
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 toggle_mode = true
@@ -163,6 +164,7 @@ offset_bottom = 85.0
 texture = ExtResource("7_v83px")
 
 [node name="Hire" type="TextureButton" parent="HBoxContainer/VBoxContainer2" unique_id=545001721]
+visible = false
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 toggle_mode = true
@@ -254,6 +256,8 @@ offset_bottom = 360.0
 
 [node name="GeneralPage" parent="Content" unique_id=1546440415 instance=ExtResource("17_weqg3")]
 layout_mode = 0
+offset_right = 270.0
+offset_bottom = 360.0
 
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/warehouse" to="." method="_on_warehouse_pressed"]

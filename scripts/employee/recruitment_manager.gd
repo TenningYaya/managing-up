@@ -52,13 +52,20 @@ func _on_headhunt_finished():
 		var roll = randf()
 		var rarity = Employee.Rarity.R
 		
-		# 写死的爆率逻辑
+		# 1. 判定稀有度
 		if roll <= 0.02: 
 			rarity = Employee.Rarity.SSR
 		elif roll <= 0.17: 
 			rarity = Employee.Rarity.SR
 			
-		headhunt_pool.append(_create_data(rarity))
+		# 2. 🌟 关键修正：先创建并赋值给 new_emp
+		var new_emp = _create_data(rarity) 
+		
+		# 3. 🌟 打上猎头标记
+		new_emp.is_headhunt = true
+		
+		# 4. 塞进猎头简历池
+		headhunt_pool.append(new_emp)
 	new_resumes_arrived.emit()
 
 func _create_data(rarity: Employee.Rarity) -> Employee:

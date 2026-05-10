@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://dw8e3yggffqyn"]
+
+[ext_resource type="Script" uid="uid://n4af1jva2mxc" path="res://scenes/sidebar/recruitment_panel/resume_slot.gd" id="1_ac7bj"]
+[ext_resource type="PackedScene" uid="uid://bn26w2vn7o4ff" path="res://scenes/sidebar/recruitment_panel/resume_cards.tscn" id="1_v51ww"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_ac7bj"]
+
+[node name="ResumeSlot" type="HBoxContainer" unique_id=1254920124]
+offset_right = 219.0
+offset_bottom = 111.0
+theme_override_constants/separation = 4
+script = ExtResource("1_ac7bj")
+
+[node name="ResumeCard" parent="." unique_id=102445997 instance=ExtResource("1_v51ww")]
+custom_minimum_size = Vector2(170, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="VBoxContainer" parent="." unique_id=1473229006]
+layout_mode = 2
+alignment = 1
+
+[node name="RejectBtn" type="Button" parent="HBoxContainer" unique_id=1453280961]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ac7bj")
+text = "NO!"
+
+[node name="HireBtn" type="Button" parent="HBoxContainer" unique_id=370016965]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ac7bj")
+text = "YES!"

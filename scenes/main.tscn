@@ -19,6 +19,7 @@
 [ext_resource type="Script" uid="uid://bx1cavexc0whx" path="res://scripts/test/test_currency.gd" id="14_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://im2qyo8akr0" path="res://scenes/office/DeskUpgradePanel.tscn" id="15_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://c8d4rax1ise3l" path="res://scenes/sidebar/employee_panel/employee_warehouse.tscn" id="19_0ld40"]
+[ext_resource type="PackedScene" uid="uid://6py6ljmq7wln" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.tscn" id="20_gqmmt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dp3eg"]
 texture = ExtResource("2_jbj1t")
@@ -366,7 +367,17 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="EmployeeWarehouse" parent="CanvasLayer" unique_id=1330516969 groups=["employee_warehouse"] instance=ExtResource("19_0ld40")]
+visible = false
 offset_left = 788.0
 offset_top = 160.0
 offset_right = 1213.0
 offset_bottom = 687.0
+
+[node name="RecruitmentPanel" parent="CanvasLayer" unique_id=463444191 groups=["recruitment_panel"] instance=ExtResource("20_gqmmt")]
+visible = false
+offset_left = 161.0
+offset_top = 245.0
+offset_right = 431.0
+offset_bottom = 605.0
+
+[connection signal="pressed" from="FullGameMode/Background/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

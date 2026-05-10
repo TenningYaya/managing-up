@@ -310,3 +310,7 @@ func _on_title_bar_gui_input(event: InputEvent):
 			
 	if event is InputEventMouseMotion and dragging:
 		global_position = get_global_mouse_position() - drag_offset
+
+
+func _on_close_panel_pressed() -> void:
+	self.hide()

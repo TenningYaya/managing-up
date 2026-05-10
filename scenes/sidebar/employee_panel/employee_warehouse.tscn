@@ -52,7 +52,7 @@ anchors_preset = 0
 script = ExtResource("1_fhgjr")
 card_scene = ExtResource("2_fdhm7")
 
-[node name="TextureRect" type="NinePatchRect" parent="." unique_id=698226710]
+[node name="Background" type="NinePatchRect" parent="." unique_id=698226710]
 texture_filter = 1
 layout_mode = 0
 offset_left = -12.0
@@ -154,4 +154,12 @@ offset_right = 423.0
 offset_bottom = 25.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_vfn86")
 
+[node name="ClosePanel" type="Button" parent="." unique_id=98309169]
+layout_mode = 0
+offset_left = 394.0
+offset_right = 423.0
+offset_bottom = 24.0
+flat = true
+
 [connection signal="gui_input" from="TitleBar" to="." method="_on_title_bar_gui_input"]
+[connection signal="pressed" from="ClosePanel" to="." method="_on_close_panel_pressed"]

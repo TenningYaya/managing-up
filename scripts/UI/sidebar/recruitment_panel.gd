@@ -2,18 +2,25 @@
 extends Control
 
 # ================= UI 节点获取 =================
-@onready var normal_empty_lbl = $VBoxContainer/NormalPanel/MarginContainer/LblEmpty
+#@onready var normal_empty_lbl = $VBoxContainer/NormalPanel/MarginContainer/LblEmpty
+#@onready var normal_waiting_anim = $VBoxContainer/NormalPanel/MarginContainer/NormalWaitAnim
 @onready var normal_viewer = $VBoxContainer/NormalPanel/MarginContainer/NormalViewer
+@onready var normal_no_resume = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel
 
-@onready var headhunt_locked_lbl = $VBoxContainer/HeadhuntPanel/MarginContainer/LblLocked
+#@onready var headhunt_locked_lbl = $VBoxContainer/HeadhuntPanel/MarginContainer/LblLocked
 @onready var headhunt_box_idle = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle
 @onready var headhunt_box_recruiting = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting
 @onready var headhunt_viewer = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadViewer
 @onready var countdown_label = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/LblCountdown
+#@onready var headhunt_waiting_anim = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/HeadWaitAnim
+@onready var headhunt_locked = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadhuntLocked
 
 var last_normal_count: int = -1
 var last_headhunt_state: int = -1
 var last_office_status: bool = false
+
+var dragging = false
+var drag_offset = Vector2()
 
 func _ready():
 	# 1. 绑定【录用】信号
@@ -43,7 +50,7 @@ func _ready():
 func _process(_delta):
 	# 只有在猎头寻访中，才去更新文字，超级省性能
 	if RecruitmentManager.current_state == RecruitmentManager.State.RECRUITING:
-		countdown_label.text = "寻访中... %.1f" % RecruitmentManager.headhunt_time_left
+		countdown_label.text = "              %.1f" % RecruitmentManager.headhunt_time_left
 
 # ================= 核心：数据下发与同步 =================
 func _on_new_resumes_arrived():
@@ -60,24 +67,12 @@ func _on_new_resumes_arrived():
 			headhunt_viewer.load_resumes(RecruitmentManager.headhunt_pool.duplicate())
 	_update_headhunt_ui()
 
-# ================= 雇佣与拒绝逻辑 =================
-#func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
-	#var cost = (emp.efficiency + emp.quality + emp.experience) * 10
-	#if Gamemanager.spend_kpi(cost):
-		#EmployeeManager.hire_employee(emp)
-		#
-		## 1. 划掉原件里的人
-		#pool.erase(emp) 
-		#
-		## 2. 告诉 Viewer：雇佣成功，你可以把复印件里的人删了并翻页了
-		#viewer.remove_current_success() 
 func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 	# 1. 计算所需 KPI
 	var cost = (emp.efficiency + emp.quality + emp.experience) * 10
 	
 	# 2. 检查并扣钱
 	if Gamemanager.spend_kpi(cost):
-		print("【招聘中心】扣款成功 (", cost, " KPI)。准备空投员工: ", emp.employee_name)
 		
 		# 🚨 关键：呼叫天窗掉落系统！
 		# 不要在这里写 EmployeeManager.hire_employee，
@@ -86,7 +81,7 @@ func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 		Gamemanager.request_employee_drop.emit(emp)
 		
 		# 3. 把这张“简历复印件”从当前的 Viewer 列表里移除并翻页
-		viewer.remove_current_success() 
+		viewer.remove_employee(emp)
 		
 		# 4. 把这个“员工原件”从全局简历池里彻底划掉
 		pool.erase(emp)
@@ -110,10 +105,10 @@ func _reject_from_pool(emp: Employee, pool: Array):
 # ================= UI 显示更新控制 =================
 func _update_normal_ui():
 	if normal_viewer.current_resumes.is_empty():
-		normal_empty_lbl.show()
+		normal_no_resume.show()
 		normal_viewer.hide()
 	else:
-		normal_empty_lbl.hide()
+		normal_no_resume.hide()
 		normal_viewer.show()
 
 func _update_headhunt_ui():
@@ -126,13 +121,13 @@ func _update_headhunt_ui():
 	last_headhunt_state = current_state
 	last_office_status = current_office_exists
 	
-	headhunt_locked_lbl.hide()
+	headhunt_locked.hide()
 	headhunt_box_idle.hide()
 	headhunt_box_recruiting.hide()
 	headhunt_viewer.hide()
 	
 	if not OfficeManager.has_recruitment_office:
-		headhunt_locked_lbl.show()
+		headhunt_locked.show()
 		return
 		
 	match RecruitmentManager.current_state:
@@ -159,7 +154,15 @@ func _execute_headhunt(amount: int):
 func _on_hire_1_pressed(): _execute_headhunt(1)
 func _on_hire_10_pressed(): _execute_headhunt(10)
 
-func _on_all_coworkers_pressed() -> void:
-	var warehouse = get_tree().get_first_node_in_group("employee_warehouse")
-	if warehouse:
-		warehouse.show()
+func _on_title_bar_gui_input(event: InputEvent):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			dragging = event.pressed
+			drag_offset = get_global_mouse_position() - global_position
+			
+	if event is InputEventMouseMotion and dragging:
+		global_position = get_global_mouse_position() - drag_offset
+
+
+func _on_close_panel_pressed() -> void:
+	self.hide()
