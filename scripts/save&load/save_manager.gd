@@ -16,6 +16,7 @@ func _ready() -> void:
 	pass
 
 # ================= 一键删档 =================
+# ================= 一键删档 =================
 func delete_save() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
 		DirAccess.remove_absolute(SAVE_PATH)
@@ -25,6 +26,15 @@ func delete_save() -> void:
 	Gamemanager.kpi = 10000
 	Gamemanager.dollar = 10000
 	Gamemanager.player_level = 1
+	
+	# 🌟 修复 Bug 的核心所在：清空全局单例里残留的员工数据
+	if EmployeeManager.get("my_employees") != null:
+		EmployeeManager.my_employees.clear()
+		
+	# 如果你还有其他单例（比如 OfficeManager）里的状态需要重置，也可以写在这里
+	# OfficeManager.has_recruitment_office = false
+	# OfficeManager.has_culture_center = false
+		
 	# 强制重启当前场景以应用重置
 	get_tree().reload_current_scene()
 
@@ -50,6 +60,7 @@ func save_game() -> void:
 			if emp.current_seat:
 				emp_dict["seat_path"] = str(emp.current_seat.get_path())
 			employee_data.append(emp_dict)
+	print("[SaveSystem] 准备保存员工，当前管理器中的员工总数: ", EmployeeManager.my_employees.size())
 	# ... (写入文件逻辑保持不变) ...
 
 # ================= 读取修复版 =================
@@ -126,6 +137,7 @@ func load_game() -> void:
 	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
 	var json_str = file.get_as_text()
 	file.close()
+	
 	
 	var json = JSON.new()
 	if json.parse(json_str) != OK:
