@@ -1,77 +1,138 @@
 [gd_scene format=3 uid="uid://duispsomfw47v"]
 
-[ext_resource type="PackedScene" uid="uid://bh0062hnotklq" path="res://scenes/UI/change_office_button.tscn" id="1_kpljw"]
+[ext_resource type="PackedScene" uid="uid://bh0062hnotklq" path="res://scenes/UI/custom/change_office_button.tscn" id="1_kpljw"]
 [ext_resource type="Script" uid="uid://dukdaecvcphbo" path="res://scripts/office/office_panel.gd" id="1_mixia"]
-[ext_resource type="Texture2D" uid="uid://dlcfrb1rbk12b" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/0.png" id="2_mixia"]
-[ext_resource type="Texture2D" uid="uid://c2bhltrmpscm5" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/5.png" id="3_dvne8"]
-[ext_resource type="Texture2D" uid="uid://0egbjch7bqrf" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/4.png" id="4_l2t2v"]
-[ext_resource type="Texture2D" uid="uid://lmahrrg3htrb" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/icons/3.png" id="6_mixia"]
+[ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_kpljw"]
+[ext_resource type="Texture2D" uid="uid://w0pkc05aakr3" path="res://assets/UI/ingame/office_icons.jpg" id="3_wtdck"]
 [ext_resource type="PackedScene" uid="uid://b2l7mr7bb5b41" path="res://scenes/UI/panel/culture_panel.tscn" id="7_dvne8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e55uw"]
+atlas = ExtResource("2_kpljw")
+region = Rect2(2595, 65, 333, 229)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oppgx"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1hrmf"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.72100043, 0.5685323, 0.3618315, 0.6392157)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0khrq"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.897224, 0.4568857, 0.3017082, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kpljw"]
+atlas = ExtResource("3_wtdck")
+region = Rect2(108.276825, 88.61937, 312.36905, 313.90308)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dvne8"]
+atlas = ExtResource("3_wtdck")
+region = Rect2(108.3488, 560.368, 313.38208, 315.45807)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mixia"]
+atlas = ExtResource("3_wtdck")
+region = Rect2(603.6087, 89.110435, 312.2473, 314.42557)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l2t2v"]
+atlas = ExtResource("3_wtdck")
+region = Rect2(602.98975, 558.7769, 312.54968, 316.76886)
 
 [node name="OfficePanel" type="Control" unique_id=1437560562]
 z_index = 100
-custom_minimum_size = Vector2(270, 360)
 layout_mode = 3
 anchors_preset = 0
+offset_right = 234.0
+offset_bottom = 325.0
 script = ExtResource("1_mixia")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=646702830]
-layout_mode = 0
-offset_right = 274.0
-offset_bottom = 373.0
-color = Color(0.61769116, 0.81180215, 0.93698454, 1)
+[node name="Background" type="NinePatchRect" parent="." unique_id=1324415450]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_e55uw")
+region_rect = Rect2(53, 90, 225, 139)
 
-[node name="Background" type="TextureRect" parent="." unique_id=534803045]
-custom_minimum_size = Vector2(270, 360)
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1159218567]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_top = 31.0
+offset_right = 234.0
+offset_bottom = 325.0
 
-[node name="TabContainer" type="TabContainer" parent="Background" unique_id=515328770]
-layout_mode = 0
-offset_right = 273.0
-offset_bottom = 376.0
+[node name="TabContainer" type="TabContainer" parent="." unique_id=515328770]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oppgx")
+theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_1hrmf")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_0khrq")
 current_tab = 1
 
-[node name="Office" type="MarginContainer" parent="Background/TabContainer" unique_id=1786972547]
+[node name="Office" type="MarginContainer" parent="TabContainer" unique_id=1786972547]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/TabContainer/Office" unique_id=389843594]
+[node name="OfficeButton" type="GridContainer" parent="TabContainer/Office" unique_id=1425084846]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 30
+columns = 2
 
-[node name="Label" type="Label" parent="Background/TabContainer/Office/VBoxContainer" unique_id=1401466]
-layout_mode = 2
-text = "Office Panel"
-
-[node name="HSeparator" type="HSeparator" parent="Background/TabContainer/Office/VBoxContainer" unique_id=1679675622]
-layout_mode = 2
-
-[node name="ChangeOfficeButton" parent="Background/TabContainer/Office/VBoxContainer" unique_id=959548433 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton" parent="TabContainer/Office/OfficeButton" unique_id=959548433 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 1
 button_text = "pantry"
-normal_icon = ExtResource("2_mixia")
+normal_icon = SubResource("AtlasTexture_kpljw")
 
-[node name="ChangeOfficeButton2" parent="Background/TabContainer/Office/VBoxContainer" unique_id=2030963439 instance=ExtResource("1_kpljw")]
-layout_mode = 2
-office_type = 2
-button_text = "Meeting"
-normal_icon = ExtResource("3_dvne8")
-
-[node name="ChangeOfficeButton3" parent="Background/TabContainer/Office/VBoxContainer" unique_id=2129935784 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton3" parent="TabContainer/Office/OfficeButton" unique_id=2129935784 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 3
 button_text = "Headhunt"
-normal_icon = ExtResource("4_l2t2v")
+normal_icon = SubResource("AtlasTexture_dvne8")
 
-[node name="ChangeOfficeButton4" parent="Background/TabContainer/Office/VBoxContainer" unique_id=277010416 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton2" parent="TabContainer/Office/OfficeButton" unique_id=2030963439 instance=ExtResource("1_kpljw")]
+layout_mode = 2
+office_type = 2
+button_text = "Meeting"
+normal_icon = SubResource("AtlasTexture_mixia")
+
+[node name="ChangeOfficeButton4" parent="TabContainer/Office/OfficeButton" unique_id=277010416 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 4
 button_text = "Cullture"
-normal_icon = ExtResource("6_mixia")
+normal_icon = SubResource("AtlasTexture_l2t2v")
 
-[node name="Culture" parent="Background/TabContainer" unique_id=1580029639 instance=ExtResource("7_dvne8")]
+[node name="Culture" type="Panel" parent="TabContainer" unique_id=1455203945]
 layout_mode = 2
 metadata/_tab_index = 1
+
+[node name="CultureScene" parent="TabContainer/Culture" unique_id=1580029639 instance=ExtResource("7_dvne8")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+size_flags_horizontal = 4
+size_flags_vertical = 4

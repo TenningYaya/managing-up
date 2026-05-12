@@ -7,9 +7,9 @@ class_name CulturePanel
 # ==========================================
 
 # 假设你把三个按钮放在了一个 VBoxContainer 里
-@onready var eff_btn: Button = $Background/MarginContainer/VBoxContainer/EffButton   # 末位淘汰按钮
-@onready var qual_btn: Button = $Background/MarginContainer/VBoxContainer/QualButton # 项目奖金按钮
-@onready var exp_btn: Button =  $Background/MarginContainer/VBoxContainer/ExpButton  # 绩效考核按钮
+@onready var eff_btn: TextureButton = $MarginContainer/VBoxContainer/Eff
+@onready var qual_btn: TextureButton = $MarginContainer/VBoxContainer/Qual
+@onready var exp_btn: TextureButton =  $MarginContainer/VBoxContainer/Exp
 
 # (可选) 如果你做了关闭按钮
 #@onready var close_btn: Button = $PanelBg/CloseButton 

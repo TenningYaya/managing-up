@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://b2l7mr7bb5b41"]
 
+[ext_resource type="PackedScene" uid="uid://djvbh74bpt6us" path="res://scenes/UI/custom/change_culture_button.tscn" id="1_42fho"]
+
 [node name="CulturePanel" type="Control" unique_id=1580029639]
 layout_mode = 3
 anchors_preset = 15
@@ -12,35 +14,27 @@ offset_bottom = -149.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1722200571]
-visible = false
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1049156711]
 layout_mode = 0
-offset_right = 274.0
-offset_bottom = 373.0
-color = Color(0.92366534, 0.73956615, 0.618449, 1)
+offset_left = -82.0
+offset_top = -118.0
+offset_right = 88.0
+offset_bottom = 120.0
 
-[node name="Background" type="TextureRect" parent="." unique_id=1310240839]
-custom_minimum_size = Vector2(270, 360)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="MarginContainer" type="MarginContainer" parent="Background" unique_id=1049156711]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer" unique_id=735603081]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=735603081]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 14
 
-[node name="EffButton" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=1378556752]
+[node name="Eff" parent="MarginContainer/VBoxContainer" unique_id=1466933540 instance=ExtResource("1_42fho")]
 layout_mode = 2
-text = "+2Efficiency"
+culture_type = 1
 
-[node name="QualButton" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=2077549557]
+[node name="Qual" parent="MarginContainer/VBoxContainer" unique_id=1121197770 instance=ExtResource("1_42fho")]
 layout_mode = 2
-text = "+2Quality"
+culture_type = 2
 
-[node name="ExpButton" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=1657558665]
+[node name="Exp" parent="MarginContainer/VBoxContainer" unique_id=1653694938 instance=ExtResource("1_42fho")]
 layout_mode = 2
-text = "+2Experience"
+culture_type = 3

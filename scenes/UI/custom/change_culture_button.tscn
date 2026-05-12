@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://djvbh74bpt6us"]
+
+[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_ccmah"]
+[ext_resource type="Script" uid="uid://cotl14t6i0e58" path="res://scenes/UI/custom/change_culture_button.gd" id="2_kivqj"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_vamsw"]
+
+[node name="ChangeCultureButton" type="TextureButton" unique_id=1466933540 groups=["culture_selection_buttons"]]
+custom_minimum_size = Vector2(170, 70)
+texture_normal = ExtResource("1_ccmah")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("2_kivqj")
+
+[node name="Label" type="Label" parent="." unique_id=979613405]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -79.0
+offset_top = 5.0
+offset_right = -32.0
+offset_bottom = 28.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_vamsw")
+theme_override_font_sizes/font_size = 20
+text = "Name"
+horizontal_alignment = 1
+
+[node name="SelectionBorder" type="ReferenceRect" parent="." unique_id=1479282821]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+border_color = Color(0.7916734, 0.7370134, 0.10803854, 1)
+border_width = 5.0
+editor_only = false

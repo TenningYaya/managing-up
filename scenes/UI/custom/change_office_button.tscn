@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://bh0062hnotklq"]
+
+[ext_resource type="Script" uid="uid://bqm6ojq7xdl2y" path="res://scripts/UI/custom/change_office_button.gd" id="1_2dd3i"]
+[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="2_soxcl"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_g1hsx"]
+[ext_resource type="Texture2D" uid="uid://xk8qvkxuphm0" path="res://assets/UI/office_function_locked.png" id="3_ic3v5"]
+
+[node name="ChangeOfficeButton" type="TextureButton" unique_id=959548433]
+custom_minimum_size = Vector2(100, 100)
+offset_right = 100.0
+offset_bottom = 75.0
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("1_2dd3i")
+normal_icon = ExtResource("2_soxcl")
+
+[node name="Label" type="Label" parent="." unique_id=158870519]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -23.5
+offset_top = -19.95
+offset_right = 23.5
+offset_bottom = 3.0499992
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_g1hsx")
+theme_override_font_sizes/font_size = 20
+text = "Name"
+horizontal_alignment = 1
+
+[node name="DisabledMask" type="ColorRect" parent="." unique_id=737525674]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09061124, 0.50000703, 0.85347265, 0.5411765)
+
+[node name="LockedMask" type="ColorRect" parent="." unique_id=740803253]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.4117647)
+
+[node name="LockIcon" type="TextureRect" parent="LockedMask" unique_id=817637911]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ic3v5")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="SelectionBorder" type="ReferenceRect" parent="." unique_id=769132046]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+border_color = Color(0.7916734, 0.7370134, 0.10803854, 1)
+border_width = 5.0
+editor_only = false

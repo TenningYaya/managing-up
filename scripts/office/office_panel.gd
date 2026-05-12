@@ -5,19 +5,19 @@ extends Control
 var current_target_office: Office = null
 
 # 🌟 新增：引用面板的底图，用于判断鼠标是不是点在它外面
-@onready var background: TextureRect = $Background 
-@onready var tab_container: TabContainer = $Background/TabContainer
+@onready var background: NinePatchRect = $Background 
+@onready var tab_container: TabContainer = $TabContainer
 
 # 🌟 新增：记录打开面板的时间，防止当前帧点击误触发关闭
 var _open_time: int = 0
 
 # 这里的路径请根据你实际的节点树修改
 # --- 引用原有的容器 ---
-@onready var selection_page: Control = $Background/TabContainer/Office
-@onready var culture_page: Control = $Background/TabContainer/Culture
+@onready var selection_page: Control = $TabContainer/Office
+@onready var culture_page: Control = $TabContainer/Culture
 
 # --- 按钮容器引用 ---
-@onready var selection_buttons: VBoxContainer = $Background/TabContainer/Office/VBoxContainer
+@onready var selection_buttons: GridContainer = $TabContainer/Office/OfficeButton
 var culture_buttons: VBoxContainer
 
 func _ready() -> void:
@@ -51,7 +51,35 @@ func _input(event: InputEvent) -> void:
 				close_panel()
 				# 如果你不希望点击到外面的办公室，可以取消下面这行的注释：
 				# get_viewport().set_input_as_handled()
+func open_panel(office: Node, open_culture_tab: bool = false) -> void:
+	current_target_office = office
+	_open_time = Time.get_ticks_msec()
+	
+	var is_culture_center = (office.current_type == Gamemanager.OfficeType.CULTURE_CENTER)
+	
+	tab_container.set_tab_hidden(1, !is_culture_center) 
+	
+	if open_culture_tab and is_culture_center:
+		tab_container.current_tab = 1
+	else:
+		tab_container.current_tab = 0
 
+	# 每次打开面板，直接全场广播刷新
+	_refresh_all_ui()
+	
+	show()
+
+func _refresh_all_ui() -> void:
+	if not current_target_office: return
+	
+	# 刷新第一页的办公室按钮
+	get_tree().call_group("office_buttons", "refresh_status", current_target_office)
+	
+	# 🌟 刷新第二页的文化按钮
+	var logic = current_target_office.logic_node
+	if logic is CultureCenterLogic:
+		get_tree().call_group("culture_selection_buttons", "refresh_status", logic)
+		
 func _setup_selection_buttons() -> void:
 	for child in selection_buttons.get_children():
 		if child is Button:
@@ -84,46 +112,11 @@ func _on_culture_selected(type: CultureCenterLogic.CultureType) -> void:
 	_refresh_culture_highlight()
 	#close_panel()
 
-func open_panel(office: Office, open_culture_tab: bool = false) -> void:
-	# 1. 记录初始状态
-	var was_hidden = !visible
-	current_target_office = office
-	_open_time = Time.get_ticks_msec()
-	
-	# 2. 判定类型
-	var is_culture_center = (office.current_type == Gamemanager.OfficeType.CULTURE_CENTER)
-	
-	# 3. 先处理显隐（这步最危险，可能导致索引重置）
-	# 我们显式地先把两页都打开，防止跳转失败，然后再根据类型隐藏
-	tab_container.set_tab_hidden(0, false)
-	tab_container.set_tab_hidden(1, false) # 先全部释放，让索引 1 处于合法状态
-	
-	# 4. 执行跳转逻辑（核心修正点）
-	if open_culture_tab and is_culture_center:
-		# 如果明确要求去文化页，直接强制赋值
-		tab_container.current_tab = 1
-	elif was_hidden:
-		# 只有从关闭状态打开，且没要求去文化页，才去第一页
-		tab_container.current_tab = 0
-	# else: 面板本来就开着时，我们完全不去碰 current_tab 变量！
-	
-	# 5. 最后再根据实际情况隐藏第二页
-	# 如果当前就在第一页且不是文化中心，才隐藏老二
-	if not is_culture_center:
-		tab_container.set_tab_hidden(1, true)
-
-	# 6. 刷新内容
-	_refresh_selection_state()
-	_refresh_culture_highlight()
-	
-	show()
-	print("面板最终停留在页签：", tab_container.current_tab, " | 来自点击要求：", open_culture_tab)
-
 func _refresh_selection_state() -> void:
 	for child in selection_buttons.get_children():
 		# 🌟 核心魔法：如果子节点有 refresh_status 这个函数，就执行它
 		if child.has_method("refresh_status"):
-			child.refresh_status()
+			child.refresh_status(current_target_office)
 			
 			# 针对“唯一性”在面板层级的特殊修正（可选）：
 			# 如果该按钮代表的功能正是当前办公室的功能，应该让它亮起来，方便玩家切换回来

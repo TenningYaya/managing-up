@@ -8,9 +8,11 @@ extends TextureButton
 @export_group("Visuals")
 @export var normal_icon: Texture2D
 
-# 🌟 新增引用：锁头图标
+# 节点引用
 @onready var label: Label = $Label
-@onready var lock_icon: TextureRect = $LockIcon # 假设你在预制体里加了这个节点
+@onready var locked_mask: Control = $LockedMask     # 未解锁遮罩
+@onready var disabled_mask: Control = $DisabledMask # 已存在遮罩
+@onready var selection_border: Control = $SelectionBorder # 选中边框
 
 func _ready() -> void:
 	if label:
@@ -20,42 +22,60 @@ func _ready() -> void:
 	if normal_icon:
 		texture_normal = normal_icon
 	
-	# 初始刷一次状态
-	refresh_status()
+	# 加入按钮组，方便面板统一调用
+	add_to_group("office_buttons")
+	
+	# 初始状态：参数为 null 时，is_selected 默认为 false
+	refresh_status(null)
 	pressed.connect(_on_pressed)
 
-# 🌟 核心：封装刷新逻辑
-func refresh_status() -> void:
-	# 1. 判定等级解锁 (从 Gamemanager 拿配置)
+# 🌟 核心刷新逻辑
+func refresh_status(target_office: Node = null) -> void:
+	# --- 1. 获取全局判定数据 ---
 	var required_lv = Gamemanager.OFFICE_UNLOCK_LEVELS.get(office_type, 1)
 	var is_level_ok = Gamemanager.player_level >= required_lv
 	
-	# 2. 判定唯一性 (从 OfficeManager 拿状态)
 	var already_exists = false
 	if office_type == Gamemanager.OfficeType.RECRUITMENT:
 		already_exists = OfficeManager.has_recruitment_office
 	elif office_type == Gamemanager.OfficeType.CULTURE_CENTER:
 		already_exists = OfficeManager.has_culture_center
 	
-	# 🌟 重点：如果当前办公室已经选择了这个功能，不应该判定为“重复而禁用”
-	# 所以这里通常配合 Panel 的逻辑，但为了按钮通用，我们可以只管等级
-	
-	# 3. 执行视觉反馈
+	# --- 2. 核心选中判定 ---
+	var is_selected = false
+	if target_office != null:
+		# 只有类型完全一致，才算被选中
+		is_selected = (office_type == target_office.current_type)
+
+	# --- 3. 视觉显隐控制 ---
+	# 边框显隐
+	if selection_border:
+		selection_border.visible = is_selected
+		selection_border.modulate.a = 1.0 # 确保它是实心的
+
+	# 遮罩和状态重置
+	disabled = false
+	locked_mask.hide()
+	disabled_mask.hide()
+
 	if not is_level_ok:
-		# 等级未达到：重度变暗 + 显示锁头
+		# 等级不够，显示锁头，禁用点击
 		disabled = true
-		modulate = Color(0.3, 0.3, 0.3, 1.0)
-		if lock_icon: lock_icon.show()
+		locked_mask.show()
 	elif already_exists:
-		# 已存在：中度变暗 + 禁用点击 + 不显锁头
-		disabled = true
-		modulate = Color(0.5, 0.5, 0.5, 1.0)
-		if lock_icon: lock_icon.hide()
+		# 功能已存在
+		if is_selected:
+			# 🌟 特例：如果当前房间就是这个功能，必须允许玩家点它（或者至少亮着）
+			# 这样边框才会显示出来
+			disabled = false
+			disabled_mask.hide()
+		else:
+			# 别的房间占了，这间房想换就不行了
+			disabled = true
+			disabled_mask.show()
 	else:
-		# 正常可用
-		disabled = false
-		modulate = Color(1, 1, 1, 1)
-		if lock_icon: lock_icon.hide()
+		# 没有任何限制，正常可用
+		pass
 
 func _on_pressed() -> void:
 	var panel = get_tree().get_first_node_in_group("office_panel")
