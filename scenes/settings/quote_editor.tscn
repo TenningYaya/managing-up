@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://doe15yvabaqje"]
+
+[ext_resource type="Script" uid="uid://dqw6tnbj3u20k" path="res://scripts/UI/panel/quote_editor.gd" id="1_7ps1e"]
+
+[node name="QuoteEditor" type="VBoxContainer" unique_id=1617537307]
+script = ExtResource("1_7ps1e")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=746130785]
+custom_minimum_size = Vector2(200, 300)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=2033802843]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=459132124]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer" unique_id=1827014698]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Text your co-workers!"
+
+[node name="AddQuote" type="Button" parent="HBoxContainer" unique_id=2021766350]
+layout_mode = 2
+text = "Add"
+
+[connection signal="pressed" from="HBoxContainer/AddQuote" to="." method="_on_add_pressed"]

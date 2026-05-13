@@ -65,7 +65,7 @@ var portrait: Texture2D      # 核心：生成的静态立绘
 var _move_tween: Tween = null
 var _active_bubble: SpeechBubble = null
 const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
-const SPEECH_BUBBLE_SCENE = preload("res://scenes/UI/custom/speech_bubble.tscn")
+const SPEECH_BUBBLE_SCENE = preload("res://scenes/vfx/speech_bubble.tscn")
 const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
 
 func _ready() -> void:
@@ -480,35 +480,37 @@ func _spawn_dollar_vfx(vfx) -> void:
 		burst_vfx.play_burst_vfx()
 
 func _speed_up_work() -> void:
-	# 只有在工作状态下点击才有效
 	if not is_working:
 		return
 		
-	# ✅ 使用当前这一轮锁定的总时长
 	var total_duration = current_cycle_duration
-	
-	# GDD公式：减少最终生产时间 * 2%
 	var speed_up_amount = total_duration * 0.02
-	
-	# 增加已工作的时间，相当于减少了剩余时间
 	work_elapsed += speed_up_amount
 	
-	print(employee_name, " 被老板敲打了一下，工作进度增加了: ", speed_up_amount, " 秒")
-	
-	var random_texts = [
-		"总感觉怪怪的你再改改",
-		"快打包了什么时候做完啊",
-		"老师这就是成图了吗"
-	]
-	var chosen_text = random_texts[randi() % random_texts.size()]
-	# 触发冒气泡！
+	# 🌟 这里的代码变清爽了！
+	var chosen_text = SpeedupQuoteSave.get_random_quote()
 	_spawn_speech_bubble(chosen_text)
 	
-	# 检查是否点满了
 	if get_work_progress_percent() >= 100.0:
 		_finish_and_generate_file()
-
-
+func _spawn_speech_bubble(text_content: String) -> void:
+	# 🌟 打断机制：如果头上已经有一个气泡了，直接把它干掉
+	#if is_instance_valid(_active_bubble):
+		#_active_bubble.kill_bubble()
+		
+	_active_bubble = SPEECH_BUBBLE_SCENE.instantiate()
+	add_child(_active_bubble)
+	
+	_active_bubble.scale = Vector2(0.3, 0.3)
+	# 设置层级，保证盖住员工和后面的东西
+	_active_bubble.z_index = 3 
+	
+	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
+	_active_bubble.position = Vector2(70, -70)
+	
+	# 呼叫接口，播放内容
+	_active_bubble.pop_up(text_content)
+	
 func get_final_efficiency() -> int:
 	var total = efficiency	
 	# 来源 1：工位补正
@@ -551,23 +553,7 @@ func get_final_experience() -> int:
 	total += meet_buff_exp
 	return total
 
-func _spawn_speech_bubble(text_content: String) -> void:
-	# 🌟 打断机制：如果头上已经有一个气泡了，直接把它干掉
-	#if is_instance_valid(_active_bubble):
-		#_active_bubble.kill_bubble()
-		
-	_active_bubble = SPEECH_BUBBLE_SCENE.instantiate()
-	add_child(_active_bubble)
-	
-	_active_bubble.scale = Vector2(0.3, 0.3)
-	# 设置层级，保证盖住员工和后面的东西
-	_active_bubble.z_index = 3 
-	
-	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
-	_active_bubble.position = Vector2(-50, -70)
-	
-	# 呼叫接口，播放内容
-	_active_bubble.pop_up(text_content)
+
 
 func _try_get_snack_buff() -> void:
 	# 条件判定：如果已经在吃、或者在摸鱼、或者零食名额满了，就不发

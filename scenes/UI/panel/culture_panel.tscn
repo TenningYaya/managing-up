@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b2l7mr7bb5b41"]
 
 [ext_resource type="PackedScene" uid="uid://djvbh74bpt6us" path="res://scenes/UI/custom/change_culture_button.tscn" id="1_42fho"]
+[ext_resource type="Texture2D" uid="uid://66sj4mi5r1rk" path="res://assets/UI/culture_qual.png" id="2_81qjf"]
 
 [node name="CulturePanel" type="Control" unique_id=1580029639]
 layout_mode = 3
@@ -30,6 +31,7 @@ theme_override_constants/separation = 14
 [node name="Eff" parent="MarginContainer/VBoxContainer" unique_id=1466933540 instance=ExtResource("1_42fho")]
 layout_mode = 2
 culture_type = 1
+normal_icon = ExtResource("2_81qjf")
 
 [node name="Qual" parent="MarginContainer/VBoxContainer" unique_id=1121197770 instance=ExtResource("1_42fho")]
 layout_mode = 2

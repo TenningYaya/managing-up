@@ -80,10 +80,9 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_oppgx")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_1hrmf")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_0khrq")
-current_tab = 1
+current_tab = 0
 
 [node name="Office" type="MarginContainer" parent="TabContainer" unique_id=1786972547]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -120,6 +119,7 @@ button_text = "Cullture"
 normal_icon = SubResource("AtlasTexture_l2t2v")
 
 [node name="Culture" type="Panel" parent="TabContainer" unique_id=1455203945]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
