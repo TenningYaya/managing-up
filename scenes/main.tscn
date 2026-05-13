@@ -390,9 +390,9 @@ offset_right = 431.0
 offset_bottom = 605.0
 
 [node name="QuoteEditor" parent="CanvasLayer" unique_id=1617537307 instance=ExtResource("22_jscy8")]
-offset_left = 52.0
-offset_top = 516.0
-offset_right = 132.0
-offset_bottom = 551.0
+offset_left = 13.0
+offset_top = 297.0
+offset_right = 213.0
+offset_bottom = 632.0
 
 [connection signal="pressed" from="FullGameMode/Background/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

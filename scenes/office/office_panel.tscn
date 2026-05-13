@@ -43,6 +43,8 @@ region = Rect2(603.6087, 89.110435, 312.2473, 314.42557)
 atlas = ExtResource("3_wtdck")
 region = Rect2(602.98975, 558.7769, 312.54968, 316.76886)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpljw"]
+
 [node name="OfficePanel" type="Control" unique_id=1437560562]
 z_index = 100
 layout_mode = 3
@@ -80,9 +82,10 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_oppgx")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_1hrmf")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_0khrq")
-current_tab = 0
+current_tab = 1
 
 [node name="Office" type="MarginContainer" parent="TabContainer" unique_id=1786972547]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -119,8 +122,8 @@ button_text = "Cullture"
 normal_icon = SubResource("AtlasTexture_l2t2v")
 
 [node name="Culture" type="Panel" parent="TabContainer" unique_id=1455203945]
-visible = false
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_kpljw")
 metadata/_tab_index = 1
 
 [node name="CultureScene" parent="TabContainer/Culture" unique_id=1580029639 instance=ExtResource("7_dvne8")]

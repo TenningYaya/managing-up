@@ -5,7 +5,9 @@
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_vamsw"]
 
 [node name="ChangeCultureButton" type="TextureButton" unique_id=1466933540 groups=["culture_selection_buttons"]]
-custom_minimum_size = Vector2(170, 70)
+custom_minimum_size = Vector2(220, 70)
+offset_right = 200.0
+offset_bottom = 70.0
 texture_normal = ExtResource("1_ccmah")
 ignore_texture_size = true
 stretch_mode = 0

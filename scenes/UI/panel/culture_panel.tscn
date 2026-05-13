@@ -1,7 +1,21 @@
 [gd_scene format=3 uid="uid://b2l7mr7bb5b41"]
 
 [ext_resource type="PackedScene" uid="uid://djvbh74bpt6us" path="res://scenes/UI/custom/change_culture_button.tscn" id="1_42fho"]
-[ext_resource type="Texture2D" uid="uid://66sj4mi5r1rk" path="res://assets/UI/culture_qual.png" id="2_81qjf"]
+[ext_resource type="Texture2D" uid="uid://db34pir2hfarw" path="res://assets/UI/culture_panel/culture_eff.png" id="2_81qjf"]
+[ext_resource type="Texture2D" uid="uid://bwggrrfduonri" path="res://assets/UI/culture_panel/culture_qual.png" id="3_oea1h"]
+[ext_resource type="Texture2D" uid="uid://ch61hp0ntfwdh" path="res://assets/UI/culture_panel/culture_exp.png" id="4_yswu2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oea1h"]
+atlas = ExtResource("2_81qjf")
+region = Rect2(68, 139, 1825, 542)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yswu2"]
+atlas = ExtResource("3_oea1h")
+region = Rect2(87, 118, 1779, 547)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oc1ty"]
+atlas = ExtResource("4_yswu2")
+region = Rect2(30, 145, 1890, 518)
 
 [node name="CulturePanel" type="Control" unique_id=1580029639]
 layout_mode = 3
@@ -17,10 +31,10 @@ grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1049156711]
 layout_mode = 0
-offset_left = -82.0
-offset_top = -118.0
-offset_right = 88.0
-offset_bottom = 120.0
+offset_left = -109.0
+offset_top = -125.0
+offset_right = 111.0
+offset_bottom = 123.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=735603081]
 layout_mode = 2
@@ -31,12 +45,14 @@ theme_override_constants/separation = 14
 [node name="Eff" parent="MarginContainer/VBoxContainer" unique_id=1466933540 instance=ExtResource("1_42fho")]
 layout_mode = 2
 culture_type = 1
-normal_icon = ExtResource("2_81qjf")
+normal_icon = SubResource("AtlasTexture_oea1h")
 
 [node name="Qual" parent="MarginContainer/VBoxContainer" unique_id=1121197770 instance=ExtResource("1_42fho")]
 layout_mode = 2
 culture_type = 2
+normal_icon = SubResource("AtlasTexture_yswu2")
 
 [node name="Exp" parent="MarginContainer/VBoxContainer" unique_id=1653694938 instance=ExtResource("1_42fho")]
 layout_mode = 2
 culture_type = 3
+normal_icon = SubResource("AtlasTexture_oc1ty")

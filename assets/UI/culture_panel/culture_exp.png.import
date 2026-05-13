@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://66sj4mi5r1rk"
-path="res://.godot/imported/culture_qual.png-9ee9ae54d2d75b90164d68b67fb50589.ctex"
+uid="uid://ch61hp0ntfwdh"
+path="res://.godot/imported/culture_exp.png-f556c413d815bc8c7870364b8bfea1c1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/culture_qual.png"
-dest_files=["res://.godot/imported/culture_qual.png-9ee9ae54d2d75b90164d68b67fb50589.ctex"]
+source_file="res://assets/UI/culture_panel/culture_exp.png"
+dest_files=["res://.godot/imported/culture_exp.png-f556c413d815bc8c7870364b8bfea1c1.ctex"]
 
 [params]
 
