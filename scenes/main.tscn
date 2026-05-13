@@ -204,6 +204,21 @@ offset_top = -102.0
 offset_right = 222.0
 offset_bottom = -32.0
 
+[node name="HBoxContainer" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1047662462]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 86.0
+grow_horizontal = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="FrontWarehouseButton" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer" unique_id=1938687981 instance=ExtResource("8_dp3eg")]
+layout_mode = 2
+
+[node name="FrontRecruitmentButton" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer" unique_id=1065910196 instance=ExtResource("9_0ld40")]
+layout_mode = 2
+
 [node name="DeskRow" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=1158104807]
 layout_mode = 2
 
@@ -220,20 +235,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="DeskSlot5" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=715536118 instance=ExtResource("2_sugp2")]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="FullGameMode/Background" unique_id=1047662462]
-layout_mode = 0
-offset_left = -473.0
-offset_top = 16.0
-offset_right = -281.0
-offset_bottom = 102.0
-theme_override_constants/separation = 20
-
-[node name="FrontWarehouseButton" parent="FullGameMode/Background/HBoxContainer" unique_id=1938687981 instance=ExtResource("8_dp3eg")]
-layout_mode = 2
-
-[node name="FrontRecruitmentButton" parent="FullGameMode/Background/HBoxContainer" unique_id=1065910196 instance=ExtResource("9_0ld40")]
 layout_mode = 2
 
 [node name="employees" type="Control" parent="FullGameMode" unique_id=489643899]
@@ -395,4 +396,4 @@ offset_top = 297.0
 offset_right = 213.0
 offset_bottom = 632.0
 
-[connection signal="pressed" from="FullGameMode/Background/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]
+[connection signal="pressed" from="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]
