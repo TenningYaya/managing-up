@@ -50,6 +50,13 @@ func get_snap_global_position() -> Vector2:
 
 
 func contains_global_point(point: Vector2) -> bool:
+	# 向上检查层级树，如果当前座位或其所在的工位组（DeskSlot）被设为透明，则判定为不可放置
+	var current_node = self
+	while current_node and current_node is CanvasItem:
+		if current_node.modulate.a <= 0.01:
+			return false
+		current_node = current_node.get_parent()
+
 	var rect: Rect2 = Rect2(drop_area.global_position, drop_area.size)
 	return rect.has_point(point)
 

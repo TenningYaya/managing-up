@@ -159,8 +159,14 @@ func _update_desk_visibility():
 	var slots = desk_row.get_children()
 	
 	for i in range(slots.size()):
-		# 🔥 核心修改：直接拿刚刚收到更新的 Gamemanager.player_level 来判断！
+		var slot = slots[i]
 		if i < Gamemanager.player_level:
-			slots[i].visible = true
+			# 解锁状态：完全可见，并启用升级按钮
+			slot.modulate.a = 1.0
+			if slot.has_node("UpgradeTriggerBtn"):
+				slot.get_node("UpgradeTriggerBtn").disabled = false
 		else:
-			slots[i].visible = false
+			# 未解锁状态：变成全透明（但保留布局占位），并禁用升级按钮防止误触
+			slot.modulate.a = 0.0
+			if slot.has_node("UpgradeTriggerBtn"):
+				slot.get_node("UpgradeTriggerBtn").disabled = true
