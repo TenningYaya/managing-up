@@ -2,32 +2,68 @@
 
 [ext_resource type="Script" uid="uid://n4af1jva2mxc" path="res://scripts/employee/resume_slot.gd" id="1_ac7bj"]
 [ext_resource type="PackedScene" uid="uid://bn26w2vn7o4ff" path="res://scenes/sidebar/recruitment_panel/resume_cards.tscn" id="1_v51ww"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_ac7bj"]
+[ext_resource type="Texture2D" uid="uid://bc073ucn8x6vx" path="res://data/background/resume_card_normal_bcg.tres" id="2_p7wyv"]
+[ext_resource type="Texture2D" uid="uid://cyyqqj8m063ct" path="res://data/background/resume_card_head_bcg.png" id="3_ovtm2"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="5_p7wyv"]
 
-[node name="ResumeSlot" type="HBoxContainer" unique_id=1254920124]
-offset_right = 219.0
-offset_bottom = 111.0
-theme_override_constants/separation = 4
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p7wyv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4h6ub"]
+
+[node name="ResumeSlot" type="Panel" unique_id=2059928352]
+custom_minimum_size = Vector2(250, 120)
+offset_right = 287.0
+offset_bottom = 124.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_p7wyv")
 script = ExtResource("1_ac7bj")
+normal_bg = ExtResource("2_p7wyv")
+headhunt_bg = ExtResource("3_ovtm2")
 
-[node name="ResumeCard" parent="." unique_id=102445997 instance=ExtResource("1_v51ww")]
-custom_minimum_size = Vector2(170, 80)
+[node name="TextureRect" type="TextureRect" parent="." unique_id=26698101]
+modulate = Color(0.9682575, 0.9682575, 0.9682575, 1)
+material = SubResource("ShaderMaterial_4h6ub")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_p7wyv")
+expand_mode = 1
+
+[node name="CardContainer" type="HBoxContainer" parent="." unique_id=1009297960]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 26.0
+offset_top = 6.0
+offset_right = -16.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ResumeCard" parent="CardContainer" unique_id=102445997 instance=ExtResource("1_v51ww")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="VBoxContainer" parent="." unique_id=1473229006]
+[node name="MarginContainer" type="MarginContainer" parent="CardContainer" unique_id=893397392]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="SelectionContainer" type="VBoxContainer" parent="CardContainer" unique_id=1473229006]
 layout_mode = 2
 alignment = 1
 
-[node name="RejectBtn" type="Button" parent="HBoxContainer" unique_id=1453280961]
-custom_minimum_size = Vector2(30, 30)
+[node name="HireBtn" parent="CardContainer/SelectionContainer" unique_id=2048579194 instance=ExtResource("5_p7wyv")]
+custom_minimum_size = Vector2(50, 30)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ac7bj")
-text = "NO!"
+button_text = "Yes!"
 
-[node name="HireBtn" type="Button" parent="HBoxContainer" unique_id=370016965]
-custom_minimum_size = Vector2(30, 30)
+[node name="RejectBtn" parent="CardContainer/SelectionContainer" unique_id=182769794 instance=ExtResource("5_p7wyv")]
+custom_minimum_size = Vector2(50, 30)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ac7bj")
-text = "YES!"
+button_text = "No!"
