@@ -200,10 +200,10 @@ layout_mode = 2
 
 [node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1716905617 instance=ExtResource("11_trceg")]
 layout_mode = 0
-offset_left = 72.0
-offset_top = -102.0
-offset_right = 222.0
-offset_bottom = -32.0
+offset_left = -102.0
+offset_top = -69.0
+offset_right = 48.0
+offset_bottom = 1.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1047662462]
 layout_mode = 1
@@ -400,9 +400,9 @@ offset_bottom = 632.0
 
 [node name="MobileSidebar" parent="CanvasLayer" unique_id=2025363917 instance=ExtResource("14_pm3ni")]
 z_index = 100
-offset_left = -43.0
-offset_top = -36.0
-offset_right = -3.0
-offset_bottom = 4.0
+offset_left = -42.0
+offset_top = -24.0
+offset_right = -2.0
+offset_bottom = 16.0
 
 [connection signal="pressed" from="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

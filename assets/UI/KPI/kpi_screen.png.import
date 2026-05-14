@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3kwbra45xfrt"
-path="res://.godot/imported/KPI.png-d82c4bbfbb6dedc27880d4033a2b44a4.ctex"
+uid="uid://csubs4ax3cbp0"
+path="res://.godot/imported/kpi_screen.png-198cd5a0dd725835834eb4d21e45f64a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/KPI.png"
-dest_files=["res://.godot/imported/KPI.png-d82c4bbfbb6dedc27880d4033a2b44a4.ctex"]
+source_file="res://assets/UI/KPI/kpi_screen.png"
+dest_files=["res://.godot/imported/kpi_screen.png-198cd5a0dd725835834eb4d21e45f64a.ctex"]
 
 [params]
 
