@@ -29,6 +29,7 @@ region = Rect2(13.045013, 48.486374, 297.62228, 292.4687)
 [sub_resource type="ButtonGroup" id="ButtonGroup_7o1yw"]
 
 [node name="SideMenu" type="Control" unique_id=1012173253]
+visible = false
 layout_mode = 3
 anchors_preset = 3
 anchor_left = 1.0

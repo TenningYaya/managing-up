@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://c2stthjkcu8gc" path="res://scripts/UI/camera_2d.gd" id="13_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://btou2tsygvjc0" path="res://scenes/employee/test_hirefire.tscn" id="13_jkv2x"]
 [ext_resource type="Script" uid="uid://bx1cavexc0whx" path="res://scripts/test/test_currency.gd" id="14_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://dfvnhbmpp2k2b" path="res://scenes/sidebar/phone_menu.tscn" id="14_pm3ni"]
 [ext_resource type="PackedScene" uid="uid://im2qyo8akr0" path="res://scenes/office/DeskUpgradePanel.tscn" id="15_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://c8d4rax1ise3l" path="res://scenes/sidebar/employee_panel/employee_warehouse.tscn" id="19_0ld40"]
 [ext_resource type="PackedScene" uid="uid://6py6ljmq7wln" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.tscn" id="20_gqmmt"]
@@ -395,5 +396,12 @@ offset_left = 13.0
 offset_top = 297.0
 offset_right = 213.0
 offset_bottom = 632.0
+
+[node name="MobileSidebar" parent="CanvasLayer" unique_id=2025363917 instance=ExtResource("14_pm3ni")]
+z_index = 100
+offset_left = -43.0
+offset_top = -36.0
+offset_right = -3.0
+offset_bottom = 4.0
 
 [connection signal="pressed" from="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

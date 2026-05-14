@@ -1,0 +1,153 @@
+extends Control
+
+# =====================================================
+# 1. Sidebar 展开 / 收回相关节点
+# =====================================================
+@onready var phone_wrapper: Control = $PhoneWrapper
+@onready var trigger_btn: BaseButton = $Trigger
+@onready var close_blocker: BaseButton = $CloseBlocker
+
+var is_open := false
+
+# 根据你之前测试好的坐标
+var open_x := -213.0
+var closed_x := 253.0
+
+
+# =====================================================
+# 2. 手机首页 / App 页面区域
+# =====================================================
+@onready var home_screen: Control = $PhoneWrapper/Screen/HomeScreen
+@onready var app_display_area: Control = $PhoneWrapper/Screen/AppDisplayArea
+
+# App 图标按钮
+@onready var btn_general: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/general
+@onready var btn_settings: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/settings
+@onready var btn_upgrades: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades
+@onready var btn_tutorial: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/tutorial
+
+# 手机底部 Home / Back 按钮
+@onready var home_button: BaseButton = $PhoneWrapper/HomeButton
+
+# App 页面
+@onready var general_page: Control = $PhoneWrapper/Screen/AppDisplayArea/GeneralPage
+@onready var settings_page: Control = $PhoneWrapper/Screen/AppDisplayArea/SettingsPage
+@onready var upgrades_page: Control = $PhoneWrapper/Screen/AppDisplayArea/UpgradesPage
+
+# 如果你之后做了 TutorialPage，就取消这行注释
+# @onready var tutorial_page: Control = $PhoneWrapper/Screen/AppDisplayArea/TutorialPage
+
+
+func _ready() -> void:
+	# =====================================================
+	# 初始状态：手机收回
+	# =====================================================
+	phone_wrapper.position.x = closed_x
+	close_blocker.hide()
+	trigger_btn.show()
+	is_open = false
+
+	# 初始状态：显示手机桌面
+	show_home_screen()
+
+	# =====================================================
+	# 连接 Sidebar 展开 / 收回按钮
+	# =====================================================
+	trigger_btn.pressed.connect(open_phone)
+	close_blocker.pressed.connect(close_phone)
+
+	# =====================================================
+	# 连接 App 图标按钮
+	# =====================================================
+	btn_general.pressed.connect(func():
+		open_app(general_page)
+	)
+
+	btn_settings.pressed.connect(func():
+		open_app(settings_page)
+	)
+
+	btn_upgrades.pressed.connect(func():
+		open_app(upgrades_page)
+	)
+
+	btn_tutorial.pressed.connect(func():
+		print("Tutorial app clicked, but TutorialPage is not ready yet.")
+		# 如果你之后有 TutorialPage，就改成：
+		# open_app(tutorial_page)
+	)
+
+	# =====================================================
+	# 手机底部按钮：返回桌面
+	# =====================================================
+	home_button.pressed.connect(show_home_screen)
+
+
+# =====================================================
+# 3. 展开手机
+# =====================================================
+func open_phone() -> void:
+	if is_open:
+		return
+
+	is_open = true
+
+	trigger_btn.hide()
+	close_blocker.show()
+
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(phone_wrapper, "position:x", open_x, 0.5)
+
+
+# =====================================================
+# 4. 收回手机
+# =====================================================
+func close_phone() -> void:
+	if not is_open:
+		return
+
+	is_open = false
+
+	close_blocker.hide()
+
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(phone_wrapper, "position:x", closed_x, 0.5)
+
+	tween.finished.connect(func():
+		trigger_btn.show()
+	)
+
+
+# =====================================================
+# 5. 打开某个 App 页面
+# =====================================================
+func open_app(page: Control) -> void:
+	hide_all_pages()
+
+	home_screen.visible = false
+	app_display_area.visible = true
+	page.visible = true
+
+
+# =====================================================
+# 6. 返回手机桌面
+# =====================================================
+func show_home_screen() -> void:
+	hide_all_pages()
+
+	home_screen.visible = true
+	app_display_area.visible = false
+
+
+# =====================================================
+# 7. 隐藏所有 App 页面
+# =====================================================
+func hide_all_pages() -> void:
+	general_page.visible = false
+	settings_page.visible = false
+	upgrades_page.visible = false
+
+	# 如果你之后有 TutorialPage，就取消这行注释
+	# tutorial_page.visible = false

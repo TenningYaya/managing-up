@@ -16,33 +16,20 @@ offset_right = 270.0
 offset_bottom = 360.0
 script = ExtResource("1_vc4hl")
 
-[node name="TextureRect" type="ColorRect" parent="." unique_id=1357907453]
-visible = false
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1466235282]
 layout_mode = 0
-offset_right = 270.0
-offset_bottom = 360.0
-color = Color(0.97654, 0.37769583, 0.618274, 1)
-
-[node name="settings" type="Label" parent="." unique_id=1474957546]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 40.0
-offset_right = 271.0
-offset_bottom = 69.0
-theme_override_fonts/font = ExtResource("3_70tse")
-theme_override_font_sizes/font_size = 34
-text = "upgrades"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_right = 248.0
+offset_bottom = 336.0
+color = Color(1, 0, 1, 1)
 
 [node name="MainLayout" type="VBoxContainer" parent="." unique_id=1465389803]
-custom_minimum_size = Vector2(270, 360)
+custom_minimum_size = Vector2(214, 277)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -7.5
-offset_right = 7.5
+offset_right = -2.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 15
@@ -243,9 +230,9 @@ autowrap_mode = 2
 
 [node name="UpgradeButton" type="TextureButton" parent="." unique_id=1385535808]
 layout_mode = 0
-offset_left = 70.0
-offset_top = 300.0
-offset_right = 210.0
+offset_left = 62.0
+offset_top = 305.0
+offset_right = 182.0
 offset_bottom = 335.0
 texture_normal = ExtResource("1_v0of0")
 texture_pressed = ExtResource("2_lh86t")
@@ -270,3 +257,15 @@ theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 20
 text = "M1->M2"
 horizontal_alignment = 1
+
+[node name="upgrades" type="Label" parent="." unique_id=2091357471]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 43.0
+offset_right = 247.0
+offset_bottom = 72.0
+theme_override_fonts/font = ExtResource("3_70tse")
+theme_override_font_sizes/font_size = 34
+text = "upgrades"
+horizontal_alignment = 1
+vertical_alignment = 1

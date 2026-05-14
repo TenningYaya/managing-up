@@ -9,15 +9,24 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_qayn5")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=754440685]
+layout_mode = 0
+offset_right = 248.0
+offset_bottom = 336.0
+color = Color(1, 0, 1, 1)
+
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=984241471]
+custom_minimum_size = Vector2(248, 0)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.086
 anchor_top = 0.111
 anchor_right = 0.182
 anchor_bottom = 0.183
-offset_right = 240.0
-offset_bottom = 170.0
+offset_left = -27.220001
+offset_top = 3.040001
+offset_right = 194.86
+offset_bottom = 173.04001
 
 [node name="general" type="Label" parent="VBoxContainer" unique_id=1370354661]
 layout_mode = 2
