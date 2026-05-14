@@ -3,11 +3,6 @@
 
 extends Control
 
-@onready var bg_texture_rect = $TextureRect # 你的背景节点
-
-# 🌟 在编辑器里把两张背景图拖进去
-@export var normal_bg: Texture2D
-@export var headhunt_bg: Texture2D
 
 # 直接用固定的节点路径，简单粗暴！
 # （⚠️ 记得把下面的 $路径 换成你新场景里真实的节点路径）
@@ -24,12 +19,7 @@ func setup(employee_data: Employee) -> void:
 		
 	if employee_data == null: 
 		return
-	
-	if employee_data.is_headhunt:
-		bg_texture_rect.texture = headhunt_bg
-	else:
-		bg_texture_rect.texture = normal_bg
-	
+
 	# 1. 设置名字
 	name_label.text = employee_data.employee_name
 	

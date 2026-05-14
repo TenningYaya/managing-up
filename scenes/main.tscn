@@ -392,6 +392,7 @@ offset_right = 431.0
 offset_bottom = 605.0
 
 [node name="QuoteEditor" parent="CanvasLayer" unique_id=1617537307 instance=ExtResource("22_jscy8")]
+visible = false
 offset_left = 13.0
 offset_top = 297.0
 offset_right = 213.0
