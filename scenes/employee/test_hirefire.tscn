@@ -29,6 +29,16 @@ text = "Normal10"
 layout_mode = 2
 text = "FireAll"
 
+[node name="10*SR" type="Button" parent="VBoxContainer" unique_id=84577640]
+layout_mode = 2
+text = "10*SR"
+
+[node name="10*SSR" type="Button" parent="VBoxContainer" unique_id=1750770604]
+layout_mode = 2
+text = "10*SSR"
+
 [connection signal="pressed" from="VBoxContainer/Normal1" to="." method="_on_test_normal_gen_pressed"]
 [connection signal="pressed" from="VBoxContainer/Normal10" to="." method="_on_normal_10_pressed"]
 [connection signal="pressed" from="VBoxContainer/FireAll" to="." method="_on_clear_all_test"]
+[connection signal="pressed" from="VBoxContainer/10*SR" to="." method="_on_test_10_sr_pressed"]
+[connection signal="pressed" from="VBoxContainer/10*SSR" to="." method="_on_test_10_ssr_pressed"]

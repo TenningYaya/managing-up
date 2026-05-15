@@ -73,7 +73,6 @@ func _ready() -> void:
 	if size.x < 10 or size.y < 10:
 		custom_minimum_size = Vector2(80, 80)
 		size = Vector2(80, 80)
-		print("[Employee] 警告: ", employee_name, " 尺寸坍塌，已强制重置包围盒")
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	z_index = 1
 	randomize()

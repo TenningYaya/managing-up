@@ -11,21 +11,38 @@
 [ext_resource type="Texture2D" uid="uid://ditxnyxugap07" path="res://assets/figures/1.char SR/characters/char7.png" id="8_3nv6k"]
 [ext_resource type="Texture2D" uid="uid://crfkv4vxtdj03" path="res://assets/figures/1.char SR/characters/char8.png" id="9_ujswb"]
 [ext_resource type="Texture2D" uid="uid://cq4k2gacwc6ur" path="res://assets/figures/1.char SR/clothes/dress .png" id="10_c0kfj"]
+[ext_resource type="Texture2D" uid="uid://c2fjfihetig0n" path="res://assets/figures/1.char SR/clothes/clown.png" id="10_m7hmh"]
 [ext_resource type="Texture2D" uid="uid://ctsta6qyfuxiq" path="res://assets/figures/1.char SR/hair/bob .png" id="11_nc5v7"]
+[ext_resource type="Texture2D" uid="uid://djgwnmrhcdjml" path="res://assets/figures/1.char SR/clothes/pumpkin.png" id="12_40b0r"]
 [ext_resource type="Texture2D" uid="uid://bjugwub6dicqj" path="res://assets/figures/1.char SR/hair/braids.png" id="12_lpiy5"]
 [ext_resource type="Texture2D" uid="uid://bj0x1lh53mia0" path="res://assets/figures/1.char SR/hair/buzzcut.png" id="13_1pebh"]
+[ext_resource type="Texture2D" uid="uid://c6njik8auoxyb" path="res://assets/figures/1.char SR/clothes/spooky .png" id="13_y06rb"]
+[ext_resource type="Texture2D" uid="uid://pktqyqo5sphk" path="res://assets/figures/1.char SR/clothes/witch.png" id="14_8tefo"]
 [ext_resource type="Texture2D" uid="uid://cfjumw7yec4gi" path="res://assets/figures/1.char SR/hair/curly.png" id="14_aci0q"]
 [ext_resource type="Texture2D" uid="uid://cvnmyxhy2w2aq" path="res://assets/figures/1.char SR/hair/emo.png" id="15_1sr55"]
+[ext_resource type="Texture2D" uid="uid://be4kctagqd722" path="res://assets/figures/1.char SR/clothes/basic.png" id="15_76jsl"]
 [ext_resource type="Texture2D" uid="uid://cyn8c03cq8hr3" path="res://assets/figures/1.char SR/hair/extra_long.png" id="16_pmx2p"]
+[ext_resource type="Texture2D" uid="uid://xpihrwsmaurh" path="res://assets/figures/1.char SR/clothes/floral.png" id="16_vx4wf"]
+[ext_resource type="Texture2D" uid="uid://wujsqpu8udx8" path="res://assets/figures/1.char SR/clothes/overalls.png" id="17_0w8p7"]
 [ext_resource type="Texture2D" uid="uid://cufqcpm1vwvsa" path="res://assets/figures/1.char SR/hair/extra_long_skirt.png" id="17_t16hf"]
 [ext_resource type="Texture2D" uid="uid://b07n1ukikr1wg" path="res://assets/figures/1.char SR/hair/french_curl.png" id="18_20kw5"]
+[ext_resource type="Texture2D" uid="uid://blafoj0xtk8sr" path="res://assets/figures/1.char SR/clothes/sailor.png" id="18_m5cy6"]
 [ext_resource type="Texture2D" uid="uid://eseowwjo51t5" path="res://assets/figures/1.char SR/hair/gentleman.png" id="19_ixcai"]
+[ext_resource type="Texture2D" uid="uid://cw10bcdgrof5e" path="res://assets/figures/1.char SR/clothes/sailor_bow.png" id="19_kp8jg"]
+[ext_resource type="Texture2D" uid="uid://ngcttwuek01p" path="res://assets/figures/1.char SR/clothes/skull.png" id="20_7k5jk"]
 [ext_resource type="Texture2D" uid="uid://dp3p01skbwpmf" path="res://assets/figures/1.char SR/hair/long_straight .png" id="20_gpjop"]
+[ext_resource type="Texture2D" uid="uid://shrwrtiwj6y2" path="res://assets/figures/1.char SR/clothes/spaghetti.png" id="21_huhrs"]
 [ext_resource type="Texture2D" uid="uid://boeg2ofti17h5" path="res://assets/figures/1.char SR/hair/long_straight_skirt.png" id="21_w6k5j"]
 [ext_resource type="Texture2D" uid="uid://dy4rnoivttme3" path="res://assets/figures/1.char SR/hair/midiwave.png" id="22_as58k"]
+[ext_resource type="Texture2D" uid="uid://b8irbkotpe7kp" path="res://assets/figures/1.char SR/clothes/sporty.png" id="22_ryuct"]
+[ext_resource type="Texture2D" uid="uid://qsakjf1pf6j4" path="res://assets/figures/1.char SR/clothes/stripe.png" id="23_fcyow"]
 [ext_resource type="Texture2D" uid="uid://brv13na5vmwew" path="res://assets/figures/1.char SR/hair/ponytail .png" id="23_sy7hi"]
+[ext_resource type="Texture2D" uid="uid://bn7s7yid6hqdr" path="res://assets/figures/1.char SR/clothes/suit.png" id="24_bo4s4"]
 [ext_resource type="Texture2D" uid="uid://basaf7uenuw64" path="res://assets/figures/1.char SR/hair/spacebuns.png" id="24_u8fk0"]
+[ext_resource type="Texture2D" uid="uid://bojuubenmww3s" path="res://assets/figures/1.char SR/clothes/pants.png" id="25_2lwrg"]
 [ext_resource type="Texture2D" uid="uid://d26ulv8sya5a1" path="res://assets/figures/1.char SR/hair/wavy.png" id="25_7oyj2"]
+[ext_resource type="Texture2D" uid="uid://lhdklq783qon" path="res://assets/figures/1.char SR/clothes/pants_suit.png" id="26_cmbfr"]
+[ext_resource type="Texture2D" uid="uid://jttbdk8wu3oj" path="res://assets/figures/1.char SR/clothes/skirt.png" id="27_ri2be"]
 
 [sub_resource type="Animation" id="Animation_nc5v7"]
 length = 0.001
@@ -68,8 +85,12 @@ _data = {
 texture_filter = 1
 script = ExtResource("1_uejui")
 body_skins = Array[Texture2D]([ExtResource("2_mmcof"), ExtResource("3_48wic"), ExtResource("4_c0kfj"), ExtResource("5_un4vt"), ExtResource("6_qusjs"), ExtResource("7_vi70u"), ExtResource("8_3nv6k"), ExtResource("9_ujswb")])
-clothes_pool = Array[Texture2D]([ExtResource("10_c0kfj")])
-clothes_color_counts = Array[int]([10])
+set_pool = Array[Texture2D]([ExtResource("10_m7hmh"), ExtResource("10_c0kfj"), ExtResource("12_40b0r"), ExtResource("13_y06rb"), ExtResource("14_8tefo")])
+set_color_counts = Array[int]([2, 10, 2, 1, 1])
+top_pool = Array[Texture2D]([ExtResource("15_76jsl"), ExtResource("16_vx4wf"), ExtResource("17_0w8p7"), ExtResource("18_m5cy6"), ExtResource("19_kp8jg"), ExtResource("20_7k5jk"), ExtResource("21_huhrs"), ExtResource("22_ryuct"), ExtResource("23_fcyow"), ExtResource("24_bo4s4")])
+top_color_counts = Array[int]([10, 10, 10, 10, 10, 10, 10, 10, 10, 10])
+bottom_pool = Array[Texture2D]([ExtResource("25_2lwrg"), ExtResource("26_cmbfr"), ExtResource("27_ri2be")])
+bottom_color_counts = Array[int]([10, 10, 10])
 hair_textures = Array[Texture2D]([ExtResource("11_nc5v7"), ExtResource("12_lpiy5"), ExtResource("13_1pebh"), ExtResource("14_aci0q"), ExtResource("15_1sr55"), ExtResource("16_pmx2p"), ExtResource("17_t16hf"), ExtResource("18_20kw5"), ExtResource("19_ixcai"), ExtResource("20_gpjop"), ExtResource("21_w6k5j"), ExtResource("22_as58k"), ExtResource("23_sy7hi"), ExtResource("24_u8fk0"), ExtResource("25_7oyj2")])
 
 [node name="Body" type="Sprite2D" parent="." unique_id=718598502]
@@ -85,7 +106,10 @@ texture = ExtResource("3_mmcof")
 region_enabled = true
 region_rect = Rect2(32, 96, 0, 0)
 
-[node name="Clothes" type="Sprite2D" parent="." unique_id=2146590574]
+[node name="ClothesBottom" type="Sprite2D" parent="." unique_id=569376166]
+texture_filter = 1
+
+[node name="ClothesTop" type="Sprite2D" parent="." unique_id=2146590574]
 texture_filter = 1
 
 [node name="Hair" type="Sprite2D" parent="." unique_id=47210730]

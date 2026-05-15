@@ -163,7 +163,6 @@ func _connect_current_employee() -> void:
 		current_employee.tree_exiting.connect(_on_current_employee_tree_exiting)
 	if not current_employee.buff_status_changed.is_connected(_refresh_buffs):
 		current_employee.buff_status_changed.connect(_refresh_buffs)
-	print("[EmployeePanel] 已连接进度信号 -> ", current_employee.employee_name)
 
 
 func _disconnect_current_employee() -> void:

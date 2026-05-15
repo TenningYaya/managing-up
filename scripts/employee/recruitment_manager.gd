@@ -68,6 +68,14 @@ func _on_headhunt_finished():
 		headhunt_pool.append(new_emp)
 	new_resumes_arrived.emit()
 
+func debug_generate_specified(amount: int, rarity: Employee.Rarity):
+	for i in range(amount):
+		var new_emp = _create_data(rarity)
+		normal_pool.append(new_emp)
+	
+	new_resumes_arrived.emit()
+	print("【测试】已成功生成 %d 个 %s 级员工" % [amount, Employee.Rarity.keys()[rarity]])
+	
 func _create_data(rarity: Employee.Rarity) -> Employee:
 	var e = employee_scene.instantiate() as Employee
 	var visual_scene = visual_scenes[rarity]

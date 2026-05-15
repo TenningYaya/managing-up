@@ -48,3 +48,13 @@ func _on_normal_10_pressed() -> void:
 	for i in range(10):
 		# 注意：这里我们调用原本写好的单次生成逻辑
 		RecruitmentManager.auto_generate_normal()
+
+# 🌟 十连抽 SR
+func _on_test_10_sr_pressed() -> void:
+	# 调用刚才写的后门，传入 SR 枚举
+	RecruitmentManager.debug_generate_specified(10, Employee.Rarity.SR)
+
+# 🌟 十连抽 SSR
+func _on_test_10_ssr_pressed() -> void:
+	# 传入 SSR 枚举
+	RecruitmentManager.debug_generate_specified(10, Employee.Rarity.SSR)
