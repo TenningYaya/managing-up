@@ -7,8 +7,9 @@ class_name EmployeePanel
 # ==========================================
 # --- 员工信息部分 ---
 @onready var figure: TextureRect = $PanelBg/EmployeePage/NameCard/Figure
-@onready var name_label: Label = $PanelBg/EmployeePage/NameCard/VBoxContainer/NameLabel
-@onready var rarity_label: Label = $PanelBg/EmployeePage/NameCard/VBoxContainer/RarityLabel
+@onready var name_label: HBoxContainer = $PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer/NameLabel
+@onready var rarity_label: HBoxContainer = $PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer/RarityLabel
+@onready var attribute_label: HBoxContainer = $PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer/AttributeLabel
 
 # --- 属性条组件部分 ---
 @onready var efficiency_bar: EmployeeAbility = $PanelBg/EmployeePage/Information/Abilities/EfficiencyBar
@@ -16,6 +17,9 @@ class_name EmployeePanel
 @onready var experience_bar: EmployeeAbility = $PanelBg/EmployeePage/Information/Abilities/ExperienceBar
 
 @onready var progress_bar: TextureProgressBar = $PanelBg/EmployeePage/Information/ProgressBar
+
+@onready var buffs_container: HFlowContainer = $PanelBg/EmployeePage/PanelContainer/MarginContainer/VBoxContainer/Buffs
+const BUFF_TAG_SCENE = preload("res://scenes/sidebar/employee_panel/buff_tag.tscn")
 
 # --- 底部按钮部分 ---
 @onready var dispatch_btn: TextureButton = $PanelBg/EmployeePage/Manage/DispatchButton
@@ -28,8 +32,6 @@ class_name EmployeePanel
 # 当前正在查看的员工数据引用
 var current_employee: Employee = null
 
-# --- buff部分 ---
-@onready var buffs_container: Container = $PanelBg/EmployeePage/Information/Buffs
 # ==========================================
 # 2. 初始化
 # ==========================================
@@ -90,13 +92,19 @@ func open_panel(employee: Employee) -> void:
 	# ==========================================
 	# 🚨 【这里是之前丢失的“三维”刷新代码】
 	# ==========================================
-	name_label.text = employee.employee_name
+	name_label.set_value_text(employee.employee_name)
 	
 	# 刷新稀有度
 	match employee.rarity:
-		Employee.Rarity.R: rarity_label.text = "R"
-		Employee.Rarity.SR: rarity_label.text = "SR"
-		Employee.Rarity.SSR: rarity_label.text = "SSR"
+		Employee.Rarity.R: 
+			rarity_label.set_value_text("R")
+		Employee.Rarity.SR: 
+			rarity_label.set_value_text("SR")
+		Employee.Rarity.SSR: 
+			rarity_label.set_value_text("SSR")
+	
+	var total_attributes = employee.efficiency + employee.quality + employee.experience
+	attribute_label.set_value_text(str(total_attributes))
 	
 	# 🌟 刷新属性条（确保你的节点引用名和这里一致）
 	efficiency_bar.set_value(employee.efficiency)
@@ -112,10 +120,6 @@ func open_panel(employee: Employee) -> void:
 	if employee.portrait:
 		# 🌟 改成这一句：直接把立绘节点(figure)交给 Helper 处理
 		AvatarHelper.apply_portrait(figure, employee.portrait)
-		
-	# --- 刷新 UI (这部分保持原样) ---
-	name_label.text = employee.employee_name
-	# ... 你的 rarity_label, bars 等刷新代码 ...
 	
 	_refresh_progress_bar()
 	_refresh_buffs()
@@ -317,98 +321,83 @@ func cancel_fire_employee() -> void:
 # 7. Buff 显示逻辑
 # ==========================================
 func _refresh_buffs() -> void:
-	# 1. 每次打开面板前，先把旧的 Buff 标签清空，防止无限叠加
+	# 1. 每次打开面板前，先把旧的 Buff 标签清空
 	for child in buffs_container.get_children():
 		child.queue_free()
 		
 	if current_employee == null:
 		return
 		
-	var has_any_buff = false
-	
 	# ==========================================
-	# 🌟 重点：在这里增加会议 Buff 的动态展示
+	# 🌟 Meeting Buff
 	# ==========================================
 	if current_employee.is_in_meeting:
-		# 我们把那一串跳动的随机数直接打在标签上
 		var q_val = current_employee.meet_buff_qual
 		var e_val = current_employee.meet_buff_exp
 		var eff_val = current_employee.meet_buff_eff
 		
-		# 构造一个看起来就很专业的 Buff 描述
-		var meeting_text = "会议头脑风暴中"
-		var details = "本轮加成：\n"
-		details += "✨ 质量 + " + str(q_val) + "\n"
-		details += "📈 经验 + " + str(e_val) + "\n"
-		details += "⏳ 效率 " + str(eff_val) + " (会议开销)"
+		# 极简英文：头脑风暴
+		var meeting_text = "Brainstorming"
+		var details = "Current Buffs:\n"
+		details += "✨ Qual + " + str(q_val) + "\n"
+		details += "📈 Exp + " + str(e_val) + "\n"
+		details += "⏳ Eff " + str(eff_val) + " (Cost)"
 		
 		_add_buff_label(meeting_text, details)
-		has_any_buff = true
 		
-	# 2. 检查是否有【工位 Buff】
+	# 2. Desk Buff (工位 Buff)
 	if current_employee.get("current_seat") != null:
 		var seat = current_employee.current_seat
 		var eff_buff = 0
 		var qual_buff = 0
 		
-		# 读取工位的增益（使用你之前写好的接口）
 		if seat.has_method("get_efficiency_buff"):
 			eff_buff = seat.get_efficiency_buff()
 		if seat.has_method("get_quality_buff"):
 			qual_buff = seat.get_quality_buff()
 			
-		# 如果工位确实提供了 Buff，就生成一条标签
 		if eff_buff > 0 or qual_buff > 0:
-			var desc = "当前工位提供:\n"
-			if eff_buff > 0: desc += "效率 +" + str(eff_buff) + " "
-			if qual_buff > 0: desc += "质量 +" + str(qual_buff)
+			var desc = "Desk Bonus:\n"
+			if eff_buff > 0: desc += "Eff +" + str(eff_buff) + " "
+			if qual_buff > 0: desc += "Qual +" + str(qual_buff)
 			
-			# 调用添加标签的函数 (显示的名字, 悬停的解释)
-			_add_buff_label("办公桌增益", desc)
-			has_any_buff = true
+			_add_buff_label("Workspace", desc)
 			
-	# 3. 检查是否有【文化 Buff】		
+	# 3. Culture Buff (企业文化 Buff)
 	if OfficeManager.culture_efficiency > 0:
-		_add_buff_label("企业文化", "全公司效率 +" + str(OfficeManager.culture_efficiency))
+		_add_buff_label("Culture", "Global Eff +" + str(OfficeManager.culture_efficiency))
 	if OfficeManager.culture_experience > 0:
-		_add_buff_label("企业文化", "全公司效率 +" + str(OfficeManager.culture_experience))
+		# 💡 这里顺手帮你把原来写错的“效率”修成了 Exp
+		_add_buff_label("Culture", "Global Exp +" + str(OfficeManager.culture_experience))
 	if OfficeManager.culture_quality > 0:
-		_add_buff_label("企业文化", "全公司效率 +" + str(OfficeManager.culture_quality))
-	# 4. 检查是否有【零食 Buff】	
+		# 💡 这里顺手帮你修成了 Qual
+		_add_buff_label("Culture", "Global Qual +" + str(OfficeManager.culture_quality))
+		
+	# 4. Snack Buff (零食 Buff)
 	if current_employee.get("current_snack_buff") != null:
 		var snack = current_employee.current_snack_buff
 		
-		# 利用你在 Employee.gd 里定义的枚举
-		# 这里注意：如果 Employee.gd 里枚举没加 class_name，可能需要用 employee.SnackBuff
 		match snack:
-			1: # MILK_TEA (对应你定义的 1: 奶茶)
-				_add_buff_label("奶茶增益", "茶水间供应：本次产出效率 +3")
-			2: # CAKE (对应你定义的 2: 蛋糕)
-				_add_buff_label("蛋糕增益", "茶水间供应：本次产出质量 +3")
-			3: # SAUSAGE (对应你定义的 3: 烤肠)
-				_add_buff_label("烤肠增益", "茶水间供应：本次产出经验 +3")
-		# 4. 如果什么 Buff 都没有，显示一句提示（可选）
-	#if not has_any_buff:
-		#_add_buff_label("无增益", "该员工当前没有任何状态加成")
-# 动态生成一条 Buff 标签的辅助函数
+			1: # MILK_TEA
+				_add_buff_label("Milk Tea", "Pantry Perk: Eff +3")
+			2: # CAKE
+				_add_buff_label("Cake", "Pantry Perk: Qual +3")
+			3: # SAUSAGE
+				_add_buff_label("Sausage", "Pantry Perk: Exp +3")
+
 func _add_buff_label(buff_name: String, hover_description: String) -> void:
-	var label = Label.new()
-	label.text = "✦ " + buff_name
+	# 🌟 不再用 Label.new()，而是实例化你的精美预制体
+	var buff_tag = BUFF_TAG_SCENE.instantiate()
 	
-	# 🚨 【核心魔法】：Godot 原生悬停提示！
-	label.tooltip_text = hover_description
+	# 假设你的预制体里，Label 的名字就叫 Label
+	var label_node = buff_tag.get_node("%Label")
+	label_node.text = "✦ " + buff_name
 	
-	# 必须开启鼠标阻挡，否则悬停提示弹不出来
-	label.mouse_filter = Control.MOUSE_FILTER_STOP 
+	# 悬停提示最好加在根节点上，这样鼠标碰到背景框也能弹出来
+	buff_tag.tooltip_text = hover_description
+	buff_tag.mouse_filter = Control.MOUSE_FILTER_STOP 
 	
-	# （可选）给 Buff 换个显眼的颜色
-	if buff_name != "无增益":
-		label.add_theme_color_override("font_color", Color.GREEN_YELLOW)
-	else:
-		label.add_theme_color_override("font_color", Color.GRAY)
-		
-	# 把生成好的标签塞进容器里
-	buffs_container.add_child(label)
+	buffs_container.add_child(buff_tag)
 
 func _is_pos_inside_panel(global_pos: Vector2) -> bool:
 	# 这里的 $PanelBg 是你面板的实际可见区域
