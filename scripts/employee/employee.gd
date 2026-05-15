@@ -70,6 +70,10 @@ const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
 
 func _ready() -> void:
 	add_to_group("employees")
+	if size.x < 10 or size.y < 10:
+		custom_minimum_size = Vector2(80, 80)
+		size = Vector2(80, 80)
+		print("[Employee] 警告: ", employee_name, " 尺寸坍塌，已强制重置包围盒")
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	z_index = 1
 	randomize()
@@ -81,46 +85,41 @@ func setup_employee(new_rarity: Rarity) -> void:
 	rarity = new_rarity
 	_generate_attributes()
 
-func _gui_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
-				# 1. 鼠标按下：记录位置，打上标记，但不立刻中断工作
-				is_pressing = true
-				drag_start_mouse_pos = get_global_mouse_position()
-				drag_start_position = global_position
-				drag_offset = drag_start_mouse_pos - global_position
-				accept_event()
+				# 检查鼠标是否在自己身上（用全局坐标系判断，绝对精准）
+				if get_global_rect().has_point(event.global_position):
+					is_pressing = true
+					drag_start_mouse_pos = get_global_mouse_position()
+					drag_start_position = global_position
+					drag_offset = drag_start_mouse_pos - global_position
+					get_viewport().set_input_as_handled() # 霸道地告诉引擎：我点到了，不许传给别人！
 			else:
-				# 2. 鼠标松开：在这里做最终判决！
 				if is_pressing:
 					is_pressing = false
 					if dragging:
-						# 如果已经进入拖拽状态，正常走吸附逻辑
 						_end_drag()
 					else:
-					# 如果到松开为止都没触发拖拽，那就是在原地点击！
 						if is_slacking and is_instance_valid(active_slacking_bubble):
 							active_slacking_bubble.resolve(true)
 						else:
 							_speed_up_work()
-					accept_event()
-					
+		
+		# 右键打开面板，同理也做全局保护
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			_on_employee_clicked()
-			accept_event()
+			if get_global_rect().has_point(event.global_position):
+				_on_employee_clicked()
+				get_viewport().set_input_as_handled()
 
-func _input(event: InputEvent) -> void:
-	# 只有在鼠标左键按住的状态下，才处理位移
+	# 拖拽的每帧移动
 	if is_pressing and event is InputEventMouseMotion:
-		# 如果还没进入拖拽状态，算一下鼠标偏离了按下点多远
 		if not dragging:
 			var move_dist = get_global_mouse_position().distance_to(drag_start_mouse_pos)
 			if move_dist > 10.0:
-				# 🌟 移动超过 10 像素，这才是真拖拽，立刻触发中断工作和拿起的逻辑
 				_start_drag()
 		
-		# 如果已经在拖拽中了，就让员工跟着鼠标走
 		if dragging:
 			global_position = get_global_mouse_position() - drag_offset
 
