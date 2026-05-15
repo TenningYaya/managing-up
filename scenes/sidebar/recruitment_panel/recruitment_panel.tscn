@@ -172,7 +172,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 3.0
+offset_left = 4.0
 offset_top = 23.0
 offset_bottom = -17.0
 grow_horizontal = 2
@@ -227,8 +227,6 @@ vertical_alignment = 2
 
 [node name="NormalViewer" parent="VBoxContainer/NormalPanel/MarginContainer" unique_id=931473494 instance=ExtResource("1_pfe0p")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer" unique_id=173082834]
 layout_mode = 2
@@ -322,8 +320,6 @@ frame_progress = 0.4569082
 
 [node name="HeadViewer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=74954453 instance=ExtResource("1_pfe0p")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
 [node name="TitleBar" type="Panel" parent="." unique_id=1469736204]
 layout_mode = 1

@@ -136,9 +136,9 @@ patch_margin_bottom = 12
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelBg/EmployeePage/PanelContainer" unique_id=485005502]
 layout_mode = 2
-theme_override_constants/margin_left = 6
+theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 6
+theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelBg/EmployeePage/PanelContainer/MarginContainer" unique_id=574563919]
@@ -149,6 +149,7 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.4811564, 0.6522103, 0.29271916, 1)
 theme_override_fonts/font = ExtResource("3_ajc7u")
+theme_override_font_sizes/font_size = 18
 text = "Employee Benefits"
 horizontal_alignment = 1
 vertical_alignment = 1

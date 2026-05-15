@@ -13,7 +13,7 @@ offset_bottom = -3.0
 script = ExtResource("1_lxgr6")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=13999434]
-custom_minimum_size = Vector2(280, 280)
+custom_minimum_size = Vector2(280, 380)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -42,20 +42,13 @@ theme_override_constants/margin_left = 10
 [node name="CardsContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1289101729]
 custom_minimum_size = Vector2(294, 124)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
 [node name="Slot0" parent="HBoxContainer/CardsContainer" unique_id=1317698709 instance=ExtResource("2_7ettr")]
 layout_mode = 2
 
-[node name="HSeparator2" type="HSeparator" parent="HBoxContainer/CardsContainer" unique_id=1428288041]
-visible = false
-layout_mode = 2
-
 [node name="Slot1" parent="HBoxContainer/CardsContainer" unique_id=919752536 instance=ExtResource("2_7ettr")]
-layout_mode = 2
-
-[node name="HSeparator" type="HSeparator" parent="HBoxContainer/CardsContainer" unique_id=515839698]
-visible = false
 layout_mode = 2
 
 [node name="Slot2" parent="HBoxContainer/CardsContainer" unique_id=870443455 instance=ExtResource("2_7ettr")]

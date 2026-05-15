@@ -7,6 +7,7 @@ class_name EmployeeAbility
 @onready var label: Label = $Label
 # 修改这里的类型为 ProgressBar，并确保路径正确
 @onready var progress_bar: ProgressBar = $ProgressBar 
+@onready var value_label: Label = $ProgressBar/AttributeNum
 
 func _ready() -> void:
 	label.text = ability_name
@@ -21,9 +22,12 @@ func _ready() -> void:
 
 # 面板主脚本依然调用这个函数来赋值
 func set_value(val: float) -> void:
-	# ProgressBar 的 value 是 float 类型
 	progress_bar.value = val
-
+	
+	# 如果你的属性值是整数，用 str(int(val))
+	# 如果需要保留一位小数，用 "%.1f" % val
+	if value_label:
+		value_label.text = str(int(val))
 # --- 顺便把颜色换了的方法 ---
 func set_bar_color(color: Color) -> void:
 	# 通过代码修改 Theme Override 中的 fill 样式
