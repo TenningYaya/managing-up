@@ -6,12 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://dndhwa02h345o" path="res://scenes/sidebar/employee_panel/employee_information_bar.tscn" id="3_agpfo"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_ajc7u"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="3_r7cc6"]
-[ext_resource type="Texture2D" uid="uid://psxqnorwo2wh" path="res://assets/UI/employee/infobar/icon-name (1).png" id="4_5it8m"]
 [ext_resource type="Texture2D" uid="uid://db3dnhkb3b0xc" path="res://assets/progress bar/progress bar most rounded under.png" id="4_bfpbm"]
 [ext_resource type="PackedScene" uid="uid://5sdsush0erlr" path="res://scenes/UI/custom/popup_window.tscn" id="4_e3e08"]
+[ext_resource type="Texture2D" uid="uid://c1rwplf815rnk" path="res://assets/UI/employee/infobar/icon-name.png" id="4_khksj"]
+[ext_resource type="Texture2D" uid="uid://c5m87b0iat414" path="res://assets/UI/employee/infobar/职级 (1).png" id="5_fnfi6"]
 [ext_resource type="Texture2D" uid="uid://dwaqo62o1yx1u" path="res://assets/progress bar/progress bar most rounded over.png" id="5_fq3kw"]
-[ext_resource type="Texture2D" uid="uid://c0g0vpqci5akb" path="res://assets/UI/employee/infobar/职级.png" id="5_khksj"]
-[ext_resource type="Texture2D" uid="uid://c1tim4bavmc38" path="res://assets/UI/employee/infobar/评分.png" id="6_fnfi6"]
+[ext_resource type="Texture2D" uid="uid://p7h0yvalk70i" path="res://assets/UI/employee/infobar/评分 (1).png" id="6_cr4tb"]
 [ext_resource type="Texture2D" uid="uid://bbt1nylq8pmni" path="res://assets/progress bar/progress bar most rounded progress cinnamon.png" id="6_p7uvh"]
 [ext_resource type="Texture2D" uid="uid://dnrqtwbwt5472" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/PNG SpriteSheet/SpriteSheet.png" id="11_5it8m"]
 
@@ -29,6 +29,15 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_sl25x")
 
+[node name="BackgroundImage" type="TextureRect" parent="." unique_id=1393985823]
+layout_mode = 0
+offset_left = -400.00003
+offset_top = -503.0
+offset_right = 228.57138
+offset_bottom = 231.5238
+scale = Vector2(0.84, 0.84)
+texture = ExtResource("1_kp28t")
+
 [node name="PanelBg" type="Panel" parent="." unique_id=1968908939]
 custom_minimum_size = Vector2(270, 360)
 layout_mode = 1
@@ -38,19 +47,11 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -270.0
-offset_top = -360.0
+offset_top = -349.0
+offset_bottom = 11.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ajc7u")
-
-[node name="BackgroundImage" type="TextureRect" parent="PanelBg" unique_id=1393985823]
-layout_mode = 0
-offset_left = -130.00006
-offset_top = -133.0
-offset_right = 498.57135
-offset_bottom = 601.5238
-scale = Vector2(0.84, 0.84)
-texture = ExtResource("1_kp28t")
 
 [node name="EmployeePage" type="VBoxContainer" parent="PanelBg" unique_id=949899160]
 layout_mode = 0
@@ -71,7 +72,7 @@ layout_mode = 2
 [node name="MarginContainer" type="MarginContainer" parent="PanelBg/EmployeePage/NameCard" unique_id=1222019418]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 6
 
 [node name="InfoContainer" type="VBoxContainer" parent="PanelBg/EmployeePage/NameCard/MarginContainer" unique_id=2005388425]
 layout_mode = 2
@@ -80,15 +81,15 @@ alignment = 1
 
 [node name="NameLabel" parent="PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer" unique_id=922239808 instance=ExtResource("3_agpfo")]
 layout_mode = 2
-icon_texture = ExtResource("4_5it8m")
+icon_texture = ExtResource("4_khksj")
 
 [node name="RarityLabel" parent="PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer" unique_id=1613757036 instance=ExtResource("3_agpfo")]
 layout_mode = 2
-icon_texture = ExtResource("5_khksj")
+icon_texture = ExtResource("5_fnfi6")
 
 [node name="AttributeLabel" parent="PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer" unique_id=799690892 instance=ExtResource("3_agpfo")]
 layout_mode = 2
-icon_texture = ExtResource("6_fnfi6")
+icon_texture = ExtResource("6_cr4tb")
 
 [node name="Information" type="VBoxContainer" parent="PanelBg/EmployeePage" unique_id=2130907609]
 layout_mode = 2

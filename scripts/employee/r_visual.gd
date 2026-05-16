@@ -37,5 +37,6 @@ func generate_portrait_texture() -> Texture2D:
 		
 		# 永远只切第 1 格（最左边）的画面作为头像
 		atlas.region = Rect2(0, 0, frame_width, frame_height)
+		atlas.set_meta("rarity", "R")
 		
 	return atlas

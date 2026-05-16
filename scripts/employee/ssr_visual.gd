@@ -55,5 +55,6 @@ func generate_portrait_texture() -> Texture2D:
 	atlas.atlas = sprite.texture
 	# 截取第一帧 (0, 0, 32, 32)
 	atlas.region = Rect2(0, 0, 32, 32) 
+	atlas.set_meta("rarity", "SSR")
 	
 	return atlas

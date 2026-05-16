@@ -185,6 +185,7 @@ func _get_combined_atlas_view(rect: Rect2) -> Texture2D:
 	var atlas = AtlasTexture.new()
 	atlas.atlas = body.texture
 	atlas.region = rect
+	atlas.set_meta("rarity", "SR")
 	
 	atlas.set_meta("hair_tex", hair.texture)
 	atlas.set_meta("hair_rect", _get_hair_rect({"y":256, "w":32, "h":32}))

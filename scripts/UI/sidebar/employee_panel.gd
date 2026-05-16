@@ -112,9 +112,9 @@ func open_panel(employee: Employee) -> void:
 	experience_bar.set_value(employee.experience)
 	
 	# 顺便设置颜色（如果你需要的话）
-	efficiency_bar.set_bar_color(Color.SKY_BLUE)
-	quality_bar.set_bar_color(Color.YELLOW)
-	experience_bar.set_bar_color(Color.PALE_GREEN)
+	efficiency_bar.set_bar_color(Color.from_string("#4fb2ff", Color.BLUE))
+	quality_bar.set_bar_color(Color.from_string("#eeb422", Color.YELLOW))
+	experience_bar.set_bar_color(Color.from_string("#76c442", Color.GREEN))
 	# ==========================================
 	
 	if employee.portrait:

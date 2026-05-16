@@ -20,6 +20,30 @@ max_value = 10.0
 step = 1.0
 show_percentage = false
 
+[node name="AttributeNumStyle" type="Label" parent="ProgressBar" unique_id=807371820]
+visible = false
+modulate = Color(0.0051989118, 0.005198905, 0.0051989057, 1)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -13.0
+offset_right = 16.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.2, 1.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tdgr8")
+theme_override_font_sizes/font_size = 18
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="AttributeNum" type="Label" parent="ProgressBar" unique_id=1893177076]
 texture_filter = 1
 layout_mode = 1
@@ -34,6 +58,7 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tdgr8")
 theme_override_font_sizes/font_size = 18
 text = "10"
