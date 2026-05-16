@@ -57,6 +57,7 @@ script = ExtResource("1_2wxww")
 ssr_skins = Array[Texture2D]([ExtResource("2_rji6d"), ExtResource("3_nwlo5"), ExtResource("4_0bnyd"), ExtResource("5_gqaca"), ExtResource("6_3eac3"), ExtResource("7_kg0yu"), ExtResource("8_11be2"), ExtResource("9_1fyof"), ExtResource("10_wh0ok"), ExtResource("11_4xewb"), ExtResource("12_xq5fj"), ExtResource("13_1c5my")])
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1502791674]
+texture_filter = 1
 texture = ExtResource("2_rji6d")
 hframes = 6
 

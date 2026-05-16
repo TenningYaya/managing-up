@@ -47,8 +47,19 @@ text = "SR"
 layout_mode = 2
 alignment = 1
 
-[node name="NameLabel" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1856881405]
+[node name="Control" type="Control" parent="HBoxContainer/VBoxContainer" unique_id=1199633069]
+custom_minimum_size = Vector2(75, 17)
 layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="HBoxContainer/VBoxContainer/Control" unique_id=1856881405]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.21779999, 0.32835, 0.66, 1)
 theme_override_fonts/font = ExtResource("2_hlt22")
 theme_override_font_sizes/font_size = 20

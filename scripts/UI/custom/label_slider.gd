@@ -31,10 +31,23 @@ func set_value(val: float) -> void:
 		value_label.text = str(int(val))
 	#if value_label_style:
 		#value_label_style.text = str(int(val))
-# --- 顺便把颜色换了的方法 ---
+
 func set_bar_color(color: Color) -> void:
-	# 通过代码修改 Theme Override 中的 fill 样式
-	var sb = StyleBoxFlat.new()
-	sb.bg_color = color
-	# 给 ProgressBar 的 "fill" 样式设置新的颜色
-	progress_bar.add_theme_stylebox_override("fill", sb)
+	# 🌟 1. 先尝试获取当前已经在使用的 fill 样式
+	# 如果你在编辑器里设置过 Style，这里就能拿回来
+	var current_sb = progress_bar.get_theme_stylebox("fill")
+	
+	if current_sb is StyleBoxFlat:
+		# 🌟 2. 核心：克隆一份一模一样的（包括圆角！）
+		var new_sb = current_sb.duplicate()
+		# 🌟 3. 只改颜色
+		new_sb.bg_color = color
+		# 🌟 4. 覆盖回去
+		progress_bar.add_theme_stylebox_override("fill", new_sb)
+	else:
+		# 如果之前没设过样式，才需要新建（并手动补上圆角）
+		var new_sb = StyleBoxFlat.new()
+		new_sb.bg_color = color
+		# 这里要手动设一下圆角，不然默认就是直角
+		new_sb.set_corner_radius_all(5) 
+		progress_bar.add_theme_stylebox_override("fill", new_sb)

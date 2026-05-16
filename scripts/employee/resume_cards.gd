@@ -3,10 +3,8 @@
 
 extends Control
 
-
-# 直接用固定的节点路径，简单粗暴！
-# （⚠️ 记得把下面的 $路径 换成你新场景里真实的节点路径）
-@onready var name_label: Label = $HBoxContainer/VBoxContainer/NameLabel
+# 🌟 改动 1：路径里加上了 Control 节点
+@onready var name_label: Label = $HBoxContainer/VBoxContainer/Control/NameLabel
 @onready var rarity_label: Label = $HBoxContainer/AvatarArea/RarityLabel
 @onready var eff_bar: ProgressBar = $HBoxContainer/VBoxContainer/StatsBars/EfficiencyBar
 @onready var qual_bar: ProgressBar = $HBoxContainer/VBoxContainer/StatsBars/QualityBar
@@ -20,10 +18,10 @@ func setup(employee_data: Employee) -> void:
 	if employee_data == null: 
 		return
 
-	# 1. 设置名字
-	name_label.text = employee_data.employee_name
+	# 1. 设置名字（先直接赋值，然后调自适应函数）
+	_apply_name_with_auto_scale(employee_data.employee_name)
 	
-	# 2. 设置稀有度显示 (根据你的游戏设定，SSR 只有猎头才能出)
+	# 2. 设置稀有度显示
 	match employee_data.rarity:
 		Employee.Rarity.R:
 			rarity_label.text = " R "
@@ -48,20 +46,55 @@ func setup(employee_data: Employee) -> void:
 	var total_stats = employee_data.efficiency + employee_data.quality + employee_data.experience
 	var cost_kpi = total_stats * 10
 	
-	# 将计算结果填入那个 1000 KPI 的位置
+	# 将计算结果填入
 	if hire_price_label:
 		hire_price_label.text = str(cost_kpi) + " KPI"
 		
 	if employee_data.portrait:
 		AvatarHelper.apply_portrait(avatar_img, employee_data.portrait)
 
+func _apply_name_with_auto_scale(new_name: String):
+	name_label.text = new_name
+	
+	# 关键：等一帧。让外部容器把 Control 的实际大小分配好
+	await get_tree().process_frame
+	
+	if not is_instance_valid(name_label): return
+	
+	set_employee_name(new_name)
+
 # 动态创建层叠节点的工具函数
 func _create_layer_node(layer_name: String) -> TextureRect:
 	var tr = TextureRect.new()
 	tr.name = layer_name
-	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE # 保持和父节点一致
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	tr.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT) # 铺满父节点
-	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE # 别挡住点击
+	tr.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	avatar_img.add_child(tr)
 	return tr
+
+func set_employee_name(new_name: String):
+	name_label.text = new_name
+	
+	# 🌟 第一步：重置缩放
+	name_label.scale = Vector2.ONE
+	
+	# 🌟 第二步：获取父节点（Control 容器）的宽度作为终极参考
+	# 因为有了 Control 包装，它的 size 永远是锁死的，不会被撑开
+	var wrapper = name_label.get_parent()
+	var max_w = wrapper.size.x
+	
+	# 设置缩放中心。基于外层防弹衣的中心来缩放，保证永远居中
+	name_label.pivot_offset = Vector2(max_w / 2.0, name_label.size.y / 2.0)
+	
+	# 🌟 第三步：计算这段文字需要多宽
+	var font = name_label.get_theme_font("font")
+	var font_size = name_label.get_theme_font_size("font_size")
+	var text_w = font.get_string_size(new_name, name_label.horizontal_alignment, -1, font_size).x
+	
+	# 🌟 第四步：如果需要的宽度 > 容器宽度，压扁它！
+	if text_w > max_w and max_w > 0:
+		name_label.scale.x = max_w / text_w
+	else:
+		name_label.scale.x = 1.0
