@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://c18bskwtiitsq"]
+
+[ext_resource type="Script" uid="uid://dvjxqv21c7djc" path="res://scripts/UI/dialogue/dialogue_intro_ui.gd" id="1_bte1p"]
+
+[node name="DialogueIntroUI" type="Control" unique_id=490138412]
+custom_minimum_size = Vector2(1920, 270)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 810.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bte1p")
+
+[node name="Background" type="ColorRect" parent="." unique_id=392583362]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+
+[node name="MainMargin" type="MarginContainer" parent="Background" unique_id=1554729028]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 480
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 480
+theme_override_constants/margin_bottom = 15
+
+[node name="ChatScroll" type="ScrollContainer" parent="Background/MainMargin" unique_id=589131416]
+layout_mode = 2
+mouse_filter = 2
+horizontal_scroll_mode = 0
+
+[node name="MessageList" type="VBoxContainer" parent="Background/MainMargin/ChatScroll" unique_id=735599988]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 8
