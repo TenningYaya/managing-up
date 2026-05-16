@@ -12,8 +12,6 @@ const MAX_BUBBLE_WIDTH := 520.0
 
 
 func setup(speaker: String, dialogue_text: String) -> void:
-	bubble_label.text = dialogue_text
-
 	if speaker == "boss":
 		_set_boss_style()
 	elif speaker == "employee":
@@ -21,8 +19,25 @@ func setup(speaker: String, dialogue_text: String) -> void:
 	else:
 		_set_boss_style()
 
+	set_dialogue_text(dialogue_text)
+
+
+func set_dialogue_text(dialogue_text: String) -> void:
+	bubble_label.text = dialogue_text
 	_update_bubble_size(dialogue_text)
 
+
+func type_dialogue_text(full_text: String, char_delay: float = 0.035) -> void:
+	# 先按照完整句子计算气泡大小，避免气泡一边打字一边变宽
+	_update_bubble_size(full_text)
+
+	# 先清空文字
+	bubble_label.text = ""
+
+	# 一个字母一个字母显示
+	for i in range(1, full_text.length() + 1):
+		bubble_label.text = full_text.substr(0, i)
+		await get_tree().create_timer(char_delay).timeout
 
 func _set_boss_style() -> void:
 	# Boss 靠左
