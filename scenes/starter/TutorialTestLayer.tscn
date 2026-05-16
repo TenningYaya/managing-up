@@ -15,6 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_pijsm")
 
 [node name="BoxDrawer" type="Control" parent="Blocker" unique_id=1269571969]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
