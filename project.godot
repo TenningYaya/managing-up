@@ -42,6 +42,7 @@ office_panel=""
 employee_warehouse=""
 recruitment_panel=""
 culture_selection_buttons=""
+recruitment_button=""
 
 [input]
 
