@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ogdh0yh58uvd"
-path="res://.godot/imported/等待文件 (3).png-68c48f20616168cdb47a9d49ffc563f0.ctex"
+uid="uid://do7m0qra75myl"
+path="res://.godot/imported/等待文件 (1).png-ee5396630d9fd110dd6655207d8d031b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/employee/等待文件 (3).png"
-dest_files=["res://.godot/imported/等待文件 (3).png-68c48f20616168cdb47a9d49ffc563f0.ctex"]
+source_file="res://assets/UI/employee/warehouse/等待文件 (1).png"
+dest_files=["res://.godot/imported/等待文件 (1).png-ee5396630d9fd110dd6655207d8d031b.ctex"]
 
 [params]
 

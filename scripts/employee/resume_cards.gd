@@ -3,12 +3,12 @@
 
 extends Control
 
-# 🌟 改动 1：路径里加上了 Control 节点
+# 🌟 节点引用：类型已经完美升级为通用的 PropertyBar 组件
 @onready var name_label: Label = $HBoxContainer/VBoxContainer/Control/NameLabel
 @onready var rarity_label: Label = $HBoxContainer/AvatarArea/RarityLabel
-@onready var eff_bar: ProgressBar = $HBoxContainer/VBoxContainer/StatsBars/EfficiencyBar
-@onready var qual_bar: ProgressBar = $HBoxContainer/VBoxContainer/StatsBars/QualityBar
-@onready var exp_bar: ProgressBar = $HBoxContainer/VBoxContainer/StatsBars/ExperienceBar
+@onready var eff_bar: PropertyBar = $HBoxContainer/VBoxContainer/StatsBars/EfficiencyBar
+@onready var qual_bar: PropertyBar = $HBoxContainer/VBoxContainer/StatsBars/QualityBar
+@onready var exp_bar: PropertyBar = $HBoxContainer/VBoxContainer/StatsBars/ExperienceBar
 @onready var hire_price_label: Label = $HBoxContainer/VBoxContainer/HirePriceLabel
 @onready var avatar_img: TextureRect = $HBoxContainer/AvatarArea/Avatar
 
@@ -28,21 +28,23 @@ func setup(employee_data: Employee) -> void:
 			rarity_label.add_theme_color_override("font_color", Color.LIGHT_BLUE)
 		Employee.Rarity.SR:
 			rarity_label.text = " SR "
-			rarity_label.add_theme_color_override("font_color", Color.MEDIUM_PURPLE)
+			rarity_label.add_theme_color_override("font_color", Color.GREEN_YELLOW)
 		Employee.Rarity.SSR:
 			rarity_label.text = " SSR "
 			rarity_label.add_theme_color_override("font_color", Color.GOLD)
 			
-	# 3. 设置属性条
-	eff_bar.max_value = 10
-	eff_bar.value = employee_data.efficiency
+	# 3. 🌟 核心修改：调用我们全新的、避开冲突的 set_bar_value 传入机制！
+	# 进度条的最大值、数字文本刷新、Inspector 调配好的颜色都会在组件内部自动完美处理
+	if eff_bar:
+		eff_bar.set_bar_value(employee_data.efficiency)
 	
-	qual_bar.max_value = 10
-	qual_bar.value = employee_data.quality
+	if qual_bar:
+		qual_bar.set_bar_value(employee_data.quality)
 	
-	exp_bar.max_value = 10
-	exp_bar.value = employee_data.experience
+	if exp_bar:
+		exp_bar.set_bar_value(employee_data.experience)
 	
+	# 计算总和与价格
 	var total_stats = employee_data.efficiency + employee_data.quality + employee_data.experience
 	var cost_kpi = total_stats * 10
 	
@@ -51,7 +53,7 @@ func setup(employee_data: Employee) -> void:
 		hire_price_label.text = str(cost_kpi) + " KPI"
 		
 	if employee_data.portrait:
-		AvatarHelper.apply_portrait(avatar_img, employee_data.portrait)
+		AvatarHelper.apply_portrait(avatar_img, employee_data.portrait, employee_data.rarity)
 
 func _apply_name_with_auto_scale(new_name: String):
 	name_label.text = new_name
@@ -77,23 +79,22 @@ func _create_layer_node(layer_name: String) -> TextureRect:
 func set_employee_name(new_name: String):
 	name_label.text = new_name
 	
-	# 🌟 第一步：重置缩放
+	# 第一步：重置缩放
 	name_label.scale = Vector2.ONE
 	
-	# 🌟 第二步：获取父节点（Control 容器）的宽度作为终极参考
-	# 因为有了 Control 包装，它的 size 永远是锁死的，不会被撑开
+	# 第二步：获取父节点（Control 容器）的宽度作为终极参考
 	var wrapper = name_label.get_parent()
 	var max_w = wrapper.size.x
 	
 	# 设置缩放中心。基于外层防弹衣的中心来缩放，保证永远居中
 	name_label.pivot_offset = Vector2(max_w / 2.0, name_label.size.y / 2.0)
 	
-	# 🌟 第三步：计算这段文字需要多宽
+	# 第三步：计算这段文字需要多宽
 	var font = name_label.get_theme_font("font")
 	var font_size = name_label.get_theme_font_size("font_size")
 	var text_w = font.get_string_size(new_name, name_label.horizontal_alignment, -1, font_size).x
 	
-	# 🌟 第四步：如果需要的宽度 > 容器宽度，压扁它！
+	# 第四步：如果需要的宽度 > 容器宽度，压扁它！
 	if text_w > max_w and max_w > 0:
 		name_label.scale.x = max_w / text_w
 	else:

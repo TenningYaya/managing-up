@@ -62,8 +62,6 @@ func cleanup() -> void:
 	# 断开悬停信号
 	my_office.mouse_entered.disconnect(_on_office_mouse_entered)
 	my_office.mouse_exited.disconnect(_on_office_mouse_exited)
-	
-	super.cleanup()
 
 func _on_btn_mouse_exited() -> void:
 	# 鼠标离开按钮时：如果没回到 office 区域内，就隐藏按钮

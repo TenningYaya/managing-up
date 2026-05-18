@@ -100,7 +100,6 @@ func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 func _reject_from_pool(emp: Employee, pool: Array):
 	# Viewer 内部已经把复印件删了，我们只需要在这里悄悄把原件也删了即可
 	pool.erase(emp)
-	print("已拒绝员工，并从全局池中移除: ", emp.employee_name)
 
 # ================= UI 显示更新控制 =================
 func _update_normal_ui():

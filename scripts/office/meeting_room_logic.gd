@@ -110,7 +110,7 @@ func _update_avatars():
 			
 			# 🌟 调用你封装好的 AvatarHelper 
 			# 这句会全自动处理：底图 + 衣服 + 头发 + 像素对齐
-			AvatarHelper.apply_portrait(btn, emp.portrait)
+			AvatarHelper.apply_portrait(btn, emp.portrait, emp.rarity)
 			
 			# 绑定点击查看面板
 			btn.pressed.connect(func(): _open_employee_panel(emp))

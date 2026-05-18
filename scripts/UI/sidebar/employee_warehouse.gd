@@ -157,7 +157,6 @@ func refresh_display():
 	
 	# 3. 获取数据
 	var sorted_data = EmployeeManager.get_sorted_employees(current_sort)
-	print("当前排序类型: ", current_sort, " 第一名员工: ", sorted_data[0].employee_name if sorted_data.size() > 0 else "空")
 	
 	# 4. 重新生成
 	for emp in sorted_data:

@@ -75,8 +75,6 @@ func enter_sticky_mode():
 	# 👉 关键：只让 StickyNote 可点击
 	update_mouse_passthrough($StickyNote)
 
-	print("进入 Sticky 模式")
-
 
 func exit_sticky_mode():
 	# UI恢复
@@ -93,8 +91,6 @@ func exit_sticky_mode():
 
 	# 👉 关键：整个窗口可点击
 	set_full_window_clickable()
-
-	print("退出 Sticky 模式")
 
 
 # --- 5. 拖拽逻辑 ---

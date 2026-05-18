@@ -6,13 +6,17 @@ signal on_hire_attempted(employee_data: Employee)
 signal on_rejected(employee_data: Employee)
 signal on_empty() # 当所有简历都被处理完时发出
 
-@onready var left_arrow = $HBoxContainer/LeftArrow
-@onready var right_arrow = $HBoxContainer/RightArrow
-@onready var cards_container = $HBoxContainer/CardsContainer # 🌟 新增的容器
+@onready var left_arrow = $VBoxContainer/HBoxContainer/LeftArrow
+@onready var right_arrow = $VBoxContainer/HBoxContainer/RightArrow
+@onready var cards_container = $VBoxContainer/HBoxContainer/CardsContainer # 🌟 新增的容器
+@onready var reject_all_btn = $VBoxContainer/MarginContainer/OpreateAll/RejectAll
+@onready var accept_all_btn = $VBoxContainer/MarginContainer/OpreateAll/AcceptAll
 
 var current_resumes: Array[Employee] = []
 var current_page: int = 0
+
 const ITEMS_PER_PAGE: int = 3 # 🌟 一页展示几张
+const YES_NO_PANEL_SCENE = preload("res://scenes/UI/custom/popup_window.tscn")
 
 func _ready():
 	left_arrow.pressed.connect(_on_left_pressed)
@@ -22,7 +26,9 @@ func _ready():
 		if slot is ResumeSlot: # 前提是你在 resume_slot.gd 顶部写了 class_name ResumeSlot
 			slot.hire_requested.connect(_on_slot_hire_requested)
 			slot.reject_requested.connect(_on_slot_reject_requested)
-
+	
+	_init_opreate_all_buttons()
+	
 func _update_display() -> void:
 	if current_resumes.is_empty():
 		on_empty.emit()
@@ -125,3 +131,86 @@ func _on_slot_hire_requested(emp: Employee):
 func _on_slot_reject_requested(emp: Employee):
 	on_rejected.emit(emp)
 	remove_employee(emp)
+
+func _init_opreate_all_buttons() -> void:
+	if reject_all_btn:
+		reject_all_btn.pressed.connect(_on_reject_all_pressed)
+	if accept_all_btn:
+		accept_all_btn.pressed.connect(_on_accept_all_pressed)
+
+func _on_reject_all_pressed() -> void:
+	if current_resumes.is_empty():
+		return
+		
+	# 1. 检查当前列表里有没有高贵的 SSR
+	var has_ssr: bool = false
+	for emp in current_resumes:
+		if emp.rarity == Employee.Rarity.SSR:
+			has_ssr = true
+			break # 抓到一个就触发熔断
+			
+	# 2. 风控判定：有 SSR 就跳出二级弹窗
+	if has_ssr:
+		_show_ssr_warning_popup()
+	else:
+		# 全是普通打工人，直接一键全拒
+		_do_actual_reject_all()
+
+# 点击【接收所有】
+func _on_accept_all_pressed() -> void:
+	if current_resumes.is_empty():
+		return
+		
+	print("大赦天下！全都要了！")
+	
+	# 🌟 必须复制一份数组！因为你在循环里触发外部招募后，
+	# 外部可能会调用 remove_employee() 动态修改原数组，直接遍历原数组会导致报错或漏人。
+	var temp_list = current_resumes.duplicate()
+	for emp in temp_list:
+		on_hire_attempted.emit(emp)
+		
+	# 招募完后，清空数据，触发刷新
+	current_resumes.clear()
+	current_page = 0
+	_update_display()
+
+func _do_actual_reject_all() -> void:
+	print("正在一键拒绝所有员工...")
+	
+	# 🌟 复制一份数组，挨个通知外部：“这些人被拒了啊！”（为了触发你们可能的拒绝统计或KPI扣除）
+	var temp_list = current_resumes.duplicate()
+	for emp in temp_list:
+		on_rejected.emit(emp)
+		
+	# 斩草除根，清空本地池子，复位页码，更新显示
+	current_resumes.clear()
+	current_page = 0
+	_update_display()
+
+func _show_ssr_warning_popup() -> void:
+	# 1. 实例化你的弹窗
+	var popup = YES_NO_PANEL_SCENE.instantiate()
+	
+	# 2. 🌟 灵魂一步：利用它自带的 @export set 拦截器，直接优雅赋值！
+	# 这样哪怕节点还没进入场景树，值也已经安全塞进去了
+	popup.title_text = "Are you sure to reject SSR resume？"
+	popup.confirm_label = "Yes"  # 把 QUIT 改成接地气的中文
+	popup.cancel_label = "No" # 把 CANCEL 改成点错了
+	
+	# 3. 把弹窗丢进当前场景（让它居中置顶显示）
+	add_child(popup)
+	
+	# 如果你的预制体本身没做居中锚点，可以在这里用代码强行把它按在全屏正中央
+	if popup is Control:
+		popup.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+
+	# 4. 🌟 精准偷听信号：对接确认窗口发出的自定义信号
+	popup.confirmed.connect(func():
+		_do_actual_reject_all() # 玩家铁了心不要，执行全拒
+		popup.queue_free()      # 斩草除根，销毁弹窗（用 queue_free 彻底释放内存，比单纯 hide 更好）
+	)
+	
+	popup.canceled.connect(func():
+		print("玩家后悔了，成功保住 SSR！")
+		popup.queue_free()      # 点错了，直接人间蒸发，不留痕迹
+	)

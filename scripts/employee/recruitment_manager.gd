@@ -17,9 +17,9 @@ var _pending_amount = 0
 
 # 🌟 字典映射：后期加其他等级（比如 UR），只需在这里加上对应的场景路径
 @onready var visual_scenes = {
-	Employee.Rarity.R: preload("res://scenes/employee/r_visual.tscn"),
+	Employee.Rarity.R: preload("res://scenes/employee/sr_visual.tscn"),
 	Employee.Rarity.SR: preload("res://scenes/employee/sr_visual.tscn"),
-	Employee.Rarity.SSR: preload("res://scenes/employee/ssr_visual.tscn")
+	Employee.Rarity.SSR: preload("res://scenes/employee/sr_visual.tscn")
 }
 
 func _ready():
@@ -74,19 +74,20 @@ func debug_generate_specified(amount: int, rarity: Employee.Rarity):
 		normal_pool.append(new_emp)
 	
 	new_resumes_arrived.emit()
-	print("【测试】已成功生成 %d 个 %s 级员工" % [amount, Employee.Rarity.keys()[rarity]])
 	
 func _create_data(rarity: Employee.Rarity) -> Employee:
-	var e = employee_scene.instantiate() as Employee
+	var e = employee_scene.instantiate() as Employee	
+	e.setup_employee(rarity)
+	e.employee_name = NameBank.get_random_name()
+	
 	var visual_scene = visual_scenes[rarity]
 	var visual_instance = visual_scene.instantiate()
 	
 	e.add_child(visual_instance) 
 	e.visual_component = visual_instance
 	
-	# 🌟 防弹衣 1：如果对方写了 setup_visual 才调用
 	if visual_instance.has_method("setup_visual"):
-		visual_instance.setup_visual(randi(), e.dna)
+		visual_instance.setup_visual(randi(), e.dna, e.rarity)
 	
 	# 🌟 防弹衣 2：如果对方写了生成头像的方法，就拿过来；没有就给个保底或者空着
 	if visual_instance.has_method("generate_portrait_texture"):
@@ -97,8 +98,5 @@ func _create_data(rarity: Employee.Rarity) -> Employee:
 			e.portrait = visual_instance.default_portrait
 		else:
 			print("警告：该级别的员工缺少头像数据！")
-	
-	e.employee_name = NameBank.get_random_name()
-	e.setup_employee(rarity)
 	
 	return e

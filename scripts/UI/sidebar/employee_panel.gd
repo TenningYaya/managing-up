@@ -119,7 +119,7 @@ func open_panel(employee: Employee) -> void:
 	
 	if employee.portrait:
 		# 🌟 改成这一句：直接把立绘节点(figure)交给 Helper 处理
-		AvatarHelper.apply_portrait(figure, employee.portrait)
+		AvatarHelper.apply_portrait(figure, employee.portrait, employee.rarity)
 	
 	_refresh_progress_bar()
 	_refresh_buffs()
@@ -241,8 +241,6 @@ func _on_dispatch_pressed() -> void:
 	if current_employee == null: return
 	
 	if _is_employee_on_map():
-		# ======= 【调回 (Recall) 逻辑】 =======
-		print("把员工从地图收回仓库：", current_employee.employee_name)
 		
 		# 1. 如果在工位上，让他从工位上下来
 		if current_employee.get("current_seat") != null:
@@ -265,10 +263,6 @@ func _on_dispatch_pressed() -> void:
 		progress_bar.value = 0
 		
 	else:
-		# ======= 【派遣 (Dispatch) 逻辑】 =======
-		print("把员工扔进地图：", current_employee.employee_name)
-		# 🚨 【核心修复点】：如果他还在内存的某个角落挂着父节点
-		# 必须先解绑，DropArea 那边的 add_child 才能成功
 		if current_employee.get_parent():
 			current_employee.get_parent().remove_child(current_employee)
 		

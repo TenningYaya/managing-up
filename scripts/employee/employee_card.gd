@@ -43,10 +43,9 @@ func setup_card(employee_data: Employee) -> void:
 	
 	# 1. 设置名字
 	name_label.text = employee_data.employee_name
-	print(name_label.text)
 	
 	if employee_data.portrait:
-		AvatarHelper.apply_portrait(avatar_img, employee_data.portrait)
+		AvatarHelper.apply_portrait(avatar_img, employee_data.portrait, employee_data.rarity)
 		
 	# 2. 设置头像和等级悬浮标
 	match employee_data.rarity:
@@ -77,7 +76,6 @@ func setup_card(employee_data: Employee) -> void:
 	
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		print("点中了员工：", my_employee_data.employee_name)
 		card_clicked.emit(my_employee_data) # 发射信号
 		accept_event() # 拦截点击，防止触发仓库的“点击空白处关闭”
 

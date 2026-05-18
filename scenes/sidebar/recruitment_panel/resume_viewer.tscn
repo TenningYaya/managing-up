@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d1ryy3748h1xn" path="res://scripts/UI/sidebar/resume_viewer.gd" id="1_lxgr6"]
 [ext_resource type="PackedScene" uid="uid://dw8e3yggffqyn" path="res://scenes/sidebar/recruitment_panel/resume_slot.tscn" id="2_7ettr"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="3_lxgr6"]
 
 [node name="ResumeViewer" type="Control" unique_id=931473494]
 layout_mode = 3
@@ -12,54 +13,71 @@ offset_right = -3.0
 offset_bottom = -3.0
 script = ExtResource("1_lxgr6")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=13999434]
-custom_minimum_size = Vector2(280, 380)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -141.0
-offset_top = -140.0
-offset_right = 141.0
-offset_bottom = 140.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1889456912]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=13999434]
+custom_minimum_size = Vector2(280, 340)
+layout_mode = 2
 theme_override_constants/separation = 4
 alignment = 1
 
-[node name="LeftArrow" type="Button" parent="HBoxContainer" unique_id=1047870306]
+[node name="LeftArrow" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1047870306]
 layout_mode = 2
 text = "<"
 flat = true
 
-[node name="PlaceHolder" type="MarginContainer" parent="HBoxContainer" unique_id=1414798634]
+[node name="PlaceHolder" type="MarginContainer" parent="VBoxContainer/HBoxContainer" unique_id=1414798634]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 
-[node name="CardsContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1289101729]
+[node name="CardsContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=1289101729]
 custom_minimum_size = Vector2(294, 124)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
-[node name="Slot0" parent="HBoxContainer/CardsContainer" unique_id=1317698709 instance=ExtResource("2_7ettr")]
+[node name="Slot0" parent="VBoxContainer/HBoxContainer/CardsContainer" unique_id=1317698709 instance=ExtResource("2_7ettr")]
+custom_minimum_size = Vector2(250, 110)
 layout_mode = 2
 
-[node name="Slot1" parent="HBoxContainer/CardsContainer" unique_id=919752536 instance=ExtResource("2_7ettr")]
+[node name="Slot1" parent="VBoxContainer/HBoxContainer/CardsContainer" unique_id=919752536 instance=ExtResource("2_7ettr")]
+custom_minimum_size = Vector2(250, 110)
 layout_mode = 2
 
-[node name="Slot2" parent="HBoxContainer/CardsContainer" unique_id=870443455 instance=ExtResource("2_7ettr")]
+[node name="Slot2" parent="VBoxContainer/HBoxContainer/CardsContainer" unique_id=870443455 instance=ExtResource("2_7ettr")]
+custom_minimum_size = Vector2(250, 110)
 layout_mode = 2
 
-[node name="PlaceHolder2" type="MarginContainer" parent="HBoxContainer" unique_id=258167313]
+[node name="PlaceHolder2" type="MarginContainer" parent="VBoxContainer/HBoxContainer" unique_id=258167313]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 
-[node name="RightArrow" type="Button" parent="HBoxContainer" unique_id=2110914968]
+[node name="RightArrow" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=2110914968]
 layout_mode = 2
 text = ">"
 flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1992433244]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="OpreateAll" type="HBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=350166341]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="RejectAll" parent="VBoxContainer/MarginContainer/OpreateAll" unique_id=2048579194 instance=ExtResource("3_lxgr6")]
+layout_mode = 2
+size_flags_horizontal = 3
+button_text = "Reject All"
+
+[node name="AcceptAll" parent="VBoxContainer/MarginContainer/OpreateAll" unique_id=549996692 instance=ExtResource("3_lxgr6")]
+layout_mode = 2
+size_flags_horizontal = 3
+button_text = "Accept All"

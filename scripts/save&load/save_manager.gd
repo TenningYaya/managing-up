@@ -136,7 +136,7 @@ func _restore_employees(emp_list: Array) -> void:
 			new_emp.visual_component = visual_instance
 			
 			if visual_instance.has_method("setup_visual"):
-				visual_instance.setup_visual(0, new_emp.dna)
+				visual_instance.setup_visual(0, new_emp.dna, new_emp.rarity)
 			
 			if visual_instance.has_method("generate_portrait_texture"):
 				new_emp.portrait = visual_instance.generate_portrait_texture()

@@ -49,7 +49,6 @@
 [ext_resource type="Texture2D" uid="uid://bkovujk3581cm" path="res://assets/figures/1.char SR/acc/hat_lucky.png" id="46_m5cy6"]
 [ext_resource type="Texture2D" uid="uid://chvskrn8chenn" path="res://assets/figures/1.char SR/acc/hat_pumpkin.png" id="47_kp8jg"]
 [ext_resource type="Texture2D" uid="uid://cerch3pqbicxr" path="res://assets/figures/1.char SR/acc/hat_pumpkin_purple.png" id="48_7k5jk"]
-[ext_resource type="Texture2D" uid="uid://db7uhupcq5yvs" path="res://assets/figures/1.char SR/acc/hat_witch.png" id="49_m5cy6"]
 
 [sub_resource type="Animation" id="Animation_nc5v7"]
 length = 0.001
@@ -99,9 +98,10 @@ top_color_counts = Array[int]([10, 10, 10, 10, 10, 10, 10, 10, 10, 10])
 bottom_pool = Array[Texture2D]([ExtResource("25_2lwrg"), ExtResource("26_cmbfr"), ExtResource("27_ri2be")])
 bottom_color_counts = Array[int]([10, 10, 10])
 hair_textures = Array[Texture2D]([ExtResource("11_nc5v7"), ExtResource("12_lpiy5"), ExtResource("13_1pebh"), ExtResource("14_aci0q"), ExtResource("15_1sr55"), ExtResource("16_pmx2p"), ExtResource("17_t16hf"), ExtResource("18_20kw5"), ExtResource("19_ixcai"), ExtResource("20_gpjop"), ExtResource("21_w6k5j"), ExtResource("22_as58k"), ExtResource("23_sy7hi"), ExtResource("24_u8fk0"), ExtResource("25_7oyj2")])
+hair_color_count = null
 glasses_pool = Array[Texture2D]([ExtResource("43_y06rb"), ExtResource("44_8tefo")])
 glasses_color_counts = Array[int]([10, 10])
-hat_pool = Array[Texture2D]([ExtResource("45_0w8p7"), ExtResource("46_m5cy6"), ExtResource("47_kp8jg"), ExtResource("48_7k5jk"), ExtResource("49_m5cy6")])
+hat_pool = Array[Texture2D]([ExtResource("45_0w8p7"), ExtResource("46_m5cy6"), ExtResource("47_kp8jg"), ExtResource("46_m5cy6"), ExtResource("47_kp8jg"), ExtResource("48_7k5jk")])
 hat_color_counts = Array[int]([1, 1, 1, 1, 1])
 
 [node name="Body" type="Sprite2D" parent="." unique_id=718598502]
@@ -127,8 +127,10 @@ texture_filter = 1
 texture_filter = 1
 
 [node name="AccGlasses" type="Sprite2D" parent="." unique_id=1434867254]
+visible = false
 
 [node name="AccHat" type="Sprite2D" parent="." unique_id=1280748233]
+visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=297607943]
 libraries/ = SubResource("AnimationLibrary_1pebh")

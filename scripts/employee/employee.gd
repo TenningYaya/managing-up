@@ -9,11 +9,6 @@ signal work_started()
 signal work_stopped()
 signal buff_status_changed
 
-#----------摸鱼气泡喵-----------
-var is_slacking: bool = false
-var active_slacking_bubble = null
-const SLACKING_BUBBLE_SCENE = preload("res://scenes/UI/custom/SlackingBubble.tscn")
-
 #——————————员工信息————————————
 @export var employee_name: String = "Marry"
 @export var rarity: Rarity = Rarity.R
@@ -67,6 +62,9 @@ var _active_bubble: SpeechBubble = null
 const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
 const SPEECH_BUBBLE_SCENE = preload("res://scenes/vfx/speech_bubble.tscn")
 const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
+var is_slacking: bool = false
+var active_slacking_bubble = null
+const SLACKING_BUBBLE_SCENE = preload("res://scenes/UI/custom/SlackingBubble.tscn")
 
 func _ready() -> void:
 	add_to_group("employees")
@@ -615,7 +613,6 @@ func enter_meeting() -> void:
 	
 	is_working = true
 	_start_new_work_cycle() # 带上新 Buff 重新计算本轮时长
-	print(employee_name, " 进入会议室。当前最终效率: ", get_final_efficiency(), " (基础: ", efficiency, " 会议加成: ", meet_buff_eff, ")")
 
 func exit_meeting() -> void:
 	is_in_meeting = false

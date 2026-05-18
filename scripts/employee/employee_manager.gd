@@ -21,8 +21,6 @@ func hire_employee(new_employee: Employee) -> void:
 	if new_employee not in my_employees:
 		my_employees.append(new_employee)
 		employee_added.emit(new_employee) # 通知仓库去生成UI名片
-		
-		print("录用了新同事: ", new_employee.employee_name)
 
 # 解雇/优化员工
 func fire_employee(employee: Employee) -> void:
@@ -35,7 +33,6 @@ func fire_employee(employee: Employee) -> void:
 		
 		# 释放节点内存
 		employee.queue_free() 
-		print("开除了同事: ", employee.employee_name)
 
 # 一键开除所有
 func fire_all_employees() -> void:

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://clcnucuwiko20"
-path="res://.godot/imported/对勾小.png-afbca5afd28bc7cda273bd9b52120659.ctex"
+uid="uid://bh5aabmn4c1m6"
+path="res://.godot/imported/等待文件.png-9a0f4131d9d6a5b3075c24e0dc9f833d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/employee/对勾小.png"
-dest_files=["res://.godot/imported/对勾小.png-afbca5afd28bc7cda273bd9b52120659.ctex"]
+source_file="res://assets/UI/employee/warehouse/等待文件.png"
+dest_files=["res://.godot/imported/等待文件.png-9a0f4131d9d6a5b3075c24e0dc9f833d.ctex"]
 
 [params]
 
