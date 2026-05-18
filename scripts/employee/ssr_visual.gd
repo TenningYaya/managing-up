@@ -14,7 +14,7 @@ extends Node2D
 # 在编辑器中将准备好的 12 张 SSR 完整精灵图拖入此数组
 @export var ssr_skins: Array[Texture2D] = [] 
 
-func setup_visual(_seed: int, _style_data: Dictionary) -> void:
+func setup_visual(_seed: int, _style_data: Dictionary,rarity: Employee.Rarity = Employee.Rarity.R) -> void:
 	if sprite == null: sprite = get_node("Sprite2D")
 	if anim_player == null: anim_player = get_node("AnimationPlayer")
 	

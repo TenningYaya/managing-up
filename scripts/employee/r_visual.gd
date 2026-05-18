@@ -7,7 +7,7 @@ extends Node2D
 @export var r_character_pictures: Array[Texture2D] = []
 
 # 游戏生成员工时，会自动运行这个 setup_visual 函数
-func setup_visual(_seed: int, _style_data: Dictionary) -> void:
+func setup_visual(_seed: int, _style_data: Dictionary, rarity: Employee.Rarity = Employee.Rarity.R) -> void:
 	if body == null: body = get_node("Body")
 		
 	if not r_character_pictures.is_empty():
