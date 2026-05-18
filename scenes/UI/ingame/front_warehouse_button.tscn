@@ -19,6 +19,7 @@ script = ExtResource("1_0vhl8")
 layout_mode = 0
 offset_right = 86.4
 offset_bottom = 86.4
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=679190221]
 z_index = 4
