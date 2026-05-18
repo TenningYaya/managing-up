@@ -22,9 +22,9 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_s5yc6")
 
 [node name="BubblePadding" type="MarginContainer" parent="BubblePanel" unique_id=1275259]
 layout_mode = 2
-theme_override_constants/margin_left = 45
+theme_override_constants/margin_left = 70
 theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 45
+theme_override_constants/margin_right = 70
 theme_override_constants/margin_bottom = 30
 
 [node name="BubbleLabel" type="Label" parent="BubblePanel/BubblePadding" unique_id=2022122466]
