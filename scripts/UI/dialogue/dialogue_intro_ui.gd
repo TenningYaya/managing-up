@@ -5,195 +5,116 @@ const CHAT_BUBBLE_SCENE: PackedScene = preload("res://scenes/starter/chat_bubble
 @onready var chat_scroll: ScrollContainer = $Background/MainMargin/ChatScroll
 @onready var message_list: VBoxContainer = $Background/MainMargin/ChatScroll/MessageList
 
-
-# 一个 turn = Boss 先说一句，然后玩家点击后 Employee 回复一句
-var dialogue_turns := [
-	{
-		"boss": "早上坏，欢迎来新写字楼、新办公室",
-		"employee": "……早上坏？"
-	},
-	{
-		"boss": "我知道早上上班的心情总是很艹蛋，因为我也是",
-		"employee": "原来老板也知道。"
-	},
-	{
-		"boss": "所以，新项目组的工作就全交给你了",
-		"employee": "等一下，这个“所以”是怎么推出来的？"
-	},
-	{
-		"boss": "给它取个名字吧",
-		"employee": "我连项目组是干什么的都还不知道。"
-	},
-	{
-		"boss": "什么？你说你不会管人也不会取名字？",
-		"employee": "我刚来第一天，这很合理吧。"
-	},
-	{
-		"boss": "嗯……你要知道，把你招进来的时候，我对你是有很高的期望的",
-		"employee": "这句话听起来不像鼓励，像压力。"
-	},
-	{
-		"boss": "再说了，现在AI什么的不是很好用吗？有事问AI去吧",
-		"employee": "所以我的入职培训是问 AI？"
-	},
-	{
-		"boss": "好了，我这边的游轮慈善晚宴都要开始了",
-		"employee": "游轮……慈善……晚宴？"
-	},
-	{
-		"boss": "好好学，好好干",
-		"employee": "听起来像是没有人会教我。"
-	},
-	{
-		"boss": "绩效好的话一切都好说，bye~",
-		"employee": "那绩效不好呢？喂？老板？"
-	}
+# 1. 我们的对话现在只需要一个简单的文本列表 (List)
+var boss_messages := [
+	"早上坏，欢迎来新写字楼、新办公室",
+	"我知道早上上班的心情总是很艹蛋，因为我也是",
+	"所以，新项目组的工作就全交给你了",
+	"给它取个名字吧",
+	"什么？你说你不会管人也不会取名字？",
+	"嗯……你要知道，把你招进来的时候，我对你是有很高的期望的",
+	"再说了，现在AI什么的不是很好用吗？有事问AI去吧",
+	"好了，我这边的游轮慈善晚宴都要开始了",
+	"好好学，好好干",
+	"绩效好的话一切都好说，bye~"
 ]
 
-var current_turn_index := 0
-
-# Boss 说完后，才允许玩家点击发送 Employee 回复
-var waiting_for_employee_reply := false
-
-# 动画播放中不允许重复点击
+var current_index := 0
 var is_animating := false
 var is_finished := false
 
-# Employee 回复后，Boss 下一句出现前的等待时间
-var boss_next_delay := 0.8
-
+# 用于记录空格键按下的时间
+var space_pressed_time := 0.0
+var is_space_pressed := false
+const SKIP_HOLD_TIME := 1.0 # 按住1秒就跳过
 
 func _ready() -> void:
-	# 隐藏滚动条，但保留自动滚动功能
+	# 隐藏滚动条，但保留滚动功能
 	chat_scroll.get_v_scroll_bar().modulate.a = 0
 	chat_scroll.get_h_scroll_bar().modulate.a = 0
 
-	# 开场：Boss 先发第一句话
-	start_next_boss_message()
+	# 游戏开始，直接显示第一句话
+	show_next_message()
 
-
-func _unhandled_input(event: InputEvent) -> void:
+# _process 会在游戏运行时一直循环执行，适合用来计算时间
+func _process(delta: float) -> void:
 	if is_finished:
 		return
+
+	# 2. 如果玩家按住了空格键，我们就开始计时
+	if is_space_pressed:
+		space_pressed_time += delta
+		if space_pressed_time >= SKIP_HOLD_TIME:
+			skip_dialogue()
+
+func _input(event: InputEvent) -> void:
+	if is_finished:
+		return
+
+	# 3. 检查空格键是按下还是松开
+	if event is InputEventKey and event.keycode == KEY_SPACE:
+		if event.pressed and not event.echo:
+			is_space_pressed = true
+		elif not event.pressed:
+			is_space_pressed = false
+			space_pressed_time = 0.0 # 松开就时间归零
 
 	if is_animating:
 		return
 
-	if not waiting_for_employee_reply:
-		return
-
-	if _is_advance_input(event):
-		send_employee_reply()
-
-
-func _is_advance_input(event: InputEvent) -> bool:
-	# 鼠标左键
+	# 4. 检查鼠标左键点击，显示下一句
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			return true
+			show_next_message()
 
-	# 空格键
-	if event is InputEventKey:
-		if event.keycode == KEY_SPACE and event.pressed and not event.echo:
-			return true
-
-	return false
-
-
-func start_next_boss_message() -> void:
-	if current_turn_index >= dialogue_turns.size():
+func show_next_message() -> void:
+	if current_index >= boss_messages.size():
 		finish_intro_dialogue()
 		return
 
 	is_animating = true
-	waiting_for_employee_reply = false
 
-	var boss_text: String = dialogue_turns[current_turn_index]["boss"]
-	await add_message("boss", boss_text)
+	var text: String = boss_messages[current_index]
+	await add_message(text)
 
+	current_index += 1
 	is_animating = false
-	waiting_for_employee_reply = true
 
-
-func send_employee_reply() -> void:
-	is_animating = true
-	waiting_for_employee_reply = false
-
-	var employee_text: String = dialogue_turns[current_turn_index]["employee"]
-	await add_message("employee", employee_text)
-
-	current_turn_index += 1
-
-	await get_tree().create_timer(boss_next_delay).timeout
-
-	start_next_boss_message()
-
-
-func add_message(speaker: String, dialogue_text: String) -> void:
+func add_message(text: String) -> void:
 	var bubble = CHAT_BUBBLE_SCENE.instantiate()
 	message_list.add_child(bubble)
 
-	# Boss：先显示正在输入
-	# Employee：先显示空文字，后面再打字机显示
-	if speaker == "boss":
-		bubble.setup(speaker, ".....")
-	elif speaker == "employee":
-		bubble.setup(speaker, "")
-	else:
-		bubble.setup(speaker, dialogue_text)
-
-	# 气泡出现动画
+	bubble.setup(text)
+	
+	# 刚出现时透明度为0（看不见）
 	bubble.modulate.a = 0.0
-	# bubble.position.y += 12
 
+	# 等待一瞬间，让系统计算好气泡的大小
 	await get_tree().process_frame
 
-	chat_scroll.scroll_vertical = int(chat_scroll.get_v_scroll_bar().max_value)
+	# 5. 让滚动条滚到底部。
+	# 因为我们用的是 VBoxContainer (垂直排版盒子)，加入新气泡后，
+	# 只要我们把屏幕拉到底部，旧的消息自然就会被向上顶。
+	scroll_to_bottom()
 
+	# 气泡渐渐出现的动画
 	var tween = create_tween()
-	tween.set_parallel(true)
 	tween.tween_property(bubble, "modulate:a", 1.0, 0.22)
-	#tween.tween_property(bubble, "position:y", bubble.position.y - 12, 0.22)
-
 	await tween.finished
 
-	# Boss：播放 ..... 输入动画，然后替换成正式内容
-	if speaker == "boss":
-		await play_boss_typing_animation(bubble)
-		bubble.set_dialogue_text(dialogue_text)
+func scroll_to_bottom() -> void:
+	var max_scroll = chat_scroll.get_v_scroll_bar().max_value
+	chat_scroll.scroll_vertical = int(max_scroll)
 
-		await get_tree().process_frame
-		chat_scroll.scroll_vertical = int(chat_scroll.get_v_scroll_bar().max_value)
-
-	# Employee：一个字母一个字母打出来
-	elif speaker == "employee":
-		await bubble.type_dialogue_text(dialogue_text, 0.035)
-
-		await get_tree().process_frame
-		chat_scroll.scroll_vertical = int(chat_scroll.get_v_scroll_bar().max_value)
-
-func play_boss_typing_animation(bubble) -> void:
-	var typing_frames := [
-		".",
-		"..",
-		"...",
-		"....",
-		"....."
-	]
-
-	for i in range(2):
-		for frame in typing_frames:
-			bubble.set_dialogue_text(frame)
-			await get_tree().create_timer(0.18).timeout
-
+func skip_dialogue() -> void:
+	if is_finished: return
+	
+	is_space_pressed = false 
+	print("长按空格触发，跳过对话！")
+	finish_intro_dialogue()
 
 func finish_intro_dialogue() -> void:
 	is_finished = true
-	waiting_for_employee_reply = false
-	is_animating = false
-
-	print("Intro dialogue finished. Start tutorial here.")
-
-	# 之后可以在这里隐藏剧情对话 UI，进入新手引导
-	# hide()
-	# TutorialUI.show()
+	print("对话结束，可以进入下一步。")
+	# 之后可以在这里进入游戏主界面
+	# queue_free()
