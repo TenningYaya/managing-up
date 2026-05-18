@@ -1,27 +1,21 @@
 [gd_scene format=3 uid="uid://ckh34tvyf6vwi"]
 
+[ext_resource type="Script" uid="uid://vro6q1hn5hq2" path="res://scenes/starter/tutorial_test_layer.gd" id="1_ku523"]
 [ext_resource type="Script" uid="uid://y8q7d0kahqon" path="res://scripts/test/tutorial_blocker_test.gd" id="1_pijsm"]
+[ext_resource type="PackedScene" uid="uid://c18bskwtiitsq" path="res://scenes/starter/dialogue_intro_ui.tscn" id="3_s6hug"]
 
 [node name="TutorialTestLayer" type="CanvasLayer" unique_id=1392206114]
 layer = 100
+script = ExtResource("1_ku523")
 
-[node name="Blocker" type="ColorRect" parent="." unique_id=1900691483]
-modulate = Color(1, 1, 1, 0)
+[node name="Blocker" type="Control" parent="." unique_id=516441116]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pijsm")
-
-[node name="BoxDrawer" type="Control" parent="Blocker" unique_id=1269571969]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="FinishLabel" type="Label" parent="." unique_id=163831870]
 visible = false
@@ -31,3 +25,5 @@ offset_right = 1362.0
 offset_bottom = 593.0
 theme_override_font_sizes/font_size = 100
 text = "您已完成新手教程"
+
+[node name="DialogueIntroUI" parent="." unique_id=490138412 instance=ExtResource("3_s6hug")]

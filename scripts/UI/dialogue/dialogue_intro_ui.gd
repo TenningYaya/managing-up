@@ -1,5 +1,7 @@
 extends Control
 
+signal intro_dialogue_finished
+
 const CHAT_BUBBLE_SCENE: PackedScene = preload("res://scenes/starter/chat_bubble.tscn")
 
 @onready var chat_scroll: ScrollContainer = $Background/MainMargin/ChatScroll
@@ -118,3 +120,12 @@ func finish_intro_dialogue() -> void:
 	print("对话结束，可以进入下一步。")
 	# 之后可以在这里进入游戏主界面
 	# queue_free()
+
+# 🌟 核心修改 A：立刻把对话主界面隐藏起来（给后面的按钮腾地方）
+	hide() 
+	
+	# 🌟 核心修改 B：扯开嗓子把信号发出去！
+	intro_dialogue_finished.emit()
+	
+	# ⚠️ 注意：千万不要在这里直接 queue_free()！
+	# 如果直接 queue_free()，它刚发出信号自己就死了，后续接力可能会断掉。
