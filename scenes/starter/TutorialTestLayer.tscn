@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ckh34tvyf6vwi"]
 
-[ext_resource type="Script" uid="uid://vro6q1hn5hq2" path="res://scenes/starter/tutorial_test_layer.gd" id="1_ku523"]
+[ext_resource type="Script" uid="uid://vro6q1hn5hq2" path="res://scripts/guide/tutorial_test_layer.gd" id="1_ku523"]
 [ext_resource type="Script" uid="uid://y8q7d0kahqon" path="res://scripts/test/tutorial_blocker_test.gd" id="1_pijsm"]
 [ext_resource type="PackedScene" uid="uid://c18bskwtiitsq" path="res://scenes/starter/dialogue_intro_ui.tscn" id="3_s6hug"]
 

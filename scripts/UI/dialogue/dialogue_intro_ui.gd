@@ -9,16 +9,7 @@ const CHAT_BUBBLE_SCENE: PackedScene = preload("res://scenes/starter/chat_bubble
 
 # 1. 我们的对话现在只需要一个简单的文本列表 (List)
 var boss_messages := [
-	"早上坏，欢迎来新写字楼、新办公室",
-	"我知道早上上班的心情总是很艹蛋，因为我也是",
-	"所以，新项目组的工作就全交给你了",
-	"给它取个名字吧",
-	"什么？你说你不会管人也不会取名字？",
-	"嗯……你要知道，把你招进来的时候，我对你是有很高的期望的",
-	"再说了，现在AI什么的不是很好用吗？有事问AI去吧",
-	"好了，我这边的游轮慈善晚宴都要开始了",
-	"好好学，好好干",
-	"绩效好的话一切都好说，bye~"
+
 ]
 
 var current_index := 0
@@ -36,8 +27,31 @@ func _ready() -> void:
 	chat_scroll.get_h_scroll_bar().modulate.a = 0
 
 	# 游戏开始，直接显示第一句话
-	show_next_message()
+	#show_next_message()
 
+func start_dialogue(lines: Array[String], position_enum: int, offset_x: float, offset_y: float) -> void:
+	# 灌入这一步的台词
+	boss_messages = lines
+	current_index = 0
+	is_finished = false
+	
+	# 重置并显示界面
+	show()
+	
+	# 清理旧的气泡（防止上一步的残留气泡还在列表里）
+	for child in message_list.get_children():
+		child.queue_free()
+		
+	# 🌟 处理位置微调（基于你填的预设和 Offset）
+	# 这里先简单重置全局坐标，然后加上微调值
+	# 具体的 Preset 逻辑我们后续可以完善，目前先加上位移
+	$Background.position = Vector2.ZERO # 或者是你们的主容器节点名
+	$Background.position.x += offset_x
+	$Background.position.y += offset_y
+
+	# 开始播放第一句话
+	show_next_message()
+	
 # _process 会在游戏运行时一直循环执行，适合用来计算时间
 func _process(delta: float) -> void:
 	if is_finished:
