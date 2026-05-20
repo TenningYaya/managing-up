@@ -1,4 +1,4 @@
-# tutorial_blocker_test.gd
+# tutorial_blocker.gd
 # 🌟 削权后的纯净版：只负责生成 4 块布和挖洞，不写死任何逻辑！
 extends Control
 
@@ -9,6 +9,8 @@ var curtain_right: ColorRect
 
 var hole_rect: Rect2 = Rect2()
 var mask_color = Color(0, 0, 0, 0.5) # 幕布颜色：50%透明纯黑
+
+var is_hole_clickable: bool = true
 
 func _ready() -> void:
 	# 游戏刚开局时，默默在后台把 4 块布建好，然后隐身等总管召唤
@@ -61,8 +63,11 @@ func _has_point(point: Vector2) -> bool:
 		
 	var global_mouse_pos = global_position + point
 	
-	# 如果鼠标点在了真空洞里，放行！让底下的真实按钮收到点击！
 	if hole_rect.has_point(global_mouse_pos):
+		# 如果大总管不让点，我们就把这个洞当成实心的，继续拦截（返回 true）
+		if not is_hole_clickable:
+			return true 
+		# 如果允许点击，就放行（返回 false），让底下的按钮响应
 		return false
 		
 	return true # 点在黑布上，拦死

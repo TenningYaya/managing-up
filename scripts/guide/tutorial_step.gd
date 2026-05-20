@@ -23,6 +23,8 @@ enum DialoguePos { CENTER_PHONE, RIGHT_PHONE, TOP_WINDOW, BOTTOM_WINDOW }
 @export_group("Dialogue UI")
 ## 决定 KPI宝 或老板在屏幕的哪个基础位置探出来
 @export var dialogue_position: DialoguePos = DialoguePos.RIGHT_PHONE
+## 🌟 新增：对话框弹出来之前的“无声高亮”装逼时间（秒）。设为 0 就直接弹。
+@export var delay_before_dialogue: float = 0.0
 ## 这一步要播放的剧情台词数组（支持单句或多句连播）
 @export_multiline var dialogue_lines: Array[String] = []
 

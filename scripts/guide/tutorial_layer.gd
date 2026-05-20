@@ -53,10 +53,32 @@ func play_step(index: int) -> void:
 # 🎬 状态 1：处理纯对话
 # ==========================================
 func _handle_dialogue(step: TutorialStep) -> void:
-	blocker_ui.hide()
 	tip_ui.hide()
 	
-	# 监听你同学 UI 发出的完毕信号
+	# --- 🌟 新增的高亮与等待逻辑 ---
+	if step.target_group != "":
+		# 如果填了目标组名，找出节点并让黑布包围它
+		var target = get_tree().get_first_node_in_group(step.target_group)
+		if target:
+			var target_rect = target.get_global_rect()
+			blocker_ui.show()
+			blocker_ui._arrange_curtains(target_rect)
+			blocker_ui.hole_rect = target_rect
+			# 【关键】告诉黑布：这个洞是纯视觉的，鼠标点不进去！
+			blocker_ui.is_hole_clickable = false 
+		else:
+			printerr("KPI宝高亮失败：找不到组名 '", step.target_group, "' 的节点！")
+			blocker_ui.hide()
+	else:
+		# 没填目标，就把黑布收起来，正常播对话
+		blocker_ui.hide()
+		
+	# 如果配了等待时间，就让代码在这里挂起，让玩家干瞪眼看一会
+	if step.delay_before_dialogue > 0.0:
+		await get_tree().create_timer(step.delay_before_dialogue).timeout
+	# --------------------------------
+	
+	# 时间到了，开始正常走你同学的对话 UI 逻辑
 	current_target = dialogue_ui
 	current_signal_name = "intro_dialogue_finished"
 	current_callable = Callable(self, "_on_step_completed")

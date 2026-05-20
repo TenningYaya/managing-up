@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://0iu36v54fi06"]
 
-[ext_resource type="Script" uid="uid://cn3se308s67lx" path="res://scenes/starter/tutorial_layer.gd" id="1_rsvao"]
+[ext_resource type="Script" uid="uid://cn3se308s67lx" path="res://scripts/guide/tutorial_layer.gd" id="1_rsvao"]
 [ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="2_xpm57"]
 [ext_resource type="Resource" uid="uid://b1qi4he5wdivo" path="res://data/guide/step_1_boss_talk.tres" id="3_rb526"]
-[ext_resource type="Script" path="res://scenes/starter/tutorial_blocker.gd" id="3_ufyfw"]
+[ext_resource type="Script" uid="uid://b5473owjrbxqe" path="res://scripts/guide/tutorial_blocker.gd" id="3_ufyfw"]
 [ext_resource type="PackedScene" uid="uid://c18bskwtiitsq" path="res://scenes/starter/dialogue_intro_ui.tscn" id="3_xpm57"]
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
