@@ -23,7 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://c8d4rax1ise3l" path="res://scenes/sidebar/employee_panel/employee_warehouse.tscn" id="19_0ld40"]
 [ext_resource type="PackedScene" uid="uid://6py6ljmq7wln" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.tscn" id="20_gqmmt"]
 [ext_resource type="PackedScene" uid="uid://doe15yvabaqje" path="res://scenes/settings/quote_editor.tscn" id="22_jscy8"]
-[ext_resource type="PackedScene" uid="uid://ckh34tvyf6vwi" path="res://scenes/starter/TutorialTestLayer.tscn" id="24_y6deb"]
+[ext_resource type="PackedScene" uid="uid://0iu36v54fi06" path="res://scenes/starter/tutorial_layer.tscn" id="24_y6deb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dp3eg"]
 texture = ExtResource("2_jbj1t")
@@ -405,7 +405,6 @@ offset_top = -24.0
 offset_right = -2.0
 offset_bottom = 16.0
 
-[node name="TutorialTestLayer" parent="." unique_id=1392206114 instance=ExtResource("24_y6deb")]
-visible = false
+[node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
 
 [connection signal="pressed" from="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

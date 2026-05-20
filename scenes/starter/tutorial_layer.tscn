@@ -1,3 +1,26 @@
 [gd_scene format=3 uid="uid://0iu36v54fi06"]
 
-[node name="TutorialLayer" type="Node2D" unique_id=798168020]
+[ext_resource type="Script" uid="uid://cn3se308s67lx" path="res://scenes/starter/tutorial_layer.gd" id="1_rsvao"]
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="2_xpm57"]
+[ext_resource type="Resource" uid="uid://b1qi4he5wdivo" path="res://data/guide/step_1_boss_talk.tres" id="3_rb526"]
+[ext_resource type="Script" uid="uid://b5473owjrbxqe" path="res://scenes/starter/tutorial_blocker.gd" id="3_ufyfw"]
+[ext_resource type="PackedScene" uid="uid://c18bskwtiitsq" path="res://scenes/starter/dialogue_intro_ui.tscn" id="3_xpm57"]
+
+[node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
+script = ExtResource("1_rsvao")
+steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526")])
+
+[node name="TipUI" type="Label" parent="." unique_id=16516687]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Blocker" type="Control" parent="." unique_id=2118659743]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_ufyfw")
+
+[node name="DialogueIntroUI" parent="." unique_id=490138412 instance=ExtResource("3_xpm57")]
