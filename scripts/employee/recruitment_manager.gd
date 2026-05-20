@@ -7,7 +7,7 @@ signal new_resumes_arrived
 var normal_pool: Array[Employee] = []
 var headhunt_pool: Array[Employee] = []
 
-var is_tutorial_mode: bool = true
+var is_tutorial_mode: bool = false
 @export var tutorial_recruits_queue: Array[PackedScene] = []
 
 # 猎头状态
