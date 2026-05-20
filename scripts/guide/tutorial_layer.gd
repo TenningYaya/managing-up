@@ -117,14 +117,30 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	target.connect(current_signal_name, current_callable)
 
 # ==========================================
-# ⏳ 状态 3：处理纯逻辑等待
+# ⏳ 状态 3：处理纯逻辑等待 (支持高亮挖洞 + 禁用拒绝按钮)
 # ==========================================
 func _handle_wait_event(step: TutorialStep) -> void:
-	# 隐藏所有教程 UI，放开全屏让玩家自由操作
-	dialogue_ui.hide()
-	blocker_ui.hide()
-	tip_ui.hide()
+	# 1. 职场霸凌：强行灰掉所有拒绝按钮
+	if step.disable_reject_buttons:
+		var reject_btns = get_tree().get_nodes_in_group("reject_buttons")
+		for btn in reject_btns:
+			if btn is BaseButton:
+				btn.disabled = true
 	
+	# 2. 视觉高亮：如果需要高亮整个面板（在 tres 里把 target_group 填为 recruitment_panel）
+	if step.target_group != "":
+		var target = get_tree().get_first_node_in_group(step.target_group)
+		if target:
+			var target_rect = target.get_global_rect()
+			blocker_ui.show()
+			blocker_ui._arrange_curtains(target_rect)
+			blocker_ui.hole_rect = target_rect
+			# 🌟 这里设置为 true，确保 YES 按钮可以被点到
+			blocker_ui.is_hole_clickable = true 
+	else:
+		blocker_ui.hide()
+	
+	# 3. 挂起监听
 	var target = get_tree().get_first_node_in_group(step.target_group)
 	if target:
 		current_target = target
@@ -168,7 +184,29 @@ func _on_step_completed() -> void:
 	if current_target and current_target.has_signal(current_signal_name):
 		current_target.disconnect(current_signal_name, current_callable)
 	
-	# 2. （未来可以在这里加上一句 SaveManager 的代码保存进度）
+	var reject_btns = get_tree().get_nodes_in_group("reject_buttons")
+	for btn in reject_btns:
+		if btn is BaseButton:
+			btn.disabled = false
 	
 	# 3. 继续下一步！
 	play_step(current_step_index + 1)
+
+func setup_tutorial_hiring():
+	# 1. 这里填你的三个路径
+	var paths = [
+		"res://scenes/starter/tutorial_employees/tutemp1.tscn",
+		"res://scenes/starter/tutorial_employees/tutemp2.tscn",
+        "res://scenes/starter/tutorial_employees/tutemp3.tscn"
+	]
+	
+	# 2. 清空并重新填入 RecruitmentManager 的队列
+	RecruitmentManager.tutorial_recruits_queue.clear()
+	
+	for path in paths:
+		var scene = load(path) # 这就是把路径变成 PackedScene 的魔法
+		if scene:
+			RecruitmentManager.tutorial_recruits_queue.append(scene)
+			
+	# 3. 告诉 Manager 执行加载
+	RecruitmentManager.load_tutorial_resumes()

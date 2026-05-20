@@ -19,6 +19,7 @@ enum DialoguePos { CENTER_PHONE, RIGHT_PHONE, TOP_WINDOW, BOTTOM_WINDOW }
 @export var target_group: String = ""
 ## 触发下一步所需的引擎信号（例如 "pressed"、"project_name_confirmed"）
 @export var wait_signal: String = "pressed"
+@export var disable_reject_buttons: bool = false
 
 @export_group("Dialogue UI")
 ## 决定 KPI宝 或老板在屏幕的哪个基础位置探出来

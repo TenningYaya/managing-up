@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/employee/employee.gd" id="1_qeacl"]
+[ext_resource type="Texture2D" path="res://assets/figures/2.Office_Man_Character/Office_Man_Character/Sprite_Sheets/Office_Man_Idle.png" id="2_y28so"]
+[ext_resource type="PackedScene" path="res://scenes/employee/sr_visual.tscn" id="3_oxtqg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldasa"]
+atlas = ExtResource("2_y28so")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rjsqi"]
+atlas = ExtResource("2_y28so")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lkb8b"]
+atlas = ExtResource("2_y28so")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o8b4e"]
+atlas = ExtResource("2_y28so")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0gjo1"]
+atlas = ExtResource("2_y28so")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n6tw1"]
+atlas = ExtResource("2_y28so")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yengm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldasa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rjsqi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lkb8b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o8b4e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0gjo1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n6tw1")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="_Control_50" type="Control" unique_id=1834787427]
+z_index = 1
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
+anchors_preset = 0
+offset_left = 285.27026
+offset_top = 835.0228
+offset_right = 385.27026
+offset_bottom = 944.0228
+script = ExtResource("1_qeacl")
+employee_name = "Debra"
+efficiency = 4
+quality = 3
+experience = 4
+
+[node name="SelectionFeedback" type="TextureRect" parent="." unique_id=28408216]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1107805164]
+visible = false
+texture_filter = 1
+position = Vector2(54, -2)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_yengm")
+animation = &"idle"
+
+[node name="VisualAnchor" type="Marker2D" parent="." unique_id=1860609701]
+
+[node name="SrVisual" parent="." unique_id=609203685 instance=ExtResource("3_oxtqg")]
+position = Vector2(55, 10)
+scale = Vector2(3.5, 3.5)
