@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bq35mgt2iylto" path="res://scripts/UI/custom/SlackingBubble.gd" id="1_b3leo"]
 [ext_resource type="Texture2D" uid="uid://ciogial2diqsq" path="res://assets/UI/ingame/chat_bubble.png" id="2_du1jm"]
+[ext_resource type="AudioStream" uid="uid://b0xuaa141f4p6" path="res://audio/belch_1.wav" id="3_du1jm"]
 
 [node name="SlackingBubble" type="Control" unique_id=1519871688]
 z_index = 2
@@ -38,3 +39,6 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Timer" type="Timer" parent="." unique_id=2068783200]
+
+[node name="BubbleClicked" type="AudioStreamPlayer" parent="." unique_id=1982684811]
+stream = ExtResource("3_du1jm")

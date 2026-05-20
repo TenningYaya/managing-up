@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://fmwqeqrcve7x"]
+
+[ext_resource type="AudioStream" uid="uid://dkot41ggc4c2d" path="res://audio/frozen_winter.wav" id="1_f8x3a"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" unique_id=1826572068]
+stream = ExtResource("1_f8x3a")
+volume_db = -5.707
+autoplay = true

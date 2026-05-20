@@ -6,6 +6,7 @@ const CHAT_BUBBLE_SCENE: PackedScene = preload("res://scenes/starter/chat_bubble
 
 @onready var chat_scroll: ScrollContainer = $Background/MainMargin/ChatScroll
 @onready var message_list: VBoxContainer = $Background/MainMargin/ChatScroll/MessageList
+@onready var bubble_sound: AudioStreamPlayer = $BubbleSound
 
 # 1. 我们的对话现在只需要一个简单的文本列表 (List)
 var boss_messages := [
@@ -82,6 +83,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			show_next_message()
+			bubble_sound.play()
 
 func show_next_message() -> void:
 	if current_index >= boss_messages.size():

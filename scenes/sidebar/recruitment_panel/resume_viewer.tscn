@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://d1ryy3748h1xn" path="res://scripts/UI/sidebar/resume_viewer.gd" id="1_lxgr6"]
 [ext_resource type="PackedScene" uid="uid://dw8e3yggffqyn" path="res://scenes/sidebar/recruitment_panel/resume_slot.tscn" id="2_7ettr"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="3_lxgr6"]
+[ext_resource type="AudioStream" uid="uid://ccoub6b1gnx7n" path="res://audio/whistle.wav" id="4_v240j"]
+[ext_resource type="AudioStream" uid="uid://lb8cf8cs17k4" path="res://audio/8_bit_negative_quick.wav" id="5_updwb"]
 
 [node name="ResumeViewer" type="Control" unique_id=931473494]
 layout_mode = 3
@@ -81,3 +83,9 @@ button_text = "Reject All"
 layout_mode = 2
 size_flags_horizontal = 3
 button_text = "Accept All"
+
+[node name="YesSound" type="AudioStreamPlayer" parent="." unique_id=697872995]
+stream = ExtResource("4_v240j")
+
+[node name="NoSound" type="AudioStreamPlayer" parent="." unique_id=1284113507]
+stream = ExtResource("5_updwb")

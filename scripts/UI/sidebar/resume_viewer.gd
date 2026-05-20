@@ -11,6 +11,8 @@ signal on_empty() # 当所有简历都被处理完时发出
 @onready var cards_container = $VBoxContainer/HBoxContainer/CardsContainer # 🌟 新增的容器
 @onready var reject_all_btn = $VBoxContainer/MarginContainer/OpreateAll/RejectAll
 @onready var accept_all_btn = $VBoxContainer/MarginContainer/OpreateAll/AcceptAll
+@onready var yes_sound: AudioStreamPlayer = $YesSound
+@onready var no_sound: AudioStreamPlayer = $NoSound
 
 var current_resumes: Array[Employee] = []
 var current_page: int = 0
@@ -100,6 +102,7 @@ func _on_slot_hire_pressed(slot_index: int):
 	if target_index < current_resumes.size():
 		var emp = current_resumes[target_index]
 		on_hire_attempted.emit(emp)
+		
 
 func _on_slot_reject_pressed(slot_index: int):
 	var target_index = (current_page * ITEMS_PER_PAGE) + slot_index
@@ -108,6 +111,8 @@ func _on_slot_reject_pressed(slot_index: int):
 		on_rejected.emit(emp)
 		# 拒绝后直接从当前列表删除该员工
 		remove_employee(emp)
+		
+		
 
 # 外部调用：如果雇佣成功，从列表移除此人
 func remove_employee(emp: Employee) -> void:
@@ -127,10 +132,12 @@ func load_resumes(resumes: Array[Employee]) -> void:
 
 func _on_slot_hire_requested(emp: Employee):
 	on_hire_attempted.emit(emp)
+	yes_sound.play()
 
 func _on_slot_reject_requested(emp: Employee):
 	on_rejected.emit(emp)
 	remove_employee(emp)
+	no_sound.play()
 
 func _init_opreate_all_buttons() -> void:
 	if reject_all_btn:

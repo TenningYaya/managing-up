@@ -10,6 +10,7 @@ extends Control
 @onready var item3_desc = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer/DescLabel
 @onready var upgrade_button = $UpgradeButton
 @onready var upgrade_btn_label = $UpgradeButton/Label
+@onready var clicked_sound: AudioStreamPlayer = $ClickedSound
 
 # --- Upgrade Configuration Data (保持不变) ---
 const UPGRADE_DATA = {
@@ -90,3 +91,4 @@ func _on_upgrade_button_pressed():
 		Gamemanager.max_desk_level = min(Gamemanager.player_level, 4) 
 		
 		update_ui()
+		clicked_sound.play()

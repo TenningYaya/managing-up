@@ -12,6 +12,7 @@ signal reject_requested(emp: Employee)
 @onready var reject_btn = $CardContainer/SelectionContainer/RejectBtn
 @onready var bg_texture_rect = $TextureRect # 你的背景节点
 
+
 var current_employee: Employee
 
 # 🌟 在编辑器里把两张背景图拖进去

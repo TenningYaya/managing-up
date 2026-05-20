@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c18bskwtiitsq"]
 
 [ext_resource type="Script" uid="uid://dvjxqv21c7djc" path="res://scripts/UI/dialogue/dialogue_intro_ui.gd" id="1_bte1p"]
+[ext_resource type="AudioStream" uid="uid://bkcjnworq8lgs" path="res://audio/card_draw_1.wav" id="2_kylca"]
 
 [node name="DialogueIntroUI" type="Control" unique_id=490138412]
 custom_minimum_size = Vector2(1920, 270)
@@ -45,3 +46,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 theme_override_constants/separation = 8
+
+[node name="BubbleSound" type="AudioStreamPlayer" parent="." unique_id=1911558498]
+stream = ExtResource("2_kylca")

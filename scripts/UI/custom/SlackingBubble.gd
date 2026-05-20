@@ -7,6 +7,7 @@ signal slacking_resolved(by_click: bool)
 @onready var timer = $Timer
 # 🌟 新增：引用气泡的主体节点（如果是 bubble 整体缩放效果更好）
 @onready var bubble_main = $bubble
+@onready var bubble_clicked: AudioStreamPlayer = $BubbleClicked
 
 var icons = [
 	preload("res://assets/UI/摸鱼气泡/异常行为-打瞌睡.png"),
@@ -25,6 +26,7 @@ func _ready():
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		bubble_clicked.play()
 		# 🌟 点击反馈：被点中的瞬间弹一下
 		var t = create_tween()
 		t.tween_property(bubble_main, "scale", Vector2(0.8, 0.8), 0.05)
