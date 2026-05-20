@@ -22,7 +22,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 538.0
+offset_right = 317.0
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -44,7 +44,7 @@ theme_override_constants/margin_top = 3
 
 [node name="VBoxContainer" type="HBoxContainer" parent="ColorRect/CenterContainer/MarginContainer" unique_id=1188500502]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 40
 
 [node name="KPI" type="HBoxContainer" parent="ColorRect/CenterContainer/MarginContainer/VBoxContainer" unique_id=1068948929]
 custom_minimum_size = Vector2(0, 10)
@@ -103,38 +103,6 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="DollarsArrow" type="TextureRect" parent="ColorRect/CenterContainer/MarginContainer/VBoxContainer/dollar" unique_id=2079848243]
-visible = false
-custom_minimum_size = Vector2(30, 10)
-layout_mode = 2
-texture = ExtResource("4_mpmo8")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="EFF_" type="HBoxContainer" parent="ColorRect/CenterContainer/MarginContainer/VBoxContainer" unique_id=1064266306]
-custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
-theme_override_constants/separation = 5
-
-[node name="EFF_" type="Label" parent="ColorRect/CenterContainer/MarginContainer/VBoxContainer/EFF_" unique_id=2017875683]
-custom_minimum_size = Vector2(40, 10)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("3_mpmo8")
-theme_override_font_sizes/font_size = 30
-text = "EFF."
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="EFF_Label" type="Label" parent="ColorRect/CenterContainer/MarginContainer/VBoxContainer/EFF_" unique_id=1480765911]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.042657636, 0.6437479, 0.9999998, 1)
-theme_override_fonts/font = ExtResource("3_mpmo8")
-theme_override_font_sizes/font_size = 30
-text = "0"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="EFF_Arrow" type="TextureRect" parent="ColorRect/CenterContainer/MarginContainer/VBoxContainer/EFF_" unique_id=1025141418]
 visible = false
 custom_minimum_size = Vector2(30, 10)
 layout_mode = 2
