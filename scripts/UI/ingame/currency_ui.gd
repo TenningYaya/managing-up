@@ -7,12 +7,11 @@ extends Control
 # Label 引用
 @onready var kpi_label: Label = $ColorRect/CenterContainer/MarginContainer/VBoxContainer/KPI/KPILabel
 @onready var dollar_label: Label = $ColorRect/CenterContainer/MarginContainer/VBoxContainer/dollar/DollarLabel
-@onready var eff_label: Label = $ColorRect/CenterContainer/MarginContainer/VBoxContainer/EFF_/EFF_Label
 
 # Arrow 引用
 @onready var kpi_arrow: TextureRect = $ColorRect/CenterContainer/MarginContainer/VBoxContainer/KPI/KPIArrow
 @onready var dollar_arrow: TextureRect = $ColorRect/CenterContainer/MarginContainer/VBoxContainer/dollar/DollarsArrow
-@onready var eff_arrow: TextureRect = $ColorRect/CenterContainer/MarginContainer/VBoxContainer/EFF_/EFF_Arrow
+
 
 # 记录上一次的数值，用来判断涨了还是跌了
 var last_kpi: float = 0
@@ -49,21 +48,14 @@ func _on_dollar_updated(new_value):
 	last_dollar = new_value
 
 
-func _on_eff_updated(new_value):
-	update_value_label(eff_label, eff_arrow, last_eff, new_value)
-	last_eff = new_value
-
 
 func update_labels():
 	kpi_label.text = format_number(Gamemanager.kpi)
 	dollar_label.text = format_number(Gamemanager.dollar)
 
-	# 如果你现在还没有 eff，先让它显示 0
-	eff_label.text = format_number(0)
 
 	kpi_arrow.hide()
 	dollar_arrow.hide()
-	eff_arrow.hide()
 
 
 func update_value_label(label_node: Label, arrow_node: TextureRect, old_value: float, new_value: float):
