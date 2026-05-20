@@ -116,13 +116,13 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
-				# 检查鼠标是否在自己身上（用全局坐标系判断，绝对精准）
-				if get_global_rect().has_point(event.global_position):
+				# 🌟 关键修复：不要用 event.global_position，要用 get_global_mouse_position()
+				if get_global_rect().has_point(get_global_mouse_position()): 
 					is_pressing = true
-					drag_start_mouse_pos = get_global_mouse_position()
-					drag_start_position = global_position
-					drag_offset = drag_start_mouse_pos - global_position
-					get_viewport().set_input_as_handled() # 霸道地告诉引擎：我点到了，不许传给别人！
+					drag_start_mouse_pos = get_global_mouse_position() 
+					drag_start_position = global_position 
+					drag_offset = drag_start_mouse_pos - global_position 
+					get_viewport().set_input_as_handled()
 			else:
 				if is_pressing:
 					is_pressing = false
