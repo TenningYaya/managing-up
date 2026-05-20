@@ -7,6 +7,9 @@ signal new_resumes_arrived
 var normal_pool: Array[Employee] = []
 var headhunt_pool: Array[Employee] = []
 
+var is_tutorial_mode: bool = true
+@export var tutorial_recruits_queue: Array[PackedScene] = []
+
 # 猎头状态
 enum State { IDLE, RECRUITING, READY }
 var current_state = State.IDLE
@@ -34,6 +37,9 @@ func _process(delta):
 
 # --- 核心业务：普通招聘 (自动触发) ---
 func auto_generate_normal():
+	if is_tutorial_mode:
+		return
+		
 	var rarity = Employee.Rarity.R
 	if randf() <= 0.1: rarity = Employee.Rarity.SR
 	
@@ -100,3 +106,20 @@ func _create_data(rarity: Employee.Rarity) -> Employee:
 			print("警告：该级别的员工缺少头像数据！")
 	
 	return e
+
+func load_tutorial_resumes():
+	if tutorial_recruits_queue.is_empty():
+		printerr("老板，你没放预制体进去！")
+		return
+		
+	for scene in tutorial_recruits_queue:
+		if not scene: continue
+		
+		# 直接实例化你保存的那个完美员工
+		var new_emp = scene.instantiate() as Employee
+		
+		# 放进你的正常简历池
+		normal_pool.append(new_emp)
+		
+	tutorial_recruits_queue.clear()
+	new_resumes_arrived.emit()
