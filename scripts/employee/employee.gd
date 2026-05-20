@@ -81,6 +81,36 @@ func _ready() -> void:
 func setup_employee(new_rarity: Rarity) -> void:
 	rarity = new_rarity
 	_generate_attributes()
+	
+func _generate_attributes() -> void:
+	var target_sum: int = 0
+
+	match rarity:
+		Rarity.R:
+			target_sum = randi_range(3, 12)
+		Rarity.SR:
+			target_sum = randi_range(13, 21)
+		Rarity.SSR:
+			target_sum = randi_range(22, 30)
+
+	efficiency = 1
+	quality = 1
+	experience = 1
+
+	var remaining_points: int = target_sum - 3
+
+	while remaining_points > 0:
+		var stat_to_increase = randi() % 3
+
+		if stat_to_increase == 0 and efficiency < 10:
+			efficiency += 1
+			remaining_points -= 1
+		elif stat_to_increase == 1 and quality < 10:
+			quality += 1
+			remaining_points -= 1
+		elif stat_to_increase == 2 and experience < 10:
+			experience += 1
+			remaining_points -= 1
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -345,35 +375,7 @@ func _get_game_manager() -> Node:
 	return get_tree().root.get_node_or_null("Gamemanager")
 
 
-func _generate_attributes() -> void:
-	var target_sum: int = 0
 
-	match rarity:
-		Rarity.R:
-			target_sum = randi_range(3, 12)
-		Rarity.SR:
-			target_sum = randi_range(13, 21)
-		Rarity.SSR:
-			target_sum = randi_range(14, 30)
-
-	efficiency = 1
-	quality = 1
-	experience = 1
-
-	var remaining_points: int = target_sum - 3
-
-	while remaining_points > 0:
-		var stat_to_increase = randi() % 3
-
-		if stat_to_increase == 0 and efficiency < 10:
-			efficiency += 1
-			remaining_points -= 1
-		elif stat_to_increase == 1 and quality < 10:
-			quality += 1
-			remaining_points -= 1
-		elif stat_to_increase == 2 and experience < 10:
-			experience += 1
-			remaining_points -= 1
 
 func _finish_and_generate_file():
 	# ======= 1. 计算文件质量 =======
