@@ -10,23 +10,10 @@
 atlas = ExtResource("1_hshmp")
 region = Rect2(28.100021, 48.702408, 299.19995, 292.82007)
 
-[node name="ConfirmDialog" type="Control" unique_id=1003794883]
-z_index = 10
-custom_minimum_size = Vector2(1920, 360)
-layout_mode = 3
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1920.0
-offset_top = -360.0
-grow_horizontal = 0
-grow_vertical = 0
+[node name="ConfirmDialog" type="CanvasLayer" unique_id=582727251]
 script = ExtResource("1_e2drj")
 
 [node name="Panel" type="TextureRect" parent="." unique_id=1817486427]
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
