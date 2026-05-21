@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://dby0p1yf83dsl"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_nmofx"]
+
+[resource]
+script = ExtResource("1_nmofx")
+step_type = 1
+target_group = "recruitment_panel"
+wait_signal = "all_preset_employees_hired"
+disable_reject_buttons = true
+force_show_ui_group = "recruitment_panel"
+lock_ui_lifecycle = true
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

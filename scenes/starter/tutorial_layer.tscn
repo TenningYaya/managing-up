@@ -10,10 +10,11 @@
 [ext_resource type="Resource" uid="uid://nc1gt10bgic3" path="res://data/guide/step_4_show_recruit.tres" id="6_gtvb8"]
 [ext_resource type="Resource" uid="uid://b21vvjbul2tdh" path="res://data/guide/step_5_wait_press_recruit.tres" id="7_2853m"]
 [ext_resource type="Resource" uid="uid://beuy3hxcsfu3j" path="res://data/guide/step_6_show_3_guys.tres" id="8_hfnrs"]
+[ext_resource type="Resource" uid="uid://dby0p1yf83dsl" path="res://data/guide/step_7_hire_cowhorse.tres" id="9_5i7fk"]
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_rsvao")
-steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_rb526"), ExtResource("5_7e6m1"), ExtResource("6_gtvb8"), ExtResource("7_2853m"), ExtResource("8_hfnrs")])
+steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_rb526"), ExtResource("5_7e6m1"), ExtResource("6_gtvb8"), ExtResource("7_2853m"), ExtResource("8_hfnrs"), ExtResource("9_5i7fk")])
 
 [node name="TipUI" type="Label" parent="." unique_id=16516687]
 offset_right = 40.0

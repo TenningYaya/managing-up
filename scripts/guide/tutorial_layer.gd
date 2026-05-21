@@ -130,7 +130,10 @@ func _handle_focus_click(step: TutorialStep) -> void:
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
 		print("【抓鬼行动】大总管到底找没找到 Sidebar？结果是：", ui_node)
 		if ui_node:
-			ui_node.lock_for_tutorial() # 触发 Sidebar 展开
+			if ui_node.has_method("lock_for_tutorial"):
+				ui_node.lock_for_tutorial()
+			else:
+				ui_node.show() # 如果面板没有特殊的锁定逻辑，老老实实显示出来就行，别强求！
 			# 🌟 关键：给展开动画留点时间，防止动画还没完就开始挖洞
 			await get_tree().create_timer(0.5).timeout
 			
@@ -151,10 +154,19 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	if _global_flash_tween:
 		_global_flash_tween.kill() # 干掉上一次的闪烁，防止套娃
 	
-	if target is Control: # 只要是 UI 节点，通通闪起来
-		_global_flash_tween = create_tween().set_loops()
-		_global_flash_tween.tween_property(target, "modulate:a", 0.2, 0.4)
-		_global_flash_tween.tween_property(target, "modulate:a", 1.0, 0.4)
+	if target is Control:
+		# 🌟【新增大小判定】：获取目标矩形的大小
+		var rect_size = target.get_global_rect().size
+		
+		# 如果高亮区域的宽或高太大了（比如大于 300 像素），说明是大面板，直接不闪！
+		if rect_size.x > 200 or rect_size.y > 200:
+			print("【大总管】检测到目标是个庞然大物，为了老板的视力，关闭闪烁。")
+			target.modulate.a = 1.0 # 确保它是完全亮起的就行
+		else:
+			# 只有小按钮才配享受呼吸灯待遇
+			_global_flash_tween = create_tween().set_loops()
+			_global_flash_tween.tween_property(target, "modulate:a", 0.2, 0.4)
+			_global_flash_tween.tween_property(target, "modulate:a", 1.0, 0.4)
 		
 	# 3. 呼叫小字提示贴靠目标
 	_arrange_tip(step, target_rect)
@@ -163,7 +175,12 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	current_target = target
 	current_signal_name = step.wait_signal
 	current_callable = Callable(self, "_on_step_completed")
-	target.connect(current_signal_name, current_callable)
+	
+	# 🌟 替换区：加个防报错拦截！
+	if current_signal_name == "all_preset_employees_hired":
+		set_process(true) # 开启大总管雷达！不要去 target 上连信号！
+	else:
+		target.connect(current_signal_name, current_callable)
 
 # ==========================================
 # ⏳ 状态 3：处理纯逻辑等待 (支持高亮挖洞 + 禁用拒绝按钮)
@@ -229,25 +246,49 @@ func _arrange_tip(step: TutorialStep, target_rect: Rect2) -> void:
 # 🏁 某一步完成时的统一出口
 # ==========================================
 func _on_step_completed() -> void:
-		# 在这俩函数的开头第一行加上：
+	# 1. 每次点击，先停掉闪烁，复原透明度
 	if _global_flash_tween:
 		_global_flash_tween.kill()
 		_global_flash_tween = null
 		
-	# 如果当前高亮的目标还在，强行复原它的透明度
 	if current_target and current_target is Control:
 		current_target.modulate.a = 1.0
 	
-	# 1. 卸磨杀驴：断开当前的信号连接，防止重复触发
+	# 2. 🌟 核心拦截判定：如果是在等“招满三人”的步骤
+	if current_signal_name == "all_preset_employees_hired":
+		var remaining_count = RecruitmentManager.normal_pool.size()
+		print("【大总管数人头】有员工入职了！当前简历池还剩：", remaining_count, " 人")
+		
+		# 只要池子里还有人，说明没招完
+		if remaining_count > 0:
+			print("【大总管】还没招满，继续留在第七步！")
+			
+			# 🌟 一次性解决的核心：因为刚才玩家点了一下，黑布拦截逻辑被重置了
+			# 既然 target_group 是 recruitment_panel，我们直接在这里原地重新算一遍黑布区域，并拉开闸门允许继续点透！
+			var target_panel = get_tree().get_first_node_in_group("recruitment_panel")
+			if target_panel:
+				blocker_ui._arrange_curtains(target_panel.get_global_rect())
+				blocker_ui.hole_rect = target_panel.get_global_rect()
+				blocker_ui.is_hole_clickable = true # 继续允许点透里面的 YES
+				
+			return # 🌟 强行打断！不拆信号线，不往后翻篇，让玩家留在原地继续点！
+			
+	# ====================================================
+	# 3. 🌟 只有当 3 个人全部招完（池子变 0），代码才能走到这里，彻底翻篇！
+	# ====================================================
+	print("【大总管】3个牛马全部逮到，正式拆线，进入下一步剧情！")
+	
+	# 卸磨杀驴：断开当前的信号连接，防止重复触发
 	if current_target and current_target.has_signal(current_signal_name):
 		current_target.disconnect(current_signal_name, current_callable)
 	
+	# 恢复所有拒绝按钮的禁用状态
 	var reject_btns = get_tree().get_nodes_in_group("reject_buttons")
 	for btn in reject_btns:
 		if btn is BaseButton:
 			btn.disabled = false
 	
-	# 3. 继续下一步！
+	# 继续下一步！
 	play_step(current_step_index + 1)
 
 func setup_tutorial_hiring():
@@ -292,6 +333,13 @@ func _process(delta: float) -> void:
 			esc_hold_time = 0.0
 			print("【教程跳过】长按满1秒，全局强行结束！")
 			_finish_all_tutorials()
+	if current_signal_name == "all_preset_employees_hired":
+		# 盯着单例里的池子看
+		if RecruitmentManager.normal_pool.size() == 0:
+			print("【大总管雷达】牛马清零！自动放行！")
+			current_signal_name = "" # 🌟 关掉雷达目标，防止每帧狂刷
+			# 这里不要写 set_process(false)，因为你的 ESC 长按还需要它！
+			_on_step_completed()     # 🌟 直接呼叫通关逻辑！
 			
 func _finish_all_tutorials() -> void:
 		# 在这俩函数的开头第一行加上：
