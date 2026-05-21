@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://b21vvjbul2tdh"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_fdxad"]
+
+[resource]
+script = ExtResource("1_fdxad")
+step_type = 1
+target_group = "recruitment_button"
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

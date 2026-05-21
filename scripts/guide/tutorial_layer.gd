@@ -10,6 +10,7 @@ extends CanvasLayer
 @onready var end_label: Label = $FinishLabel # 假设你的 Label 叫这个，且它是 TutorialManager 的子节点
 
 @onready var locked_ui_node: Node = null
+var _global_flash_tween: Tween = null
 
 var current_step_index: int = 0
 
@@ -18,6 +19,7 @@ var current_target: Node = null
 var current_signal_name: String = ""
 var current_callable: Callable
 var esc_hold_time := 0.0
+var is_esc_pressing := false
 
 var is_waiting_for_final_click := false
 
@@ -47,6 +49,11 @@ func play_step(index: int) -> void:
 	
 	print("正在执行教程第 ", index + 1, " 步：", TutorialStep.Type.keys()[step.step_type])
 	
+	if step.force_show_ui_group == "recruitment_panel":
+		# 名字根据你项目的 Autoload 单例名来（假设你的单例叫 RecruitmentManager）
+		if RecruitmentManager.has_method("load_tutorial_resumes"):
+			RecruitmentManager.load_tutorial_resumes()
+		
 	if locked_ui_node and locked_ui_node.has_method("unlock_from_tutorial"):
 		locked_ui_node.unlock_from_tutorial()
 		locked_ui_node = null
@@ -139,6 +146,16 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	blocker_ui._arrange_curtains(target_rect) # 调用你之前黑布脚本里的排布逻辑
 	blocker_ui.hole_rect = target_rect        # 更新放行区域
 	
+	blocker_ui.is_hole_clickable = true
+	
+	if _global_flash_tween:
+		_global_flash_tween.kill() # 干掉上一次的闪烁，防止套娃
+	
+	if target is Control: # 只要是 UI 节点，通通闪起来
+		_global_flash_tween = create_tween().set_loops()
+		_global_flash_tween.tween_property(target, "modulate:a", 0.2, 0.4)
+		_global_flash_tween.tween_property(target, "modulate:a", 1.0, 0.4)
+		
 	# 3. 呼叫小字提示贴靠目标
 	_arrange_tip(step, target_rect)
 	
@@ -212,6 +229,15 @@ func _arrange_tip(step: TutorialStep, target_rect: Rect2) -> void:
 # 🏁 某一步完成时的统一出口
 # ==========================================
 func _on_step_completed() -> void:
+		# 在这俩函数的开头第一行加上：
+	if _global_flash_tween:
+		_global_flash_tween.kill()
+		_global_flash_tween = null
+		
+	# 如果当前高亮的目标还在，强行复原它的透明度
+	if current_target and current_target is Control:
+		current_target.modulate.a = 1.0
+	
 	# 1. 卸磨杀驴：断开当前的信号连接，防止重复触发
 	if current_target and current_target.has_signal(current_signal_name):
 		current_target.disconnect(current_signal_name, current_callable)
@@ -249,17 +275,33 @@ func _input(event: InputEvent) -> void:
 			queue_free()
 			return # 销毁后就别执行后面的了
 			
-	# 监听 ESC 长按
+	# 🌟 修复后的 ESC 状态监听
 	if event is InputEventKey and event.keycode == KEY_ESCAPE:
-		if event.pressed:
-			esc_hold_time += get_process_delta_time()
-			if esc_hold_time >= 1.0: # 按住1秒跳过
-				print("【教程跳过】强制结束所有流程")
-				_finish_all_tutorials()
-		else:
-			esc_hold_time = 0.0
+		if event.pressed and not event.echo:
+			is_esc_pressing = true  # 记录按下了
+		elif not event.pressed:
+			is_esc_pressing = false # 松开了
+			esc_hold_time = 0.0     # 计时清零
 
+func _process(delta: float) -> void:
+	# 🌟 只要按下去了，就在每帧死磕累加时间
+	if is_esc_pressing:
+		esc_hold_time += delta
+		if esc_hold_time >= 1.0: # 攒满1秒
+			is_esc_pressing = false
+			esc_hold_time = 0.0
+			print("【教程跳过】长按满1秒，全局强行结束！")
+			_finish_all_tutorials()
+			
 func _finish_all_tutorials() -> void:
+		# 在这俩函数的开头第一行加上：
+	if _global_flash_tween:
+		_global_flash_tween.kill()
+		_global_flash_tween = null
+		
+	# 如果当前高亮的目标还在，强行复原它的透明度
+	if current_target and current_target is Control:
+		current_target.modulate.a = 1.0
 	# 强制清理：断开所有逻辑，清空黑布
 	if current_target and current_target.has_signal(current_signal_name):
 		current_target.disconnect(current_signal_name, current_callable)

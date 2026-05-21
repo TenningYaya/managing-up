@@ -87,6 +87,8 @@ func _input(event: InputEvent) -> void:
 	# 4. 检查鼠标左键点击，显示下一句
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if is_animating:
+				return
 			show_next_message()
 			bubble_sound.play()
 
@@ -98,9 +100,10 @@ func show_next_message() -> void:
 	is_animating = true
 
 	var text: String = boss_messages[current_index]
+	current_index += 1
+	
 	await add_message(text)
 
-	current_index += 1
 	is_animating = false
 
 func add_message(text: String) -> void:
@@ -126,7 +129,7 @@ func add_message(text: String) -> void:
 
 	# 气泡渐渐出现的动画
 	var tween = create_tween()
-	tween.tween_property(bubble, "modulate:a", 1.0, 0.22)
+	tween.tween_property(bubble, "modulate:a", 1.0, 0.42)
 	await tween.finished
 
 func scroll_to_bottom() -> void:

@@ -25,6 +25,10 @@ var _pending_amount = 0
 	Employee.Rarity.SSR: preload("res://scenes/employee/sr_visual.tscn")
 }
 
+const TUTORIAL_EMP_1 = preload("res://scenes/starter/tutorial_employees/tutemp1.tscn")
+const TUTORIAL_EMP_2 = preload("res://scenes/starter/tutorial_employees/tutemp3.tscn")
+const TUTORIAL_EMP_3 = preload("res://scenes/starter/tutorial_employees/tutemp6.tscn")
+
 func _ready():
 	NameBank.load_names()
 	
@@ -107,19 +111,37 @@ func _create_data(rarity: Employee.Rarity) -> Employee:
 	
 	return e
 
-func load_tutorial_resumes():
-	if tutorial_recruits_queue.is_empty():
-		printerr("老板，你没放预制体进去！")
-		return
-		
-	for scene in tutorial_recruits_queue:
+func load_tutorial_resumes() -> void:
+	normal_pool.clear()
+	var pre_made_scenes = [TUTORIAL_EMP_1, TUTORIAL_EMP_2, TUTORIAL_EMP_3]
+	
+	# 给个固定的种子值，保证这仨人不仅有人样，而且每次重启游戏长得都一样
+	var seed_counter = 101 
+	
+	for scene in pre_made_scenes:
 		if not scene: continue
-		
-		# 直接实例化你保存的那个完美员工
 		var new_emp = scene.instantiate() as Employee
 		
-		# 放进你的正常简历池
+		# 1. 抓取你截图里的那个 SrVisual
+		var visual = new_emp.get_node_or_null("SrVisual")
+		if not visual: # 防呆：如果名字改了，用地毯式搜索
+			for child in new_emp.get_children():
+				if child.has_method("generate_portrait_texture"):
+					visual = child
+					break
+					
+		if visual:
+			# 🌟 核心抢救 1：强行注入 DNA，让他们把衣服和头发穿戴整齐！
+			if visual.has_method("setup_visual"):
+				visual.setup_visual(seed_counter, new_emp.dna, new_emp.rarity)
+				seed_counter += 1 # 换下一个人时长相变动一下
+				
+			# 🌟 核心抢救 2：穿戴整齐后，立刻咔嚓拍照贴到简历上
+			if visual.has_method("generate_portrait_texture"):
+				new_emp.portrait = visual.generate_portrait_texture()
+		else:
+			printerr("【警报】没找到叫 SrVisual 的外观节点！")
+			
 		normal_pool.append(new_emp)
 		
-	tutorial_recruits_queue.clear()
 	new_resumes_arrived.emit()

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://nc1gt10bgic3"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_8o0xd"]
+
+[resource]
+script = ExtResource("1_8o0xd")
+target_group = "recruitment_button"
+wait_signal = "intro_dialogue_finished"
+speaker = 1
+dialogue_lines = Array[String](["虽然您的固定工位不在这，不过您随时可以使用项目组的电脑！", "打开电脑的招聘系统，查看发给项目组的求职简历"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"
