@@ -20,7 +20,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yskv6"]
 
-[node name="MobileSidebar" type="Control" unique_id=2025363917]
+[node name="MobileSidebar" type="Control" unique_id=2025363917 groups=["sidebar_panel"]]
 layout_mode = 3
 anchors_preset = 3
 anchor_left = 1.0
@@ -117,7 +117,7 @@ texture_normal = ExtResource("3_yj4so")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="tutorial" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=425357062]
+[node name="tutorial" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=425357062 groups=["tutorial_app_icon"]]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 texture_normal = ExtResource("4_8c6sh")

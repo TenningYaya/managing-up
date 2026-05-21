@@ -1,4 +1,4 @@
-# tutorial_manager.gd
+# tutorial_layer.gd
 extends CanvasLayer
 
 # 🌟 在右侧编辑器里，把你建好的 tres 剧本文件按照顺序拖进这个数组里！
@@ -7,6 +7,9 @@ extends CanvasLayer
 @onready var dialogue_ui = $DialogueIntroUI
 @onready var blocker_ui = $Blocker
 @onready var tip_ui: Label = $TipUI # 或者你的 PanelContainer
+@onready var end_label: Label = $FinishLabel # 假设你的 Label 叫这个，且它是 TutorialManager 的子节点
+
+@onready var locked_ui_node: Node = null
 
 var current_step_index: int = 0
 
@@ -14,6 +17,10 @@ var current_step_index: int = 0
 var current_target: Node = null
 var current_signal_name: String = ""
 var current_callable: Callable
+var esc_hold_time := 0.0
+
+var is_waiting_for_final_click := false
+
 
 func _ready() -> void:
 	# 游戏一上来，把所有教程组件都藏起来
@@ -32,8 +39,7 @@ func _ready() -> void:
 # ==========================================
 func play_step(index: int) -> void:
 	if index >= steps.size():
-		print("🎉 新手教程全部通关！")
-		queue_free() # 教程结束，自我销毁释放内存
+		_show_final_label()
 		return
 		
 	current_step_index = index
@@ -41,6 +47,25 @@ func play_step(index: int) -> void:
 	
 	print("正在执行教程第 ", index + 1, " 步：", TutorialStep.Type.keys()[step.step_type])
 	
+	if locked_ui_node and locked_ui_node.has_method("unlock_from_tutorial"):
+		locked_ui_node.unlock_from_tutorial()
+		locked_ui_node = null
+
+	# 🌟 2. 检查这一步是否需要强行弹出某个界面
+	if step.force_show_ui_group != "":
+		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
+		if ui_node:
+			ui_node.show() # 强行显示
+			
+			# 播提示音（你可以直接在这里播，或者让UI节点自己播）
+			# AudioManager.play_se("tutorial_pop") 
+			
+			# 如果剧本要求控死它
+			if step.lock_ui_lifecycle:
+				locked_ui_node = ui_node
+				if ui_node.has_method("lock_for_tutorial"):
+					ui_node.lock_for_tutorial() # 开启“降智/霸体”模式
+					
 	match step.step_type:
 		TutorialStep.Type.DIALOGUE:
 			_handle_dialogue(step)
@@ -86,7 +111,7 @@ func _handle_dialogue(step: TutorialStep) -> void:
 	dialogue_ui.intro_dialogue_finished.connect(current_callable)
 	
 	# 呼叫你同学的组件开始播片
-	dialogue_ui.start_dialogue(step.dialogue_lines, step.dialogue_position, step.dialogue_offset_x, step.dialogue_offset_y)
+	dialogue_ui.start_dialogue(step.dialogue_lines, step.dialogue_position, step.dialogue_offset_x, step.dialogue_offset_y, step.speaker)
 
 # ==========================================
 # 🎯 状态 2：处理强行挖洞点击
@@ -94,6 +119,14 @@ func _handle_dialogue(step: TutorialStep) -> void:
 func _handle_focus_click(step: TutorialStep) -> void:
 	dialogue_ui.hide()
 	
+	if step.force_show_ui_group != "":
+		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
+		print("【抓鬼行动】大总管到底找没找到 Sidebar？结果是：", ui_node)
+		if ui_node:
+			ui_node.lock_for_tutorial() # 触发 Sidebar 展开
+			# 🌟 关键：给展开动画留点时间，防止动画还没完就开始挖洞
+			await get_tree().create_timer(0.5).timeout
+			
 	# 1. 抓取目标节点
 	var target = get_tree().get_first_node_in_group(step.target_group)
 	if not target:
@@ -105,7 +138,6 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	blocker_ui.show()
 	blocker_ui._arrange_curtains(target_rect) # 调用你之前黑布脚本里的排布逻辑
 	blocker_ui.hole_rect = target_rect        # 更新放行区域
-	blocker_ui.is_tutorial_finished = false
 	
 	# 3. 呼叫小字提示贴靠目标
 	_arrange_tip(step, target_rect)
@@ -210,3 +242,42 @@ func setup_tutorial_hiring():
 			
 	# 3. 告诉 Manager 执行加载
 	RecruitmentManager.load_tutorial_resumes()
+
+func _input(event: InputEvent) -> void:
+	if is_waiting_for_final_click and event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			queue_free()
+			return # 销毁后就别执行后面的了
+			
+	# 监听 ESC 长按
+	if event is InputEventKey and event.keycode == KEY_ESCAPE:
+		if event.pressed:
+			esc_hold_time += get_process_delta_time()
+			if esc_hold_time >= 1.0: # 按住1秒跳过
+				print("【教程跳过】强制结束所有流程")
+				_finish_all_tutorials()
+		else:
+			esc_hold_time = 0.0
+
+func _finish_all_tutorials() -> void:
+	# 强制清理：断开所有逻辑，清空黑布
+	if current_target and current_target.has_signal(current_signal_name):
+		current_target.disconnect(current_signal_name, current_callable)
+	
+	# 彻底销毁教程 UI
+	queue_free()
+
+func _show_final_label() -> void:
+	blocker_ui.hide()
+	dialogue_ui.hide()
+	tip_ui.hide()
+	
+	if locked_ui_node and locked_ui_node.has_method("unlock_from_tutorial"):
+		locked_ui_node.unlock_from_tutorial()
+		
+	end_label.show() 
+	
+	# 等0.2秒防止点太快直接穿透
+	await get_tree().create_timer(0.2).timeout
+	# 🌟 打开终局开关，剩下的交给 _input 去管
+	is_waiting_for_final_click = true

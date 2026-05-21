@@ -45,6 +45,8 @@ recruitment_panel=""
 culture_selection_buttons=""
 recruitment_button=""
 reject_buttons=""
+tutorial_app_icon=""
+sidebar_panel=""
 
 [input]
 

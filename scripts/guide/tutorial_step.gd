@@ -9,6 +9,10 @@ enum Type {
 	WAIT_EVENT    # 纯逻辑等待
 }
 
+enum Speaker { 
+	BOSS, 
+	KPI_BAO 
+}
 enum TipPos { TOP, BOTTOM, LEFT, RIGHT }
 enum DialoguePos { CENTER_PHONE, RIGHT_PHONE, TOP_WINDOW, BOTTOM_WINDOW }
 
@@ -21,7 +25,14 @@ enum DialoguePos { CENTER_PHONE, RIGHT_PHONE, TOP_WINDOW, BOTTOM_WINDOW }
 @export var wait_signal: String = "pressed"
 @export var disable_reject_buttons: bool = false
 
+@export_group("Auto UI Trigger")
+## 这一步需要大总管强制弹出的 UI 组名（例如 "sidebar_panel"、"notebook_panel"），不需要则留空
+@export var force_show_ui_group: String = ""
+## 是否在这一步锁定该 UI，不允许它被任何玩家操作意外关闭（通常 FOCUS_CLICK 时设为 true）
+@export var lock_ui_lifecycle: bool = false
+
 @export_group("Dialogue UI")
+@export var speaker: Speaker = Speaker.BOSS
 ## 决定 KPI宝 或老板在屏幕的哪个基础位置探出来
 @export var dialogue_position: DialoguePos = DialoguePos.RIGHT_PHONE
 ## 🌟 新增：对话框弹出来之前的“无声高亮”装逼时间（秒）。设为 0 就直接弹。

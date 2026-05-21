@@ -5,10 +5,12 @@
 [ext_resource type="Resource" uid="uid://b1qi4he5wdivo" path="res://data/guide/step_1_boss_talk.tres" id="3_rb526"]
 [ext_resource type="Script" uid="uid://b5473owjrbxqe" path="res://scripts/guide/tutorial_blocker.gd" id="3_ufyfw"]
 [ext_resource type="PackedScene" uid="uid://c18bskwtiitsq" path="res://scenes/starter/dialogue_intro_ui.tscn" id="3_xpm57"]
+[ext_resource type="Resource" uid="uid://ynde0egvpgw2" path="res://data/guide/step_2_click_tutorialAI.tres" id="4_rb526"]
+[ext_resource type="Resource" uid="uid://cpmmw4cv6t7j7" path="res://data/guide/step_3_KPI_showup.tres" id="5_7e6m1"]
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_rsvao")
-steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526")])
+steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_rb526"), ExtResource("5_7e6m1")])
 
 [node name="TipUI" type="Label" parent="." unique_id=16516687]
 offset_right = 40.0
@@ -24,3 +26,12 @@ grow_vertical = 2
 script = ExtResource("3_ufyfw")
 
 [node name="DialogueIntroUI" parent="." unique_id=490138412 instance=ExtResource("3_xpm57")]
+
+[node name="FinishLabel" type="Label" parent="." unique_id=573630729]
+visible = false
+offset_left = 562.0
+offset_top = 455.0
+offset_right = 1362.0
+offset_bottom = 593.0
+theme_override_font_sizes/font_size = 100
+text = "您已完成新手教程"

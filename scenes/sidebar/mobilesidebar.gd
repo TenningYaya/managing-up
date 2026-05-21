@@ -13,6 +13,8 @@ var is_open := false
 var open_x := -213.0
 var closed_x := 253.0
 
+var _is_locked_by_tutorial := false # 记录当前是否处于“教程霸体”状态
+var _flash_tween: Tween             # 用来存图标闪烁的动画，方便后续停掉
 
 # =====================================================
 # 2. 手机首页 / App 页面区域
@@ -104,6 +106,10 @@ func open_phone() -> void:
 # 4. 收回手机
 # =====================================================
 func close_phone() -> void:
+	if _is_locked_by_tutorial:
+		print("【教程锁死】KPI宝拒绝关闭手机！")
+		return
+		
 	if not is_open:
 		return
 
@@ -151,3 +157,25 @@ func hide_all_pages() -> void:
 
 	# 如果你之后有 TutorialPage，就取消这行注释
 	# tutorial_page.visible = false
+
+func lock_for_tutorial() -> void:
+	_is_locked_by_tutorial = true
+	
+	# 1. 如果手机现在是收起来的，强行调你的原函数把它弹出来
+	if not is_open:
+		open_phone()
+		
+	# 2. 用代码捏一个动画，让你的 btn_tutorial 图标循环闪烁（一亮一暗）
+	if _flash_tween:
+		_flash_tween.kill()
+	_flash_tween = create_tween().set_loops()
+	_flash_tween.tween_property(btn_tutorial, "modulate:a", 0.2, 0.4) 
+	_flash_tween.tween_property(btn_tutorial, "modulate:a", 1.0, 0.4) 
+
+func unlock_from_tutorial() -> void:
+	_is_locked_by_tutorial = false
+	
+	# 教程结束，把闪烁动画干掉，透明度恢复正常
+	if _flash_tween:
+		_flash_tween.kill()
+	btn_tutorial.modulate.a = 1.0

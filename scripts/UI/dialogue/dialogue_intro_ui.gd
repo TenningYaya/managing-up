@@ -1,13 +1,17 @@
+#dialogue_intro_ui.gd
+
 extends Control
 
 signal intro_dialogue_finished
 
 const CHAT_BUBBLE_SCENE: PackedScene = preload("res://scenes/starter/chat_bubble.tscn")
+const CHAT_BUBBLE_AI_SCENE = preload("res://scenes/starter/KPIhelper_chat_bubble.tscn")
 
 @onready var chat_scroll: ScrollContainer = $Background/MainMargin/ChatScroll
 @onready var message_list: VBoxContainer = $Background/MainMargin/ChatScroll/MessageList
 @onready var bubble_sound: AudioStreamPlayer = $BubbleSound
 
+var current_speaker: int = 0
 # 1. 我们的对话现在只需要一个简单的文本列表 (List)
 var boss_messages := [
 
@@ -30,7 +34,8 @@ func _ready() -> void:
 	# 游戏开始，直接显示第一句话
 	#show_next_message()
 
-func start_dialogue(lines: Array[String], position_enum: int, offset_x: float, offset_y: float) -> void:
+func start_dialogue(lines: Array[String], position_enum: int, offset_x: float, offset_y: float, speaker_enum: int) -> void:
+	current_speaker = speaker_enum
 	# 灌入这一步的台词
 	boss_messages = lines
 	current_index = 0
@@ -99,9 +104,13 @@ func show_next_message() -> void:
 	is_animating = false
 
 func add_message(text: String) -> void:
-	var bubble = CHAT_BUBBLE_SCENE.instantiate()
+	var bubble = null
+	if current_speaker == 1: # 假设 1 是 KPI_BAO
+		bubble = CHAT_BUBBLE_AI_SCENE.instantiate()
+	else:
+		bubble = CHAT_BUBBLE_SCENE.instantiate()
+		
 	message_list.add_child(bubble)
-
 	bubble.setup(text)
 	
 	# 刚出现时透明度为0（看不见）

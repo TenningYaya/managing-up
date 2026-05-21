@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bya2jsjtcfe8r"]
+
+[ext_resource type="Script" uid="uid://cbtwlraomyyyg" path="res://scripts/UI/dialogue/chat_bubble.gd" id="1_aiu62"]
+[ext_resource type="Texture2D" uid="uid://ddvoj4c41qjb5" path="res://assets/tutorial/KPI_icon.png" id="2_7te8w"]
+[ext_resource type="Texture2D" uid="uid://ba6cvfsl6vh2v" path="res://assets/dialogue/bubble_boss.png" id="3_8y7jn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0sy5o"]
+atlas = ExtResource("2_7te8w")
+region = Rect2(202, 51, 1661, 1667)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s5yc6"]
+texture = ExtResource("3_8y7jn")
+
+[node name="ChatBubble" type="HBoxContainer" unique_id=1941480218]
+offset_right = 300.0
+offset_bottom = 77.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+mouse_filter = 2
+script = ExtResource("1_aiu62")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1619545776]
+custom_minimum_size = Vector2(107, 0)
+layout_mode = 2
+texture = SubResource("AtlasTexture_0sy5o")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BubblePanel" type="PanelContainer" parent="." unique_id=1602206038]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_s5yc6")
+
+[node name="BubblePadding" type="MarginContainer" parent="BubblePanel" unique_id=1275259]
+layout_mode = 2
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 70
+theme_override_constants/margin_bottom = 30
+
+[node name="BubbleLabel" type="Label" parent="BubblePanel/BubblePadding" unique_id=2022122466]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_font_sizes/font_size = 15
+text = "Welcome to the company."
+vertical_alignment = 1
+autowrap_mode = 3

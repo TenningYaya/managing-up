@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://cpmmw4cv6t7j7"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_gtvnx"]
+
+[resource]
+script = ExtResource("1_gtvnx")
+wait_signal = "intro_dialogue_finished"
+speaker = 1
+dialogue_lines = Array[String](["深挖同事剩余价值，赋能您的向上管理", "KPI宝，您最贴心的工作管家！", "作为一个项目进度为“新建文件夹”的项目组的唯一成员
+", "您肯定也不想一个人干活吧！首先，您需要一些同事！"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

@@ -63,11 +63,9 @@ func _has_point(point: Vector2) -> bool:
 		
 	var global_mouse_pos = global_position + point
 	
+	# 如果鼠标点在了真空洞里
 	if hole_rect.has_point(global_mouse_pos):
-		# 如果大总管不让点，我们就把这个洞当成实心的，继续拦截（返回 true）
-		if not is_hole_clickable:
-			return true 
-		# 如果允许点击，就放行（返回 false），让底下的按钮响应
-		return false
+		# 如果大总管说这个洞可以点，就放行 (return false)；否则拦死 (return true)
+		return not is_hole_clickable 
 		
-	return true # 点在黑布上，拦死
+	return true # 点在黑布上，必须拦死
