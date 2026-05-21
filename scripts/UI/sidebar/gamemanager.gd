@@ -5,6 +5,7 @@ signal request_employee_drop(data)
 signal kpi_changed(new_value)
 signal dollar_changed(new_value)
 signal level_changed(new_level)
+# 记录教程是否已经完成
 
 enum OfficeType {
 	NONE,
@@ -23,6 +24,7 @@ const OFFICE_UNLOCK_LEVELS = {
 
 var has_recruitment_office: bool = false
 var has_culture_center: bool = false
+var is_tutorial_completed: bool = false
 
 # 定义总览面板需要的变量
 var total_hits: int = 0

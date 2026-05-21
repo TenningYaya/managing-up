@@ -25,17 +25,28 @@ var is_waiting_for_final_click := false
 
 
 func _ready() -> void:
-	# 游戏一上来，把所有教程组件都藏起来
+	print("【TutorialLayer】_ready 被调用，等待主场景读档...")
+
+	# 1. 游戏一上来，第一时间藏起所有 UI，防止屏幕闪烁
 	dialogue_ui.hide()
 	blocker_ui.hide()
 	tip_ui.hide()
-	
-	# 如果数组里有剧本，就开始播放第一步！
+
+	# 2. 🌟 核心魔法：强制暂停代码！让出控制权等下一帧
+	# 这给了父节点 (Main) 足够的时间去执行它的 _ready() 并彻底完成 load_game()
+	await get_tree().process_frame
+
+	# 3. 此时 Main 已经读完档了，数据是最新的，再次检查大管家
+	if Gamemanager.is_tutorial_completed:
+		print("【TutorialLayer】读档确认教程已完成，直接拔管销毁！")
+		queue_free()
+		return
+
+	# 4. 如果确实没完成（新游戏），则执行你原本真实的启动逻辑！
 	if steps.size() > 0:
 		play_step(0)
 	else:
 		printerr("老板，你还没往 TutorialManager 里塞剧本文件呢！")
-
 # ==========================================
 # 🧠 大脑核心：执行某一步骤
 # ==========================================
@@ -342,7 +353,11 @@ func _process(delta: float) -> void:
 			_on_step_completed()     # 🌟 直接呼叫通关逻辑！
 			
 func _finish_all_tutorials() -> void:
-		# 在这俩函数的开头第一行加上：
+	Gamemanager.is_tutorial_completed = true
+	if SaveManager.has_method("save_game"):
+		SaveManager.save_game()
+		print("【教程】教程通关记录已保存到硬盘！")
+		
 	if _global_flash_tween:
 		_global_flash_tween.kill()
 		_global_flash_tween = null

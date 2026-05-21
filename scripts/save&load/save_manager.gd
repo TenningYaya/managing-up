@@ -32,7 +32,7 @@ func delete_save() -> void:
 # ================= 存档核心逻辑 =================
 func save_game() -> void:
 	var save_data = {}
-	
+	save_data["is_tutorial_completed"] = Gamemanager.is_tutorial_completed	
 	save_data["player"] = {
 		"level": Gamemanager.player_level,
 		"kpi": Gamemanager.kpi,
@@ -81,7 +81,7 @@ func save_game() -> void:
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(save_data, "\t"))
 	file.close()
-	print("[SaveSystem] 游戏保存成功！")
+	print("[SaveSystem] Is Toturial completed: ", save_data["is_tutorial_completed"])
 
 # ================= 延迟吸附辅助函数 =================
 # 🌟 保险措施：等所有节点都加载完，再去找工位，防止报错
@@ -187,7 +187,9 @@ func load_game() -> void:
 	if json.parse(json_str) != OK: return
 		
 	var save_data = json.data
-	
+	if save_data.has("is_tutorial_completed"):
+		Gamemanager.is_tutorial_completed = save_data["is_tutorial_completed"]
+		
 	if save_data.has("player"):
 		var p_data = save_data["player"]
 		Gamemanager.player_level = int(p_data.get("level", 1))
