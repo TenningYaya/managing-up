@@ -23,6 +23,8 @@ func delete_save() -> void:
 	Gamemanager.player_level = 1
 	Gamemanager.total_hits = 0
 	Gamemanager.total_time = 0.0
+	Gamemanager.max_desk_level = 1
+	Gamemanager.unlocked_desk_slots = 1
 	
 	if EmployeeManager.get("my_employees") != null:
 		EmployeeManager.my_employees.clear()
@@ -38,7 +40,9 @@ func save_game() -> void:
 		"kpi": Gamemanager.kpi,
 		"dollar": Gamemanager.dollar,
 		"total_hits": Gamemanager.total_hits,
-		"total_time": Gamemanager.total_time
+		"total_time": Gamemanager.total_time,
+		"max_desk_level": Gamemanager.max_desk_level,
+		"unlocked_desk_slots": Gamemanager.unlocked_desk_slots
 	}
 	
 	var offices_data = {}
@@ -48,6 +52,11 @@ func save_game() -> void:
 			"current_type": office.current_type
 		}
 	save_data["offices"] = offices_data
+	
+	var desk_slots_data = {}
+	for slot in get_tree().get_nodes_in_group("desk_slots"):
+		desk_slots_data[slot.name] = slot.slot_level
+	save_data["desk_slots"] = desk_slots_data
 	
 	var employee_data = []
 	for emp in EmployeeManager.my_employees:
@@ -197,6 +206,8 @@ func load_game() -> void:
 		Gamemanager.dollar = int(p_data.get("dollar", 10000))
 		Gamemanager.total_hits = int(p_data.get("total_hits", 0))
 		Gamemanager.total_time = float(p_data.get("total_time", 0.0))
+		Gamemanager.max_desk_level = int(p_data.get("max_desk_level", 1))
+		Gamemanager.unlocked_desk_slots = int(p_data.get("unlocked_desk_slots", 1))
 		
 	if save_data.has("offices"):
 		var o_data = save_data["offices"]
@@ -208,6 +219,16 @@ func load_game() -> void:
 				if not office.is_locked and saved_type != Gamemanager.OfficeType.NONE:
 					office.change_function(saved_type)
 					
+	if save_data.has("desk_slots"):
+		var d_data = save_data["desk_slots"]
+		for slot in get_tree().get_nodes_in_group("desk_slots"):
+			if d_data.has(slot.name):
+				var loaded_level = int(d_data[slot.name])
+				slot.slot_level = loaded_level
+				for desk in slot.grid_container.get_children():
+					if desk is DeskSeat: 
+						desk.set_upgrade_level(loaded_level)
+						
 	if save_data.has("employees"):
 		_restore_employees(save_data["employees"])
 		

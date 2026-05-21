@@ -7,6 +7,7 @@ var slot_level: int = 1
 @onready var upgrade_trigger_btn = $UpgradeTriggerBtn # 左下角新添加的小按钮
 
 func _ready():
+	add_to_group("desk_slots")
 	# 连接新按钮的点击信号
 	upgrade_trigger_btn.pressed.connect(_on_slot_clicked)
 
