@@ -47,6 +47,8 @@ recruitment_button=""
 reject_buttons=""
 tutorial_app_icon=""
 sidebar_panel=""
+employee_droparea=""
+tutorial_drag=""
 
 [input]
 

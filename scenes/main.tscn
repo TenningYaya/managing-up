@@ -196,7 +196,7 @@ layout_mode = 2
 layout_mode = 2
 unlock_at_level = 2
 
-[node name="EmployeeDropArea" parent="FullGameMode/Background/WholeAlignment" unique_id=1860369934 instance=ExtResource("3_jkv2x")]
+[node name="EmployeeDropArea" parent="FullGameMode/Background/WholeAlignment" unique_id=1860369934 groups=["employee_droparea"] instance=ExtResource("3_jkv2x")]
 layout_mode = 2
 
 [node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1716905617 instance=ExtResource("11_trceg")]
@@ -220,6 +220,16 @@ layout_mode = 2
 
 [node name="FrontRecruitmentButton" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer" unique_id=1065910196 groups=["recruitment_button"] instance=ExtResource("9_0ld40")]
 layout_mode = 2
+
+[node name="TutorialDrag" type="Control" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1000163950 groups=["tutorial_drag"]]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="DeskRow" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=1158104807]
 layout_mode = 2

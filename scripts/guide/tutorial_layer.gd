@@ -25,8 +25,6 @@ var is_waiting_for_final_click := false
 
 
 func _ready() -> void:
-	print("【TutorialLayer】_ready 被调用，等待主场景读档...")
-
 	# 1. 游戏一上来，第一时间藏起所有 UI，防止屏幕闪烁
 	dialogue_ui.hide()
 	blocker_ui.hide()
@@ -139,7 +137,6 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	
 	if step.force_show_ui_group != "":
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
-		print("【抓鬼行动】大总管到底找没找到 Sidebar？结果是：", ui_node)
 		if ui_node:
 			if ui_node.has_method("lock_for_tutorial"):
 				ui_node.lock_for_tutorial()
@@ -223,7 +220,11 @@ func _handle_wait_event(step: TutorialStep) -> void:
 		current_target = target
 		current_signal_name = step.wait_signal
 		current_callable = Callable(self, "_on_step_completed")
-		target.connect(current_signal_name, current_callable)
+		if current_signal_name == "all_colleagues_placed":
+			print("【大总管】检测到 WAIT_EVENT 在等拖拽，开启 process 雷达，拦截物理连线。")
+			set_process(true) # 确保雷达开着
+		else:
+			target.connect(current_signal_name, current_callable) # 正常信号才给连
 
 # ==========================================
 # 📍 小字位置计算逻辑 (支持自由像素微调！)
@@ -253,9 +254,6 @@ func _arrange_tip(step: TutorialStep, target_rect: Rect2) -> void:
 	# 加上 Inspector 里的自由偏移量！
 	tip_ui.global_position = Vector2(base_pos.x + step.tip_offset_x, base_pos.y + step.tip_offset_y)
 
-# ==========================================
-# 🏁 某一步完成时的统一出口
-# ==========================================
 func _on_step_completed() -> void:
 	# 1. 每次点击，先停掉闪烁，复原透明度
 	if _global_flash_tween:
@@ -274,22 +272,24 @@ func _on_step_completed() -> void:
 		if remaining_count > 0:
 			print("【大总管】还没招满，继续留在第七步！")
 			
-			# 🌟 一次性解决的核心：因为刚才玩家点了一下，黑布拦截逻辑被重置了
-			# 既然 target_group 是 recruitment_panel，我们直接在这里原地重新算一遍黑布区域，并拉开闸门允许继续点透！
 			var target_panel = get_tree().get_first_node_in_group("recruitment_panel")
 			if target_panel:
 				blocker_ui._arrange_curtains(target_panel.get_global_rect())
 				blocker_ui.hole_rect = target_panel.get_global_rect()
-				blocker_ui.is_hole_clickable = true # 继续允许点透里面的 YES
+				blocker_ui.is_hole_clickable = true 
 				
-			return # 🌟 强行打断！不拆信号线，不往后翻篇，让玩家留在原地继续点！
+			return # 强行打断！
+		else:
+			# 🌟【移到这里】：只有在第七步判定真正通过、牛马全部抓齐时，才打印这句骚话！
+			print("【大总管专用日志】3个预制牛马全部逮到！第七步完结！")
 			
 	# ====================================================
-	# 3. 🌟 只有当 3 个人全部招完（池子变 0），代码才能走到这里，彻底翻篇！
+	# 3. 🌟 公共出口：任何步骤翻篇都会经过这里
 	# ====================================================
-	print("【大总管】3个牛马全部逮到，正式拆线，进入下一步剧情！")
+	# 把这里的打印改成通用日志，这样前几步看着就正常了！
+	print("【大总管】当前步骤 [", current_step_index + 1, "] 完成，正式拆线，进入下一步。")
 	
-	# 卸磨杀驴：断开当前的信号连接，防止重复触发
+	# 卸磨杀驴：断开当前的信号连接
 	if current_target and current_target.has_signal(current_signal_name):
 		current_target.disconnect(current_signal_name, current_callable)
 	
@@ -344,6 +344,7 @@ func _process(delta: float) -> void:
 			esc_hold_time = 0.0
 			print("【教程跳过】长按满1秒，全局强行结束！")
 			_finish_all_tutorials()
+			
 	if current_signal_name == "all_preset_employees_hired":
 		# 盯着单例里的池子看
 		if RecruitmentManager.normal_pool.size() == 0:
@@ -351,6 +352,23 @@ func _process(delta: float) -> void:
 			current_signal_name = "" # 🌟 关掉雷达目标，防止每帧狂刷
 			# 这里不要写 set_process(false)，因为你的 ESC 长按还需要它！
 			_on_step_completed()     # 🌟 直接呼叫通关逻辑！
+	
+	if current_signal_name == "all_colleagues_placed":
+		var working_count = 0
+		
+		# 直接去场景里抓所有员工（你在 employee.gd 的 _ready 里加了这个组）
+		var all_emps = get_tree().get_nodes_in_group("employees")
+		
+		for emp in all_emps:
+			# 安全读取：如果这个员工有 is_working 属性，并且是真的
+			if "is_working" in emp and emp.is_working == true:
+				working_count += 1
+				
+		# 如果打工的人达到了 3 个，通关！
+		if working_count >= 3:
+			print("【大总管雷达】3个牛马全部落座开工！拖拽教程圆满结束！")
+			current_signal_name = "" # 🌟 关掉雷达
+			_on_step_completed()     # 🌟 瞬间放行，拆线翻篇！
 			
 func _finish_all_tutorials() -> void:
 	Gamemanager.is_tutorial_completed = true
