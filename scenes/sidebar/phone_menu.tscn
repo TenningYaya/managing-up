@@ -20,7 +20,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yskv6"]
 
-[node name="MobileSidebar" type="Control" unique_id=2025363917 groups=["sidebar_panel"]]
+[node name="MobileSidebar" type="Control" unique_id=2025363917]
 layout_mode = 3
 anchors_preset = 3
 anchor_left = 1.0
@@ -110,7 +110,7 @@ theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 3
 
-[node name="upgrades" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=1381200172]
+[node name="upgrades" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=1381200172 groups=["upgrade_icon"]]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 texture_normal = ExtResource("3_yj4so")
@@ -199,7 +199,7 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_50qqt")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_diil0")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_yskv6")
 
-[node name="Trigger" type="TextureButton" parent="." unique_id=914615362]
+[node name="Trigger" type="TextureButton" parent="." unique_id=914615362 groups=["sidebar_trigger"]]
 layout_mode = 0
 offset_left = -36.0
 offset_top = -228.0

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://b2ncs7h3ywsys"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_286l6"]
+[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_em7py"]
+
+[resource]
+script = ExtResource("1_286l6")
+target_group = "employee_warehouse"
+force_show_ui_group = "employee_warehouse"
+lock_ui_lifecycle = true
+speaker = 1
+dialogue_lines = Array[String](["被派遣的同事将出现在等待区，就像刚才那样，从天而降~
+", "如果等待区已经无处下脚了，优秀的同事们会进行自我管理
+", "比如找点别的事情做，但这样他们就不会为我们产出KPI了"])
+illustration_texture = ExtResource("1_em7py")
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

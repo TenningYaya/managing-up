@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://d2lfn81rl2txt"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_idnao"]
+
+[resource]
+script = ExtResource("1_idnao")
+step_type = 1
+target_group = "upgrade_icon"
+force_show_ui_group = "sidebar_panel"
+lock_ui_lifecycle = true
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

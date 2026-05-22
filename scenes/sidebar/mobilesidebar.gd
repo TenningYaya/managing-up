@@ -164,18 +164,8 @@ func lock_for_tutorial() -> void:
 	# 1. 如果手机现在是收起来的，强行调你的原函数把它弹出来
 	if not is_open:
 		open_phone()
-		
-	# 2. 用代码捏一个动画，让你的 btn_tutorial 图标循环闪烁（一亮一暗）
-	if _flash_tween:
-		_flash_tween.kill()
-	_flash_tween = create_tween().set_loops()
-	_flash_tween.tween_property(btn_tutorial, "modulate:a", 0.2, 0.4) 
-	_flash_tween.tween_property(btn_tutorial, "modulate:a", 1.0, 0.4) 
 
 func unlock_from_tutorial() -> void:
 	_is_locked_by_tutorial = false
-	
-	# 教程结束，把闪烁动画干掉，透明度恢复正常
-	if _flash_tween:
-		_flash_tween.kill()
+
 	btn_tutorial.modulate.a = 1.0

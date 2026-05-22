@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://c4ejw1dbfjotu"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_exech"]
+
+[resource]
+script = ExtResource("1_exech")
+dialogue_lines = Array[String](["表现很突出嘛。项目才开张了多久，就做出了一点成绩", "很好，现在你攒够了绩效，可以申请提升职级了"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

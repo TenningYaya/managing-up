@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://bs531wck5ucr0"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_3xo8k"]
+
+[resource]
+script = ExtResource("1_3xo8k")
+target_group = "warehouse_button"
+speaker = 1
+dialogue_lines = Array[String](["既然都是为项目负责，您当然可以优化项目组的人员结构！", "查看您的人力资源中心，您可以在这里批量化地管理团队
+"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

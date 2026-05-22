@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://bj7tdjbhjoha1"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_ram5f"]
+
+[resource]
+script = ExtResource("1_ram5f")
+speaker = 1
+dialogue_lines = Array[String](["多亏了您的努力，又一位迷途的同事悬崖勒马！公司的资产增加了！"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

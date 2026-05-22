@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://dqidm7f4ec2rm"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_cw8ob"]
+
+[resource]
+script = ExtResource("1_cw8ob")
+target_group = "currency_board"
+speaker = 1
+dialogue_lines = Array[String](["由于老板不在家，公司的资产也约等于您的资产~", "您可以将这些资产用于许多地方，比如获取更牛的员工"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

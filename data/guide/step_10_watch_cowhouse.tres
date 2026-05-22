@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://dhym38klp1qfx"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_d1cqj"]
+
+[resource]
+script = ExtResource("1_d1cqj")
+target_group = "desk_slot_1"
+speaker = 1
+dialogue_lines = Array[String](["哦！您看，他们多可爱啊！他们工作着的样子就像是天使一样", "当然，作为老板的联系人，项目成果与您的辛劳密不可分~", "出于为项目负责的心态，我们当然要敦促同事尽快完成工作~", "您可以右键点击同事，查看他们的当前工作进度"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

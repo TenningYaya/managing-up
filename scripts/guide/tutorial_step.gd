@@ -40,6 +40,12 @@ enum DialoguePos { CENTER_PHONE, RIGHT_PHONE, TOP_WINDOW, BOTTOM_WINDOW }
 ## 这一步要播放的剧情台词数组（支持单句或多句连播）
 @export_multiline var dialogue_lines: Array[String] = []
 
+@export_group("Illustration Feature")
+## 这一步需要弹出的提示截图（不需要则留空）
+@export var illustration_texture: Texture2D = null
+## 截图像素微调偏移（正数向右下，负数向左上）
+@export var illustration_offset: Vector2 = Vector2.ZERO
+
 @export_subgroup("Dialogue Pixel Fine-Tuning")
 ## 🌟 对话框像素微调：在基础预设位置上，水平方向偏移的像素值（正数向右，负数向左）
 @export var dialogue_offset_x: float = 0.0

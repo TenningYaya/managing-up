@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://dyl85oml2ph1p"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_qxah5"]
+
+[resource]
+script = ExtResource("1_qxah5")
+target_group = "employee_panel"
+force_show_ui_group = "employee_panel"
+lock_ui_lifecycle = true
+speaker = 1
+dialogue_lines = Array[String](["当进度条走到终点时，同事就会产出一份文件", "左键点击同事。发送一条条期待，一条条敦促，提高他们的生产进度~"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

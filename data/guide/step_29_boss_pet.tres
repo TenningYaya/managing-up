@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://bjl2a62hj35cw"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_s026f"]
+
+[resource]
+script = ExtResource("1_s026f")
+dialogue_lines = Array[String](["升级之后，你掌握的资源就更多了，但也意味着之后的任务就更艰巨了", "加油，我一直是很看好你的，这对你来说是一种栽培", "好好学，好好干，bye~"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

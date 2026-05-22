@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://ysc5lu6f5pqy"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_tlx4b"]
+
+[resource]
+script = ExtResource("1_tlx4b")
+target_group = "office_area"
+speaker = 1
+dialogue_lines = Array[String](["除了更好和更多的工位，现在您可以使用办公室来激励同事工作了！
+", "空置的办公室只能拿来堆纸箱。快给它选择一个功能吧！"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

@@ -167,7 +167,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="OfficeArea" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=601108209]
+[node name="OfficeArea" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=601108209 groups=["office_area"]]
 layout_mode = 2
 mouse_filter = 2
 
@@ -189,7 +189,7 @@ layout_mode = 2
 mouse_filter = 2
 alignment = 1
 
-[node name="NewRoom3" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=1041642994 instance=ExtResource("1_0wfyh")]
+[node name="NewRoom3" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=1041642994 groups=["tutorial_office"] instance=ExtResource("1_0wfyh")]
 layout_mode = 2
 
 [node name="NewRoom4" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=2005734672 instance=ExtResource("1_0wfyh")]
@@ -199,7 +199,7 @@ unlock_at_level = 2
 [node name="EmployeeDropArea" parent="FullGameMode/Background/WholeAlignment" unique_id=1860369934 groups=["employee_droparea"] instance=ExtResource("3_jkv2x")]
 layout_mode = 2
 
-[node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1716905617 instance=ExtResource("11_trceg")]
+[node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1716905617 groups=["currency_board"] instance=ExtResource("11_trceg")]
 layout_mode = 0
 offset_left = -102.0
 offset_top = -69.0
@@ -215,7 +215,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="FrontWarehouseButton" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer" unique_id=1938687981 instance=ExtResource("8_dp3eg")]
+[node name="FrontWarehouseButton" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer" unique_id=1938687981 groups=["warehouse_button"] instance=ExtResource("8_dp3eg")]
 layout_mode = 2
 
 [node name="FrontRecruitmentButton" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer" unique_id=1065910196 groups=["recruitment_button"] instance=ExtResource("9_0ld40")]
@@ -234,7 +234,7 @@ mouse_filter = 2
 [node name="DeskRow" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=1158104807]
 layout_mode = 2
 
-[node name="DeskSlot" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=974996053 instance=ExtResource("2_sugp2")]
+[node name="DeskSlot" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=974996053 groups=["desk_slot_1"] instance=ExtResource("2_sugp2")]
 layout_mode = 2
 
 [node name="DeskSlot2" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=2027690692 instance=ExtResource("2_sugp2")]
@@ -287,9 +287,9 @@ offset_bottom = 1080.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2052431275]
 
-[node name="EmployeePanel" parent="CanvasLayer" unique_id=1329495967 instance=ExtResource("5_tbgi4")]
-offset_left = 1922.0
-offset_top = 714.0
+[node name="EmployeePanel" parent="CanvasLayer" unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
+offset_left = 1654.0
+offset_top = 336.0
 offset_right = 1922.0
 offset_bottom = 714.0
 
@@ -408,7 +408,7 @@ offset_top = 297.0
 offset_right = 213.0
 offset_bottom = 632.0
 
-[node name="MobileSidebar" parent="CanvasLayer" unique_id=2025363917 instance=ExtResource("14_pm3ni")]
+[node name="MobileSidebar" parent="CanvasLayer" unique_id=2025363917 groups=["sidebar_panel"] instance=ExtResource("14_pm3ni")]
 z_index = 100
 offset_left = -42.0
 offset_top = -24.0

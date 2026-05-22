@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://bwg53tc3ojy72"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_7tfw7"]
+[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_10nxm"]
+
+[resource]
+script = ExtResource("1_7tfw7")
+target_group = "employee_panel"
+force_show_ui_group = "employee_panel"
+lock_ui_lifecycle = true
+speaker = 1
+dialogue_lines = Array[String](["当然，您随时可以打开同事面板，再次将他们派遣到这个项目", "或者让他们永久离开这个公司~这也是优化人员架构的必不可少的一环"])
+illustration_texture = ExtResource("1_10nxm")
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

@@ -7,9 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://b343jwsuuh7fn" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Buttons & Holders/13.png" id="4_lh86t"]
 [ext_resource type="Texture2D" uid="uid://cikjriby4i27n" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Icons/14.png" id="4_vc4hl"]
 [ext_resource type="Texture2D" uid="uid://bf3w3mlc2krib" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Decoration/3.png" id="6_70tse"]
+[ext_resource type="Script" uid="uid://dx6lfbivooo7q" path="res://scenes/sidebar/upgrade_button.gd" id="8_ciro5"]
 [ext_resource type="AudioStream" uid="uid://764twux58mia" path="res://audio/gem_collect.wav" id="8_pgosc"]
 
-[node name="UpgradesPage" type="Control" unique_id=1808630414]
+[node name="UpgradesPage" type="Control" unique_id=1808630414 groups=["upgrade_page"]]
 custom_minimum_size = Vector2(270, 360)
 layout_mode = 3
 anchors_preset = 0
@@ -229,7 +230,7 @@ text = "You can recruit more people to join the workforce."
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="UpgradeButton" type="TextureButton" parent="." unique_id=1385535808]
+[node name="UpgradeButton" type="TextureButton" parent="." unique_id=1385535808 groups=["upgrade_button"]]
 layout_mode = 0
 offset_left = 62.0
 offset_top = 305.0
@@ -240,6 +241,7 @@ texture_pressed = ExtResource("2_lh86t")
 texture_disabled = ExtResource("2_lh86t")
 ignore_texture_size = true
 stretch_mode = 0
+script = ExtResource("8_ciro5")
 
 [node name="Label" type="Label" parent="UpgradeButton" unique_id=934779081]
 layout_mode = 1

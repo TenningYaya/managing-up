@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://cjfjfj4l46h23"]
 
-[ext_resource type="Texture2D" uid="uid://b70dtrr3021wm" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Map inventory/Map/Map Close/5.png" id="1_kp28t"]
 [ext_resource type="Script" uid="uid://bpk1q1i0i3xmm" path="res://scripts/UI/sidebar/employee_panel.gd" id="1_sl25x"]
 [ext_resource type="PackedScene" uid="uid://8o18jsagw05c" path="res://scenes/sidebar/employee_panel/employee_ability_slider.tscn" id="2_sl25x"]
 [ext_resource type="PackedScene" uid="uid://dndhwa02h345o" path="res://scenes/sidebar/employee_panel/employee_information_bar.tscn" id="3_agpfo"]
@@ -23,20 +22,22 @@
 atlas = ExtResource("11_5it8m")
 region = Rect2(399, 2773, 176, 20)
 
-[node name="EmployeePanel" type="Control" unique_id=1048843880 groups=["employee_panel"]]
+[node name="EmployeePanel" type="Control" unique_id=1048843880]
 z_index = 100
 layout_mode = 3
 anchors_preset = 0
+offset_left = -267.0
+offset_top = -378.0
 script = ExtResource("1_sl25x")
 
-[node name="BackgroundImage" type="TextureRect" parent="." unique_id=1393985823]
-layout_mode = 0
-offset_left = -400.00003
-offset_top = -503.0
-offset_right = 228.57138
-offset_bottom = 231.5238
-scale = Vector2(0.84, 0.84)
-texture = ExtResource("1_kp28t")
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1160354043]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.9, 0.86355, 0.657, 1)
 
 [node name="PanelBg" type="Panel" parent="." unique_id=1968908939]
 custom_minimum_size = Vector2(270, 360)

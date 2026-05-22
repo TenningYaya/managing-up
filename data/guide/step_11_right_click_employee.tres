@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://dtfjdjwgxta1"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_n5q6w"]
+
+[resource]
+script = ExtResource("1_n5q6w")
+step_type = 2
+target_group = "employees"
+wait_signal = "employee_panel_opened"
+tip_text = "右键点击员工打开面板"
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"
