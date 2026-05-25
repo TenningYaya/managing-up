@@ -1,5 +1,3 @@
-#dialogue_intro_ui.gd
-
 extends Control
 
 signal intro_dialogue_finished
@@ -11,11 +9,12 @@ const CHAT_BUBBLE_AI_SCENE = preload("res://scenes/starter/KPIhelper_chat_bubble
 @onready var message_list: VBoxContainer = $Background/MainMargin/ChatScroll/MessageList
 @onready var bubble_sound: AudioStreamPlayer = $BubbleSound
 
+# 新加的：抓取我们刚刚创建的操作提示标签
+@onready var hint_label: Label = $HintLabel
+
 var current_speaker: int = 0
 # 1. 我们的对话现在只需要一个简单的文本列表 (List)
-var boss_messages := [
-
-]
+var boss_messages := []
 
 var current_index := 0
 var is_animating := false
@@ -31,8 +30,12 @@ func _ready() -> void:
 	chat_scroll.get_v_scroll_bar().modulate.a = 0
 	chat_scroll.get_h_scroll_bar().modulate.a = 0
 
-	# 游戏开始，直接显示第一句话
-	#show_next_message()
+	# ==== 新加的代码：让提示文本呼吸闪烁 ====
+	# 如果成功抓到了这个节点，就开始播放循环动画
+	if hint_label:
+		var tween = create_tween().set_loops()
+		tween.tween_property(hint_label, "modulate:a", 0.3, 0.8)
+		tween.tween_property(hint_label, "modulate:a", 1.0, 0.8)
 
 func start_dialogue(lines: Array[String], position_enum: int, offset_x: float, offset_y: float, speaker_enum: int) -> void:
 	current_speaker = speaker_enum
@@ -49,9 +52,7 @@ func start_dialogue(lines: Array[String], position_enum: int, offset_x: float, o
 		child.queue_free()
 		
 	# 🌟 处理位置微调（基于你填的预设和 Offset）
-	# 这里先简单重置全局坐标，然后加上微调值
-	# 具体的 Preset 逻辑我们后续可以完善，目前先加上位移
-	$Background.position = Vector2.ZERO # 或者是你们的主容器节点名
+	$Background.position = Vector2.ZERO 
 	$Background.position.x += offset_x
 	$Background.position.y += offset_y
 
@@ -123,8 +124,6 @@ func add_message(text: String) -> void:
 	await get_tree().process_frame
 
 	# 5. 让滚动条滚到底部。
-	# 因为我们用的是 VBoxContainer (垂直排版盒子)，加入新气泡后，
-	# 只要我们把屏幕拉到底部，旧的消息自然就会被向上顶。
 	scroll_to_bottom()
 
 	# 气泡渐渐出现的动画
@@ -146,14 +145,9 @@ func skip_dialogue() -> void:
 func finish_intro_dialogue() -> void:
 	is_finished = true
 	print("对话结束，可以进入下一步。")
-	# 之后可以在这里进入游戏主界面
-	# queue_free()
 
-# 🌟 核心修改 A：立刻把对话主界面隐藏起来（给后面的按钮腾地方）
+	# 🌟 核心修改 A：立刻把对话主界面隐藏起来
 	hide() 
 	
-	# 🌟 核心修改 B：扯开嗓子把信号发出去！
+	# 🌟 核心修改 B：发出信号
 	intro_dialogue_finished.emit()
-	
-	# ⚠️ 注意：千万不要在这里直接 queue_free()！
-	# 如果直接 queue_free()，它刚发出信号自己就死了，后续接力可能会断掉。
