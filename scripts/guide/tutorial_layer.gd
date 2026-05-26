@@ -68,6 +68,14 @@ func play_step(index: int) -> void:
 		locked_ui_node.unlock_from_tutorial()
 		locked_ui_node = null
 
+# ==== 修改这里：加入 Cleanup（清理）逻辑 ====
+	if locked_ui_node:
+			if locked_ui_node.has_method("unlock_from_tutorial"):
+				locked_ui_node.unlock_from_tutorial()
+			# 强行隐藏上一关遗留的 Node 界面！
+			locked_ui_node.hide() 
+			locked_ui_node = null
+
 	# 🌟 2. 检查这一步是否需要强行弹出某个界面
 	if step.force_show_ui_group != "":
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
@@ -409,6 +417,8 @@ func _on_step_completed() -> void:
 	if current_target and current_target is Control:
 		current_target.modulate.a = 1.0
 	
+	blocker_ui.hide()
+	
 	# 2. 🌟 核心拦截判定：如果是在等“招满三人”的步骤
 	if current_signal_name == "all_preset_employees_hired":
 		var remaining_count = RecruitmentManager.normal_pool.size()
@@ -451,9 +461,15 @@ func _on_step_completed() -> void:
 	# 继续下一步！
 	play_step(current_step_index + 1)
 	
+	# 1. 尝试清理直接挂在外面的图片
 	var screenshot = get_node_or_null("TutorialScreenshot")
 	if screenshot:
 		screenshot.queue_free()
+		
+	# 2. ==== 新加的清理代码：使用明确的 Path（路径）去黑布上撕贴纸 ====
+	var screenshot_on_blocker = get_node_or_null("Blocker/TutorialScreenshot")
+	if screenshot_on_blocker:
+		screenshot_on_blocker.queue_free()
 	
 	if current_target and is_instance_valid(current_target) and "z_index" in current_target:
 		current_target.z_index = 0

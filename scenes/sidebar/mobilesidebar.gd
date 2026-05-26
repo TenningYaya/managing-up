@@ -35,6 +35,7 @@ var _flash_tween: Tween             # 用来存图标闪烁的动画，方便后
 @onready var general_page: Control = $PhoneWrapper/Screen/AppDisplayArea/GeneralPage
 @onready var settings_page: Control = $PhoneWrapper/Screen/AppDisplayArea/SettingsPage
 @onready var upgrades_page: Control = $PhoneWrapper/Screen/AppDisplayArea/UpgradesPage
+@onready var tutorial_page: Control = $PhoneWrapper/Screen/AppDisplayArea/TutorialPage
 
 # 如果你之后做了 TutorialPage，就取消这行注释
 # @onready var tutorial_page: Control = $PhoneWrapper/Screen/AppDisplayArea/TutorialPage

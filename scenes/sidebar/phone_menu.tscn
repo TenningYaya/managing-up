@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bfdj2mva2cc1t" path="res://assets/sidebar/tutorial.png" id="4_8c6sh"]
 [ext_resource type="Texture2D" uid="uid://bkrakpjg1rg7h" path="res://assets/sidebar/general.png" id="5_oyh58"]
 [ext_resource type="Texture2D" uid="uid://bt4qwkifuyi7d" path="res://assets/sidebar/settings.png" id="6_1dt7a"]
+[ext_resource type="PackedScene" uid="uid://bw8epncov74qg" path="res://scenes/sidebar/tutorial_page.tscn" id="7_50qqt"]
 [ext_resource type="PackedScene" uid="uid://cef1cc6y8xrd6" path="res://scenes/sidebar/settings_page.tscn" id="7_uouet"]
 [ext_resource type="PackedScene" uid="uid://72jjpffy66yt" path="res://scenes/sidebar/upgrades_page.tscn" id="8_53q3r"]
 [ext_resource type="PackedScene" uid="uid://bc1pi0j86er70" path="res://scenes/sidebar/general_page.tscn" id="9_50qqt"]
@@ -146,6 +147,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="TutorialPage" parent="PhoneWrapper/Screen/AppDisplayArea" unique_id=1808630414 instance=ExtResource("7_50qqt")]
+layout_mode = 0
+
 [node name="SettingsPage" parent="PhoneWrapper/Screen/AppDisplayArea" unique_id=517570582 instance=ExtResource("7_uouet")]
 visible = false
 layout_mode = 1
@@ -157,7 +161,7 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="UpgradesPage" parent="PhoneWrapper/Screen/AppDisplayArea" unique_id=1808630414 instance=ExtResource("8_53q3r")]
+[node name="UpgradesPage" parent="PhoneWrapper/Screen/AppDisplayArea" unique_id=1595225316 instance=ExtResource("8_53q3r")]
 visible = false
 layout_mode = 0
 
