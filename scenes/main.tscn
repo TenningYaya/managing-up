@@ -7,8 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://sclbpjras5bi" path="res://scenes/employee/employee_drop_area.tscn" id="3_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_muem4"]
 [ext_resource type="Texture2D" uid="uid://yxab4qjkxvbk" path="res://assets/background/959907CBFB75635004DB71D30DBF186B.png" id="3_yc10j"]
+[ext_resource type="Texture2D" uid="uid://b47ers1c5bqr5" path="res://assets/right.png" id="4_2wyq8"]
 [ext_resource type="PackedScene" uid="uid://bin62t7m5b1o0" path="res://scenes/sidebar/side_menu.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://cjfjfj4l46h23" path="res://scenes/sidebar/employee_panel/employee_panel.tscn" id="5_tbgi4"]
+[ext_resource type="Texture2D" uid="uid://cv504ynte8nqt" path="res://assets/left.png" id="5_vxglm"]
 [ext_resource type="Script" uid="uid://bo4d6sxmvchpt" path="res://scripts/test/test_time_control.gd" id="6_tipki"]
 [ext_resource type="PackedScene" uid="uid://d17k21r7qmpoh" path="res://scenes/UI/ingame/front_warehouse_button.tscn" id="8_dp3eg"]
 [ext_resource type="PackedScene" uid="uid://bgy17dc4wyb1u" path="res://scenes/UI/ingame/front_recruitment_button.tscn" id="9_0ld40"]
@@ -139,14 +141,16 @@ layout_mode = 0
 offset_left = 2109.0
 offset_right = 2955.0
 offset_bottom = 357.0
-texture = ExtResource("3_muem4")
+texture = ExtResource("4_2wyq8")
+expand_mode = 1
 
 [node name="LeftCover" type="TextureRect" parent="FullGameMode/Background/Floors" unique_id=557149700]
 layout_mode = 0
 offset_left = -1059.0
 offset_right = -213.0
 offset_bottom = 357.0
-texture = ExtResource("3_muem4")
+texture = ExtResource("5_vxglm")
+expand_mode = 1
 
 [node name="TopCover" type="TextureRect" parent="FullGameMode/Background/Floors" unique_id=833062593]
 visible = false
