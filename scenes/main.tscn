@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_muem4"]
 [ext_resource type="Texture2D" uid="uid://yxab4qjkxvbk" path="res://assets/background/959907CBFB75635004DB71D30DBF186B.png" id="3_yc10j"]
 [ext_resource type="Texture2D" uid="uid://b47ers1c5bqr5" path="res://assets/right.png" id="4_2wyq8"]
-[ext_resource type="PackedScene" uid="uid://bin62t7m5b1o0" path="res://scenes/sidebar/side_menu.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://cjfjfj4l46h23" path="res://scenes/sidebar/employee_panel/employee_panel.tscn" id="5_tbgi4"]
 [ext_resource type="Texture2D" uid="uid://cv504ynte8nqt" path="res://assets/left.png" id="5_vxglm"]
 [ext_resource type="Script" uid="uid://bo4d6sxmvchpt" path="res://scripts/test/test_time_control.gd" id="6_tipki"]
@@ -296,8 +295,6 @@ offset_left = 1654.0
 offset_top = 336.0
 offset_right = 1922.0
 offset_bottom = 714.0
-
-[node name="SideMenu" parent="CanvasLayer" unique_id=1012173253 instance=ExtResource("4_jyhfs")]
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
 layout_mode = 3
