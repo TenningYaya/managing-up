@@ -37,10 +37,10 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	# 3. 此时 Main 已经读完档了，数据是最新的，再次检查大管家
-	#if Gamemanager.is_tutorial_completed:
-		#print("【TutorialLayer】读档确认教程已完成，直接拔管销毁！")
-		#queue_free()
-		#return
+	if Gamemanager.is_tutorial_completed:
+		print("【TutorialLayer】读档确认教程已完成，直接拔管销毁！")
+		queue_free()
+		return
 
 	# 4. 如果确实没完成（新游戏），则执行你原本真实的启动逻辑！
 	if steps.size() > 0:
@@ -60,6 +60,13 @@ func play_step(index: int) -> void:
 	
 	print("正在执行教程第 ", index + 1, " 步：", TutorialStep.Type.keys()[step.step_type])
 	
+	# ====================================================
+	# 🌟【大总管全场员工总闸管理】
+	# ====================================================
+	if "disable_employee_interaction" in step:
+		Gamemanager.is_employee_interaction_disabled = step.disable_employee_interaction
+		print("【大总管总闸】当前步骤设定：禁用员工互动 = ", step.disable_employee_interaction)
+			
 	if step.force_show_ui_group == "recruitment_panel":
 		# 名字根据你项目的 Autoload 单例名来（假设你的单例叫 RecruitmentManager）
 		if RecruitmentManager.has_method("load_tutorial_resumes"):
@@ -109,6 +116,13 @@ func play_step(index: int) -> void:
 func _handle_dialogue(step: TutorialStep) -> void:
 	tip_ui.hide()
 	
+	# ====================================================
+	# 🌟【大总管全场员工总闸管理】
+	# ====================================================
+	if "disable_employee_interaction" in step:
+		Gamemanager.is_employee_interaction_disabled = step.disable_employee_interaction
+		print("【大总管总闸】当前步骤设定：禁用员工互动 = ", step.disable_employee_interaction)
+		
 	# 1. 弹出面板的等待缓冲
 	if step.force_show_ui_group != "":
 		await get_tree().create_timer(0.2).timeout
@@ -207,9 +221,7 @@ func _handle_focus_click(step: TutorialStep) -> void:
 			else:
 				ui_node.show()
 				
-			# 🌟【硬核补丁 1】：多给点时间！足足等 0.8 秒！
-			# 必须要等你的手机界面、侧边栏彻底动画播放完毕、在屏幕上停稳！
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.2).timeout
 			
 	# 2. 抓取目标按钮
 	var target = get_tree().get_first_node_in_group(step.target_group)

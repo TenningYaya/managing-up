@@ -7,5 +7,6 @@ script = ExtResource("1_n5q6w")
 step_type = 2
 target_group = "employees"
 wait_signal = "employee_panel_opened"
+disable_employee_interaction = false
 tip_text = "右键点击员工打开面板"
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

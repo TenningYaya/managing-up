@@ -264,14 +264,6 @@ offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="OfficePanel" parent="FullGameMode" unique_id=1437560562 groups=["office_panel"] instance=ExtResource("9_85g3d")]
-visible = false
-layout_mode = 0
-offset_left = 452.0
-offset_top = 720.0
-offset_right = 722.0
-offset_bottom = 1080.0
-
 [node name="Camera2D" type="Camera2D" parent="FullGameMode" unique_id=380816209]
 position = Vector2(959.16, 0)
 limit_left = -9999899
@@ -415,6 +407,13 @@ offset_left = -42.0
 offset_top = -24.0
 offset_right = -2.0
 offset_bottom = 16.0
+
+[node name="OfficePanel" parent="CanvasLayer" unique_id=1437560562 groups=["office_panel"] instance=ExtResource("9_85g3d")]
+visible = false
+offset_left = 11.0
+offset_top = 286.0
+offset_right = 281.0
+offset_bottom = 646.0
 
 [node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
 

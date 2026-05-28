@@ -113,6 +113,13 @@ func _generate_attributes() -> void:
 			remaining_points -= 1
 
 func _input(event: InputEvent) -> void:
+	if Gamemanager.is_employee_interaction_disabled:
+		# 如果玩家正在拖拽中，突然被拉了闸，强行帮他松手，防止员工粘在鼠标上
+		if is_pressing or dragging:
+			is_pressing = false
+			dragging = false
+			_return_to_start()
+		return # 💥 强行拦截！底下的所有点击、拖拽、右键业务代码全部作废！
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:

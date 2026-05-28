@@ -7,4 +7,5 @@ script = ExtResource("1_ejs3t")
 step_type = 2
 target_group = "employees"
 wait_signal = "tutorial_click_specific_employee"
+disable_employee_interaction = false
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"
