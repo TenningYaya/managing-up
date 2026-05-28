@@ -119,7 +119,6 @@ func load_tutorial_resumes() -> void:
 	# 如果发现之前已经生成过教程简历，并且库里有人，直接打断施法！
 	# ====================================================
 	if has_loaded_tutorial_resumes and normal_pool.size() > 0:
-		print("【招聘主管】拦截成功！简历早已捏好，不准重新画脸！")
 		new_resumes_arrived.emit() # 强行再发一次信号，让面板刷新 UI 就行
 		return
 		

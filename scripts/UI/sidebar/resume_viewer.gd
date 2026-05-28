@@ -29,6 +29,12 @@ func _ready():
 			slot.hire_requested.connect(_on_slot_hire_requested)
 			slot.reject_requested.connect(_on_slot_reject_requested)
 	
+	reject_all_btn.add_to_group("reject_buttons")
+	
+	# 看大总管脸色行事
+	if Gamemanager.is_reject_button_disabled:
+		reject_all_btn.disabled = true # 💥 进场直接变灰禁用！
+		
 	_init_opreate_all_buttons()
 	
 func _update_display() -> void:

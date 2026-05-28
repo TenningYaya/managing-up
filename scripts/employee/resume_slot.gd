@@ -36,6 +36,12 @@ func setup_slot(emp: Employee) -> void:
 	
 	if resume_card.has_method("setup"):
 		resume_card.setup(emp)
+	
+	reject_btn.add_to_group("reject_buttons")
+	
+	# 看大总管脸色行事
+	if Gamemanager.is_reject_button_disabled:
+		reject_btn.disabled = true # 💥 进场直接变灰禁用！
 		
 	# 坑位自己算钱、自己改按钮文字！主控代码不用管了
 	#var total_stats = emp.efficiency + emp.quality + emp.experience

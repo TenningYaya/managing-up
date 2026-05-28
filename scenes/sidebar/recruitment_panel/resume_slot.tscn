@@ -64,7 +64,7 @@ custom_minimum_size = Vector2(50, 30)
 layout_mode = 2
 button_text = "Yes!"
 
-[node name="RejectBtn" parent="CardContainer/SelectionContainer" unique_id=182769794 instance=ExtResource("5_p7wyv")]
+[node name="RejectBtn" parent="CardContainer/SelectionContainer" unique_id=182769794 groups=["reject_buttons"] instance=ExtResource("5_p7wyv")]
 custom_minimum_size = Vector2(50, 30)
 layout_mode = 2
 button_text = "No!"

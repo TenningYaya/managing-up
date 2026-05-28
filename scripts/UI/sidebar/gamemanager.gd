@@ -26,6 +26,7 @@ var has_recruitment_office: bool = false
 var has_culture_center: bool = false
 var is_tutorial_completed: bool = false
 var is_employee_interaction_disabled: bool = false
+var is_reject_button_disabled: bool = false
 
 # 定义总览面板需要的变量
 var total_hits: int = 0

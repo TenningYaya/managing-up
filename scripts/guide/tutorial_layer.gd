@@ -65,7 +65,20 @@ func play_step(index: int) -> void:
 	# ====================================================
 	if "disable_employee_interaction" in step:
 		Gamemanager.is_employee_interaction_disabled = step.disable_employee_interaction
-			
+	
+	if "disable_reject_buttons" in step:
+		Gamemanager.is_reject_button_disabled = step.disable_reject_buttons
+		print("【大总管总闸】当前步骤设定：禁用拒绝简历 = ", step.disable_reject_buttons)
+		
+		# 💥【神仙补丁】：如果拉闸了，我们主动去通知当前场上的拒绝按钮，让他们立刻人间蒸发！
+		if step.disable_reject_buttons:
+			# 假设你同学给“拒绝按钮”加了组名叫 "reject_buttons"
+			# 或者我们可以直接呼叫招聘面板刷新
+			var reject_nodes = get_tree().get_nodes_in_group("reject_buttons")
+			for btn in reject_nodes:
+				if is_instance_valid(btn) and btn is Control:
+					btn.disabled = true
+							
 	if step.force_show_ui_group == "recruitment_panel":
 		# 名字根据你项目的 Autoload 单例名来（假设你的单例叫 RecruitmentManager）
 		if RecruitmentManager.has_method("load_tutorial_resumes"):
@@ -638,6 +651,8 @@ func _process(delta: float) -> void:
 			current_target.z_as_relative = false
 			
 func _finish_all_tutorials() -> void:
+	Gamemanager.is_employee_interaction_disabled = false
+	Gamemanager.is_reject_button_disabled = false
 	Gamemanager.is_tutorial_completed = true
 	if SaveManager.has_method("save_game"):
 		SaveManager.save_game()
@@ -659,6 +674,7 @@ func _finish_all_tutorials() -> void:
 
 func _show_final_label() -> void:
 	Gamemanager.is_employee_interaction_disabled = false
+	Gamemanager.is_reject_button_disabled = false
 	blocker_ui.hide()
 	dialogue_ui.hide()
 	tip_ui.hide()
