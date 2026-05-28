@@ -659,6 +659,7 @@ func _finish_all_tutorials() -> void:
 	queue_free()
 
 func _show_final_label() -> void:
+	Gamemanager.is_employee_interaction_disabled = false
 	blocker_ui.hide()
 	dialogue_ui.hide()
 	tip_ui.hide()
