@@ -6,4 +6,5 @@
 script = ExtResource("1_fdxad")
 step_type = 1
 target_group = "recruitment_button"
+tip_text = "打开招聘面板，查看未处理的简历"
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

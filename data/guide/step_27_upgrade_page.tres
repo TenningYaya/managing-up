@@ -8,4 +8,5 @@ step_type = 1
 target_group = "upgrade_icon"
 force_show_ui_group = "sidebar_panel"
 lock_ui_lifecycle = true
+tip_text = "打开升级界面，查看晋升机会"
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

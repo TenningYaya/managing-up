@@ -3,6 +3,7 @@ extends CanvasLayer
 
 # 🌟 在右侧编辑器里，把你建好的 tres 剧本文件按照顺序拖进这个数组里！
 @export var steps: Array[TutorialStep] = []
+@export var TUTORIAL_TIP_SCENE: PackedScene
 
 @onready var dialogue_ui = $DialogueIntroUI
 @onready var blocker_ui = $Blocker
@@ -11,6 +12,7 @@ extends CanvasLayer
 
 @onready var locked_ui_node: Node = null
 var _global_flash_tween: Tween = null
+var current_tip_instance: TutorialTip = null
 var current_callable_ghost: Callable
 
 var current_step_index: int = 0
@@ -336,6 +338,8 @@ func _handle_wait_event(step: TutorialStep) -> void:
 	current_signal_name = step.wait_signal
 	current_callable = Callable(self, "_on_step_completed")
 	
+	_arrange_tip(step, target.get_global_rect())
+	
 	match current_signal_name:
 		"tutorial_click_specific_employee":
 			_setup_specific_employee_click_step()
@@ -432,32 +436,55 @@ func _setup_radar_step() -> void:
 # 📍 小字位置计算逻辑 (支持自由像素微调！)
 # ==========================================
 func _arrange_tip(step: TutorialStep, target_rect: Rect2) -> void:
+	# 1. 安全清理：如果上一步的 Tips 还在，直接超度它
+	if is_instance_valid(current_tip_instance):
+		current_tip_instance.queue_free()
+		current_tip_instance = null
+		
+	# 2. 如果这剧本压根没写提示小字，直接收工
 	if step.tip_text == "":
-		tip_ui.hide()
 		return
 		
-	tip_ui.text = step.tip_text
-	tip_ui.show()
+	# 3. 动态实例化新 Tips 场景，并塞进大总管的肚子里
+	current_tip_instance = TUTORIAL_TIP_SCENE.instantiate() as TutorialTip
+	add_child(current_tip_instance)
 	
-	# 等待一帧让 Label 根据文字自动撑开大小
-	await get_tree().process_frame 
+	# 4. 灌入文字（它自己内部会算好宽高）
+	current_tip_instance.set_tip(step.tip_text)
 	
-	var base_pos = Vector2.ZERO
+	# 等一帧，确保物理宽高刷新完毕，我们要拿它的最新 size 算排版
+	await get_tree().process_frame
+	if not is_instance_valid(current_tip_instance): return
+	
+	# 5. 根据剧本指定的方位（TOP/BOTTOM/LEFT/RIGHT），死死贴在目标矩形旁边
+	var tip_size = current_tip_instance.size
+	var final_pos = Vector2.ZERO
+	
 	match step.tip_position:
 		TutorialStep.TipPos.TOP:
-			base_pos = Vector2(target_rect.position.x + (target_rect.size.x / 2.0) - (tip_ui.size.x / 2.0), target_rect.position.y - tip_ui.size.y - 10)
+			final_pos.x = target_rect.position.x + (target_rect.size.x - tip_size.x) / 2.0
+			final_pos.y = target_rect.position.y - tip_size.y - 10.0 # 往上挪，留10像素空隙
 		TutorialStep.TipPos.BOTTOM:
-			base_pos = Vector2(target_rect.position.x + (target_rect.size.x / 2.0) - (tip_ui.size.x / 2.0), target_rect.end.y + 10)
+			final_pos.x = target_rect.position.x + (target_rect.size.x - tip_size.x) / 2.0
+			final_pos.y = target_rect.position.y + target_rect.size.y + 10.0
 		TutorialStep.TipPos.LEFT:
-			base_pos = Vector2(target_rect.position.x - tip_ui.size.x - 10, target_rect.position.y + (target_rect.size.y / 2.0) - (tip_ui.size.y / 2.0))
+			final_pos.x = target_rect.position.x - tip_size.x - 10.0
+			final_pos.y = target_rect.position.y + (target_rect.size.y - tip_size.y) / 2.0
 		TutorialStep.TipPos.RIGHT:
-			base_pos = Vector2(target_rect.end.x + 10, target_rect.position.y + (target_rect.size.y / 2.0) - (tip_ui.size.y / 2.0))
+			final_pos.x = target_rect.position.x + target_rect.size.x + 10.0
+			final_pos.y = target_rect.position.y + (target_rect.size.y - tip_size.y) / 2.0
 			
-	# 加上 Inspector 里的自由偏移量！
-	tip_ui.global_position = Vector2(base_pos.x + step.tip_offset_x, base_pos.y + step.tip_offset_y)
+	# 6. 加上你在剧本里预留的“像素级自由微调偏移”
+	final_pos.x += step.tip_offset_x
+	final_pos.y += step.tip_offset_y
+	
+	# 7. 啪的一声拍在最终位置上！
+	current_tip_instance.global_position = final_pos
 
 func _on_step_completed() -> void:
 	# 1. 每次点击，先停掉闪烁，复原透明度
+	if is_instance_valid(current_tip_instance):
+		current_tip_instance.queue_free()
 	if _global_flash_tween:
 		_global_flash_tween.kill()
 		_global_flash_tween = null

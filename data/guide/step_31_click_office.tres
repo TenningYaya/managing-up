@@ -6,4 +6,5 @@
 script = ExtResource("1_6lm44")
 step_type = 1
 target_group = "office_1"
+tip_text = "点击办公室，为办公室分配职能"
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"
