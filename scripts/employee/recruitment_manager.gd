@@ -8,6 +8,8 @@ var normal_pool: Array[Employee] = []
 var headhunt_pool: Array[Employee] = []
 
 var is_tutorial_mode: bool = false
+var has_loaded_tutorial_resumes: bool = false
+
 @export var tutorial_recruits_queue: Array[PackedScene] = []
 
 # 猎头状态
@@ -112,6 +114,19 @@ func _create_data(rarity: Employee.Rarity) -> Employee:
 	return e
 
 func load_tutorial_resumes() -> void:
+	# ====================================================
+	# 🌟【老板的终极防变脸结界】
+	# 如果发现之前已经生成过教程简历，并且库里有人，直接打断施法！
+	# ====================================================
+	if has_loaded_tutorial_resumes and normal_pool.size() > 0:
+		print("【招聘主管】拦截成功！简历早已捏好，不准重新画脸！")
+		new_resumes_arrived.emit() # 强行再发一次信号，让面板刷新 UI 就行
+		return
+		
+	# 盖章记录：这是第一次生成！
+	has_loaded_tutorial_resumes = true
+	# ====================================================
+
 	normal_pool.clear()
 	var pre_made_scenes = [TUTORIAL_EMP_1, TUTORIAL_EMP_2, TUTORIAL_EMP_3]
 	

@@ -65,7 +65,6 @@ func play_step(index: int) -> void:
 	# ====================================================
 	if "disable_employee_interaction" in step:
 		Gamemanager.is_employee_interaction_disabled = step.disable_employee_interaction
-		print("【大总管总闸】当前步骤设定：禁用员工互动 = ", step.disable_employee_interaction)
 			
 	if step.force_show_ui_group == "recruitment_panel":
 		# 名字根据你项目的 Autoload 单例名来（假设你的单例叫 RecruitmentManager）
@@ -89,9 +88,6 @@ func play_step(index: int) -> void:
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
 		if ui_node:
 			ui_node.show() # 强行显示
-			
-			# 播提示音（你可以直接在这里播，或者让UI节点自己播）
-			# AudioManager.play_se("tutorial_pop") 
 			
 			# 如果剧本要求控死它
 			if step.lock_ui_lifecycle:
@@ -121,7 +117,6 @@ func _handle_dialogue(step: TutorialStep) -> void:
 	# ====================================================
 	if "disable_employee_interaction" in step:
 		Gamemanager.is_employee_interaction_disabled = step.disable_employee_interaction
-		print("【大总管总闸】当前步骤设定：禁用员工互动 = ", step.disable_employee_interaction)
 		
 	# 1. 弹出面板的等待缓冲
 	if step.force_show_ui_group != "":
@@ -216,10 +211,14 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	if step.force_show_ui_group != "":
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
 		if ui_node:
-			if ui_node.has_method("lock_for_tutorial"):
-				ui_node.lock_for_tutorial()
+			# 💥【拦截核心】：同样的道理，已经亮着的面板，别去调用 lock_for_tutorial 重置它！
+			if ui_node.is_visible_in_tree():
+				print("【大总管防刷脸补丁】Focus_Click 判定面板已存在，拒绝套娃刷新。")
 			else:
-				ui_node.show()
+				if ui_node.has_method("lock_for_tutorial"):
+					ui_node.lock_for_tutorial()
+				else:
+					ui_node.show()
 				
 	await get_tree().create_timer(0.2).timeout
 			

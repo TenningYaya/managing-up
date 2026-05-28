@@ -5,7 +5,7 @@ extends Control
 # =====================================================
 @onready var phone_wrapper: Control = $PhoneWrapper
 @onready var trigger_btn: BaseButton = $Trigger
-@onready var close_blocker: BaseButton = $CloseBlocker
+
 
 var is_open := false
 
@@ -46,7 +46,7 @@ func _ready() -> void:
 	# 初始状态：手机收回
 	# =====================================================
 	phone_wrapper.position.x = closed_x
-	close_blocker.hide()
+
 	trigger_btn.show()
 	is_open = false
 
@@ -57,7 +57,7 @@ func _ready() -> void:
 	# 连接 Sidebar 展开 / 收回按钮
 	# =====================================================
 	trigger_btn.pressed.connect(open_phone)
-	close_blocker.pressed.connect(close_phone)
+
 
 	# =====================================================
 	# 连接 App 图标按钮
@@ -85,7 +85,26 @@ func _ready() -> void:
 	# =====================================================
 	home_button.pressed.connect(show_home_screen)
 
+func _input(event: InputEvent) -> void:
+	# 1. 如果手机本来就是关着的，雷达不工作
+	if not is_open: 
+		return
 
+	# 2. 捕捉全屏的鼠标左键按下事件
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		
+		# 3. 拿到手机【真正机身】的物理矩形！
+		# 注意：这里千万别拿 CloseBlocker，要拿装手机内容的那个节点，比如 PhoneWrapper！
+		var phone_rect = $PhoneWrapper.get_global_rect()
+		
+		# 4. 如果鼠标点的坐标，不在手机机身范围内
+		if not phone_rect.has_point(event.global_position):
+			# 直接调用你原本收手机的函数（就是原来 CloseBlocker 的 pressed 连的那个函数）
+			close_phone() 
+			
+			# 注意！千万不要写 get_viewport().set_input_as_handled()！
+			# 这样点击事件就能像幽灵一样穿透下去，精准砸中外面的按钮！
+			
 # =====================================================
 # 3. 展开手机
 # =====================================================
@@ -96,7 +115,7 @@ func open_phone() -> void:
 	is_open = true
 
 	trigger_btn.hide()
-	close_blocker.show()
+
 
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -116,14 +135,15 @@ func close_phone() -> void:
 
 	is_open = false
 
-	close_blocker.hide()
+
 
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(phone_wrapper, "position:x", closed_x, 0.5)
 
 	tween.finished.connect(func():
-		trigger_btn.show()
+		if not is_open:
+			trigger_btn.show()
 	)
 
 
