@@ -35,10 +35,12 @@
 [ext_resource type="Resource" uid="uid://cuudbswpv0qsy" path="res://data/guide/step_33_select_pantry.tres" id="31_ygfsw"]
 [ext_resource type="Resource" uid="uid://cvmapek56dxf2" path="res://data/guide/step_34_show_buffs.tres" id="32_5k7lp"]
 [ext_resource type="Resource" uid="uid://0daehj3yktol" path="res://data/guide/step_35_tutorial_ends.tres" id="33_kso1c"]
+[ext_resource type="PackedScene" uid="uid://bbiqd6umh6kdl" path="res://scenes/starter/tip_bubble.tscn" id="34_kso1c"]
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_rsvao")
 steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_rb526"), ExtResource("5_7e6m1"), ExtResource("6_gtvb8"), ExtResource("7_2853m"), ExtResource("8_hfnrs"), ExtResource("9_5i7fk"), ExtResource("10_q1uf3"), ExtResource("11_lacx5"), ExtResource("12_umdh6"), ExtResource("13_6ltp6"), ExtResource("14_lopl3"), ExtResource("15_r5pud"), ExtResource("16_tf07h"), ExtResource("17_fv23i"), ExtResource("18_hmtbv"), ExtResource("19_8oaor"), ExtResource("20_0ssyf"), ExtResource("21_jf5bc"), ExtResource("22_31up7"), ExtResource("23_31up7"), ExtResource("24_u7clx"), ExtResource("25_27ngn"), ExtResource("26_5k7lp"), ExtResource("27_kso1c"), ExtResource("28_mkknv"), ExtResource("29_qpdar"), ExtResource("30_ta3sa"), ExtResource("31_ygfsw"), ExtResource("32_5k7lp"), ExtResource("33_kso1c")])
+TUTORIAL_TIP_SCENE = ExtResource("34_kso1c")
 
 [node name="TipUI" type="Label" parent="." unique_id=16516687]
 offset_right = 40.0
