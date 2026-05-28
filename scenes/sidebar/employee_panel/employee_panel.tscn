@@ -147,7 +147,7 @@ texture_under = ExtResource("4_bfpbm")
 texture_over = ExtResource("5_fq3kw")
 texture_progress = ExtResource("6_p7uvh")
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelBg/EmployeePage" unique_id=338952969]
+[node name="PanelContainer" type="PanelContainer" parent="PanelBg/EmployeePage" unique_id=338952969 groups=["employee_buffs"]]
 custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_khksj")

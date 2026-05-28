@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dfvnhbmpp2k2b"]
 
 [ext_resource type="Texture2D" uid="uid://cchun4tokcayg" path="res://assets/sidebar/Phone_2.png" id="1_8gi4e"]
-[ext_resource type="Script" uid="uid://dbiup6ouwg2e" path="res://scenes/sidebar/mobilesidebar.gd" id="1_jt2no"]
+[ext_resource type="Script" uid="uid://dbiup6ouwg2e" path="res://scripts/UI/sidebar/mobilesidebar.gd" id="1_jt2no"]
 [ext_resource type="Texture2D" uid="uid://bvd528nbtp2lh" path="res://assets/sidebar/TriggerIcon.png" id="2_jt2no"]
 [ext_resource type="Texture2D" uid="uid://cq0o14on3o6ae" path="res://assets/sidebar/upgrades.png" id="3_yj4so"]
 [ext_resource type="Texture2D" uid="uid://bfdj2mva2cc1t" path="res://assets/sidebar/tutorial.png" id="4_8c6sh"]

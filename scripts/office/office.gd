@@ -135,7 +135,6 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 	if new_type == Gamemanager.OfficeType.CULTURE_CENTER and OfficeManager.has_culture_center: return
 		
 	if logic_node != null:
-		logic_node.cleanup()
 		logic_node = null
 	
 	current_type = new_type

@@ -11,6 +11,7 @@ extends CanvasLayer
 
 @onready var locked_ui_node: Node = null
 var _global_flash_tween: Tween = null
+var current_callable_ghost: Callable
 
 var current_step_index: int = 0
 var yes_click_count: int = 0
@@ -263,10 +264,33 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	if current_signal_name == "all_preset_employees_hired":
 		set_process(true) 
 	else:
-		# 🌟【安全连线】：连线前先断开，防止重复连接报错
-		if target.is_connected(current_signal_name, current_callable):
-			target.disconnect(current_signal_name, current_callable)
-		target.connect(current_signal_name, current_callable)
+		# 🌟【硬核防御补丁】：先检查这个节点身上到底有没有这个信号！
+		if target.has_signal(current_signal_name):
+			if target.is_connected(current_signal_name, current_callable):
+				target.disconnect(current_signal_name, current_callable)
+			target.connect(current_signal_name, current_callable)
+			print("【大总管】成功与节点 [", target.name, "] 建立物理信号线：", current_signal_name)
+		else:
+			# 💥 抓到现行：如果是个普通的 Control 且你填了 pressed，我们用系统的 gui_input 悄悄借尸还魂！
+			if current_signal_name == "pressed" and target is Control:
+				print("【大总管物理破局】检测到目标 [", target.name, "] 不是按钮但要求点击！强行植入 gui_input 监听...")
+				
+				# 借用 Control 的 gui_input 信号，当有鼠标事件触发时，我们内部判断是不是点击
+				var gui_input_callable = func(event: InputEvent):
+					if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+						print("【大总管】成功拦截到玩家在普通面板上的物理左键点击！翻篇！")
+						# 别忘了把这层临时连线给断了，免得污染后续业务
+						if target.is_connected("gui_input", current_callable_ghost):
+							target.disconnect("gui_input", current_callable_ghost)
+						_on_step_completed()
+						
+				# 存个临时变量方便等会儿注销
+				current_callable_ghost = gui_input_callable 
+				target.gui_input.connect(gui_input_callable)
+			else:
+				# 如果既没有信号，也不是 pressed，直接打印显眼报错并强行放行，绝不让游戏死锁！
+				printerr("【大总管严重警告】节点 '", target.name, "' 压根没有 '", current_signal_name, "' 信号！已强行跳过此步防卡死！")
+				_on_step_completed()
 
 func _handle_wait_event(step: TutorialStep) -> void:
 	# 1. 职场霸凌：强行灰掉所有拒绝按钮

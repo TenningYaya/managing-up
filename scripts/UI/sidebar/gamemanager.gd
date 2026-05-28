@@ -16,7 +16,7 @@ enum OfficeType {
 }
 
 const OFFICE_UNLOCK_LEVELS = {
-	OfficeType.PANTRY: 2,          # M2 解锁
+	OfficeType.PANTRY: 1,          # M2 解锁
 	OfficeType.RECRUITMENT: 3,     # M3 解锁
 	OfficeType.MEETING_ROOM: 4,    # M4 解锁
 	OfficeType.CULTURE_CENTER: 5   # M5 解锁

@@ -192,7 +192,7 @@ layout_mode = 2
 mouse_filter = 2
 alignment = 1
 
-[node name="NewRoom3" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=1041642994 groups=["tutorial_office"] instance=ExtResource("1_0wfyh")]
+[node name="NewRoom3" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=1041642994 groups=["office_1", "tutorial_office"] instance=ExtResource("1_0wfyh")]
 layout_mode = 2
 
 [node name="NewRoom4" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=2005734672 instance=ExtResource("1_0wfyh")]

@@ -570,7 +570,6 @@ func _try_get_snack_buff() -> void:
 	current_snack_buff = random_buff as SnackBuff
 	buff_status_changed.emit()
 	
-	print(name, " 抢到了零食！当前吃零食人数: ", OfficeManager.active_snack_buffs)
 	# TODO: 这里可以播放一个头顶冒出奶茶/蛋糕图标的特效
 
 # 3. 🌟 清理逻辑：工作结束、中断、或者员工被解雇时调用
@@ -579,7 +578,6 @@ func _clear_snack_buff() -> void:
 		OfficeManager.active_snack_buffs -= 1
 		current_snack_buff = SnackBuff.NONE
 		buff_status_changed.emit()
-		print(name, " 消化完零食了。")
 
 # ==========================================
 # 会议室核心逻辑
