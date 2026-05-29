@@ -7,6 +7,7 @@ extends Control
 @onready var btn_5x: Button = $VBoxContainer/"5x"
 @onready var btn_10x: Button = $VBoxContainer/"10x"
 @onready var btn_100x: Button = $VBoxContainer/BetterNotDoIt # 假设这个是你的 100x
+@onready var btn_max_level: Button = $VBoxContainer/MaxLevel
 
 func _ready() -> void:
 	# 批量连接按钮信号
@@ -19,7 +20,9 @@ func _ready() -> void:
 	btn_100x.text = "100x (狂暴测试)"
 	btn_100x.pressed.connect(func(): _change_speed(100.0))
 	
-	print("测试倍速控制组件就绪，默认速度: 1.0x")
+	if btn_max_level:
+		btn_max_level.text = "👑 一键满级+暴富"
+		btn_max_level.pressed.connect(_on_max_level_pressed)
 
 func _change_speed(multiplier: float) -> void:
 	# 核心逻辑：修改引擎时间缩放
@@ -32,3 +35,11 @@ func _change_speed(multiplier: float) -> void:
 	# 否则控制台 IO 会导致游戏本体卡顿。
 	if multiplier > 20.0:
 		print("警告：超高倍速下，进度条显示可能会出现跳帧现象。")
+
+func _on_max_level_pressed() -> void:
+	# 1. 强行拉到最高级（根据你之前的代码，5级解锁文化室）
+	Gamemanager.player_level = 5
+	
+	# 2. 顺手充值，给你加 100 万 KPI 和 美元，想买什么随便买
+	Gamemanager.kpi = 1000000
+	Gamemanager.dollar = 1000000

@@ -3,12 +3,18 @@
 [ext_resource type="PackedScene" uid="uid://bh0062hnotklq" path="res://scenes/UI/custom/change_office_button.tscn" id="1_kpljw"]
 [ext_resource type="Script" uid="uid://dukdaecvcphbo" path="res://scripts/office/office_panel.gd" id="1_mixia"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_kpljw"]
+[ext_resource type="Texture2D" uid="uid://cje2nxck7bbu" path="res://assets/computer/PNG/1.png" id="3_mixia"]
 [ext_resource type="Texture2D" uid="uid://w0pkc05aakr3" path="res://assets/UI/ingame/office_icons.jpg" id="3_wtdck"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="4_dvne8"]
 [ext_resource type="PackedScene" uid="uid://b2l7mr7bb5b41" path="res://scenes/UI/panel/culture_panel.tscn" id="7_dvne8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e55uw"]
 atlas = ExtResource("2_kpljw")
 region = Rect2(2595, 65, 333, 229)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oppgx"]
+atlas = ExtResource("3_mixia")
+region = Rect2(1692, 467, 134, 143)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oppgx"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -45,15 +51,18 @@ region = Rect2(602.98975, 558.7769, 312.54968, 316.76886)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpljw"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dvne8"]
+
 [node name="OfficePanel" type="Control" unique_id=1437560562]
 z_index = 100
 layout_mode = 3
 anchors_preset = 0
-offset_right = 234.0
-offset_bottom = 325.0
+offset_right = 233.0
+offset_bottom = 356.0
 script = ExtResource("1_mixia")
 
 [node name="Background" type="NinePatchRect" parent="." unique_id=1324415450]
+visible = false
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -66,19 +75,50 @@ grow_vertical = 2
 texture = SubResource("AtlasTexture_e55uw")
 region_rect = Rect2(53, 90, 225, 139)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1159218567]
-layout_mode = 0
-offset_top = 31.0
-offset_right = 234.0
-offset_bottom = 325.0
-
-[node name="TabContainer" type="TabContainer" parent="." unique_id=515328770]
+[node name="bcg" type="NinePatchRect" parent="." unique_id=2125339936]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = SubResource("AtlasTexture_oppgx")
+region_rect = Rect2(0, 0, 134, 143)
+patch_margin_left = 10
+patch_margin_top = 21
+patch_margin_right = 39
+patch_margin_bottom = 22
+
+[node name="ColorRect" type="ColorRect" parent="bcg" unique_id=1110563995]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = -298.0
+offset_right = -5.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.43529412, 1, 1, 0.4392157)
+
+[node name="TabContainer" type="TabContainer" parent="." unique_id=515328770]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -146.0
+offset_right = 105.0
+offset_bottom = 146.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_dvne8")
+theme_override_font_sizes/font_size = 20
 theme_override_styles/panel = SubResource("StyleBoxFlat_oppgx")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_1hrmf")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_0khrq")
@@ -101,24 +141,32 @@ layout_mode = 2
 office_type = 1
 button_text = "pantry"
 normal_icon = SubResource("AtlasTexture_kpljw")
+office_description = "功能介绍：打工人的快乐老家！员工在开始工作时，有概率偷溜去茶水间获得“零食增益”（奶茶加效率、蛋糕加质量、烤肠加经验），本次产出期间持续有效。"
+office_usage = "使用方法：建成后全自动生效。茶水间数量越多，能同时享受到零食 Buff 的员工就越多！"
 
 [node name="ChangeOfficeButton3" parent="TabContainer/Office/OfficeButton" unique_id=2129935784 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 3
 button_text = "Headhunt"
 normal_icon = SubResource("AtlasTexture_dvne8")
+office_description = "功能介绍：脑暴时间！用暂时的效率下降（工作效率 -1），换取产出质量与经验的随机暴击（+1~3）。"
+office_usage = "使用方法：把员工从工位【拖拽】进会议室即可开会（容纳人数受玩家等级影响）。鼠标悬停在会议室上可随时【解散会议】。"
 
 [node name="ChangeOfficeButton2" parent="TabContainer/Office/OfficeButton" unique_id=2030963439 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 2
 button_text = "Meeting"
 normal_icon = SubResource("AtlasTexture_mixia")
+office_description = "功能介绍：公司的 HR 基地，扩充牛马军团的必经之路。建成后，将解锁右侧菜单栏的“猎头招聘”高级功能。"
+office_usage = "使用方法：建好后去右侧菜单花钱搜罗简历。如果猎头还在路上你就把这间房拆了，招聘进度会立刻中断，但钱会全额退还给你。"
 
 [node name="ChangeOfficeButton4" parent="TabContainer/Office/OfficeButton" unique_id=277010416 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 4
 button_text = "Cullture"
 normal_icon = SubResource("AtlasTexture_l2t2v")
+office_description = "功能介绍：掌控公司大格局的战略中心。可颁布不同的企业文化政策，为全场所有打工人提供强力的全局 Buff。"
+office_usage = "使用方法：建成后自动激活基础政策。你可以随时点击或悬停在这间办公室上，在三种政策（末位淘汰/项目奖金/绩效考核）中自由切换。"
 
 [node name="Culture" type="Panel" parent="TabContainer" unique_id=1455203945]
 visible = false
@@ -139,3 +187,21 @@ offset_right = 0.0
 offset_bottom = 0.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="Panel" type="Panel" parent="." unique_id=1312535902]
+layout_mode = 0
+offset_top = -2.0
+offset_right = 231.0
+offset_bottom = 26.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_dvne8")
+
+[node name="ClosePanel" type="Button" parent="." unique_id=1994279830]
+layout_mode = 0
+offset_left = 187.0
+offset_top = -4.0
+offset_right = 237.0
+offset_bottom = 24.0
+flat = true
+
+[connection signal="gui_input" from="Panel" to="." method="_on_title_bar_gui_input"]
+[connection signal="pressed" from="ClosePanel" to="." method="_on_close_panel_pressed"]

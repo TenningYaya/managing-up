@@ -24,12 +24,14 @@ func setup(office: Control) -> void:
 	manage_btn = my_office.manage_btn 
 	
 	# 绑定悬停和点击信号
-	my_office.mouse_entered.connect(_on_office_mouse_entered)
-	my_office.mouse_exited.connect(_on_office_mouse_exited)
+	#my_office.mouse_entered.connect(_on_office_mouse_entered)
+	#my_office.mouse_exited.connect(_on_office_mouse_exited)
 	
 	if manage_btn.pressed.is_connected(_on_manage_btn_pressed):
 		manage_btn.pressed.disconnect(_on_manage_btn_pressed)
 	manage_btn.pressed.connect(_on_manage_btn_pressed)
+	
+	switch_culture(CultureType.EFF_UP)
 	
 func switch_culture(type: CultureType) -> void:
 	if cur_type == type: return
@@ -60,8 +62,8 @@ func cleanup() -> void:
 		btn.pressed.disconnect(_on_manage_btn_pressed)
 		
 	# 断开悬停信号
-	my_office.mouse_entered.disconnect(_on_office_mouse_entered)
-	my_office.mouse_exited.disconnect(_on_office_mouse_exited)
+	#my_office.mouse_entered.disconnect(_on_office_mouse_entered)
+	#my_office.mouse_exited.disconnect(_on_office_mouse_exited)
 
 func _on_btn_mouse_exited() -> void:
 	# 鼠标离开按钮时：如果没回到 office 区域内，就隐藏按钮
@@ -70,16 +72,19 @@ func _on_btn_mouse_exited() -> void:
 		if not my_office.get_global_rect().has_point(mouse_pos):
 			manage_btn.hide()
 
-func _on_office_mouse_entered() -> void:
+func on_mouse_entered() -> void:
 	# 只有当功能是文化室时，这套逻辑才会生效
-	my_office.manage_btn.show()
+	manage_btn.show() # 使用脚本顶部的 manage_btn
 
-func _on_office_mouse_exited() -> void:
-	var btn = my_office.manage_btn
+# 改名并接收鼠标位置参数
+func on_mouse_exited(mouse_pos: Vector2) -> void:
 	# 判定鼠标是不是挪到按钮上了
-	var mouse_pos = btn.get_global_mouse_position()
-	if not btn.get_global_rect().has_point(mouse_pos):
-		btn.hide()
+	var btn_rect = manage_btn.get_global_rect()
+	var office_rect = my_office.get_global_rect()
+	
+	# 如果鼠标既不在按钮上，也不在办公室上，才隐藏
+	if not btn_rect.has_point(mouse_pos) and not office_rect.has_point(mouse_pos):
+		manage_btn.hide()
 
 func _on_manage_btn_pressed() -> void:
 	print("【测试】点击了制定文化按钮！")

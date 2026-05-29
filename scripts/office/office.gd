@@ -96,12 +96,6 @@ func _on_office_clicked() -> void:
 	if panel:
 		panel.open_panel(self, false)
 
-#func _on_manage_btn_pressed() -> void:
-	#print("[Office] 点击管理按钮，打开文化页签")
-	#var panel = get_tree().get_first_node_in_group("office_panel")
-	#if panel:
-		#panel.open_panel(self, true)
-
 # ==========================================
 # 拖拽与悬停
 # ==========================================
@@ -130,12 +124,40 @@ func _on_mouse_exited() -> void:
 # ==========================================
 func change_function(new_type: Gamemanager.OfficeType) -> void:
 	if current_type == new_type: return
+
+	if current_type == Gamemanager.OfficeType.RECRUITMENT:
+		OfficeManager.has_recruitment_office = false
+		Gamemanager.has_recruitment_office = false # 两个单例同步扒掉，防错乱
+	elif current_type == Gamemanager.OfficeType.CULTURE_CENTER:
+		OfficeManager.has_culture_center = false
+		Gamemanager.has_culture_center = false
 	
-	if new_type == Gamemanager.OfficeType.RECRUITMENT and OfficeManager.has_recruitment_office: return
-	if new_type == Gamemanager.OfficeType.CULTURE_CENTER and OfficeManager.has_culture_center: return
+	if is_instance_valid(logic_node) and logic_node.has_method("cleanup"):
+		print("[Office] 正在触发旧逻辑安全清理...")
+		logic_node.cleanup()
+	elif is_instance_valid(logic_node):
+		# 如果活着但没写 cleanup，直接超度
+		logic_node.queue_free()
 		
-	if logic_node != null:
-		logic_node = null
+	# 强行清空引用，彻底斩断残影
+	logic_node = null
+	manage_btn.hide()
+			
+	# ====================================================
+	# 💥 2. 迎新：如果新建的是唯一办公室，立刻把坑位占死！
+	# （如果你已经在其他地方写了占位逻辑，这里可以不写；如果没有，建议统管）
+	# ====================================================
+	if new_type == Gamemanager.OfficeType.RECRUITMENT:
+		OfficeManager.has_recruitment_office = true
+		Gamemanager.has_recruitment_office = true
+	elif new_type == Gamemanager.OfficeType.CULTURE_CENTER:
+		OfficeManager.has_culture_center = true
+		Gamemanager.has_culture_center = true
+		
+	# ====================================================
+	# 3. 下面继续保留你原本的更换节点、加载场景等核心逻辑...
+	# ====================================================
+	current_type = new_type
 	
 	current_type = new_type
 	_update_visuals()

@@ -13,17 +13,33 @@ var total_pantries: int = 0
 var active_snack_buffs: int = 0
 
 # 全局唯一状态
-var has_recruitment_office: bool = false:
-	set(value):
-		if has_recruitment_office != value:
-			has_recruitment_office = value
-			recruitment_office_status_changed.emit(has_recruitment_office)
+#var has_recruitment_office: bool = false:
+	#set(value):
+		#if has_recruitment_office != value:
+			#has_recruitment_office = value
+			#recruitment_office_status_changed.emit(has_recruitment_office)
+#
+#var has_culture_center: bool = false:
+	#set(value):
+		#if has_culture_center != value:
+			#has_culture_center = value
+			#culture_center_status_changed.emit(has_culture_center)
 
-var has_culture_center: bool = false:
+var has_recruitment_office: bool:
+	get:
+		return Gamemanager.has_recruitment_office
 	set(value):
-		if has_culture_center != value:
-			has_culture_center = value
-			culture_center_status_changed.emit(has_culture_center)
+		if Gamemanager.has_recruitment_office != value:
+			Gamemanager.has_recruitment_office = value
+			recruitment_office_status_changed.emit(value)
 
+var has_culture_center: bool:
+	get:
+		return Gamemanager.has_culture_center
+	set(value):
+		if Gamemanager.has_culture_center != value:
+			Gamemanager.has_culture_center = value
+			culture_center_status_changed.emit(value)
+			
 func can_dispense_snack() -> bool:
 	return active_snack_buffs < total_pantries

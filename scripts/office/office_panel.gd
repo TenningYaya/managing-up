@@ -5,7 +5,7 @@ extends Control
 var current_target_office: Office = null
 
 # 🌟 新增：引用面板的底图，用于判断鼠标是不是点在它外面
-@onready var background: NinePatchRect = $Background 
+@onready var background: NinePatchRect = $bcg
 @onready var tab_container: TabContainer = $TabContainer
 
 # 🌟 新增：记录打开面板的时间，防止当前帧点击误触发关闭
@@ -19,6 +19,8 @@ var _open_time: int = 0
 # --- 按钮容器引用 ---
 @onready var selection_buttons: GridContainer = $TabContainer/Office/OfficeButton
 var culture_buttons: VBoxContainer
+var dragging = false
+var drag_offset = Vector2()
 
 func _ready() -> void:
 	hide()
@@ -49,8 +51,7 @@ func _input(event: InputEvent) -> void:
 			var mouse_pos = get_global_mouse_position()
 			if not background.get_global_rect().has_point(mouse_pos):
 				close_panel()
-				# 如果你不希望点击到外面的办公室，可以取消下面这行的注释：
-				# get_viewport().set_input_as_handled()
+
 func open_panel(office: Node, open_culture_tab: bool = false) -> void:
 	current_target_office = office
 	_open_time = Time.get_ticks_msec()
@@ -75,10 +76,23 @@ func _refresh_all_ui() -> void:
 	# 刷新第一页的办公室按钮
 	get_tree().call_group("office_buttons", "refresh_status", current_target_office)
 	
-	# 🌟 刷新第二页的文化按钮
-	var logic = current_target_office.logic_node
-	if logic is CultureCenterLogic:
-		get_tree().call_group("culture_selection_buttons", "refresh_status", logic)
+	var is_culture = (current_target_office.current_type == Gamemanager.OfficeType.CULTURE_CENTER)
+	if culture_buttons:
+		culture_buttons.visible = is_culture
+	## 抓取全场所有的文化选择按钮
+	#var cult_btns = get_tree().get_nodes_in_group("culture_selection_buttons")
+	#for btn in cult_btns:
+		#if is_instance_valid(btn) and btn is Control:
+			## 核心：如果是文化室就显示（true），不是文化室就彻底隐藏（false）！
+			#btn.visible = is_culture
+	#
+	## 2. 如果确实是文化室，才允许去跑里面的刷新逻辑
+	#if is_culture:
+		#var logic = current_target_office.logic_node
+		#if logic is CultureCenterLogic:
+			#get_tree().call_group("culture_selection_buttons", "refresh_status", logic)
+			## 顺便刷新高亮
+			#_refresh_culture_highlight()
 		
 func _setup_selection_buttons() -> void:
 	for child in selection_buttons.get_children():
@@ -160,3 +174,16 @@ func _refresh_culture_highlight() -> void:
 			btn.modulate = Color(1.5, 1.5, 0.5, 1.0) # 高亮
 		else:
 			btn.modulate = Color(1.0, 1.0, 1.0, 0.5) # 暗示未选中
+
+func _on_title_bar_gui_input(event: InputEvent):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			dragging = event.pressed
+			drag_offset = get_global_mouse_position() - global_position
+			
+	if event is InputEventMouseMotion and dragging:
+		global_position = get_global_mouse_position() - drag_offset
+
+
+func _on_close_panel_pressed() -> void:
+	self.hide()

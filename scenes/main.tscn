@@ -329,6 +329,10 @@ text = "10x"
 [node name="BetterNotDoIt" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestTimeControl/VBoxContainer" unique_id=374795977]
 layout_mode = 2
 
+[node name="MaxLevel" type="Button" parent="CanvasLayer/Add All Test Button Here/HBoxContainer/TestTimeControl/VBoxContainer" unique_id=1411915541]
+layout_mode = 2
+text = "MaxLevel"
+
 [node name="TestCurrency" type="Control" parent="CanvasLayer/Add All Test Button Here/HBoxContainer" unique_id=947981425]
 layout_mode = 2
 script = ExtResource("14_a8y0u")

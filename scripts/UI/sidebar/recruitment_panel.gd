@@ -2,17 +2,13 @@
 extends Control
 
 # ================= UI 节点获取 =================
-#@onready var normal_empty_lbl = $VBoxContainer/NormalPanel/MarginContainer/LblEmpty
-#@onready var normal_waiting_anim = $VBoxContainer/NormalPanel/MarginContainer/NormalWaitAnim
 @onready var normal_viewer = $VBoxContainer/NormalPanel/MarginContainer/NormalViewer
 @onready var normal_no_resume = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel
 
-#@onready var headhunt_locked_lbl = $VBoxContainer/HeadhuntPanel/MarginContainer/LblLocked
 @onready var headhunt_box_idle = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle
 @onready var headhunt_box_recruiting = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting
 @onready var headhunt_viewer = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadViewer
 @onready var countdown_label = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/LblCountdown
-#@onready var headhunt_waiting_anim = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/HeadWaitAnim
 @onready var headhunt_locked = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadhuntLocked
 
 var last_normal_count: int = -1
