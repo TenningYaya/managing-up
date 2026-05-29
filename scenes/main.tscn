@@ -391,7 +391,7 @@ offset_top = 123.0
 offset_right = 904.0
 offset_bottom = 650.0
 
-[node name="RecruitmentPanel" parent="CanvasLayer" unique_id=463444191 groups=["recruitment_panel"] instance=ExtResource("20_gqmmt")]
+[node name="RecruitmentPanel" parent="CanvasLayer" unique_id=463444191 instance=ExtResource("20_gqmmt")]
 visible = false
 offset_left = 911.0
 offset_top = 212.0
@@ -420,5 +420,6 @@ offset_right = 281.0
 offset_bottom = 646.0
 
 [node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
+layer = 100
 
 [connection signal="pressed" from="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

@@ -1,3 +1,4 @@
+#mobilesidebar.gd
 extends Control
 
 # =====================================================
@@ -123,7 +124,9 @@ func close_phone() -> void:
 		return
 
 	is_open = false
-
+	
+	show_home_screen()
+	
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(phone_wrapper, "position:x", closed_x, 0.5)

@@ -135,6 +135,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TutorialPage" parent="PhoneWrapper/Screen/AppDisplayArea" unique_id=1808630414 instance=ExtResource("7_50qqt")]
+visible = false
 layout_mode = 0
 
 [node name="SettingsPage" parent="PhoneWrapper/Screen/AppDisplayArea" unique_id=517570582 instance=ExtResource("7_uouet")]

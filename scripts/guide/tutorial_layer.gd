@@ -40,18 +40,13 @@ func _ready() -> void:
 
 	# 3. 此时 Main 已经读完档了，数据是最新的，再次检查大管家
 	if Gamemanager.is_tutorial_completed:
-		print("【TutorialLayer】读档确认教程已完成，直接拔管销毁！")
 		queue_free()
 		return
 
 	# 4. 如果确实没完成（新游戏），则执行你原本真实的启动逻辑！
 	if steps.size() > 0:
 		play_step(0)
-	else:
-		printerr("老板，你还没往 TutorialManager 里塞剧本文件呢！")
-# ==========================================
-# 🧠 大脑核心：执行某一步骤
-# ==========================================
+
 func play_step(index: int) -> void:
 	if index >= steps.size():
 		_show_final_label()
@@ -70,7 +65,6 @@ func play_step(index: int) -> void:
 	
 	if "disable_reject_buttons" in step:
 		Gamemanager.is_reject_button_disabled = step.disable_reject_buttons
-		print("【大总管总闸】当前步骤设定：禁用拒绝简历 = ", step.disable_reject_buttons)
 		
 		# 💥【神仙补丁】：如果拉闸了，我们主动去通知当前场上的拒绝按钮，让他们立刻人间蒸发！
 		if step.disable_reject_buttons:
@@ -118,12 +112,6 @@ func play_step(index: int) -> void:
 		TutorialStep.Type.WAIT_EVENT:
 			_handle_wait_event(step)
 
-# ==========================================
-# 🎬 状态 1：处理纯对话
-# ==========================================
-# ==========================================
-# 🎬 状态 1：处理纯对话（核心调度总闸，变短了！）
-# ==========================================
 func _handle_dialogue(step: TutorialStep) -> void:
 	tip_ui.hide()
 	
@@ -133,12 +121,12 @@ func _handle_dialogue(step: TutorialStep) -> void:
 	if "disable_employee_interaction" in step:
 		Gamemanager.is_employee_interaction_disabled = step.disable_employee_interaction
 		
-	# 1. 弹出面板的等待缓冲
+	## 1. 弹出面板的等待缓冲
 	if step.force_show_ui_group != "":
-		await get_tree().create_timer(0.2).timeout
+		pass
 		
 	# 2. 抽出小函数：处理黑布和钢化玻璃保护罩
-	_apply_dialogue_highlight_and_shield(step)
+	await _apply_dialogue_highlight_and_shield(step)
 	
 	# 3. 🌟 抽出小函数：专门生截图（带疯狂 Debug 日志）
 	_spawn_illustration_if_presents(step)
@@ -148,44 +136,76 @@ func _handle_dialogue(step: TutorialStep) -> void:
 		await get_tree().create_timer(step.delay_before_dialogue).timeout
 	
 	# 5. 建立连线，通知你同学的组件开始播台词
-	current_target = dialogue_ui
+	if step.target_group != "":
+		current_target = get_tree().get_first_node_in_group(step.target_group)
+	else:
+		current_target = dialogue_ui # 如果真没目标，再退而求其次
+		
 	current_signal_name = "intro_dialogue_finished"
 	current_callable = Callable(self, "_on_step_completed")
 	
+	if dialogue_ui.is_connected("intro_dialogue_finished", current_callable):
+		dialogue_ui.disconnect("intro_dialogue_finished", current_callable)
 	dialogue_ui.intro_dialogue_finished.connect(current_callable)
 	dialogue_ui.start_dialogue(step.dialogue_lines, step.dialogue_position, step.dialogue_offset_x, step.dialogue_offset_y, step.speaker)
 
 
-# ====================================================
-# 📦 拆分出来的对话期小功能魔盒（通通挂在上面主函数底下）
-# ====================================================
-
 ## 子功能 A：管理黑布挖洞与钢化玻璃物理隔绝
 func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
-	if step.target_group != "":
-		var target = get_tree().get_first_node_in_group(step.target_group)
-		if target:
-			var target_rect = target.get_global_rect()
-			blocker_ui.show()
-			blocker_ui._arrange_curtains(target_rect)
-			blocker_ui.hole_rect = target_rect
-			blocker_ui.is_hole_clickable = false 
-			
-			# 如果没有玻璃，原地生成玻璃阻挡交互
-			if not has_node("TutorialGlassShield"):
-				var glass = Control.new()
-				glass.name = "TutorialGlassShield"
-				glass.global_position = target_rect.position
-				glass.size = target_rect.size
-				glass.mouse_filter = Control.MOUSE_FILTER_STOP 
-				add_child(glass)
-		else:
-			printerr("KPI宝高亮失败：找不到组名 '", step.target_group, "' 的节点！")
-			blocker_ui.hide()
-	else:
+	if step.target_group == "":
 		blocker_ui.hide()
+		return
 
+	# 1. 强行把页面显示出来防漏
+	if step.force_show_ui_group != "":
+		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
+		if is_instance_valid(ui_node) and ui_node.has_method("show"):
+			ui_node.show()
 
+	# 2. 抓取目标节点
+	var target = get_tree().get_first_node_in_group(step.target_group)
+	if not target:
+		printerr("KPI宝高亮失败：找不到组名 '", step.target_group, "' 的节点！")
+		blocker_ui.hide()
+		return
+
+	# 3. 死等目标完全渲染稳当
+	var wait_timeout = 0.0
+	while not target.is_visible_in_tree() and wait_timeout < 2.0:
+		await get_tree().process_frame
+		wait_timeout += 0.016
+
+	# 4. 拿到最终位置并挖洞
+	var target_rect = target.get_global_rect()
+
+	blocker_ui.show()
+	blocker_ui._arrange_curtains(target_rect)
+	blocker_ui.hole_rect = target_rect 
+	blocker_ui.is_hole_clickable = false 
+
+	# ====================================================
+	# 💥 5. 核心找回：图层刺穿！让目标跳出对话框黑底的压制！
+	# ====================================================
+	if target is Control:
+		target.z_index = 2000 # 把目标提到 1000 层，必定亮瞎眼！
+		target.z_as_relative = false
+
+	# ====================================================
+	# 💥 6. 核心找回：无敌防弹玻璃！只能看，不准摸！
+	# ====================================================
+	if not has_node("TutorialGlassShield"):
+		var glass = Control.new()
+		glass.name = "TutorialGlassShield"
+		glass.global_position = target_rect.position
+		glass.size = target_rect.size
+		glass.mouse_filter = Control.MOUSE_FILTER_STOP # 拦截一切鼠标点击
+		
+		# 玻璃必须比目标的 1000 还要高，设为 1001，死死挡在它脸上！
+		glass.z_index = 1001 
+		glass.z_as_relative = false
+		add_child(glass)
+
+		
 ## 子功能 B：🌟 截图生成器（带显形追踪雷达）
 func _spawn_illustration_if_presents(step: TutorialStep) -> void:
 	if step.illustration_texture == null:
@@ -254,10 +274,6 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	
 	# 此时拿到的坐标，绝对是它滑入完成后的【真·人间坐标】！
 	var target_rect = target.get_global_rect()
-	
-	print("【大总管雷达】体检报告修正版：")
-	print(" -> 真正可见状态：", target.is_visible_in_tree())
-	print(" -> 停稳后的物理矩形：", target_rect)
 	
 	# 3. 呼叫黑布挖洞
 	blocker_ui.show()
@@ -520,6 +536,13 @@ func _on_step_completed() -> void:
 	# 把这里的打印改成通用日志，这样前几步看着就正常了！
 	print("【大总管】当前步骤 [", current_step_index + 1, "] 完成，正式拆线，进入下一步。")
 	
+	var step = steps[current_step_index]
+	if step.step_type == TutorialStep.Type.DIALOGUE and step.target_group != "":
+		var d_target = get_tree().get_first_node_in_group(step.target_group)
+		if d_target and "z_index" in d_target:
+			d_target.z_index = 0
+			d_target.z_as_relative = true
+			
 	# 卸磨杀驴：断开当前的信号连接
 	if current_target and current_target.has_signal(current_signal_name):
 		current_target.disconnect(current_signal_name, current_callable)
@@ -659,6 +682,9 @@ func _process(delta: float) -> void:
 			current_signal_name = "" # 关掉雷达
 			_on_step_completed()     # 瞬间放行！
 	
+	#if current_signal_name == "intro_dialogue_finished":
+		#return # 💥 强行打断！不准往下执行！
+		
 	if not is_instance_valid(current_target) or not current_target.is_visible_in_tree():
 		return
 		
@@ -670,7 +696,8 @@ func _process(delta: float) -> void:
 		blocker_ui.show()
 		blocker_ui._arrange_curtains(real_rect)
 		blocker_ui.hole_rect = real_rect
-		blocker_ui.is_hole_clickable = true
+		var step = steps[current_step_index]
+		blocker_ui.is_hole_clickable = (step.step_type != TutorialStep.Type.DIALOGUE)
 		
 		# 顺便给它拔高层级，不让它被黑幕盖住
 		if "z_index" in current_target:

@@ -143,7 +143,7 @@ animations = [{
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ha1ar"]
 
-[node name="RecruitmentPanel" type="Control" unique_id=463444191]
+[node name="RecruitmentPanel" type="Control" unique_id=463444191 groups=["recruitment_panel"]]
 custom_minimum_size = Vector2(711, 438)
 layout_mode = 3
 anchors_preset = 0
