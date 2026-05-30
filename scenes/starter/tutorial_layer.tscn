@@ -36,6 +36,7 @@
 [ext_resource type="Resource" uid="uid://cvmapek56dxf2" path="res://data/guide/step_34_show_buffs.tres" id="32_5k7lp"]
 [ext_resource type="Resource" uid="uid://0daehj3yktol" path="res://data/guide/step_35_tutorial_ends.tres" id="33_kso1c"]
 [ext_resource type="PackedScene" uid="uid://bbiqd6umh6kdl" path="res://scenes/starter/tip_bubble.tscn" id="34_kso1c"]
+[ext_resource type="PackedScene" uid="uid://bya2jsjtcfe8r" path="res://scenes/starter/KPIhelper_chat_bubble.tscn" id="37_mkknv"]
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_rsvao")
@@ -65,3 +66,10 @@ offset_right = 1362.0
 offset_bottom = 593.0
 theme_override_font_sizes/font_size = 100
 text = "您已完成新手教程"
+
+[node name="kpi_ChatBubble" parent="." unique_id=1941480218 instance=ExtResource("37_mkknv")]
+visible = false
+offset_left = 47.0
+offset_top = 538.0
+offset_right = 562.0
+offset_bottom = 638.0

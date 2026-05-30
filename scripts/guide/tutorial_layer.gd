@@ -9,6 +9,7 @@ extends CanvasLayer
 @onready var blocker_ui = $Blocker
 @onready var tip_ui: Label = $TipUI # 或者你的 PanelContainer
 @onready var end_label: Label = $FinishLabel # 假设你的 Label 叫这个，且它是 TutorialManager 的子节点
+@onready var kpi_ui = $kpi_ChatBubble
 
 @onready var locked_ui_node: Node = null
 var _global_flash_tween: Tween = null
@@ -115,41 +116,47 @@ func play_step(index: int) -> void:
 func _handle_dialogue(step: TutorialStep) -> void:
 	tip_ui.hide()
 	
-	# ====================================================
-	# 🌟【大总管全场员工总闸管理】
-	# ====================================================
 	if "disable_employee_interaction" in step:
 		Gamemanager.is_employee_interaction_disabled = step.disable_employee_interaction
 		
-	## 1. 弹出面板的等待缓冲
 	if step.force_show_ui_group != "":
 		pass
 		
-	# 2. 抽出小函数：处理黑布和钢化玻璃保护罩
 	await _apply_dialogue_highlight_and_shield(step)
 	
-	# 3. 🌟 抽出小函数：专门生截图（带疯狂 Debug 日志）
 	_spawn_illustration_if_presents(step)
 	
-	# 4. 延迟挂起
 	if step.delay_before_dialogue > 0.0:
 		await get_tree().create_timer(step.delay_before_dialogue).timeout
 	
-	# 5. 建立连线，通知你同学的组件开始播台词
 	if step.target_group != "":
 		current_target = get_tree().get_first_node_in_group(step.target_group)
 	else:
-		current_target = dialogue_ui # 如果真没目标，再退而求其次
+		current_target = dialogue_ui
 		
 	current_signal_name = "intro_dialogue_finished"
 	current_callable = Callable(self, "_on_step_completed")
 	
-	if dialogue_ui.is_connected("intro_dialogue_finished", current_callable):
-		dialogue_ui.disconnect("intro_dialogue_finished", current_callable)
-	dialogue_ui.intro_dialogue_finished.connect(current_callable)
-	dialogue_ui.start_dialogue(step.dialogue_lines, step.dialogue_position, step.dialogue_offset_x, step.dialogue_offset_y, step.speaker)
-
-
+	if step.speaker == 1:  # KPI
+		dialogue_ui.hide()
+		
+		if kpi_ui.is_connected("dialogue_finished", current_callable):
+			kpi_ui.disconnect("dialogue_finished", current_callable)
+		kpi_ui.dialogue_finished.connect(current_callable)
+		
+		kpi_ui.show()
+		kpi_ui.setup(step.dialogue_lines[0])
+		
+	else:  # Boss 或其他角色
+		kpi_ui.hide()  # 确保 KPI 隐藏
+		
+		if dialogue_ui.is_connected("intro_dialogue_finished", current_callable):
+			dialogue_ui.disconnect("intro_dialogue_finished", current_callable)
+		dialogue_ui.intro_dialogue_finished.connect(current_callable)
+		dialogue_ui.start_dialogue(step.dialogue_lines, step.dialogue_position,
+			step.dialogue_offset_x, step.dialogue_offset_y, step.speaker)
+			
+			
 ## 子功能 A：管理黑布挖洞与钢化玻璃物理隔绝
 func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
 	if step.target_group == "":
