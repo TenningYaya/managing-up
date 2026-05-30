@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bjepsmw3dnne6"]
 
 [ext_resource type="Script" uid="uid://cbtwlraomyyyg" path="res://scripts/UI/dialogue/chat_bubble.gd" id="1_s5yc6"]
+[ext_resource type="Texture2D" uid="uid://d2knp2u0urexp" path="res://assets/dialogue/boss.png" id="2_mvav7"]
 [ext_resource type="Texture2D" uid="uid://bpjksdfl02sm7" path="res://assets/dialogue/bubble.png" id="2_s5yc6"]
 
 [node name="ChatBubble" type="HBoxContainer" unique_id=1941480218]
@@ -10,6 +11,19 @@ size_flags_horizontal = 3
 size_flags_vertical = 0
 mouse_filter = 2
 script = ExtResource("1_s5yc6")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1568617523]
+layout_mode = 2
+theme_override_constants/margin_top = 35
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=1257754151]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("2_mvav7")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="BubblePatch" type="NinePatchRect" parent="." unique_id=2008788889]
 layout_mode = 2
@@ -40,6 +54,5 @@ size_flags_horizontal = 4
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
 theme_override_font_sizes/font_size = 20
-text = "Welcome to the company."
 vertical_alignment = 1
 autowrap_mode = 3
