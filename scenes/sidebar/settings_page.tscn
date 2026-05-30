@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cef1cc6y8xrd6"]
 
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="1_wtuay"]
+[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="1_y6t76"]
 [ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="2_nb64h"]
 [ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="3_utjtj"]
 
@@ -82,11 +83,12 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = SubResource("GDScript_nb64h")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=521931601]
+[node name="ColorRect" type="TextureRect" parent="." unique_id=1941575357]
 layout_mode = 0
 offset_right = 248.0
 offset_bottom = 336.0
-color = Color(1, 0, 1, 1)
+texture = ExtResource("1_y6t76")
+expand_mode = 1
 
 [node name="settings" type="Label" parent="." unique_id=1529637247]
 layout_mode = 0

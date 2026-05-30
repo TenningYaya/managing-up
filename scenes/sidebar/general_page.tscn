@@ -2,6 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="1_gwcfk"]
 [ext_resource type="Script" uid="uid://bfbvm6lqss5fr" path="res://scripts/UI/sidebar/general_page.gd" id="1_qayn5"]
+[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_55vqi"]
 
 [node name="GeneralPage" type="Control" unique_id=1546440415]
 custom_minimum_size = Vector2(270, 360)
@@ -9,11 +10,24 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_qayn5")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=754440685]
+[node name="ColorRect" type="TextureRect" parent="." unique_id=806973397]
 layout_mode = 0
 offset_right = 248.0
 offset_bottom = 336.0
-color = Color(1, 0, 1, 1)
+texture = ExtResource("2_55vqi")
+expand_mode = 1
+
+[node name="general" type="Label" parent="." unique_id=1370354661]
+layout_mode = 0
+offset_left = -4.0
+offset_top = 43.0
+offset_right = 244.0
+offset_bottom = 72.0
+theme_override_fonts/font = ExtResource("1_gwcfk")
+theme_override_font_sizes/font_size = 34
+text = "GENERAL"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=984241471]
 custom_minimum_size = Vector2(248, 0)
@@ -23,18 +37,10 @@ anchor_left = 0.086
 anchor_top = 0.111
 anchor_right = 0.182
 anchor_bottom = 0.183
-offset_left = -27.220001
-offset_top = 3.040001
-offset_right = 194.86
-offset_bottom = 173.04001
-
-[node name="general" type="Label" parent="VBoxContainer" unique_id=1370354661]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_gwcfk")
-theme_override_font_sizes/font_size = 34
-text = "GENERAL"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = -23.220001
+offset_top = 40.04
+offset_right = 198.86
+offset_bottom = 210.04001
 
 [node name="total hit" type="Label" parent="VBoxContainer" unique_id=2116646967]
 layout_mode = 2
@@ -52,7 +58,8 @@ text = "     Totoal Time: "
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
-text = "     number of employee: "
+text = "     number of employee: 
+"
 
 [node name="R employee" type="Label" parent="VBoxContainer" unique_id=212652451]
 layout_mode = 2

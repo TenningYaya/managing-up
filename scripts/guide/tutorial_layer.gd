@@ -551,8 +551,8 @@ func _on_step_completed() -> void:
 			d_target.z_as_relative = true
 			
 	# 卸磨杀驴：断开当前的信号连接
-	if current_target and current_target.has_signal(current_signal_name):
-		current_target.disconnect(current_signal_name, current_callable)
+	#if current_target and current_target.has_signal(current_signal_name):
+		#current_target.disconnect(current_signal_name, current_callable)
 	
 	# 恢复所有拒绝按钮的禁用状态
 	var reject_btns = get_tree().get_nodes_in_group("reject_buttons")

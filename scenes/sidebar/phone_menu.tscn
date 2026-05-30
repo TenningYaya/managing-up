@@ -2,11 +2,12 @@
 
 [ext_resource type="Texture2D" uid="uid://cchun4tokcayg" path="res://assets/sidebar/Phone_2.png" id="1_8gi4e"]
 [ext_resource type="Script" uid="uid://dbiup6ouwg2e" path="res://scripts/UI/sidebar/mobilesidebar.gd" id="1_jt2no"]
+[ext_resource type="Texture2D" uid="uid://col5yadt45xx5" path="res://assets/sidebar/wallpaper.png" id="2_diil0"]
 [ext_resource type="Texture2D" uid="uid://bvd528nbtp2lh" path="res://assets/sidebar/TriggerIcon.png" id="2_jt2no"]
-[ext_resource type="Texture2D" uid="uid://cq0o14on3o6ae" path="res://assets/sidebar/upgrades.png" id="3_yj4so"]
-[ext_resource type="Texture2D" uid="uid://bfdj2mva2cc1t" path="res://assets/sidebar/tutorial.png" id="4_8c6sh"]
-[ext_resource type="Texture2D" uid="uid://bkrakpjg1rg7h" path="res://assets/sidebar/general.png" id="5_oyh58"]
-[ext_resource type="Texture2D" uid="uid://bt4qwkifuyi7d" path="res://assets/sidebar/settings.png" id="6_1dt7a"]
+[ext_resource type="Texture2D" uid="uid://dlh7llvih2fei" path="res://assets/sidebar/app/upgrades.png" id="3_50qqt"]
+[ext_resource type="Texture2D" uid="uid://cde3nq5rhvsqe" path="res://assets/sidebar/app/tutorial.png" id="4_diil0"]
+[ext_resource type="Texture2D" uid="uid://bvt1p6cec31x6" path="res://assets/sidebar/app/general.png" id="5_yskv6"]
+[ext_resource type="Texture2D" uid="uid://dmved7ah87vso" path="res://assets/sidebar/app/settings.png" id="6_gtcak"]
 [ext_resource type="PackedScene" uid="uid://bw8epncov74qg" path="res://scenes/sidebar/tutorial_page.tscn" id="7_50qqt"]
 [ext_resource type="PackedScene" uid="uid://cef1cc6y8xrd6" path="res://scenes/sidebar/settings_page.tscn" id="7_uouet"]
 [ext_resource type="PackedScene" uid="uid://72jjpffy66yt" path="res://scenes/sidebar/upgrades_page.tscn" id="8_53q3r"]
@@ -41,13 +42,14 @@ offset_top = -317.0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ColorRect" type="ColorRect" parent="PhoneWrapper" unique_id=65976063]
+[node name="ColorRect" type="TextureRect" parent="PhoneWrapper" unique_id=1895759753]
 layout_mode = 0
-offset_left = -27.0
-offset_top = -40.0
-offset_right = 221.0
-offset_bottom = 296.0
-color = Color(1, 0.58431375, 1, 1)
+offset_left = -34.0
+offset_top = -44.0
+offset_right = 231.0
+offset_bottom = 316.0
+texture = ExtResource("2_diil0")
+expand_mode = 1
 
 [node name="PhoneBase" type="TextureRect" parent="PhoneWrapper" unique_id=1110929080]
 custom_minimum_size = Vector2(270, 360)
@@ -95,36 +97,76 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 0
+theme_override_constants/v_separation = 15
 columns = 3
 
 [node name="upgrades" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=1381200172 groups=["upgrade_icon"]]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-texture_normal = ExtResource("3_yj4so")
+texture_normal = ExtResource("3_50qqt")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="upgrades" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades" unique_id=1867715456]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 71.0
+offset_right = 75.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "UPGRADES"
 
 [node name="tutorial" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=425357062 groups=["tutorial_app_icon"]]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-texture_normal = ExtResource("4_8c6sh")
+texture_normal = ExtResource("4_diil0")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="Tutorial" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/tutorial" unique_id=661914488]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 72.0
+offset_right = 74.0
+offset_bottom = 95.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "TUTORIAL"
 
 [node name="general" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=426804594]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-texture_normal = ExtResource("5_oyh58")
+texture_normal = ExtResource("5_yskv6")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="GENERAL" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/general" unique_id=1857504635]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 72.0
+offset_right = 76.0
+offset_bottom = 95.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "GENERAL"
 
 [node name="settings" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=375597110]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-texture_normal = ExtResource("6_1dt7a")
+texture_normal = ExtResource("6_gtcak")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="SETTINGS" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/settings" unique_id=572774759]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 67.0
+offset_right = 76.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "SETTINGS"
 
 [node name="AppDisplayArea" type="Control" parent="PhoneWrapper/Screen" unique_id=1568197251]
 layout_mode = 1
@@ -165,6 +207,7 @@ offset_left = 10.0
 offset_top = 11.0
 offset_right = 50.0
 offset_bottom = 34.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("10_53q3r")
 theme_override_font_sizes/font_size = 20
 text = "12:00"
@@ -175,6 +218,7 @@ offset_left = 184.0
 offset_top = 11.0
 offset_right = 235.0
 offset_bottom = 34.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("10_53q3r")
 theme_override_font_sizes/font_size = 20
 text = "89%"

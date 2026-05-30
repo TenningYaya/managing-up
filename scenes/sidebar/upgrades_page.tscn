@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="1_v0of0"]
 [ext_resource type="Script" uid="uid://da0wfxebqnghg" path="res://scripts/UI/sidebar/upgrades_page.gd" id="1_vc4hl"]
+[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_gfse4"]
 [ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="2_lh86t"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_70tse"]
 [ext_resource type="Texture2D" uid="uid://b343jwsuuh7fn" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Buttons & Holders/13.png" id="4_lh86t"]
@@ -18,11 +19,12 @@ offset_right = 270.0
 offset_bottom = 360.0
 script = ExtResource("1_vc4hl")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1466235282]
+[node name="ColorRect" type="TextureRect" parent="." unique_id=308287506]
 layout_mode = 0
 offset_right = 248.0
 offset_bottom = 336.0
-color = Color(1, 0, 1, 1)
+texture = ExtResource("2_gfse4")
+expand_mode = 1
 
 [node name="MainLayout" type="VBoxContainer" parent="." unique_id=1465389803]
 custom_minimum_size = Vector2(214, 277)
