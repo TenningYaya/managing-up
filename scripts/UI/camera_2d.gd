@@ -1,3 +1,4 @@
+#camera_2d.gd
 extends Camera2D
 
 var dragging = false
@@ -8,6 +9,10 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_MIDDLE:
 			if event.pressed:
+				if not Gamemanager.is_tutorial_completed:
+					dragging = false
+					return # 拦截按下事件
+					
 				dragging = true
 				last_mouse_pos = event.global_position
 			else:
@@ -15,8 +20,11 @@ func _input(event: InputEvent) -> void:
 
 	# 2. 拖拽逻辑
 	if event is InputEventMouseMotion and dragging:
-		# 计算鼠标移动了多少，然后反向移动相机
+		if not Gamemanager.is_tutorial_completed:
+			dragging = false
+			return
+			
 		var delta = event.global_position - last_mouse_pos
 		position -= delta # 注意是减法，鼠标往右拽，相机往左走，画面就往右平移
-		position.x = clamp(position.x, -100, 2000) # 添加camera的限制范围
+		position.x = clamp(position.x, -100, 2110) # 添加camera的限制范围
 		last_mouse_pos = event.global_position

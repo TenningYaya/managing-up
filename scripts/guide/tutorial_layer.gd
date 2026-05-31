@@ -600,6 +600,12 @@ func setup_tutorial_hiring():
 	RecruitmentManager.load_tutorial_resumes()
 
 func _input(event: InputEvent) -> void:
+	if not Gamemanager.is_tutorial_completed:
+		if event.is_action("ui_accept"):
+			# 把这个事件标记为“已处理”，引擎底层和所有按钮就再也收不到它了
+			get_viewport().set_input_as_handled() 
+			return # 强行打断，不准往下走
+			
 	if is_waiting_for_final_click and event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			queue_free()

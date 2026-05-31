@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://d2vtifhmv6jpd"]
+
+[ext_resource type="Texture2D" uid="uid://cv504ynte8nqt" path="res://assets/left.png" id="1_shhuv"]
+
+[node name="GlassWall" type="Control" unique_id=1956728320]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1267662779]
+clip_children = 1
+layout_mode = 0
+offset_left = -1061.0
+offset_top = -75.0
+offset_right = 2281.0
+offset_bottom = 19.0
+
+[node name="LeftCover4" type="TextureRect" parent="ColorRect" unique_id=1403495778]
+layout_mode = 0
+offset_left = 2510.0
+offset_top = -3.0
+offset_right = 3356.0
+offset_bottom = 432.0
+texture = ExtResource("1_shhuv")
+expand_mode = 1
+
+[node name="LeftCover3" type="TextureRect" parent="ColorRect" unique_id=799396940]
+layout_mode = 0
+offset_left = 1674.0
+offset_top = -3.0
+offset_right = 2520.0
+offset_bottom = 432.0
+texture = ExtResource("1_shhuv")
+expand_mode = 1
+
+[node name="LeftCover2" type="TextureRect" parent="ColorRect" unique_id=1692529036]
+layout_mode = 0
+offset_left = 838.0
+offset_top = -3.0
+offset_right = 1684.0
+offset_bottom = 432.0
+texture = ExtResource("1_shhuv")
+expand_mode = 1
+
+[node name="LeftCover" type="TextureRect" parent="ColorRect" unique_id=373100993]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -3.0
+offset_right = 848.0
+offset_bottom = 432.0
+texture = ExtResource("1_shhuv")
+expand_mode = 1

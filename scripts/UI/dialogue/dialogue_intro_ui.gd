@@ -73,14 +73,24 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if is_finished:
 		return
-
-	# 3. 检查空格键是按下还是松开
+#
+	## 3. 检查空格键是按下还是松开
+	## ====================================================
+	## 💥【空格全面封锁阵】：长按交信，短按原地超度！
+	# ====================================================
 	if event is InputEventKey and event.keycode == KEY_SPACE:
 		if event.pressed and not event.echo:
 			is_space_pressed = true
 		elif not event.pressed:
 			is_space_pressed = false
 			space_pressed_time = 0.0 # 松开就时间归零
+			
+		# 🌟 核心绝杀：把这个空格事件标记为“已处理”！
+		# 这样 Godot 引擎底层的 ui_accept 机制和全场所有的 UI 焦点，
+		# 就会认为这个空格键压根没发生过，绝对无法触发任何按钮的连点或翻篇！
+		get_viewport().set_input_as_handled()
+		return # 💥 强行打断！空格事件到此为止，绝对不允许往下走！
+	# ====================================================
 
 	if is_animating:
 		return
