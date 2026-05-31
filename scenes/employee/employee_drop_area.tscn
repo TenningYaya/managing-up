@@ -27,7 +27,7 @@ offset_right = 106.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
-color = Color(0, 0, 0, 0.16078432)
+color = Color(0, 0, 0, 0)
 
 [node name="EmployeeContainer" type="Control" parent="." unique_id=898007098]
 anchors_preset = 0

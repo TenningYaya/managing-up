@@ -37,7 +37,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -3.0
+offset_left = -8.0
+offset_top = 81.0
+offset_right = -8.0
+offset_bottom = 78.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 480
@@ -83,3 +86,20 @@ offset_bottom = 433.0
 texture = ExtResource("3_4k5w1")
 expand_mode = 2
 stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1920948347]
+layout_mode = 0
+offset_left = 427.0
+offset_right = 1463.0
+offset_bottom = 80.0
+color = Color(1.8289685e-06, 0.4949876, 0.25025076, 0.78039217)
+
+[node name="Label" type="Label" parent="." unique_id=1596074237]
+layout_mode = 0
+offset_left = 780.0
+offset_top = 14.0
+offset_right = 1075.0
+offset_bottom = 69.0
+theme_override_font_sizes/font_size = 40
+text = "John (CEO) "
+horizontal_alignment = 1
