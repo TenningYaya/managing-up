@@ -71,6 +71,8 @@ func _process(delta: float) -> void:
 			skip_dialogue()
 
 func _input(event: InputEvent) -> void:
+	if not is_visible_in_tree():
+		return
 	if is_finished:
 		return
 #
@@ -131,6 +133,7 @@ func add_message(text: String) -> void:
 	bubble.modulate.a = 0.0
 
 	# 等待一瞬间，让系统计算好气泡的大小
+	await get_tree().process_frame
 	await get_tree().process_frame
 
 	# 5. 让滚动条滚到底部。
