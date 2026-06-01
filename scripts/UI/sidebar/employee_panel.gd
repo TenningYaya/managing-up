@@ -31,6 +31,14 @@ const BUFF_TAG_SCENE = preload("res://scenes/sidebar/employee_panel/buff_tag.tsc
 
 # 当前正在查看的员工数据引用
 var current_employee: Employee = null
+var is_locked_by_tutorial: bool = false
+
+func lock_for_tutorial():
+	is_locked_by_tutorial = true
+	show() # 确保它显示出来
+
+func unlock_from_tutorial():
+	is_locked_by_tutorial = false
 
 # ==========================================
 # 2. 初始化
@@ -58,6 +66,9 @@ func _ready() -> void:
 	set_process_input(true)
 
 func _input(event: InputEvent) -> void:
+	if is_locked_by_tutorial:
+		return
+		
 	# 只处理鼠标左键按下
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if not visible: 

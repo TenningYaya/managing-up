@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cjfjfj4l46h23"]
 
 [ext_resource type="Script" uid="uid://bpk1q1i0i3xmm" path="res://scripts/UI/sidebar/employee_panel.gd" id="1_sl25x"]
+[ext_resource type="Texture2D" uid="uid://dkkojjppp7n5c" path="res://assets/computer/PNG/2.png" id="2_khksj"]
 [ext_resource type="PackedScene" uid="uid://8o18jsagw05c" path="res://scenes/sidebar/employee_panel/employee_ability_slider.tscn" id="2_sl25x"]
 [ext_resource type="PackedScene" uid="uid://dndhwa02h345o" path="res://scenes/sidebar/employee_panel/employee_information_bar.tscn" id="3_agpfo"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_ajc7u"]
@@ -14,6 +15,14 @@
 [ext_resource type="Texture2D" uid="uid://bbt1nylq8pmni" path="res://assets/progress bar/progress bar most rounded progress cinnamon.png" id="6_p7uvh"]
 [ext_resource type="Texture2D" uid="uid://dnrqtwbwt5472" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/PNG SpriteSheet/SpriteSheet.png" id="11_5it8m"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_cr4tb"]
+atlas = ExtResource("2_khksj")
+region = Rect2(1488, 346, 339, 90)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5620"]
+atlas = ExtResource("2_khksj")
+region = Rect2(2224, 48, 337, 257)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ajc7u"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_khksj"]
@@ -26,11 +35,12 @@ region = Rect2(399, 2773, 176, 20)
 z_index = 100
 layout_mode = 3
 anchors_preset = 0
-offset_left = -267.0
-offset_top = -378.0
+offset_left = -316.0
+offset_top = -391.0
 script = ExtResource("1_sl25x")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1160354043]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,6 +48,35 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.9, 0.86355, 0.657, 1)
+
+[node name="TextureRect" type="NinePatchRect" parent="." unique_id=586413719]
+visible = false
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_cr4tb")
+patch_margin_left = 41
+patch_margin_top = 21
+patch_margin_right = 42
+patch_margin_bottom = 22
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=558552942]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_x5620")
+patch_margin_left = 46
+patch_margin_top = 25
+patch_margin_right = 41
+patch_margin_bottom = 29
 
 [node name="PanelBg" type="Panel" parent="." unique_id=1968908939]
 custom_minimum_size = Vector2(270, 360)
@@ -47,9 +86,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -270.0
-offset_top = -349.0
-offset_bottom = 11.0
+offset_left = -295.0
+offset_top = -344.0
+offset_right = -25.0
+offset_bottom = 16.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ajc7u")
@@ -153,7 +193,8 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_khksj")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="PanelBg/EmployeePage/PanelContainer" unique_id=1369688952]
-modulate = Color(0.32156864, 0.85882354, 0.019607844, 0.54901963)
+modulate = Color(1, 1, 1, 0.54901963)
+self_modulate = Color(0.5965778, 1, 0.8432457, 1)
 texture_filter = 1
 layout_mode = 2
 texture = SubResource("AtlasTexture_fnfi6")
@@ -176,7 +217,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="PanelBg/EmployeePage/PanelContainer/MarginContainer/VBoxContainer" unique_id=1846502286]
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.4811564, 0.6522103, 0.29271916, 1)
+theme_override_colors/font_color = Color(0.6734581, 0.86878794, 0.46772617, 1)
 theme_override_fonts/font = ExtResource("3_ajc7u")
 theme_override_font_sizes/font_size = 18
 text = "Employee Benefits"

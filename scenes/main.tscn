@@ -289,8 +289,8 @@ offset_bottom = 1080.0
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2052431275]
 
 [node name="EmployeePanel" parent="CanvasLayer" unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
-offset_left = 1654.0
-offset_top = 336.0
+offset_left = 1601.0
+offset_top = 324.0
 offset_right = 1922.0
 offset_bottom = 714.0
 
