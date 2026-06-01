@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dsbjb26fr5nob"]
+
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="1_ori2l"]
+[ext_resource type="Script" uid="uid://m1plp4pdalyw" path="res://scripts/guide/language_selector.gd" id="1_sx052"]
+
+[node name="LanguageSelector" type="Control" unique_id=1539052228]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_sx052")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=524995909]
+layout_mode = 0
+offset_top = -194.0
+offset_right = 150.0
+offset_bottom = -84.0
+theme_override_constants/separation = 10
+
+[node name="BtnChinese" parent="VBoxContainer" unique_id=2048579194 instance=ExtResource("1_ori2l")]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+button_text = "简体中文"
+
+[node name="BtnEnglish" parent="VBoxContainer" unique_id=929430409 instance=ExtResource("1_ori2l")]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+button_text = "English"
+
+[connection signal="pressed" from="VBoxContainer/BtnChinese" to="." method="_on_btn_chinese_pressed"]
+[connection signal="pressed" from="VBoxContainer/BtnEnglish" to="." method="_on_btn_english_pressed"]
