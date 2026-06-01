@@ -160,7 +160,7 @@ func _dispatch_translated_dialogue(step: TutorialStep, signal_name: String, call
 		
 		kpi_ui.show()
 		var text_to_show = translated_lines[0] if translated_lines.size() > 0 else ""
-		kpi_ui.setup(text_to_show)
+		kpi_ui.setup(translated_lines)
 		
 	else:  # Boss 或其他角色分支
 		kpi_ui.hide()
