@@ -10,6 +10,15 @@ var current_target_office: Office = null
 
 # 🌟 新增：记录打开面板的时间，防止当前帧点击误触发关闭
 var _open_time: int = 0
+var is_locked: bool = false
+
+func lock_for_tutorial():
+	is_locked = true
+	show() # 强制显形
+
+func unlock_from_tutorial():
+	is_locked = false
+
 
 # 这里的路径请根据你实际的节点树修改
 # --- 引用原有的容器 ---
@@ -40,7 +49,8 @@ func _input(event: InputEvent) -> void:
 	# 只有面板显示时才检测
 	if not visible:
 		return
-		
+	if is_locked:
+		return
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			# 保护：如果是刚刚打开面板（同一帧或 0.1 秒内），不执行关闭
@@ -186,4 +196,5 @@ func _on_title_bar_gui_input(event: InputEvent):
 
 
 func _on_close_panel_pressed() -> void:
+	if is_locked: return
 	self.hide()

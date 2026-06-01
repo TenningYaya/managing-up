@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cn3se308s67lx" path="res://scripts/guide/tutorial_layer.gd" id="1_3ctmu"]
 [ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="2_ygpln"]
+[ext_resource type="PackedScene" uid="uid://bbiqd6umh6kdl" path="res://scenes/starter/tip_bubble.tscn" id="9_xdy0o"]
+[ext_resource type="PackedScene" uid="uid://bya2jsjtcfe8r" path="res://scenes/starter/KPIhelper_chat_bubble.tscn" id="11_fhdn4"]
 [ext_resource type="Resource" uid="uid://ysc5lu6f5pqy" path="res://data/guide/step_30_explain_office.tres" id="28_0ujgi"]
 [ext_resource type="Resource" uid="uid://c7yrg2baad1rh" path="res://data/guide/step_31_click_office.tres" id="29_cu6rd"]
 [ext_resource type="Resource" uid="uid://biv0bllp51ve5" path="res://data/guide/step_32_chose_function.tres" id="30_g27r1"]
@@ -11,9 +13,10 @@
 [ext_resource type="Script" uid="uid://b5473owjrbxqe" path="res://scripts/guide/tutorial_blocker.gd" id="34_5im61"]
 [ext_resource type="PackedScene" uid="uid://c18bskwtiitsq" path="res://scenes/starter/dialogue_intro_ui.tscn" id="35_irqpq"]
 
-[node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
+[node name="TutorialLayerCut" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_3ctmu")
 steps = Array[ExtResource("2_ygpln")]([ExtResource("28_0ujgi"), ExtResource("29_cu6rd"), ExtResource("30_g27r1"), ExtResource("31_8oh1r"), ExtResource("32_xjbmj"), ExtResource("33_2fm1o")])
+TUTORIAL_TIP_SCENE = ExtResource("9_xdy0o")
 
 [node name="TipUI" type="Label" parent="." unique_id=16516687]
 offset_right = 40.0
@@ -41,3 +44,10 @@ offset_right = 1362.0
 offset_bottom = 593.0
 theme_override_font_sizes/font_size = 100
 text = "您已完成新手教程"
+
+[node name="kpi_ChatBubble" parent="." unique_id=1941480218 instance=ExtResource("11_fhdn4")]
+visible = false
+offset_left = 47.0
+offset_top = 538.0
+offset_right = 562.0
+offset_bottom = 638.0

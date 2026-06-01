@@ -27,7 +27,7 @@ var esc_hold_time := 0.0
 var is_esc_pressing := false
 
 var is_waiting_for_final_click := false
-
+var current_target_employee = null
 
 func _ready() -> void:
 	# 1. 游戏一上来，第一时间藏起所有 UI，防止屏幕闪烁
@@ -133,10 +133,26 @@ func _handle_dialogue(step: TutorialStep) -> void:
 		current_target = get_tree().get_first_node_in_group(step.target_group)
 	else:
 		current_target = dialogue_ui
+	
+	if step.target_group == "employee_buffs":
+		# 1. 强制显示面板 (利用你写好的 force_show_ui_group)
+		var panel = get_tree().get_first_node_in_group("employee_panel")
+		if panel:
+			panel.show()
+			if panel.has_method("lock_for_tutorial"): panel.lock_for_tutorial()
+			# 确保面板绑定的是我们要投喂的那个员工
+			if is_instance_valid(current_target_employee) and panel.has_method("setup"):
+				panel.setup(current_target_employee)
 		
+		# 2. 只有在确保有员工时才喂 Buff
+		if is_instance_valid(current_target_employee):
+			print("【大总管】强制投喂：", current_target_employee.name)
+			current_target_employee.force_give_snack_buff(1)
+			# 🌟 补一刀：手动调用 refresh，确保面板立刻刷出 Buff 图标
+			if panel and panel.has_method("_refresh_all_ui"):
+				panel._refresh_all_ui()
+	
 	_dispatch_translated_dialogue(step, "intro_dialogue_finished", Callable(self, "_on_step_completed"))
-
-
 # ====================================================
 # 🛠️ 核心封装：多语言清洗 + UI 分流解绑连线总闸
 # ====================================================
@@ -180,29 +196,6 @@ func _dispatch_translated_dialogue(step: TutorialStep, signal_name: String, call
 			
 ## 子功能 A：管理黑布挖洞与钢化玻璃物理隔绝
 func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
-	#if step.target_group == "":
-		#blocker_ui.hide()
-		#return
-#
-	## 1. 强行把页面显示出来防漏
-	#if step.force_show_ui_group != "":
-		#var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
-		#if is_instance_valid(ui_node) and ui_node.has_method("show"):
-			#ui_node.show()
-#
-	## 2. 抓取目标节点
-	#var target = get_tree().get_first_node_in_group(step.target_group)
-	#if not target:
-		#printerr("KPI宝高亮失败：找不到组名 '", step.target_group, "' 的节点！")
-		#blocker_ui.hide()
-		#return
-#
-	## 3. 死等目标完全渲染稳当
-	#var wait_timeout = 0.0
-	#while not target.is_visible_in_tree() and wait_timeout < 2.0:
-		#await get_tree().process_frame
-		#wait_timeout += 0.016
-
 	blocker_ui.show() # 只要进到这个函数，无论有没有 target，先保证黑幕是亮的！
 	
 	if step.target_group == "":
@@ -286,7 +279,6 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	if step.force_show_ui_group != "":
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
 		if ui_node:
-			# 💥【拦截核心】：同样的道理，已经亮着的面板，别去调用 lock_for_tutorial 重置它！
 			if ui_node.is_visible_in_tree():
 				print("【大总管防刷脸补丁】Focus_Click 判定面板已存在，拒绝套娃刷新。")
 			else:

@@ -646,3 +646,16 @@ func _clear_all_vfx() -> void:
 	for child in get_children():
 		if child is FileVFX: # 这里用到你脚本里定义的 class_name
 			child.queue_free()
+
+func force_give_snack_buff(buff_type: SnackBuff):
+	# 1. 强行先清理一下之前的状态，防止占着名额
+	_clear_snack_buff()
+	
+	# 2. 强行把 Buff 状态塞进去
+	current_snack_buff = buff_type
+	
+	# 3. 告诉 Manager 名额占用（如果是教程，甚至可以不占用名额，看你心情）
+	OfficeManager.active_snack_buffs += 1
+	
+	# 4. 广播状态，UI 立刻刷新图标
+	buff_status_changed.emit()
