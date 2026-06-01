@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://co283eup1di0n"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_ejs3t"]
+
+[resource]
+script = ExtResource("1_ejs3t")
+step_type = 2
+target_group = "employees"
+wait_signal = "tutorial_click_specific_employee"
+disable_employee_interaction = false
+tip_text = "连续点击同事，鼓励他们尽快完成工作"
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

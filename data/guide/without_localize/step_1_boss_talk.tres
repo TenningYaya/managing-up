@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://b1qi4he5wdivo"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_g5msc"]
+
+[resource]
+script = ExtResource("1_g5msc")
+wait_signal = "intro_dialogue_finished"
+dialogue_position = 0
+dialogue_lines = Array[String](["TUTORIAL_STEP_01_01
+
+", "我知道早上上班的心情总是很艹蛋，因为我也是", "所以，新项目组的工作就全交给你了
+", "什么？你说你不会管人也不会取名字？
+", "嗯……你要知道，把你招进来的时候，我对你是有很高的期望的
+", "再说了，现在AI什么的不是很好用吗？有事问AI去吧
+", "好了，我这边的游轮慈善晚宴都要开始了", "好好学，好好干
+", "绩效好的话一切都好说，bye~
+"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

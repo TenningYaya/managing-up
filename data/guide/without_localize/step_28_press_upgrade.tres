@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://cjdfxbuui5c0w"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_d05er"]
+
+[resource]
+script = ExtResource("1_d05er")
+step_type = 1
+target_group = "upgrade_button"
+tip_text = "消耗您积累的KPI，晋升为一颗更稳固的螺丝钉"
+tip_position = 2
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

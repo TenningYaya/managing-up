@@ -7,6 +7,5 @@ script = ExtResource("1_4slvd")
 target_group = "employee_droparea"
 wait_signal = "intro_dialogue_finished"
 speaker = 1
-dialogue_lines = Array[String](["现在，三位已经是您的同事啦！", "让同事闲着……啊不，没有工位坐就太不礼貌了", "把同事拖拽到工位上，同事就会开始为项目组工作啦！
-"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_08_01", "TUTORIAL_STEP_08_02", "TUTORIAL_STEP_08_03"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

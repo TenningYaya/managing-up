@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://cuudbswpv0qsy"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_b8tlb"]
+
+[resource]
+script = ExtResource("1_b8tlb")
+step_type = 1
+target_group = "pantry_button"
+force_show_ui_group = "office_panel"
+lock_ui_lifecycle = true
+tip_text = "选择茶水间作为这间办公室的职能"
+tip_position = 3
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

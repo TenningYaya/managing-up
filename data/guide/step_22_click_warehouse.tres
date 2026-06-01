@@ -6,5 +6,5 @@
 script = ExtResource("1_lj4mf")
 step_type = 1
 target_group = "warehouse_button"
-tip_text = "打开人力资源中心，查看同事的工作状态"
+tip_text = "TUTORIAL_STEP_22_01"
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

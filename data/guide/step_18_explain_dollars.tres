@@ -6,5 +6,5 @@
 script = ExtResource("1_cw8ob")
 target_group = "currency_board"
 speaker = 1
-dialogue_lines = Array[String](["由于老板不在家，公司的资产也约等于您的资产~", "您可以将这些资产用于许多地方，比如获取更牛的员工"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_18_01", "TUTORIAL_STEP_18_02"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

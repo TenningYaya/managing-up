@@ -6,5 +6,5 @@
 script = ExtResource("1_d1cqj")
 target_group = "desk_slot_1"
 speaker = 1
-dialogue_lines = Array[String](["哦！您看，他们多可爱啊！他们工作着的样子就像是天使一样", "当然，作为老板的联系人，项目成果与您的辛劳密不可分~", "出于为项目负责的心态，我们当然要敦促同事尽快完成工作~", "您可以右键点击同事，查看他们的当前工作进度"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_10_01", "TUTORIAL_STEP_10_02", "TUTORIAL_STEP_10_03", "TUTORIAL_STEP_10_04"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

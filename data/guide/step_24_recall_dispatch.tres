@@ -9,6 +9,6 @@ target_group = "employee_panel"
 force_show_ui_group = "employee_panel"
 lock_ui_lifecycle = true
 speaker = 1
-dialogue_lines = Array[String](["当然，您随时可以打开同事面板，再次将他们派遣到这个项目", "或者让他们永久离开这个公司~这也是优化人员架构的必不可少的一环"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_24_01", "TUTORIAL_STEP_24_02"])
 illustration_texture = ExtResource("1_10nxm")
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

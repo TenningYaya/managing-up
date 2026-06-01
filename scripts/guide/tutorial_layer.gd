@@ -134,28 +134,49 @@ func _handle_dialogue(step: TutorialStep) -> void:
 	else:
 		current_target = dialogue_ui
 		
-	current_signal_name = "intro_dialogue_finished"
-	current_callable = Callable(self, "_on_step_completed")
+	_dispatch_translated_dialogue(step, "intro_dialogue_finished", Callable(self, "_on_step_completed"))
+
+
+# ====================================================
+# 🛠️ 核心封装：多语言清洗 + UI 分流解绑连线总闸
+# ====================================================
+func _dispatch_translated_dialogue(step: TutorialStep, signal_name: String, callback: Callable) -> void:
+	current_signal_name = signal_name
+	current_callable = callback
 	
-	if step.speaker == 1:  # KPI
+	# 1. 物理清洗：将大写暗号在底层原地还原成当前语言的真话
+	var translated_lines: Array[String] = []
+	for line_key in step.dialogue_lines:
+		translated_lines.append(tr(line_key))
+		
+	# 2. 核心分流与安全断连
+	if step.speaker == 1:  # KPI宝分支
 		dialogue_ui.hide()
 		
-		if kpi_ui.is_connected("dialogue_finished", current_callable):
-			kpi_ui.disconnect("dialogue_finished", current_callable)
-		kpi_ui.dialogue_finished.connect(current_callable)
+		# 安全断连，谨防报错
+		if kpi_ui.is_connected("dialogue_finished", callback):
+			kpi_ui.disconnect("dialogue_finished", callback)
+		kpi_ui.dialogue_finished.connect(callback)
 		
 		kpi_ui.show()
-		kpi_ui.setup(step.dialogue_lines[0])
+		var text_to_show = translated_lines[0] if translated_lines.size() > 0 else ""
+		kpi_ui.setup(text_to_show)
 		
-	else:  # Boss 或其他角色
-		kpi_ui.hide()  # 确保 KPI 隐藏
+	else:  # Boss 或其他角色分支
+		kpi_ui.hide()
 		
-		if dialogue_ui.is_connected("intro_dialogue_finished", current_callable):
-			dialogue_ui.disconnect("intro_dialogue_finished", current_callable)
-		dialogue_ui.intro_dialogue_finished.connect(current_callable)
-		dialogue_ui.start_dialogue(step.dialogue_lines, step.dialogue_position,
-			step.dialogue_offset_x, step.dialogue_offset_y, step.speaker)
-			
+		# 安全断连，谨防报错
+		if dialogue_ui.is_connected("intro_dialogue_finished", callback):
+			dialogue_ui.disconnect("intro_dialogue_finished", callback)
+		dialogue_ui.intro_dialogue_finished.connect(callback)
+		
+		dialogue_ui.start_dialogue(
+			translated_lines, 
+			step.dialogue_position,
+			step.dialogue_offset_x, 
+			step.dialogue_offset_y, 
+			step.speaker
+		)
 			
 ## 子功能 A：管理黑布挖洞与钢化玻璃物理隔绝
 func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:

@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_p8mna")
 speaker = 1
-dialogue_lines = Array[String](["一收到您的暖心问候，同事们工作进度实时飞涨", "显然，同事也感受到了您的热情，干劲更足了！"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_14_01", "TUTORIAL_STEP_14_02"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

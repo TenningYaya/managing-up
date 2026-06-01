@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://bi383uqormwnv"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_p8mna"]
+
+[resource]
+script = ExtResource("1_p8mna")
+speaker = 1
+dialogue_lines = Array[String](["一收到您的暖心问候，同事们工作进度实时飞涨", "显然，同事也感受到了您的热情，干劲更足了！"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

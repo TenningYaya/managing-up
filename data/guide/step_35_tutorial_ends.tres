@@ -6,6 +6,5 @@
 script = ExtResource("1_c6efx")
 target_group = "tutorial_app_icon"
 speaker = 1
-dialogue_lines = Array[String](["考虑到您日理百机，忘掉这些操作也是非常正常的", "您随时可以查看职场手册，一键恢复记忆", "至于为什么不是问我？那当然是因为：节约token是AI的传统美德", "那么，我先去培训其他工贼……啊不，工作人员了！
-", "KPI宝，您最贴心的工作管家", "更懂职场，更懂您！"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_35_01", "TUTORIAL_STEP_35_02", "TUTORIAL_STEP_35_03", "TUTORIAL_STEP_35_04", "TUTORIAL_STEP_35_05", "TUTORIAL_STEP_35_06"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

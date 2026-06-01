@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://h5m2818rtjcl"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_0dfo4"]
+
+[resource]
+script = ExtResource("1_0dfo4")
+target_group = "desk_slot_1"
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

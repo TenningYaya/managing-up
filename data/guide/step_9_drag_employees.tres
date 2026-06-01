@@ -8,5 +8,5 @@ step_type = 2
 target_group = "tutorial_drag"
 wait_signal = "all_colleagues_placed"
 disable_employee_interaction = false
-tip_text = "将同事拖拽到工位"
+tip_text = "TUTORIAL_STEP_09_01"
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

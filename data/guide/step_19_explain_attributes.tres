@@ -6,7 +6,6 @@
 [resource]
 script = ExtResource("1_cc6lk")
 speaker = 1
-dialogue_lines = Array[String](["当进度条走到终点时，同事会产出文件！这是他们的工作成果~", "同事的工作成果会被直接转化为您的KPI，同时也有一定概率产出资产
-", "产出的效率和数额与同事的属性相关，您只要查看他们的数据就明白了！"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_19_01", "TUTORIAL_STEP_19_02", "TUTORIAL_STEP_19_03"])
 illustration_texture = ExtResource("1_61fh0")
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

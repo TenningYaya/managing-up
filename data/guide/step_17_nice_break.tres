@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_ram5f")
 speaker = 1
-dialogue_lines = Array[String](["多亏了您的努力，又一位迷途的同事悬崖勒马！公司的资产增加了！"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_17_01"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

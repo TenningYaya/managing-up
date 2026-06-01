@@ -8,5 +8,5 @@ target_group = "employee_panel"
 force_show_ui_group = "employee_panel"
 lock_ui_lifecycle = true
 speaker = 1
-dialogue_lines = Array[String](["当进度条走到终点时，同事就会产出一份文件", "左键点击同事。发送一条条期待，一条条敦促，提高他们的生产进度~"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_12_01", "TUTORIAL_STEP_12_02"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://ddd8382uweb3e"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_4slvd"]
+
+[resource]
+script = ExtResource("1_4slvd")
+target_group = "employee_droparea"
+wait_signal = "intro_dialogue_finished"
+speaker = 1
+dialogue_lines = Array[String](["现在，三位已经是您的同事啦！", "让同事闲着……啊不，没有工位坐就太不礼貌了", "把同事拖拽到工位上，同事就会开始为项目组工作啦！
+"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

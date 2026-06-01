@@ -8,5 +8,5 @@ step_type = 2
 target_group = "employees"
 wait_signal = "employee_panel_opened"
 disable_employee_interaction = false
-tip_text = "右键点击同事，打开同事面板"
+tip_text = "TUTORIAL_STEP_11_01"
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

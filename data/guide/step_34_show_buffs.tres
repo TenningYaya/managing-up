@@ -8,5 +8,5 @@ target_group = "employee_buffs"
 force_show_ui_group = "employee_panel"
 lock_ui_lifecycle = true
 speaker = 1
-dialogue_lines = Array[String](["享受到了员工福利的同事显然更有干劲了！", "积攒更多KPI提升职级，您将解锁更多的办公室和办公室功能！"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_34_01", "TUTORIAL_STEP_34_02"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

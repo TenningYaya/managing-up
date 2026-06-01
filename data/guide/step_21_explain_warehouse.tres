@@ -6,6 +6,5 @@
 script = ExtResource("1_3xo8k")
 target_group = "warehouse_button"
 speaker = 1
-dialogue_lines = Array[String](["既然都是为项目负责，您当然可以优化项目组的人员结构！", "查看您的人力资源中心，您可以在这里批量化地管理团队
-"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_21_01", "TUTORIAL_STEP_21_02"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

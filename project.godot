@@ -68,6 +68,10 @@ toggle_sticky_mode={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://language/tutorial_dialogue_tips.en.translation", "res://language/tutorial_dialogue_tips.zh.translation")
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
