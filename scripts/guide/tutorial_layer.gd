@@ -180,33 +180,45 @@ func _dispatch_translated_dialogue(step: TutorialStep, signal_name: String, call
 			
 ## 子功能 A：管理黑布挖洞与钢化玻璃物理隔绝
 func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
+	#if step.target_group == "":
+		#blocker_ui.hide()
+		#return
+#
+	## 1. 强行把页面显示出来防漏
+	#if step.force_show_ui_group != "":
+		#var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
+		#if is_instance_valid(ui_node) and ui_node.has_method("show"):
+			#ui_node.show()
+#
+	## 2. 抓取目标节点
+	#var target = get_tree().get_first_node_in_group(step.target_group)
+	#if not target:
+		#printerr("KPI宝高亮失败：找不到组名 '", step.target_group, "' 的节点！")
+		#blocker_ui.hide()
+		#return
+#
+	## 3. 死等目标完全渲染稳当
+	#var wait_timeout = 0.0
+	#while not target.is_visible_in_tree() and wait_timeout < 2.0:
+		#await get_tree().process_frame
+		#wait_timeout += 0.016
+
+	blocker_ui.show() # 只要进到这个函数，无论有没有 target，先保证黑幕是亮的！
+	
 	if step.target_group == "":
-		blocker_ui.hide()
+		# 如果没填 target，我们就把黑布挖洞功能关掉，让它变成一张纯粹的黑色遮罩
+		blocker_ui._arrange_curtains(Rect2(0, 0, 0, 0)) # 传递一个空矩形
+		blocker_ui.is_hole_clickable = true 
 		return
 
-	# 1. 强行把页面显示出来防漏
-	if step.force_show_ui_group != "":
-		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
-		if is_instance_valid(ui_node) and ui_node.has_method("show"):
-			ui_node.show()
-
-	# 2. 抓取目标节点
+	# 下面依然是原本的挖洞逻辑
 	var target = get_tree().get_first_node_in_group(step.target_group)
 	if not target:
 		printerr("KPI宝高亮失败：找不到组名 '", step.target_group, "' 的节点！")
-		blocker_ui.hide()
 		return
-
-	# 3. 死等目标完全渲染稳当
-	var wait_timeout = 0.0
-	while not target.is_visible_in_tree() and wait_timeout < 2.0:
-		await get_tree().process_frame
-		wait_timeout += 0.016
-
+		
 	# 4. 拿到最终位置并挖洞
 	var target_rect = target.get_global_rect()
-
-	blocker_ui.show()
 	blocker_ui._arrange_curtains(target_rect)
 	blocker_ui.hole_rect = target_rect 
 	blocker_ui.is_hole_clickable = false 
