@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://qhurj1ycadsw"
+
+[deps]
+
+files=["res://language/tutorial_page_tips.zh.translation", "res://language/tutorial_page_tips.en.translation"]
+
+source_file="res://language/tutorial_page_tips.csv"
+dest_files=["res://language/tutorial_page_tips.zh.translation", "res://language/tutorial_page_tips.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

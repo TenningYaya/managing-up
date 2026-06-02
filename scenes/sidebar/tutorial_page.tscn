@@ -35,12 +35,20 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="Recruitment" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1582098235]
+auto_translate_mode = 1
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tehtr")
 theme_override_font_sizes/font_size = 16
-text = "A. 招聘系统 
-点击桌上的招聘系统按钮，进入招聘界面。消耗 KPI 可以进行普通招募抽卡，获得新员工加入团队。"
+text = "TUTORIAL_PAGE_A_TITLE"
+autowrap_mode = 3
+
+[node name="Recruitment2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1132385072]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 16
+text = "TUTORIAL_PAGE_A_DESC"
 autowrap_mode = 3
 
 [node name="Employee Rarity" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=291339549]
@@ -48,8 +56,15 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tehtr")
 theme_override_font_sizes/font_size = 16
-text = "B. 员工等级
-员工分为 R、SR、SSR 三个等级。等级越高，工作效率越强，产出也越丰厚。合理搭配团队，才能让 KPI 飞速增长。"
+text = "TUTORIAL_PAGE_B_TITLE"
+autowrap_mode = 3
+
+[node name="Employee Rarity2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1447198598]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 16
+text = "TUTORIAL_PAGE_B_DESC"
 autowrap_mode = 3
 
 [node name="Project Assignments" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=148088695]
@@ -57,8 +72,15 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tehtr")
 theme_override_font_sizes/font_size = 16
-text = "C. 分配工位
-招募到的员工会进入等待区。用鼠标左键将员工拖拽到办公桌上，他们就会立即开始为项目工作。"
+text = "TUTORIAL_PAGE_C_TITLE"
+autowrap_mode = 3
+
+[node name="Project Assignments2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=460165213]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 16
+text = "TUTORIAL_PAGE_C_DESC"
 autowrap_mode = 3
 
 [node name="Employee Panel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=972860061]
@@ -66,8 +88,15 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tehtr")
 theme_override_font_sizes/font_size = 16
-text = "D. 查看员工面板
-在工作中的员工上右键点击，可以打开他们的个人面板，查看各项工作属性以及当前任务的进度条。"
+text = "TUTORIAL_PAGE_D_TITLE"
+autowrap_mode = 3
+
+[node name="Employee Panel2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=818424192]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 16
+text = "TUTORIAL_PAGE_D_DESC"
 autowrap_mode = 3
 
 [node name="Stopping the Slacking" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=982672894]
@@ -75,8 +104,15 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tehtr")
 theme_override_font_sizes/font_size = 16
-text = "E. 摸鱼与打断
-工作期间，员工头顶偶尔会冒出摸鱼气泡，试图占用工作时间放松。发现后要立即用鼠标左键点击气泡将其打断，否则员工将停止工作。"
+text = "TUTORIAL_PAGE_E_TITLE"
+autowrap_mode = 3
+
+[node name="Stopping the Slacking2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1098929396]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 16
+text = "TUTORIAL_PAGE_E_DESC"
 autowrap_mode = 3
 
 [node name="warehouse" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=2032361863]
@@ -84,8 +120,15 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tehtr")
 theme_override_font_sizes/font_size = 16
-text = "F. 员工仓库 
-点击人力资源中心按钮，可以集中管理所有员工。在这里可以将员工撤回等待区重新分配，或直接解雇以优化团队结构。"
+text = "TUTORIAL_PAGE_F_TITLE"
+autowrap_mode = 3
+
+[node name="warehouse2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=972653119]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 16
+text = "TUTORIAL_PAGE_F_DESC"
 autowrap_mode = 3
 
 [node name="Level Up" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1313639471]
@@ -93,8 +136,15 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tehtr")
 theme_override_font_sizes/font_size = 16
-text = "G. 玩家升级
-当积累的 KPI 达到一定量后，升级按钮将会解锁。点击后提升你的职级，掌握更多资源与管理权限。"
+text = "TUTORIAL_PAGE_G_TITLE"
+autowrap_mode = 3
+
+[node name="Level Up2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=989326270]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 16
+text = "TUTORIAL_PAGE_G_DESC"
 autowrap_mode = 3
 
 [node name="Office Upgrade" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=776125585]
@@ -102,8 +152,15 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tehtr")
 theme_override_font_sizes/font_size = 16
-text = "H. 办公室改造
-升级后，闲置的空房间可以改造为不同的功能区，为团队提供不同的支持。职级越高，可解锁的空房间数量也越多。"
+text = "TUTORIAL_PAGE_H_TITLE"
+autowrap_mode = 3
+
+[node name="Office Upgrade2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1056027679]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 16
+text = "TUTORIAL_PAGE_H_DESC"
 autowrap_mode = 3
 
 [node name="Currency" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=298158768]
@@ -111,8 +168,15 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tehtr")
 theme_override_font_sizes/font_size = 16
-text = "I. KPI 与美金
-KPI 是主要货币，员工完成工作后自动产出，用于招募员工与解锁升级。"
+text = "TUTORIAL_PAGE_I_TITLE"
+autowrap_mode = 3
+
+[node name="Currency2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1064021660]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 16
+text = "TUTORIAL_PAGE_I_DESC"
 autowrap_mode = 3
 
 [node name="tutorial" type="Label" parent="." unique_id=2091357471]

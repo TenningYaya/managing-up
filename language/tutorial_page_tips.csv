@@ -1,0 +1,19 @@
+id,zh,en
+TUTORIAL_PAGE_A_TITLE,A. 招聘系统,A. Recruitment System
+TUTORIAL_PAGE_A_DESC,点击桌上的招聘系统按钮，进入招聘界面。消耗 KPI 可以进行普通招募抽卡，获得新员工加入团队。,Click the Recruitment System button on the desk to access the recruitment interface. You can spend KPI to perform standard recruitment draws and acquire new employees to join your team.
+TUTORIAL_PAGE_B_TITLE,B. 员工等级,B. Employee Tiers
+TUTORIAL_PAGE_B_DESC,员工分为 R、SR、SSR 三个等级。等级越高，工作效率越强，产出也越丰厚。合理搭配团队，才能让 KPI 飞速增长。,"Employees are categorized into three tiers: R, SR, and SSR. The higher the tier, the greater the work efficiency and the more substantial the output. Strategically assembling your team is the key to driving rapid growth in your KPIs."
+TUTORIAL_PAGE_C_TITLE,C. 分配工位,C. Assign Workstations
+TUTORIAL_PAGE_C_DESC,招募到的员工会进入等待区。用鼠标左键将员工拖拽到办公桌上，他们就会立即开始为项目工作。,Recruited employees will enter the waiting area. Use the left mouse button to drag an employee onto a desk and they will immediately begin working on the project.
+TUTORIAL_PAGE_D_TITLE,D. 查看员工面板,D. Viewing the Employee Panel
+TUTORIAL_PAGE_D_DESC,在工作中的员工上右键点击，可以打开他们的个人面板，查看各项工作属性以及当前任务的进度条。,"Right-click on an employee who is currently working to open their personal panel, where you can view various work attributes as well as the progress bar for their current task."
+TUTORIAL_PAGE_E_TITLE,E. 摸鱼与打断,E. Slacking Off and Interruptions
+TUTORIAL_PAGE_E_DESC,工作期间，员工头顶偶尔会冒出摸鱼气泡，试图占用工作时间放松。发现后要立即用鼠标左键点击气泡将其打断，否则员工将停止工作。,"During work hours, ""slacking off"" bubbles will occasionally appear above employees' heads as they attempt to use work time to relax. Upon spotting one, you must immediately left-click the bubble with your mouse to interrupt it; otherwise, the employee will stop working."
+TUTORIAL_PAGE_F_TITLE,F. 员工仓库,F. Employee Repository
+TUTORIAL_PAGE_F_DESC,点击人力资源中心按钮，可以集中管理所有员工。在这里可以将员工撤回等待区重新分配，或直接解雇以优化团队结构。,"Click the Human Resources Center button to centrally manage all employees. From here, you can recall employees to the waiting area for reassignment, or dismiss them directly to optimize your team structure."
+TUTORIAL_PAGE_G_TITLE,G. 玩家升级,G. Player Leveling Up
+TUTORIAL_PAGE_G_DESC,当积累的 KPI 达到一定量后，升级按钮将会解锁。点击后提升你的职级，掌握更多资源与管理权限。,"Once your accumulated KPIs reach a certain threshold, the Upgrade button will unlock. Click it to advance your rank and gain access to additional resources and management privileges."
+TUTORIAL_PAGE_H_TITLE,H. 办公室改造,H. Office Renovation
+TUTORIAL_PAGE_H_DESC,升级后，闲置的空房间可以改造为不同的功能区，为团队提供不同的支持。职级越高，可解锁的空房间数量也越多。,"Following the upgrade, previously vacant rooms can be repurposed into various functional areas to provide diverse support for the team. The higher your rank, the greater the number of vacant rooms you can unlock."
+TUTORIAL_PAGE_I_TITLE,I. KPI 与美金,I. KPI and USD
+TUTORIAL_PAGE_I_DESC,KPI 是主要货币，员工完成工作后自动产出，用于招募员工与解锁升级。,"KPI serves as the primary currency; it is automatically generated upon the completion of work by employees and is used to recruit staff and unlock upgrades."

@@ -71,7 +71,7 @@ toggle_sticky_mode={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://language/tutorial_dialogue_tips.en.translation", "res://language/tutorial_dialogue_tips.zh.translation")
+locale/translations=PackedStringArray("res://language/tutorial_dialogue_tips.en.translation", "res://language/tutorial_dialogue_tips.zh.translation", "res://language/tutorial_page_tips.en.translation", "res://language/tutorial_page_tips.zh.translation")
 
 [physics]
 
