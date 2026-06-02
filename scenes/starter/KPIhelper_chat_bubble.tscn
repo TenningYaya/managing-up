@@ -3,16 +3,31 @@
 [ext_resource type="Script" uid="uid://b5pe6i8ak5ia4" path="res://scripts/guide/kp_ihelper_chat_bubble.gd" id="1_ml5kk"]
 [ext_resource type="Texture2D" uid="uid://dep4ep5tbqea0" path="res://assets/dialogue/kpi_ai.png" id="2_aiu62"]
 
-[node name="kpi_ChatBubble" type="HBoxContainer" unique_id=1941480218]
-offset_right = 300.0
-offset_bottom = 77.0
+[node name="kpi_ChatBubble" type="Control" unique_id=759275261]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 519.0
+offset_bottom = 100.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 mouse_filter = 2
 script = ExtResource("1_ml5kk")
 
+[node name="NinePatchRect" type="ColorRect" parent="." unique_id=1233626663]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.036556315, 0.03655632, 0.03655632, 1)
+
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=976384796]
-layout_mode = 2
+layout_mode = 0
+offset_left = 4.0
+offset_right = 519.0
+offset_bottom = 100.0
 theme_override_constants/separation = 15
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=1619545776]

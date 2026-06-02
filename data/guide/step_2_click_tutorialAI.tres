@@ -8,5 +8,6 @@ step_type = 1
 target_group = "tutorial_app_icon"
 force_show_ui_group = "sidebar_panel"
 lock_ui_lifecycle = true
+dialogue_position = 0
 tip_text = "TUTORIAL_STEP_02_01"
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"
