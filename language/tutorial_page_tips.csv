@@ -17,3 +17,7 @@ TUTORIAL_PAGE_H_TITLE,H. 办公室改造,H. Office Renovation
 TUTORIAL_PAGE_H_DESC,升级后，闲置的空房间可以改造为不同的功能区，为团队提供不同的支持。职级越高，可解锁的空房间数量也越多。,"Following the upgrade, previously vacant rooms can be repurposed into various functional areas to provide diverse support for the team. The higher your rank, the greater the number of vacant rooms you can unlock."
 TUTORIAL_PAGE_I_TITLE,I. KPI 与美金,I. KPI and USD
 TUTORIAL_PAGE_I_DESC,KPI 是主要货币，员工完成工作后自动产出，用于招募员工与解锁升级。,"KPI serves as the primary currency; it is automatically generated upon the completion of work by employees and is used to recruit staff and unlock upgrades."
+
+EXPLAIN_EMPLOYEE_STATUS_1,没在项目组,Not In Program
+EXPLAIN_EMPLOYEE_STATUS_2,已分配工位,On Seat
+EXPLAIN_EMPLOYEE_STATUS_3,在等候区,Waiting For Seats

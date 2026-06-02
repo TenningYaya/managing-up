@@ -7,6 +7,7 @@
 script = ExtResource("1_286l6")
 target_group = "employee_warehouse"
 force_show_ui_group = "employee_warehouse"
+extra_show_group = "explain_employee_status"
 lock_ui_lifecycle = true
 speaker = 1
 dialogue_lines = Array[String](["TUTORIAL_STEP_23_01", "TUTORIAL_STEP_23_02", "TUTORIAL_STEP_23_03"])

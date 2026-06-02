@@ -38,6 +38,7 @@
 [ext_resource type="PackedScene" uid="uid://bbiqd6umh6kdl" path="res://scenes/starter/tip_bubble.tscn" id="34_kso1c"]
 [ext_resource type="PackedScene" uid="uid://bya2jsjtcfe8r" path="res://scenes/starter/KPIhelper_chat_bubble.tscn" id="37_mkknv"]
 [ext_resource type="PackedScene" uid="uid://cas5e6gctsod5" path="res://scenes/starter/tutorial_picture/explain_folders.tscn" id="38_qpdar"]
+[ext_resource type="PackedScene" uid="uid://b40jqv4carlsm" path="res://scenes/starter/tutorial_picture/explain_employee_status.tscn" id="39_ta3sa"]
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_rsvao")
@@ -97,3 +98,10 @@ offset_bottom = 538.0
 grow_horizontal = 1
 grow_vertical = 1
 mouse_filter = 2
+
+[node name="ExplainEmployeeStatus" parent="PlaceTutorialSceneHere" unique_id=692860009 groups=["explain_employee_status"] instance=ExtResource("39_ta3sa")]
+layout_mode = 1
+offset_left = -328.0
+offset_top = -37.0
+offset_right = -328.0
+offset_bottom = -37.0

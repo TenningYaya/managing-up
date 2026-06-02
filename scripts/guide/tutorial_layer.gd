@@ -12,6 +12,7 @@ extends CanvasLayer
 @onready var kpi_ui = $kpi_ChatBubble
 
 @onready var locked_ui_node: Node = null
+var extra_locked_node: Node = null
 var _global_flash_tween: Tween = null
 var current_tip_instance: TutorialTip = null
 var current_callable_ghost: Callable
@@ -90,10 +91,13 @@ func play_step(index: int) -> void:
 		if RecruitmentManager.has_method("load_tutorial_resumes"):
 			RecruitmentManager.load_tutorial_resumes()
 		
-	if locked_ui_node and locked_ui_node.has_method("unlock_from_tutorial"):
-		locked_ui_node.unlock_from_tutorial()
-		locked_ui_node = null
-
+	#if locked_ui_node and locked_ui_node.has_method("unlock_from_tutorial"):
+		#locked_ui_node.unlock_from_tutorial()
+		#locked_ui_node = null
+		#
+	if extra_locked_node:
+		extra_locked_node.hide()
+		extra_locked_node = null
 # ==== 修改这里：加入 Cleanup（清理）逻辑 ====
 	if locked_ui_node:
 			if locked_ui_node.has_method("unlock_from_tutorial"):
@@ -104,34 +108,7 @@ func play_step(index: int) -> void:
 
 	# 🌟 2. 检查这一步是否需要强行弹出某个界面
 	if step.force_show_ui_group != "":
-		# =================【硬核排查代码开始】=================
-		print("\n====== 🕵️ 教程组名排查: [", step.force_show_ui_group, "] ======")
-		var all_nodes = get_tree().get_nodes_in_group(step.force_show_ui_group)
-		print("1. 场景中找到属于该组的节点数量: ", all_nodes.size())
-		
-		if all_nodes.size() > 0:
-			var test_node = all_nodes[0]
-			print("2. 抓到节点: ", test_node.name)
-			print("3. 节点绝对路径: ", test_node.get_path())
-			print("4. 它目前的自身 visible 状态: ", test_node.visible)
-			
-			# 检查它老爹是不是把它藏起来了
-			var p = test_node.get_parent()
-			if p and "visible" in p:
-				print("5. 它的父节点 (", p.name, ") visible 状态: ", p.visible)
-				if not p.visible:
-					print("   -> 🚨 致命元凶：爹是隐形的！所以儿子 show() 了也看不见！")
-			
-			print("6. 强行执行 show() ...")
-			test_node.show()
-			
-			print("7. is_visible_in_tree() 真实渲染状态: ", test_node.is_visible_in_tree())
-			if not test_node.is_visible_in_tree():
-				print("   -> 🚨 警告：虽然被 show 了，但在屏幕上依然不可见！请检查更上层的父节点是否隐藏！")
-		else:
-			print("   -> 🚨 致命错误：大总管在场景树里根本找不到这个组名！")
-		print("========================================================\n")
-		# =================【硬核排查代码结束】=================
+
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
 		if ui_node:
 			ui_node.show() # 强行显示
@@ -141,6 +118,12 @@ func play_step(index: int) -> void:
 				locked_ui_node = ui_node
 				if ui_node.has_method("lock_for_tutorial"):
 					ui_node.lock_for_tutorial() # 开启“降智/霸体”模式
+	
+	if step.extra_show_group != "":
+		var extra_node = get_tree().get_first_node_in_group(step.extra_show_group)
+		if extra_node:
+			extra_node.show()
+			extra_locked_node = extra_node # 记在死神的小本本上，下一步开头就会关掉它
 					
 	match step.step_type:
 		TutorialStep.Type.DIALOGUE:
