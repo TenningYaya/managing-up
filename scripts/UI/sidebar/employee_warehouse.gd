@@ -100,7 +100,7 @@ func _on_employee_hired(new_employee: Employee) -> void:
 	grid.add_child(card_instance) 
 	# 【然后再喂数据】：此时 @onready 已经跑过了，节点不再是 Nil
 	card_instance.setup_card(new_employee)
-	card_instance.name = new_employee.employee_name 
+	#card_instance.name = new_employee.employee_name 
 	
 	if card_instance.has_method("update_on_map_status"):
 		card_instance.update_on_map_status()
@@ -118,10 +118,10 @@ func _on_card_selected(emp_data: Employee):
 		if panel: panel.open_panel(emp_data)
 		
 func _on_employee_fired(fired_employee: Employee) -> void:
-	# 在网格里找到对应名字的名片，然后删除
-	var card = grid.get_node_or_null(fired_employee.employee_name)
-	if card:
-		card.queue_free()
+	for card in grid.get_children():
+		if card.get("my_employee_data") == fired_employee:
+			card.queue_free()
+			break
 		
 # 模拟抽卡/获得新员工后添加到仓库
 func add_employee_to_warehouse(new_employee_data: Employee):
@@ -163,7 +163,7 @@ func refresh_display():
 		var card = card_scene.instantiate()
 		grid.add_child(card)
 		card.setup_card(emp)
-		card.name = emp.employee_name
+		#card.name = emp.employee_name
 		if card.has_method("update_on_map_status"):
 			card.update_on_map_status()
 		# 别忘了连信号
@@ -181,7 +181,7 @@ func _toggle_employee_selection(emp: Employee):
 	
 	# 刷新名片的选中视觉效果
 	for card in grid.get_children():
-		if card.name == emp.employee_name:
+		if card.get("my_employee_data") == emp:
 			card.is_selected = selected_employees.has(emp)
 			break
 			
