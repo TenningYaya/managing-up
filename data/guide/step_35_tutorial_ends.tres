@@ -5,6 +5,8 @@
 [resource]
 script = ExtResource("1_c6efx")
 target_group = "tutorial_app_icon"
+force_show_ui_group = "sidebar_panel"
+lock_ui_lifecycle = true
 speaker = 1
 dialogue_lines = Array[String](["TUTORIAL_STEP_35_01", "TUTORIAL_STEP_35_02", "TUTORIAL_STEP_35_03", "TUTORIAL_STEP_35_04", "TUTORIAL_STEP_35_05", "TUTORIAL_STEP_35_06"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

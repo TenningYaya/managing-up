@@ -119,8 +119,10 @@ func _handle_dialogue(step: TutorialStep) -> void:
 	if "disable_employee_interaction" in step:
 		Gamemanager.is_employee_interaction_disabled = step.disable_employee_interaction
 		
-	if step.force_show_ui_group != "":
-		pass
+	if step.force_show_ui_group != "" or step.target_group != "":
+		# 不要写 pass，给引擎 2 帧的时间去重新排版 UI（非常重要，少一帧都可能拿不到真实坐标）
+		await get_tree().process_frame
+		await get_tree().process_frame
 		
 	await _apply_dialogue_highlight_and_shield(step)
 	
@@ -233,12 +235,12 @@ func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
 	blocker_ui.hole_rect = target_rect 
 	blocker_ui.is_hole_clickable = false 
 
-	# ====================================================
-	# 💥 5. 核心找回：图层刺穿！让目标跳出对话框黑底的压制！
-	# ====================================================
-	if target is Control:
-		target.z_index = 2000 # 把目标提到 1000 层，必定亮瞎眼！
-		target.z_as_relative = false
+	## ====================================================
+	## 💥 5. 核心找回：图层刺穿！让目标跳出对话框黑底的压制！
+	## ====================================================
+	#if target is Control:
+		#target.z_index = 2000 # 把目标提到 1000 层，必定亮瞎眼！
+		#target.z_as_relative = false
 
 	# ====================================================
 	# 💥 6. 核心找回：无敌防弹玻璃！只能看，不准摸！
@@ -333,8 +335,8 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	# 🌟【硬核补丁 3】：图层刺穿！
 	# 为了防止按钮被黑布无脑压住，我们利用 CanvasItem 的 z_index 或者是强行把按钮的渲染层级提到黑布前面
 	if target is Control:
-		target.z_index = 999 # 强行把这个升级按钮的层级踢到天界！
-		target.z_as_relative = false # 不继承手机老爹那卑微的层级
+		#target.z_index = 999 # 强行把这个升级按钮的层级踢到天界！
+		#target.z_as_relative = false # 不继承手机老爹那卑微的层级
 		
 		# 顺便处理闪烁
 		var rect_size = target_rect.size
@@ -603,12 +605,11 @@ func _on_step_completed() -> void:
 	if step.step_type == TutorialStep.Type.DIALOGUE and step.target_group != "":
 		var d_target = get_tree().get_first_node_in_group(step.target_group)
 		if d_target and "z_index" in d_target:
-			d_target.z_index = 0
-			d_target.z_as_relative = true
-			
-	# 卸磨杀驴：断开当前的信号连接
-	#if current_target and current_target.has_signal(current_signal_name):
-		#current_target.disconnect(current_signal_name, current_callable)
+			if d_target.is_in_group("employees"):
+				d_target.z_index = 1
+			#else:
+				#d_target.z_index = 0
+			#d_target.z_as_relative = true
 	
 	# 恢复所有拒绝按钮的禁用状态
 	var reject_btns = get_tree().get_nodes_in_group("reject_buttons")
@@ -632,9 +633,12 @@ func _on_step_completed() -> void:
 	if screenshot_on_blocker:
 		screenshot_on_blocker.queue_free()
 	
-	if current_target and is_instance_valid(current_target) and "z_index" in current_target:
-		current_target.z_index = 0
-		current_target.z_as_relative = true
+	#if current_target and is_instance_valid(current_target) and "z_index" in current_target:
+		#if current_target.is_in_group("employees"):
+			#current_target.z_index = 1
+		#else:
+			#current_target.z_index = 0
+		#current_target.z_as_relative = true
 		
 func setup_tutorial_hiring():
 	# 1. 这里填你的三个路径
@@ -767,11 +771,11 @@ func _process(delta: float) -> void:
 		blocker_ui.hole_rect = real_rect
 		var step = steps[current_step_index]
 		blocker_ui.is_hole_clickable = (step.step_type != TutorialStep.Type.DIALOGUE)
-		
-		# 顺便给它拔高层级，不让它被黑幕盖住
-		if "z_index" in current_target:
-			current_target.z_index = 999
-			current_target.z_as_relative = false
+		#
+		## 顺便给它拔高层级，不让它被黑幕盖住
+		#if "z_index" in current_target:
+			#current_target.z_index = 999
+			#current_target.z_as_relative = false
 			
 func _finish_all_tutorials() -> void:
 	Gamemanager.is_employee_interaction_disabled = false
