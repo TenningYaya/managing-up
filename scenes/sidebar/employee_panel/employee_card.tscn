@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://ye2744q5h3x2" path="res://assets/UI/employee/warehouse/工作中 (1).png" id="4_fd3x5"]
 [ext_resource type="Texture2D" uid="uid://clcnucuwiko20" path="res://assets/UI/employee/warehouse/对勾小.png" id="5_4mhpm"]
 [ext_resource type="Texture2D" uid="uid://b1803wupke64j" path="res://assets/UI/employee/warehouse/等待文件 (4).png" id="6_4mhpm"]
+[ext_resource type="Texture2D" uid="uid://c6d5kwkjdderp" path="res://assets/UI/employee/warehouse/不在线 (1).png" id="7_pbnqc"]
 
 [node name="EmployeeCard" type="Control" unique_id=1721669152]
 custom_minimum_size = Vector2(75, 125)
@@ -132,4 +133,14 @@ offset_top = 41.0
 offset_right = 29.0
 offset_bottom = 68.0
 texture = ExtResource("6_4mhpm")
+expand_mode = 1
+
+[node name="NotWorking" type="TextureRect" parent="." unique_id=2111894042]
+visible = false
+layout_mode = 0
+offset_left = 4.0
+offset_top = 43.0
+offset_right = 29.0
+offset_bottom = 66.0
+texture = ExtResource("7_pbnqc")
 expand_mode = 1

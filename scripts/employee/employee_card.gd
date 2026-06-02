@@ -17,6 +17,7 @@ signal card_clicked(employee_data: Employee) # 定义信号，把员工数据传
 @onready var checkmark = $Checkmark
 @onready var on_map_icon = $OnMapIcon
 @onready var on_drop_area = $OnDropArea
+@onready var not_working = $NotWorking
 
 var my_employee_data: Employee
 var is_selected: bool = false : 
@@ -105,13 +106,16 @@ func update_on_map_status(employee_data_override: Employee = null):
 	if is_at_seat:
 		on_map_icon.visible = true       # 显示 OnMap 图标
 		on_drop_area.visible = false     # 隐藏 OnDropArea 图标
+		not_working.visible = false
 		
 	# 状态二：在空地上
 	elif is_on_drop_area:
 		on_map_icon.visible = false      # 隐藏 OnMap 图标
-		on_drop_area.visible = true      # 显示 OnDropArea 图标
+		on_drop_area.visible = true
+		not_working.visible = false      # 显示 OnDropArea 图标
 		
 	# 状态三：不在场（在仓库）
 	else:
 		on_map_icon.visible = false
 		on_drop_area.visible = false
+		not_working.visible = true
