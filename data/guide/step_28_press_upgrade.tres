@@ -6,6 +6,8 @@
 script = ExtResource("1_d05er")
 step_type = 1
 target_group = "upgrade_button"
+force_show_ui_group = "sidebar_panel"
+lock_ui_lifecycle = true
 tip_text = "TUTORIAL_STEP_28_01"
 tip_position = 2
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

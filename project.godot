@@ -60,6 +60,7 @@ office_1=""
 pantry_button=""
 employee_buffs=""
 explain_folders=""
+explain_dispatch=""
 
 [input]
 
@@ -71,6 +72,7 @@ toggle_sticky_mode={
 
 [internationalization]
 
+locale/translation_remaps={}
 locale/translations=PackedStringArray("res://language/tutorial_dialogue_tips.en.translation", "res://language/tutorial_dialogue_tips.zh.translation", "res://language/tutorial_page_tips.en.translation", "res://language/tutorial_page_tips.zh.translation")
 
 [physics]

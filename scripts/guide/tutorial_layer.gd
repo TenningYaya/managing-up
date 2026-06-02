@@ -59,14 +59,16 @@ func play_step(index: int) -> void:
 	
 	print("正在执行教程第 ", index + 1, " 步：", TutorialStep.Type.keys()[step.step_type])
 	
+	# ====================================================
+	# 💥 修正点 1：检查它有没有 "close_phone" 技能！
+	# ====================================================
 	if step.force_show_ui_group != "sidebar_panel":
 		var sidebar = get_tree().get_first_node_in_group("sidebar_panel")
 		if sidebar:
-			# ⚠️ 注意：把 "close_panel" 换成你侧边栏脚本里真实负责收回的那个函数名！
-			if sidebar.has_method("close_panel"): 
-				sidebar.close_phone()
+			if sidebar.has_method("close_phone"): 
+				sidebar.close_phone() # 优雅地播放动画收回
 			else:
-				sidebar.hide() # 如果没有动画函数，就直接瞬间消失
+				sidebar.hide() # 兜底逻辑
 				
 	# ====================================================
 	# 🌟【大总管全场员工总闸管理】
@@ -77,53 +79,63 @@ func play_step(index: int) -> void:
 	if "disable_reject_buttons" in step:
 		Gamemanager.is_reject_button_disabled = step.disable_reject_buttons
 		
-		# 💥【神仙补丁】：如果拉闸了，我们主动去通知当前场上的拒绝按钮，让他们立刻人间蒸发！
 		if step.disable_reject_buttons:
-			# 假设你同学给“拒绝按钮”加了组名叫 "reject_buttons"
-			# 或者我们可以直接呼叫招聘面板刷新
 			var reject_nodes = get_tree().get_nodes_in_group("reject_buttons")
 			for btn in reject_nodes:
 				if is_instance_valid(btn) and btn is Control:
 					btn.disabled = true
 							
 	if step.force_show_ui_group == "recruitment_panel":
-		# 名字根据你项目的 Autoload 单例名来（假设你的单例叫 RecruitmentManager）
 		if RecruitmentManager.has_method("load_tutorial_resumes"):
 			RecruitmentManager.load_tutorial_resumes()
 		
-	#if locked_ui_node and locked_ui_node.has_method("unlock_from_tutorial"):
-		#locked_ui_node.unlock_from_tutorial()
-		#locked_ui_node = null
-		#
 	if extra_locked_node:
-		extra_locked_node.hide()
+		if is_instance_valid(extra_locked_node):
+			extra_locked_node.hide()
 		extra_locked_node = null
-# ==== 修改这里：加入 Cleanup（清理）逻辑 ====
+
+	# ====================================================
+	# 💥 修正点 2：温柔地清理被锁定的界面！
+	# ====================================================
 	if locked_ui_node:
+		# 🌟 核心判断：如果下一步还需要这个面板，绝对不准关！直接白嫖！
+		if step.force_show_ui_group != "" and locked_ui_node.is_in_group(step.force_show_ui_group):
+			print("【大总管连招判定】连续两步使用同一面板，保持锁定，跳过关闭动画！")
+		else:
+			# 真的不需要了，卸磨杀驴
 			if locked_ui_node.has_method("unlock_from_tutorial"):
 				locked_ui_node.unlock_from_tutorial()
-			# 强行隐藏上一关遗留的 Node 界面！
-			locked_ui_node.hide() 
+			
+			if locked_ui_node.has_method("close_phone"):
+				locked_ui_node.close_phone()
+			elif locked_ui_node.has_method("close_panel"):
+				locked_ui_node.close_panel()
+			else:
+				locked_ui_node.hide()
+				
 			locked_ui_node = null
 
 	# 🌟 2. 检查这一步是否需要强行弹出某个界面
 	if step.force_show_ui_group != "":
-
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
 		if ui_node:
-			ui_node.show() # 强行显示
+			# 🌟 核心判断：如果它刚刚领了免死金牌（已经被锁定在屏幕上了），就不准再播一遍弹出动画了！
+			if ui_node != locked_ui_node:
+				if ui_node.has_method("open_phone"):
+					ui_node.open_phone()
+				else:
+					ui_node.show() 
 			
-			# 如果剧本要求控死它
 			if step.lock_ui_lifecycle:
 				locked_ui_node = ui_node
 				if ui_node.has_method("lock_for_tutorial"):
-					ui_node.lock_for_tutorial() # 开启“降智/霸体”模式
+					ui_node.lock_for_tutorial()
 	
 	if step.extra_show_group != "":
 		var extra_node = get_tree().get_first_node_in_group(step.extra_show_group)
 		if extra_node:
 			extra_node.show()
-			extra_locked_node = extra_node # 记在死神的小本本上，下一步开头就会关掉它
+			extra_locked_node = extra_node 
 					
 	match step.step_type:
 		TutorialStep.Type.DIALOGUE:

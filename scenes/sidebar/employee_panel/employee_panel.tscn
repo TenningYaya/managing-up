@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://p7h0yvalk70i" path="res://assets/UI/employee/infobar/评分 (1).png" id="6_cr4tb"]
 [ext_resource type="Texture2D" uid="uid://bbt1nylq8pmni" path="res://assets/progress bar/progress bar most rounded progress cinnamon.png" id="6_p7uvh"]
 [ext_resource type="Texture2D" uid="uid://dnrqtwbwt5472" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/PNG SpriteSheet/SpriteSheet.png" id="11_5it8m"]
+[ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="13_fnfi6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cr4tb"]
 atlas = ExtResource("2_khksj")
@@ -30,6 +31,10 @@ region = Rect2(2224, 48, 337, 257)
 [sub_resource type="AtlasTexture" id="AtlasTexture_fnfi6"]
 atlas = ExtResource("11_5it8m")
 region = Rect2(399, 2773, 176, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uoiyf"]
+atlas = ExtResource("13_fnfi6")
+region = Rect2(1488, 48, 336, 256)
 
 [node name="EmployeePanel" type="Control" unique_id=1048843880]
 z_index = 100
@@ -226,6 +231,35 @@ vertical_alignment = 1
 
 [node name="Buffs" type="HFlowContainer" parent="PanelBg/EmployeePage/PanelContainer/MarginContainer/VBoxContainer" unique_id=147567325]
 layout_mode = 2
+
+[node name="ExplainDispatch" type="NinePatchRect" parent="PanelBg/EmployeePage/PanelContainer" unique_id=24523839 groups=["explain_dispatch"]]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+texture = SubResource("AtlasTexture_uoiyf")
+region_rect = Rect2(0, 0, 336, 256)
+patch_margin_left = 64
+patch_margin_top = 18
+patch_margin_right = 40
+patch_margin_bottom = 13
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelBg/EmployeePage/PanelContainer/ExplainDispatch" unique_id=54891090]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 30.0
+offset_right = 215.0
+offset_bottom = 80.0
+
+[node name="Label" type="Label" parent="PanelBg/EmployeePage/PanelContainer/ExplainDispatch/VBoxContainer" unique_id=1732137519]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Dispatch: make idle co-worker active"
+
+[node name="Label2" type="Label" parent="PanelBg/EmployeePage/PanelContainer/ExplainDispatch/VBoxContainer" unique_id=1723660653]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Recall: make active co-worker idle"
 
 [node name="Manage" type="HBoxContainer" parent="PanelBg/EmployeePage" unique_id=656689347]
 layout_mode = 2

@@ -32,6 +32,7 @@ var dragging = false
 var drag_offset = Vector2()
 
 func _ready() -> void:
+	
 	hide()
 # 🌟 2. 核心魔法：去 culture_page 内部向下搜索名为 "VBoxContainer" 的节点
 	# 参数 true 表示向下无限层级搜索，参数 false 表示无视场景的所有权（强行掏出子场景的节点）
@@ -89,20 +90,6 @@ func _refresh_all_ui() -> void:
 	var is_culture = (current_target_office.current_type == Gamemanager.OfficeType.CULTURE_CENTER)
 	if culture_buttons:
 		culture_buttons.visible = is_culture
-	## 抓取全场所有的文化选择按钮
-	#var cult_btns = get_tree().get_nodes_in_group("culture_selection_buttons")
-	#for btn in cult_btns:
-		#if is_instance_valid(btn) and btn is Control:
-			## 核心：如果是文化室就显示（true），不是文化室就彻底隐藏（false）！
-			#btn.visible = is_culture
-	#
-	## 2. 如果确实是文化室，才允许去跑里面的刷新逻辑
-	#if is_culture:
-		#var logic = current_target_office.logic_node
-		#if logic is CultureCenterLogic:
-			#get_tree().call_group("culture_selection_buttons", "refresh_status", logic)
-			## 顺便刷新高亮
-			#_refresh_culture_highlight()
 		
 func _setup_selection_buttons() -> void:
 	for child in selection_buttons.get_children():
@@ -132,7 +119,6 @@ func _on_culture_selected(type: CultureCenterLogic.CultureType) -> void:
 	# 从 Office 实例中找到逻辑组件
 	if current_target_office and current_target_office.logic_node is CultureCenterLogic:
 		current_target_office.logic_node.switch_culture(type)
-		print("[OfficePanel] 已下发新政策: ", type)
 	_refresh_culture_highlight()
 	#close_panel()
 

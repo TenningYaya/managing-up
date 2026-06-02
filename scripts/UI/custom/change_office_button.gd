@@ -72,30 +72,14 @@ func refresh_status(target_office: Node = null) -> void:
 	locked_mask.hide()
 	disabled_mask.hide()
 #
-	#if not is_level_ok:
-		## 等级不够，显示锁头，禁用点击
-		#disabled = true
-		#locked_mask.show()
-	#elif already_exists:
-		## 功能已存在
-		#if is_selected:
-			## 🌟 特例：如果当前房间就是这个功能，必须允许玩家点它（或者至少亮着）
-			## 这样边框才会显示出来
-			#disabled = false
-			#disabled_mask.hide()
-		#else:
-			## 别的房间占了，这间房想换就不行了
-			#disabled = true
-			#disabled_mask.show()
-	#else:
-		## 没有任何限制，正常可用
-		#pass
 	if not is_level_ok:
 		# 等级不够，显示锁头，禁用点击
 		disabled = true
 		locked_mask.show()
-		# 💥 没解锁的，把台词本没收，悬停啥也不显示！
-		tooltip_text = "" 
+		
+		# 💥 体验升级中英双语版：调用 tr() 获取带 %d 的文案，然后把 required_lv 塞进去！
+		tooltip_text = tr("OFFICE_UNLOCK_REQUIREMENT") + str(required_lv)
+		
 	elif already_exists:
 		if is_selected:
 			disabled = false
@@ -103,7 +87,7 @@ func refresh_status(target_office: Node = null) -> void:
 		else:
 			disabled = true
 			disabled_mask.show()
-		# 💥 等级够了，但被别人占用的（比如已有文化室），依然把台词本发给它，正常看介绍！
+		# 等级够了，但被别人占用的，依然把台词本发给它，正常看介绍
 		tooltip_text = _full_tip_text
 	else:
 		# 正常可用状态
@@ -115,16 +99,21 @@ func _on_pressed() -> void:
 		panel.on_type_selected(office_type)
 
 func _setup_native_tooltip() -> void:
-	var is_unique = (office_type == Gamemanager.OfficeType.RECRUITMENT or office_type == Gamemanager.OfficeType.CULTURE_CENTER)
-	var type_title = "【 💥 全局唯一职能办 】\n" if is_unique else "【 🏠 普通基础办公室 】\n"
+	#var is_unique = (office_type == Gamemanager.OfficeType.RECRUITMENT or office_type == Gamemanager.OfficeType.CULTURE_CENTER)
+	#var type_title = "【 💥 全局唯一职能办 】\n" if is_unique else "【 🏠 普通基础办公室 】\n"
 	
-	var desc = office_description if office_description != "" else "暂无描述"
-	var usage = "\n" + office_usage if office_usage != "" else ""
+	var desc = tr(office_description) if office_description != "" else ""
+	var usage = "\n" + tr(office_usage) if office_usage != "" else ""
 	
 	# 💥 核心：把拼好的长篇大论存起来，先不急着喂给 tooltip_text
-	_full_tip_text = type_title + desc + usage
+	#_full_tip_text = type_title + desc + usage
+	_full_tip_text = desc + usage
 	
 func _make_custom_tooltip(for_text: String) -> Object:
+	# 💥 核心防呆：如果文字为空，直接返回 null，彻底拒绝渲染空黑框！
+	if for_text.strip_edges() == "":
+		return null
+		
 	var label = Label.new()
 	label.text = for_text
 	
