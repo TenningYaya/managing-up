@@ -95,6 +95,34 @@ func play_step(index: int) -> void:
 
 	# 🌟 2. 检查这一步是否需要强行弹出某个界面
 	if step.force_show_ui_group != "":
+		# =================【硬核排查代码开始】=================
+		print("\n====== 🕵️ 教程组名排查: [", step.force_show_ui_group, "] ======")
+		var all_nodes = get_tree().get_nodes_in_group(step.force_show_ui_group)
+		print("1. 场景中找到属于该组的节点数量: ", all_nodes.size())
+		
+		if all_nodes.size() > 0:
+			var test_node = all_nodes[0]
+			print("2. 抓到节点: ", test_node.name)
+			print("3. 节点绝对路径: ", test_node.get_path())
+			print("4. 它目前的自身 visible 状态: ", test_node.visible)
+			
+			# 检查它老爹是不是把它藏起来了
+			var p = test_node.get_parent()
+			if p and "visible" in p:
+				print("5. 它的父节点 (", p.name, ") visible 状态: ", p.visible)
+				if not p.visible:
+					print("   -> 🚨 致命元凶：爹是隐形的！所以儿子 show() 了也看不见！")
+			
+			print("6. 强行执行 show() ...")
+			test_node.show()
+			
+			print("7. is_visible_in_tree() 真实渲染状态: ", test_node.is_visible_in_tree())
+			if not test_node.is_visible_in_tree():
+				print("   -> 🚨 警告：虽然被 show 了，但在屏幕上依然不可见！请检查更上层的父节点是否隐藏！")
+		else:
+			print("   -> 🚨 致命错误：大总管在场景树里根本找不到这个组名！")
+		print("========================================================\n")
+		# =================【硬核排查代码结束】=================
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
 		if ui_node:
 			ui_node.show() # 强行显示
@@ -260,12 +288,24 @@ func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
 		
 ## 子功能 B：🌟 截图生成器（带显形追踪雷达）
 func _spawn_illustration_if_presents(step: TutorialStep) -> void:
-	if step.illustration_texture == null:
-		return # 没配图就直接滚粗，不废话
+	# 1. 🌟 获取当前游戏运行的语言环境
+	var current_lang = TranslationServer.get_locale()
 	
+	# 2. 🌟 决定用哪张图（默认用英文）
+	var final_texture: Texture2D = step.illustration_en
+	
+	# 如果当前语言是 zh, zh_CN, zh_TW 等等，就换成中文图
+	if current_lang.begins_with("zh") and step.illustration_zh != null:
+		final_texture = step.illustration_zh
+		
+	# 3. 拦截：如果两个都没填，就直接滚粗
+	if final_texture == null:
+		return 
+
+	# ======= 下面是你原本的代码，只要把 step.illustration_texture 换成 final_texture 即可 =======
 	var img_rect = TextureRect.new()
 	img_rect.name = "TutorialScreenshot" 
-	img_rect.texture = step.illustration_texture
+	img_rect.texture = final_texture # 👈 用我们选好的图
 	# 🌟 核心改动 1：既然图片真实尺寸很小，我们把它改成强行拉伸填充，别居中缩放了！
 	img_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	img_rect.stretch_mode = TextureRect.STRETCH_SCALE # 强行平铺拉满方框

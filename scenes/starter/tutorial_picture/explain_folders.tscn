@@ -1,0 +1,186 @@
+[gd_scene format=3 uid="uid://cas5e6gctsod5"]
+
+[ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="1_gqxw0"]
+[ext_resource type="Texture2D" uid="uid://csp1o8i6lawlg" path="res://assets/UI/ingame/folder_golden.png" id="2_fw2fm"]
+[ext_resource type="Texture2D" uid="uid://bje11o4ym53fe" path="res://assets/UI/ingame/folder_blue.png" id="3_0a14i"]
+[ext_resource type="Texture2D" uid="uid://7um6mjepkvnt" path="res://assets/UI/ingame/folder_green.png" id="4_q1gvt"]
+[ext_resource type="Texture2D" uid="uid://na1h3ldvysl6" path="res://assets/UI/ingame/folder_grey.png" id="5_qwf6k"]
+[ext_resource type="Texture2D" uid="uid://c5wqhwcet4iw8" path="res://assets/tutorial/emoji/emoji-9.png" id="6_nnrk7"]
+[ext_resource type="Texture2D" uid="uid://cl7k1gwchw78v" path="res://assets/tutorial/emoji/thumbs.png" id="7_jety7"]
+[ext_resource type="Texture2D" uid="uid://b1ifnlyf552n3" path="res://assets/tutorial/emoji/emoji-4.png" id="8_s30se"]
+[ext_resource type="Texture2D" uid="uid://bxkc8210w1npe" path="res://assets/tutorial/emoji/emoji-1.png" id="9_mv4n6"]
+[ext_resource type="Texture2D" uid="uid://cylj5yaj8vl4h" path="res://assets/tutorial/emoji/emoji-22.png" id="10_bij3h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nebpw"]
+atlas = ExtResource("1_gqxw0")
+region = Rect2(1488, 48, 336, 256)
+
+[node name="Control" type="Control" unique_id=246945969]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ExplainFolders" type="NinePatchRect" parent="." unique_id=1689069484]
+texture_filter = 1
+custom_minimum_size = Vector2(200, 235)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -117.5
+offset_right = 100.0
+offset_bottom = 117.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_nebpw")
+region_rect = Rect2(0, 0, 336, 256)
+patch_margin_left = 64
+patch_margin_top = 18
+patch_margin_right = 40
+patch_margin_bottom = 13
+
+[node name="ExplainFolders2" type="ColorRect" parent="." unique_id=1706538118]
+custom_minimum_size = Vector2(150, 180)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -98.0
+offset_right = 99.0
+offset_bottom = 105.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.49803922, 0.5294118, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ExplainFolders2" unique_id=517684237]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 13.0
+offset_top = -86.0
+offset_right = 53.0
+offset_bottom = 86.0
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="ExplainFolders2/VBoxContainer" unique_id=1008933681]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("2_fw2fm")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="ExplainFolders2/VBoxContainer" unique_id=605171092]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("3_0a14i")
+expand_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="ExplainFolders2/VBoxContainer" unique_id=462503166]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("4_q1gvt")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="ExplainFolders2/VBoxContainer" unique_id=1301645568]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("5_qwf6k")
+expand_mode = 1
+
+[node name="emoji" type="VBoxContainer" parent="ExplainFolders2" unique_id=1624108620]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -86.0
+offset_right = -12.0
+offset_bottom = 86.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ExplainFolders2/emoji" unique_id=2056748668]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ExplainFolders2/emoji/HBoxContainer" unique_id=465004502]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("6_nnrk7")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="ExplainFolders2/emoji/HBoxContainer" unique_id=1160515255]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("7_jety7")
+expand_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="ExplainFolders2/emoji/HBoxContainer" unique_id=373765641]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("7_jety7")
+expand_mode = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ExplainFolders2/emoji" unique_id=358192511]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ExplainFolders2/emoji/HBoxContainer2" unique_id=847056425]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("8_s30se")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="ExplainFolders2/emoji/HBoxContainer2" unique_id=584196920]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("7_jety7")
+expand_mode = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="ExplainFolders2/emoji" unique_id=1098843476]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ExplainFolders2/emoji/HBoxContainer3" unique_id=1301815594]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("9_mv4n6")
+expand_mode = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="ExplainFolders2/emoji" unique_id=249894533]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ExplainFolders2/emoji/HBoxContainer4" unique_id=114349788]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("10_bij3h")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="ExplainFolders2/emoji/HBoxContainer4" unique_id=202850431]
+clip_contents = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("7_jety7")
+expand_mode = 1
+flip_v = true

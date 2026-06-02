@@ -37,6 +37,7 @@
 [ext_resource type="Resource" uid="uid://0daehj3yktol" path="res://data/guide/step_35_tutorial_ends.tres" id="33_kso1c"]
 [ext_resource type="PackedScene" uid="uid://bbiqd6umh6kdl" path="res://scenes/starter/tip_bubble.tscn" id="34_kso1c"]
 [ext_resource type="PackedScene" uid="uid://bya2jsjtcfe8r" path="res://scenes/starter/KPIhelper_chat_bubble.tscn" id="37_mkknv"]
+[ext_resource type="PackedScene" uid="uid://cas5e6gctsod5" path="res://scenes/starter/tutorial_picture/explain_folders.tscn" id="38_qpdar"]
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_rsvao")
@@ -73,3 +74,24 @@ offset_left = 47.0
 offset_top = 538.0
 offset_right = 562.0
 offset_bottom = 638.0
+
+[node name="PlaceTutorialSceneHere" type="Control" parent="." unique_id=1603064866]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ExplainFolders" parent="PlaceTutorialSceneHere" unique_id=1689069484 groups=["explain_folders"] instance=ExtResource("38_qpdar")]
+visible = false
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 886.0
+offset_top = 507.0
+offset_right = 990.0
+offset_bottom = 538.0
+grow_horizontal = 1
+grow_vertical = 1

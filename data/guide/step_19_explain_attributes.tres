@@ -1,11 +1,12 @@
 [gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://pk8v760khrsh"]
 
-[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_61fh0"]
 [ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_cc6lk"]
 
 [resource]
 script = ExtResource("1_cc6lk")
+target_group = "explain_folders"
+force_show_ui_group = "explain_folders"
+lock_ui_lifecycle = true
 speaker = 1
 dialogue_lines = Array[String](["TUTORIAL_STEP_19_01", "TUTORIAL_STEP_19_02", "TUTORIAL_STEP_19_03"])
-illustration_texture = ExtResource("1_61fh0")
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

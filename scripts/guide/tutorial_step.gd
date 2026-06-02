@@ -43,7 +43,8 @@ enum DialoguePos { CENTER_PHONE, RIGHT_PHONE, TOP_WINDOW, BOTTOM_WINDOW }
 
 @export_group("Illustration Feature")
 ## 这一步需要弹出的提示截图（不需要则留空）
-@export var illustration_texture: Texture2D = null
+@export var illustration_en: Texture2D # 英文版（默认）插图
+@export var illustration_zh: Texture2D # 中文版插图
 ## 截图像素微调偏移（正数向右下，负数向左上）
 @export var illustration_offset: Vector2 = Vector2.ZERO
 
