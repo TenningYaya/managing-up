@@ -582,9 +582,27 @@ func _try_get_snack_buff() -> void:
 # 3. 🌟 清理逻辑：工作结束、中断、或者员工被解雇时调用
 func _clear_snack_buff() -> void:
 	if current_snack_buff != SnackBuff.NONE:
+		# 1. 归还名额并清空自己
 		OfficeManager.active_snack_buffs -= 1
 		current_snack_buff = SnackBuff.NONE
 		buff_status_changed.emit()
+
+		# 2. 击鼓传花：立刻让下一个人接盘 Buff
+		var tree = Engine.get_main_loop() # 用这种方式拿场景树最安全，节点死了也能拿到
+		if tree is SceneTree:
+			var all_emps = tree.get_nodes_in_group("employees")
+			for emp in all_emps:
+				# 条件：不是自己 + 正在打工 + 当前没吃零食
+				if emp != self and emp.is_working and emp.current_snack_buff == SnackBuff.NONE:
+					emp._try_get_snack_buff()
+					# 如果这个人成功吃到了（因为 _try_get 有 50% 概率），就立刻结束传递
+					if emp.current_snack_buff != SnackBuff.NONE:
+						break 
+
+
+# 🌟 超级保险：只要员工被“收回(Recall)”或“开除(Fire)”，必定会触发这个内置函数
+func _exit_tree() -> void:
+	_clear_snack_buff()
 
 # ==========================================
 # 会议室核心逻辑

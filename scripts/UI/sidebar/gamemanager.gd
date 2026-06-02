@@ -15,6 +15,13 @@ enum OfficeType {
 	CULTURE_CENTER
 }
 
+enum SnackBuff {
+	NONE = 0,
+	MILK_TEA = 1,
+	CAKE = 2,
+	SAUSAGE = 3
+}
+
 const OFFICE_UNLOCK_LEVELS = {
 	OfficeType.PANTRY: 1,          # M2 解锁
 	OfficeType.RECRUITMENT: 3,     # M3 解锁

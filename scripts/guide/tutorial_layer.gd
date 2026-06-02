@@ -135,23 +135,40 @@ func _handle_dialogue(step: TutorialStep) -> void:
 		current_target = dialogue_ui
 	
 	if step.target_group == "employee_buffs":
-		# 1. 强制显示面板 (利用你写好的 force_show_ui_group)
+		# 1. 找人
+		if not is_instance_valid(current_target_employee):
+			var employees = get_tree().get_nodes_in_group("employees")
+			if employees.size() > 0:
+				current_target_employee = employees[0]
+				
 		var panel = get_tree().get_first_node_in_group("employee_panel")
-		if panel:
-			panel.show()
-			if panel.has_method("lock_for_tutorial"): panel.lock_for_tutorial()
-			# 确保面板绑定的是我们要投喂的那个员工
-			if is_instance_valid(current_target_employee) and panel.has_method("setup"):
-				panel.setup(current_target_employee)
-		
-		# 2. 只有在确保有员工时才喂 Buff
-		if is_instance_valid(current_target_employee):
-			print("【大总管】强制投喂：", current_target_employee.name)
+		if panel and is_instance_valid(current_target_employee):
+			# 2. 绑定、投喂、刷新
+			panel.force_bind_and_refresh(current_target_employee)
 			current_target_employee.force_give_snack_buff(1)
-			# 🌟 补一刀：手动调用 refresh，确保面板立刻刷出 Buff 图标
-			if panel and panel.has_method("_refresh_all_ui"):
-				panel._refresh_all_ui()
-	
+			panel._refresh_all_ui()
+			
+			# 🌟 必须等一帧，让 Buff 图标在屏幕上排版完成
+			await get_tree().process_frame 
+			
+			# 3. 直接找面板里的容器，获取第一个 Buff 图标（比用 Group 稳 100 倍）
+			var container = panel.buffs_container
+			if container.get_child_count() > 0:
+				var first_buff = container.get_child(0)
+				
+				# 4. 创建提示框
+				var temp_tip = Label.new()
+				temp_tip.name = "TutorialBuffTip"
+				temp_tip.text = "✦ Milk Tea: Pantry Perk: Eff +3"
+				temp_tip.add_theme_stylebox_override("normal", _create_temp_box())
+				
+				# 🌟 致命修复：必须 add_child！我们直接把它挂在面板上，防止被挡住
+				panel.add_child(temp_tip)
+				
+				# 5. 等 Tip 自己排版完，然后精准对齐到 Buff 正下方 10px
+				await get_tree().process_frame
+				temp_tip.global_position = first_buff.global_position + Vector2(0, first_buff.size.y + 10)
+
 	_dispatch_translated_dialogue(step, "intro_dialogue_finished", Callable(self, "_on_step_completed"))
 # ====================================================
 # 🛠️ 核心封装：多语言清洗 + UI 分流解绑连线总闸
@@ -536,6 +553,10 @@ func _arrange_tip(step: TutorialStep, target_rect: Rect2) -> void:
 	final_pos.x += step.tip_offset_x
 	final_pos.y += step.tip_offset_y
 	
+	var temp_tip = get_node_or_null("TutorialBuffTip")
+	if temp_tip:
+		temp_tip.queue_free()
+		
 	# 7. 啪的一声拍在最终位置上！
 	current_tip_instance.global_position = final_pos
 
@@ -790,3 +811,14 @@ func _show_final_label() -> void:
 	await get_tree().create_timer(0.2).timeout
 	# 🌟 打开终局开关，剩下的交给 _input 去管
 	is_waiting_for_final_click = true
+
+func _create_temp_box() -> StyleBoxFlat:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.1, 0.1, 0.1, 0.9) # 深色背景
+	style.border_width_left = 2; style.border_width_right = 2
+	style.border_width_top = 2; style.border_width_bottom = 2
+	style.border_color = Color(0.8, 0.8, 0.8)
+	style.content_margin_left = 10; style.content_margin_right = 10
+	style.content_margin_top = 5; style.content_margin_bottom = 5
+	return style
+	

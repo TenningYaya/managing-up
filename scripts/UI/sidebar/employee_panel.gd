@@ -40,9 +40,17 @@ func lock_for_tutorial():
 func unlock_from_tutorial():
 	is_locked_by_tutorial = false
 
-# ==========================================
-# 2. 初始化
-# ==========================================
+func setup(employee_node: Node) -> void:
+	current_employee = employee_node
+	# 强制全量刷新 UI
+	_refresh_all_ui() 
+	show()
+
+func _refresh_all_ui() -> void:
+	if not current_employee: return
+	_refresh_progress_bar()
+	_refresh_buffs()
+	
 func _ready() -> void:
 	hide() 
 	popup_window.hide()
@@ -379,28 +387,38 @@ func _refresh_buffs() -> void:
 		
 	# 4. Snack Buff (零食 Buff)
 	if current_employee.get("current_snack_buff") != null:
-		var snack = current_employee.current_snack_buff
+		var snack = int(current_employee.get("current_snack_buff"))
+	
+		print("[Panel Debug] 正在刷新 Buff, 当前 snack 值: ", snack)
 		
 		match snack:
-			1: # MILK_TEA
+			1: # 对应你的 Milk Tea
 				_add_buff_label("Milk Tea", "Pantry Perk: Eff +3")
-			2: # CAKE
+			2: # 对应你的 Cake
 				_add_buff_label("Cake", "Pantry Perk: Qual +3")
-			3: # SAUSAGE
+			3: # 对应你的 Sausage
 				_add_buff_label("Sausage", "Pantry Perk: Exp +3")
+			_:
+				# 默认情况不显示，或者打印一下 debug
+				if snack != 0:
+					print("[Panel Debug] 未知的零食 ID: ", snack)
 
 func _add_buff_label(buff_name: String, hover_description: String) -> void:
-	# 🌟 不再用 Label.new()，而是实例化你的精美预制体
 	var buff_tag = BUFF_TAG_SCENE.instantiate()
-	
-	# 假设你的预制体里，Label 的名字就叫 Label
+	buff_tag.add_to_group("buffs")
 	var label_node = buff_tag.get_node("%Label")
 	label_node.text = "✦ " + buff_name
 	
-	# 悬停提示最好加在根节点上，这样鼠标碰到背景框也能弹出来
 	buff_tag.tooltip_text = hover_description
-	buff_tag.mouse_filter = Control.MOUSE_FILTER_STOP 
 	
+	# 🌟 关键修改：如果是教程锁死状态，我们确保它对鼠标输入更加敏感
+	# 将 MOUSE_FILTER_STOP 改为 MOUSE_FILTER_PASS
+	# 这样鼠标事件即使经过遮罩层，也能通过某种方式传达给图标
+	if is_locked_by_tutorial:
+		buff_tag.mouse_filter = Control.MOUSE_FILTER_PASS
+	else:
+		buff_tag.mouse_filter = Control.MOUSE_FILTER_STOP
+		
 	buffs_container.add_child(buff_tag)
 
 func _is_pos_inside_panel(global_pos: Vector2) -> bool:
@@ -416,3 +434,21 @@ func _is_pos_on_any_employee(global_pos: Vector2) -> bool:
 			if emp.get_global_rect().has_point(global_pos):
 				return true
 	return false
+
+func force_bind_and_refresh(employee: Employee) -> void:
+	print("[Panel Debug] 强制绑定员工: ", employee.employee_name)
+	current_employee = employee
+	
+	# 强制将引用传递给每一个子组件，哪怕它们之前是空的
+	if employee:
+		# 1. 刷新基础信息
+		name_label.set_value_text(employee.employee_name)
+		# 2. 刷新进度条
+		_refresh_progress_bar()
+		# 3. 刷新 Buffs
+		_refresh_buffs()
+		# 4. 刷新立绘
+		if employee.portrait:
+			AvatarHelper.apply_portrait(figure, employee.portrait, employee.rarity)
+		
+		show()

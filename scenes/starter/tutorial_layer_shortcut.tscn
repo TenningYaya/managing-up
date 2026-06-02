@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://cn3se308s67lx" path="res://scripts/guide/tutorial_layer.gd" id="1_3ctmu"]
 [ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="2_ygpln"]
+[ext_resource type="Resource" uid="uid://beuy3hxcsfu3j" path="res://data/guide/step_6_show_3_guys.tres" id="3_tdg5m"]
+[ext_resource type="Resource" uid="uid://cobwldmft10mo" path="res://data/guide/step_9_drag_employees.tres" id="3_xdy0o"]
+[ext_resource type="Resource" uid="uid://dby0p1yf83dsl" path="res://data/guide/step_7_hire_cowhorse.tres" id="4_yxqby"]
 [ext_resource type="PackedScene" uid="uid://bbiqd6umh6kdl" path="res://scenes/starter/tip_bubble.tscn" id="9_xdy0o"]
 [ext_resource type="PackedScene" uid="uid://bya2jsjtcfe8r" path="res://scenes/starter/KPIhelper_chat_bubble.tscn" id="11_fhdn4"]
-[ext_resource type="Resource" uid="uid://ysc5lu6f5pqy" path="res://data/guide/step_30_explain_office.tres" id="28_0ujgi"]
 [ext_resource type="Resource" uid="uid://c7yrg2baad1rh" path="res://data/guide/step_31_click_office.tres" id="29_cu6rd"]
 [ext_resource type="Resource" uid="uid://biv0bllp51ve5" path="res://data/guide/step_32_chose_function.tres" id="30_g27r1"]
 [ext_resource type="Resource" uid="uid://cuudbswpv0qsy" path="res://data/guide/step_33_select_pantry.tres" id="31_8oh1r"]
@@ -15,7 +17,7 @@
 
 [node name="TutorialLayerCut" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_3ctmu")
-steps = Array[ExtResource("2_ygpln")]([ExtResource("28_0ujgi"), ExtResource("29_cu6rd"), ExtResource("30_g27r1"), ExtResource("31_8oh1r"), ExtResource("32_xjbmj"), ExtResource("33_2fm1o")])
+steps = Array[ExtResource("2_ygpln")]([ExtResource("3_tdg5m"), ExtResource("4_yxqby"), ExtResource("3_xdy0o"), ExtResource("29_cu6rd"), ExtResource("30_g27r1"), ExtResource("31_8oh1r"), ExtResource("32_xjbmj"), ExtResource("33_2fm1o")])
 TUTORIAL_TIP_SCENE = ExtResource("9_xdy0o")
 
 [node name="TipUI" type="Label" parent="." unique_id=16516687]
