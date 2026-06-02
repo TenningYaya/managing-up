@@ -5,9 +5,9 @@ const SAVE_PATH = "user://boss_quotes.json"
 
 # 默认台词
 var boss_quotes: Array = [
-	"总感觉怪怪的你再改改",
-	"快打包了什么时候做完啊",
-	"老师这就是成图了吗"
+	"BOSS_QUOTE_01",
+	"BOSS_QUOTE_02", 
+    "BOSS_QUOTE_03"
 ]
 
 #默认的存一下
@@ -31,7 +31,7 @@ func remove_quote(index: int):
 		save_quotes()
 
 func get_random_quote() -> String:
-	return boss_quotes[randi() % boss_quotes.size()]
+	return tr(boss_quotes[randi() % boss_quotes.size()])
 
 # --- 持久化存储 ---
 func save_quotes():

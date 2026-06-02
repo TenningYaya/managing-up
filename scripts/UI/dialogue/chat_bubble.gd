@@ -1,7 +1,7 @@
 extends HBoxContainer
 
 const MIN_BUBBLE_WIDTH := 140.0
-const MAX_BUBBLE_WIDTH := 520.0
+const MAX_BUBBLE_WIDTH := 700.0
 
 @onready var bubble_patch: NinePatchRect = $BubblePatch
 @onready var bubble_padding: MarginContainer = $BubblePatch/BubblePadding
