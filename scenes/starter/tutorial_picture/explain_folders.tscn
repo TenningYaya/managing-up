@@ -34,8 +34,8 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -100.0
 offset_top = -117.5
-offset_right = 100.0
-offset_bottom = 117.5
+offset_right = 138.0
+offset_bottom = 135.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -57,8 +57,8 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -96.0
 offset_top = -98.0
-offset_right = 99.0
-offset_bottom = 105.0
+offset_right = 135.0
+offset_bottom = 124.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 0.49803922, 0.5294118, 1)
@@ -76,28 +76,28 @@ grow_vertical = 2
 
 [node name="TextureRect" type="TextureRect" parent="ExplainFolders2/VBoxContainer" unique_id=1008933681]
 clip_contents = true
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = ExtResource("2_fw2fm")
 expand_mode = 1
 
 [node name="TextureRect2" type="TextureRect" parent="ExplainFolders2/VBoxContainer" unique_id=605171092]
 clip_contents = true
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = ExtResource("3_0a14i")
 expand_mode = 1
 
 [node name="TextureRect3" type="TextureRect" parent="ExplainFolders2/VBoxContainer" unique_id=462503166]
 clip_contents = true
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = ExtResource("4_q1gvt")
 expand_mode = 1
 
 [node name="TextureRect4" type="TextureRect" parent="ExplainFolders2/VBoxContainer" unique_id=1301645568]
 clip_contents = true
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = ExtResource("5_qwf6k")
 expand_mode = 1
@@ -115,6 +115,7 @@ offset_right = -12.0
 offset_bottom = 86.0
 grow_horizontal = 0
 grow_vertical = 2
+theme_override_constants/separation = 15
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ExplainFolders2/emoji" unique_id=2056748668]
 layout_mode = 2

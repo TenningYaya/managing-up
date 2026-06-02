@@ -3,7 +3,7 @@ signal dialogue_finished
 
 @onready var label: RichTextLabel = $HBoxContainer/RichTextLabel
 
-const CHAR_SPEED := 0.0
+const CHAR_SPEED := 0.02
 
 var _lines: Array[String] = []
 var _current_index: int = 0

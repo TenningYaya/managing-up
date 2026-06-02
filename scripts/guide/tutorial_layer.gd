@@ -58,6 +58,15 @@ func play_step(index: int) -> void:
 	
 	print("正在执行教程第 ", index + 1, " 步：", TutorialStep.Type.keys()[step.step_type])
 	
+	if step.force_show_ui_group != "sidebar_panel":
+		var sidebar = get_tree().get_first_node_in_group("sidebar_panel")
+		if sidebar:
+			# ⚠️ 注意：把 "close_panel" 换成你侧边栏脚本里真实负责收回的那个函数名！
+			if sidebar.has_method("close_panel"): 
+				sidebar.close_phone()
+			else:
+				sidebar.hide() # 如果没有动画函数，就直接瞬间消失
+				
 	# ====================================================
 	# 🌟【大总管全场员工总闸管理】
 	# ====================================================
