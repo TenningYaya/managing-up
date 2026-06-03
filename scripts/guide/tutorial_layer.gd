@@ -785,7 +785,6 @@ func _process(delta: float) -> void:
 				
 		# 如果打工的人达到了 3 个，通关！
 		if working_count >= 3:
-			print("【大总管雷达】3个牛马全部落座开工！拖拽教程圆满结束！")
 			current_signal_name = "" # 🌟 关掉雷达
 			_on_step_completed()     # 🌟 瞬间放行，拆线翻篇！
 		
@@ -795,12 +794,8 @@ func _process(delta: float) -> void:
 		
 		# is_visible_in_tree() 会精准判断这个 UI 目前是不是在屏幕上真实显示着
 		if panel and panel.is_visible_in_tree():
-			print("【大总管雷达】捕捉到员工面板已弹出！右键教学通关！")
 			current_signal_name = "" # 关掉雷达
 			_on_step_completed()     # 瞬间放行！
-	
-	#if current_signal_name == "intro_dialogue_finished":
-		#return # 💥 强行打断！不准往下执行！
 		
 	if not is_instance_valid(current_target) or not current_target.is_visible_in_tree():
 		return
@@ -815,11 +810,6 @@ func _process(delta: float) -> void:
 		blocker_ui.hole_rect = real_rect
 		var step = steps[current_step_index]
 		blocker_ui.is_hole_clickable = (step.step_type != TutorialStep.Type.DIALOGUE)
-		#
-		## 顺便给它拔高层级，不让它被黑幕盖住
-		#if "z_index" in current_target:
-			#current_target.z_index = 999
-			#current_target.z_as_relative = false
 			
 func _finish_all_tutorials() -> void:
 	Gamemanager.is_employee_interaction_disabled = false
@@ -827,7 +817,6 @@ func _finish_all_tutorials() -> void:
 	Gamemanager.is_tutorial_completed = true
 	if SaveManager.has_method("save_game"):
 		SaveManager.save_game()
-		print("【教程】教程通关记录已保存到硬盘！")
 		
 	if _global_flash_tween:
 		_global_flash_tween.kill()
@@ -844,9 +833,11 @@ func _finish_all_tutorials() -> void:
 	queue_free()
 
 func _show_final_label() -> void:
+	Gamemanager.is_tutorial_completed = true
 	Gamemanager.is_employee_interaction_disabled = false
 	Gamemanager.is_reject_button_disabled = false
 	blocker_ui.hide()
+	blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE # 强行让黑布变成“幽灵”，不挡鼠标
 	dialogue_ui.hide()
 	tip_ui.hide()
 	

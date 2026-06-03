@@ -67,7 +67,7 @@ offset_top = 455.0
 offset_right = 1362.0
 offset_bottom = 593.0
 theme_override_font_sizes/font_size = 100
-text = "您已完成新手教程"
+text = "Tutorial Finished"
 
 [node name="kpi_ChatBubble" parent="." unique_id=1941480218 instance=ExtResource("37_mkknv")]
 visible = false
