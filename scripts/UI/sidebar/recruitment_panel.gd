@@ -65,7 +65,7 @@ func _on_new_resumes_arrived():
 
 func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 	# 1. 计算所需 KPI
-	var cost = (emp.efficiency + emp.quality + emp.experience) * 10
+	var cost = (emp.efficiency + emp.quality + emp.experience) * 50
 	
 	# 2. 检查并扣钱
 	if Gamemanager.spend_kpi(cost):
@@ -140,7 +140,7 @@ func _on_office_status_updated(_is_active: bool):
 func _execute_headhunt(amount: int):
 	var cost = 100 * amount
 	if Gamemanager.spend_dollar(cost):
-		var duration = 1.0 if amount == 1 else 10.0
+		var duration = 30.0 if amount == 1 else 270.0
 		RecruitmentManager.start_headhunt(amount, duration)
 		_update_headhunt_ui() # 点击后立刻刷一下 UI 显示倒计时
 	else:

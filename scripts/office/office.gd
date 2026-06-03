@@ -47,6 +47,13 @@ func _ready() -> void:
 	# 1. 初始化职级判断 (这会修改 is_locked 的值)
 	_on_level_changed(Gamemanager.player_level)
 	
+	# 🌟 读档自愈：如果存档里已经有本办公室的记录，就在这里覆盖应用。
+	# 这一步与 load_game() 的执行先后无关：
+	#   - 若 load_game 先跑：数据已缓存，这里直接取用恢复。
+	#   - 若 load_game 后跑：load_game 会再扫一遍 offices 组补上。
+	# 两种顺序都能保证解锁/功能不丢。
+	_apply_saved_state_if_any()
+	
 	# 🌟 核心修复：在这里强制执行全套视觉与交互同步！
 	# 这样哪怕 Setter 因为值没变而拦截了，我们在ready里也强行刷一次最终状态
 	_sync_visual_and_interaction()
@@ -56,11 +63,38 @@ func _ready() -> void:
 
 # 全局等级变动时，自动判断生死
 func _on_level_changed(new_level: int) -> void:
-	# 这里只修改数据，表现交给 Setter 和 Ready
-	self.is_locked = (new_level < unlock_at_level) 
-	
-	if not is_locked:
+	# 🌟 单向解锁：等级够了就解锁；等级不够时【不再主动回锁】。
+	# 这样读档后任何一次 level_changed 信号，都不会把已解锁
+	# （无论是按等级解锁还是存档恢复的）办公室重新锁上。
+	if new_level >= unlock_at_level:
+		self.is_locked = false
 		print("[Office] ", name, " 已解锁，当前职级：M", new_level)
+
+# ==========================================
+# 🌟 读档自愈：向 SaveManager 索取本办公室的存档状态并应用
+# ==========================================
+func _get_save_manager() -> Node:
+	# 不靠 autoload 名字硬编码，直接在 /root 下找带有恢复方法的单例，
+	# 这样无论你的 SaveManager 注册成什么名字都能找到。
+	for child in get_tree().root.get_children():
+		if child.has_method("get_saved_office_state"):
+			return child
+	return null
+
+func _apply_saved_state_if_any() -> void:
+	var sm = _get_save_manager()
+	if sm == null:
+		return
+	var saved = sm.get_saved_office_state(name)
+	if saved.is_empty():
+		return
+	# 只解锁、不回锁：存档说解锁就解锁
+	if not bool(saved.get("is_locked", true)):
+		self.is_locked = false
+	# 恢复功能类型
+	var saved_type := int(saved.get("current_type", Gamemanager.OfficeType.NONE))
+	if not is_locked and saved_type != Gamemanager.OfficeType.NONE:
+		change_function(saved_type)
 
 # ==========================================
 # 🌟 核心修复：数据表现一键同步 (代替原本分散的两个函数)

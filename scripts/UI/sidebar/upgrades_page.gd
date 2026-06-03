@@ -14,7 +14,7 @@ extends Control
 
 # --- Upgrade Configuration Data (保持不变) ---
 const UPGRADE_DATA = {
-	1: { "cost": 100, "next_level": "M2", "benefits": [
+	1: { "cost": 50, "next_level": "M2", "benefits": [
 		{"title": "+ DESK SLOT × 1 ROW", "desc": "Expand desk slots to 2 rows. Max level increased to 2."},
 		{"title": "+ OFFICE × 1", "desc": "Unlock and gain your first independent office."},
 		{"title": "+ UNLOCK PANTRY", "desc": "New office function: Pantry, available for staff."}
@@ -29,7 +29,7 @@ const UPGRADE_DATA = {
 		{"title": "+ OFFICE × 1", "desc": "Expand the number of offices to 3."},
 		{"title": "+ UNLOCK MEETING", "desc": "New office function: Meeting, for team collaboration."}
 	]},
-	4: { "cost": 10000, "next_level": "M5", "benefits": [
+	4: { "cost": 15000, "next_level": "M5", "benefits": [
 		{"title": "+ DESK SLOT × 1 ROW", "desc": "Expand desk slots to 5 rows. Max level remains at 4."},
 		{"title": "+ OFFICE × 1", "desc": "Expand the number of offices to 4."},
 		{"title": "+ UNLOCK CULTURE", "desc": "New office function: Culture, to boost company morale."}
