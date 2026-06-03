@@ -509,7 +509,7 @@ func _spawn_speech_bubble(text_content: String) -> void:
 	
 	_active_bubble.scale = Vector2(0.3, 0.3)
 	# 设置层级，保证盖住员工和后面的东西
-	_active_bubble.z_index = 3 
+	_active_bubble.z_index = 11 
 	
 	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
 	_active_bubble.position = Vector2(70, -70)

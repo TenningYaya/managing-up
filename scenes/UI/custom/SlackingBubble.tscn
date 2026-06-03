@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://b0xuaa141f4p6" path="res://audio/belch_1.wav" id="3_du1jm"]
 
 [node name="SlackingBubble" type="Control" unique_id=1519871688]
-z_index = 2
+z_index = 10
 layout_mode = 3
 anchors_preset = 0
 offset_right = 50.0
