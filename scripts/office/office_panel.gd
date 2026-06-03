@@ -19,7 +19,6 @@ func lock_for_tutorial():
 func unlock_from_tutorial():
 	is_locked = false
 
-
 # 这里的路径请根据你实际的节点树修改
 # --- 引用原有的容器 ---
 @onready var selection_page: Control = $TabContainer/Office

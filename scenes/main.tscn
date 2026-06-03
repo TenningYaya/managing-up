@@ -419,7 +419,6 @@ offset_right = -2.0
 offset_bottom = 16.0
 
 [node name="OfficePanel" parent="CanvasLayer" unique_id=1437560562 groups=["office_panel"] instance=ExtResource("9_85g3d")]
-visible = false
 offset_left = 11.0
 offset_top = 286.0
 offset_right = 281.0

@@ -196,11 +196,13 @@ offset_bottom = 26.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_dvne8")
 
 [node name="ClosePanel" type="Button" parent="." unique_id=1994279830]
-layout_mode = 0
-offset_left = 187.0
-offset_top = -4.0
-offset_right = 237.0
-offset_bottom = 24.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_bottom = 28.0
+grow_horizontal = 0
 flat = true
 
 [connection signal="gui_input" from="Panel" to="." method="_on_title_bar_gui_input"]

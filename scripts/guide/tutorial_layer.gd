@@ -193,7 +193,7 @@ func _handle_dialogue(step: TutorialStep) -> void:
 				# 4. 创建提示框
 				var temp_tip = Label.new()
 				temp_tip.name = "TutorialBuffTip"
-				temp_tip.text = "✦ Milk Tea: Pantry Perk: Eff +3"
+				temp_tip.text = "Pantry Perk: Eff +3"
 				temp_tip.add_theme_stylebox_override("normal", _create_temp_box())
 				
 				# 🌟 致命修复：必须 add_child！我们直接把它挂在面板上，防止被挡住
@@ -732,7 +732,6 @@ func _input(event: InputEvent) -> void:
 				if current_target.get_global_rect().has_point(event.global_position):
 					
 					yes_click_count += 1
-					print("【大总管催促】精准命中！已点击：", yes_click_count, "/5 次")
 					
 					# 💎 附赠极致爽感：每次点中，让白框闪烁一下给予反馈！
 					var frame = get_node_or_null("TutorialWhiteFrame")
@@ -742,8 +741,7 @@ func _input(event: InputEvent) -> void:
 						tween.tween_property(frame, "modulate:a", 1.0, 0.05)
 					
 					# 点满 5 次，直接结案！
-					if yes_click_count >= 5:
-						print("【大总管】连点任务完成！准备拆线！")
+					if yes_click_count >= 8:
 						current_signal_name = "" 
 						yes_click_count = 0 
 						
@@ -761,13 +759,11 @@ func _process(delta: float) -> void:
 		if esc_hold_time >= 1.0: # 攒满1秒
 			is_esc_pressing = false
 			esc_hold_time = 0.0
-			print("【教程跳过】长按满1秒，全局强行结束！")
 			_finish_all_tutorials()
 			
 	if current_signal_name == "all_preset_employees_hired":
 		# 盯着单例里的池子看
 		if RecruitmentManager.normal_pool.size() == 0:
-			print("【大总管雷达】牛马清零！自动放行！")
 			current_signal_name = "" # 🌟 关掉雷达目标，防止每帧狂刷
 			# 这里不要写 set_process(false)，因为你的 ESC 长按还需要它！
 			_on_step_completed()     # 🌟 直接呼叫通关逻辑！
@@ -817,7 +813,8 @@ func _finish_all_tutorials() -> void:
 	Gamemanager.is_tutorial_completed = true
 	if SaveManager.has_method("save_game"):
 		SaveManager.save_game()
-		
+	if locked_ui_node and locked_ui_node.has_method("unlock_from_tutorial"):
+		locked_ui_node.unlock_from_tutorial()
 	if _global_flash_tween:
 		_global_flash_tween.kill()
 		_global_flash_tween = null
