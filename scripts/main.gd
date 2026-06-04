@@ -2,43 +2,119 @@ extends Control
 
 # --- 1. 变量定义 ---
 var is_sticky = false
-var original_window_pos = Vector2i()
-var original_size = Vector2i(1920, 360)
 
-# 拖拽相关变量
+# 拖拽相关变量（便签模式下拖动整个 OS 窗口）
 var is_dragging = false
 var mouse_offset = Vector2i()
 
-# ➕ 新增：获取包含 5排工位 的父节点
+# ➕ 鼠标穿透相关
+# 原理：在 Windows 上，只有 DisplayServer.window_set_mouse_passthrough(region) 能把点击
+#      “穿透”到其它程序；WINDOW_FLAG_MOUSE_PASSTHROUGH 只会穿透到“本程序自己的窗口”，没用。
+#      region 内 = 可点击且会绘制；region 外 = 既穿透点击、又显示桌面（窗口被裁剪掉那块）。
+#      因此 region 必须覆盖“所有需要被看见/被点到”的区域 = 底部条 + 当前可见的浮窗。
+const BOTTOM_STRIP_HEIGHT := 435.0          # 底部固定窗口高度（画布坐标，随分辨率缩放）
+const DEBUG_PASSTHROUGH := false            # 需要排查时改 true，会打印每次 region 更新
+var interactive_panels: Array[Control] = [] # 底部条之外、显示时也要进 region 的浮窗
+var _passthrough_active := false            # 全屏模式 true / 便签模式 false
+var _last_region := Rect2(-1, -1, -1, -1)   # 上次设置的 region，变化时才重设（省开销、避免闪烁）
+
+# ➕ 获取包含 5排工位 的父节点
 @onready var desk_row = $FullGameMode/Background/WholeAlignment/DeskRow
 
 # --- 2. Initialization ---
 func _ready():
-	
-	SaveManager.load_game()
-	
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 
-	get_viewport().transparent_bg = true
+	SaveManager.load_game()
+
+	# —— 全屏透明覆盖窗口 ——
+	# ⚠️ 用“无边框窗口铺满屏幕”实现全屏，绝不能用 WINDOW_MODE_FULLSCREEN：
+	#    独占全屏会让透明背景和点击穿透同时失效。
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)   # 常驻其他程序之上
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_TRANSPARENT, true)     # 确保窗口可透明
+	get_viewport().transparent_bg = true
+
+	_cover_current_screen()
 
 	$FullGameMode.show()
 	$StickyNote.hide()
 
-	# 👉 初始整个窗口可点击
-	set_full_window_clickable()
+	# 底部条之外、显示时也要保持可点击+可见的浮窗。
+	# 其余 UI 都在底部 435 条内，由底部条统一覆盖。
+	# 注：RecruitmentPanel / EmployeeWarehouse 的拖动已在别处实现，这里只读它们的实时位置。
+	interactive_panels = [
+		$CanvasLayer/RecruitmentPanel,   # 可移动
+		$CanvasLayer/EmployeeWarehouse,  # 可移动
+		$CanvasLayer/EmployeePanel,      # 不可移动（平时隐藏，选中员工时才出现）
+	]
+
+	# 👉 全屏模式：启用 region 穿透
+	_passthrough_active = true
 
 	print("window mode: ", DisplayServer.window_get_mode())
 
-	# ➕ 新增：监听 Gamemanager 的玩家升级信号
+	# ➕ 监听 Gamemanager 的玩家升级信号
 	Gamemanager.level_changed.connect(_on_player_level_changed)
-	
-	# ➕ 新增：游戏刚启动时，初始化一次桌子的显示状态
+
+	# ➕ 游戏刚启动时，初始化一次桌子的显示状态
 	_update_desk_visibility()
-	
 
 
-# --- 3. 输入监听 ---
+# 让窗口铺满它当前所在的那块屏幕（支持任意分辨率 / 多显示器）
+func _cover_current_screen() -> void:
+	var scr := DisplayServer.window_get_current_screen()
+	DisplayServer.window_set_position(DisplayServer.screen_get_position(scr))
+	DisplayServer.window_set_size(DisplayServer.screen_get_size(scr))
+
+
+# --- 3. 穿透 region 维护 ---
+# 每帧计算“底部条 + 可见浮窗”的包围盒，只有它变化时才重设 region。
+# 这样开关/拖动面板、改分辨率都会自动跟随，且不会每帧调用原生 API。
+func _process(_dt):
+	if not _passthrough_active:
+		return
+	var region := _compute_region()
+	if region != _last_region:
+		_last_region = region
+		_apply_region(region)
+
+
+# 底部条（画布坐标 → 物理窗口像素）。get_screen_transform 已包含缩放与黑边偏移，兼容任意分辨率
+func _band_physical_rect() -> Rect2:
+	var vp := get_viewport().get_visible_rect().size
+	var band_canvas := Rect2(0.0, vp.y - BOTTOM_STRIP_HEIGHT, vp.x, BOTTOM_STRIP_HEIGHT)
+	return get_viewport().get_screen_transform() * band_canvas
+
+
+# region = 底部条 + 当前可见浮窗 的整体包围盒（物理像素，取整避免亚像素抖动反复重设）
+func _compute_region() -> Rect2:
+	var bb := _band_physical_rect()
+	for panel in interactive_panels:
+		if is_instance_valid(panel) and panel.is_visible_in_tree():
+			bb = bb.merge(get_viewport().get_screen_transform() * panel.get_global_rect())
+	return Rect2(bb.position.floor(), bb.size.ceil())
+
+
+func _apply_region(r: Rect2) -> void:
+	var pts := PackedVector2Array([
+		r.position,
+		Vector2(r.position.x + r.size.x, r.position.y),
+		r.position + r.size,
+		Vector2(r.position.x, r.position.y + r.size.y),
+	])
+	DisplayServer.window_set_mouse_passthrough(pts)
+	if DEBUG_PASSTHROUGH:
+		print("[PT] region set to ", r)
+
+
+# 清除 region（整窗都可点击、不裁剪）——便签模式用
+func _clear_region() -> void:
+	_last_region = Rect2(-1, -1, -1, -1)
+	DisplayServer.window_set_mouse_passthrough(PackedVector2Array())
+
+
+# --- 4. 输入监听 ---
 func _input(event):
 	if event.is_action_pressed("toggle_sticky_mode"):
 		toggle_mode()
@@ -47,7 +123,7 @@ func _input(event):
 		handle_drag(event)
 
 
-# --- 4. 模式切换逻辑 ---
+# --- 5. 模式切换逻辑 ---
 func toggle_mode():
 	is_sticky = !is_sticky
 
@@ -58,22 +134,17 @@ func toggle_mode():
 
 
 func enter_sticky_mode():
-	# 记录原始位置
-	original_window_pos = DisplayServer.window_get_position()
-
 	# UI切换
 	$FullGameMode.hide()
 	$StickyNote.show()
 	$CanvasLayer.hide()
 
-	# 缩小窗口
+	# 👉 停止 region 维护，并清除裁剪：便签是个独立小窗口，整窗都要可点击
+	_passthrough_active = false
+	_clear_region()
+
+	# 缩小窗口（置顶在 _ready 已开启，无需重复设置）
 	DisplayServer.window_set_size(Vector2i(270, 360))
-	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
-
-	await get_tree().process_frame
-
-	# 👉 关键：只让 StickyNote 可点击
-	update_mouse_passthrough($StickyNote)
 
 
 func exit_sticky_mode():
@@ -82,18 +153,14 @@ func exit_sticky_mode():
 	$FullGameMode.show()
 	$CanvasLayer.show()
 
-	# 窗口恢复
-	DisplayServer.window_set_size(original_size)
-	DisplayServer.window_set_position(original_window_pos)
-	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, false)
+	# 恢复全屏覆盖
+	_cover_current_screen()
 
-	await get_tree().process_frame
-
-	# 👉 关键：整个窗口可点击
-	set_full_window_clickable()
+	# 👉 重新启用 region 穿透（下一帧 _process 会重建 region）
+	_passthrough_active = true
 
 
-# --- 5. 拖拽逻辑 ---
+# --- 6. 便签拖拽逻辑（拖动整个 OS 窗口）---
 func handle_drag(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
@@ -111,39 +178,7 @@ func handle_drag(event):
 
 
 # ================================
-# ✅ 新增：鼠标穿透核心函数
-# ================================
-
-func update_mouse_passthrough(target_node: Control):
-	await get_tree().process_frame
-
-	var rect = target_node.get_global_rect()
-
-	var points = PackedVector2Array([
-		rect.position,
-		rect.position + Vector2(rect.size.x, 0),
-		rect.position + rect.size,
-		rect.position + Vector2(0, rect.size.y)
-	])
-
-	DisplayServer.window_set_mouse_passthrough(points)
-
-
-func set_full_window_clickable():
-	var win_size = DisplayServer.window_get_size()
-
-	var points = PackedVector2Array([
-		Vector2(0, 0),
-		Vector2(win_size.x, 0),
-		Vector2(win_size.x, win_size.y),
-		Vector2(0, win_size.y)
-	])
-
-	DisplayServer.window_set_mouse_passthrough(points)
-
-
-# ================================
-# ✅ 新增：工位显示与隐藏控制逻辑
+# ✅ 工位显示与隐藏控制逻辑
 # ================================
 
 func _on_player_level_changed(_new_level: int):
@@ -151,9 +186,9 @@ func _on_player_level_changed(_new_level: int):
 	_update_desk_visibility()
 
 func _update_desk_visibility():
-	if not desk_row: return 
+	if not desk_row: return
 	var slots = desk_row.get_children()
-	
+
 	for i in range(slots.size()):
 		var slot = slots[i]
 		if i < Gamemanager.player_level:
