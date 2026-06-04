@@ -44,7 +44,7 @@ var player_level: int = 1:
 		player_level = value
 		level_changed.emit(player_level)
 		
-var kpi: int = 1000:
+var kpi: int = 3000:
 	set(value):
 		kpi = value
 		kpi_changed.emit(kpi)
