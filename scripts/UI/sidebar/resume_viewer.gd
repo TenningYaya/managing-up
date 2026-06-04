@@ -173,19 +173,33 @@ func _on_reject_all_pressed() -> void:
 func _on_accept_all_pressed() -> void:
 	if current_resumes.is_empty():
 		return
-		
-	print("大赦天下！全都要了！")
 	
-	# 🌟 必须复制一份数组！因为你在循环里触发外部招募后，
-	# 外部可能会调用 remove_employee() 动态修改原数组，直接遍历原数组会导致报错或漏人。
-	var temp_list = current_resumes.duplicate()
-	for emp in temp_list:
-		on_hire_attempted.emit(emp)
+	# 1. 预检总成本
+	var total_cost = 0
+	for emp in current_resumes:
+		total_cost += RecruitmentManager.calculate_hire_cost(emp)
+	
+	# 2. 判断 KPI
+	if Gamemanager.kpi >= total_cost:
+		print("大赦天下！全都要了！")
 		
-	# 招募完后，清空数据，触发刷新
-	current_resumes.clear()
-	current_page = 0
-	_update_display()
+		# 3. 稳妥招募：复制名单，挨个触发招募信号
+		var temp_list = current_resumes.duplicate()
+		for emp in temp_list:
+			on_hire_attempted.emit(emp)
+			
+		# 招募完后清空列表
+		current_resumes.clear()
+		current_page = 0
+		_update_display()
+	else:
+		# 4. 钱不够时：什么都不做，只弹出提示
+		print("【招聘中心】KPI 不足，全招募失败！")
+
+		var panel = get_tree().get_first_node_in_group("recruitment_panel")
+		if panel and panel.has_method("show_floating_tip"):
+			panel.show_floating_tip("INGAME_TIP_NOT_ENOUGH_HIRE_COUNT")
+
 
 func _do_actual_reject_all() -> void:
 	print("正在一键拒绝所有员工...")
