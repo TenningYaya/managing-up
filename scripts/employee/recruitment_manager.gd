@@ -159,3 +159,7 @@ func load_tutorial_resumes() -> void:
 		normal_pool.append(new_emp)
 		
 	new_resumes_arrived.emit()
+
+func calculate_hire_cost(emp: Employee) -> int:
+	# 以后想要修改招聘价格公式，只需要改这里这一行！
+	return (emp.efficiency + emp.quality + emp.experience) * 50

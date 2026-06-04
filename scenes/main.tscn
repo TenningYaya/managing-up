@@ -295,14 +295,13 @@ offset_right = 1922.0
 offset_bottom = 714.0
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
-visible = false
 layout_mode = 3
 anchors_preset = 0
+offset_top = 653.0
 offset_right = 40.0
-offset_bottom = 40.0
+offset_bottom = 693.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Add All Test Button Here" unique_id=410798175]
-visible = false
 layout_mode = 0
 offset_left = 187.0
 offset_right = 495.0
@@ -342,7 +341,6 @@ layout_mode = 2
 text = "MaxLevel"
 
 [node name="TestCurrency" type="Control" parent="CanvasLayer/Add All Test Button Here/HBoxContainer" unique_id=947981425]
-visible = false
 layout_mode = 2
 script = ExtResource("14_a8y0u")
 

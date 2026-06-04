@@ -45,8 +45,7 @@ func setup(employee_data: Employee) -> void:
 		exp_bar.set_bar_value(employee_data.experience)
 	
 	# 计算总和与价格
-	var total_stats = employee_data.efficiency + employee_data.quality + employee_data.experience
-	var cost_kpi = total_stats * 10
+	var cost_kpi = RecruitmentManager.calculate_hire_cost(employee_data)
 	
 	# 将计算结果填入
 	if hire_price_label:

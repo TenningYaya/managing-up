@@ -10,6 +10,7 @@ extends Control
 @onready var headhunt_viewer = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadViewer
 @onready var countdown_label = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/LblCountdown
 @onready var headhunt_locked = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadhuntLocked
+@onready var hire_tip_label: Label = $NotEnoughKPI
 
 var last_normal_count: int = -1
 var last_headhunt_state: int = -1
@@ -65,7 +66,7 @@ func _on_new_resumes_arrived():
 
 func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 	# 1. 计算所需 KPI
-	var cost = (emp.efficiency + emp.quality + emp.experience) * 50
+	var cost = RecruitmentManager.calculate_hire_cost(emp)
 	
 	# 2. 检查并扣钱
 	if Gamemanager.spend_kpi(cost):
@@ -90,7 +91,7 @@ func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 	else:
 		# 钱不够时的处理
 		print("【招聘中心】KPI 不足！需要: ", cost, " 当前仅有: ", Gamemanager.kpi)
-		# 你可以这里调用一个 UI 飘窗提示：UI.show_message("KPI 不足！")
+		show_floating_tip("INGAME_TIP_NOT_ENOUGH_HIRE_COUNT")
 		
 # 对应 Viewer 的 _on_reject_pressed 信号
 func _reject_from_pool(emp: Employee, pool: Array):
@@ -146,6 +147,25 @@ func _execute_headhunt(amount: int):
 	else:
 		print("老板，Dollar 不够！")
 
+func show_floating_tip(text_key: String) -> void:
+	# 1. 设置文字
+	hire_tip_label.text = tr(text_key)
+	
+	# 2. 强行把这个 Label 提到最前面
+	hire_tip_label.show()
+	hire_tip_label.z_index = 100 
+	
+	# 3. 如果之前有正在执行的动画，先杀掉，防止冲突
+	var tween = create_tween()
+	
+	# 4. 简单的动画：显示一段时间，然后渐隐
+	hire_tip_label.modulate.a = 1.0 # 确保它是可见的
+	tween.tween_interval(1.0)       # 停留 1 秒
+	tween.tween_property(hire_tip_label, "modulate:a", 0.0, 0.5) # 0.5秒渐变消失
+	
+	# 动画结束自动隐藏
+	tween.tween_callback(func(): hire_tip_label.hide())
+	
 func _on_hire_1_pressed(): _execute_headhunt(1)
 func _on_hire_10_pressed(): _execute_headhunt(10)
 
