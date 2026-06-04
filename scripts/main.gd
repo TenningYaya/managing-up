@@ -14,6 +14,7 @@ var mouse_offset = Vector2i()
 #      因此 region 必须覆盖“所有需要被看见/被点到”的区域 = 底部条 + 当前可见的浮窗。
 const BOTTOM_STRIP_HEIGHT := 435.0          # 底部固定窗口高度（画布坐标，随分辨率缩放）
 const DEBUG_PASSTHROUGH := false            # 需要排查时改 true，会打印每次 region 更新
+const SETTINGS_PATH := "user://settings.cfg" # 轻量设置持久化（与游戏存档分离，删档也不影响）
 var interactive_panels: Array[Control] = [] # 底部条之外、显示时也要进 region 的浮窗
 var _passthrough_active := false            # 全屏模式 true / 便签模式 false
 var _last_region := Rect2(-1, -1, -1, -1)   # 上次设置的 region，变化时才重设（省开销、避免闪烁）
@@ -32,7 +33,7 @@ func _ready():
 	#    独占全屏会让透明背景和点击穿透同时失效。
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
-	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)   # 常驻其他程序之上
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, _load_always_on_top())   # 读取设置，默认置顶
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_TRANSPARENT, true)     # 确保窗口可透明
 	get_viewport().transparent_bg = true
 
@@ -76,6 +77,23 @@ func _cover_current_screen() -> void:
 	var scr := DisplayServer.window_get_current_screen()
 	DisplayServer.window_set_position(DisplayServer.screen_get_position(scr))
 	DisplayServer.window_set_size(DisplayServer.screen_get_size(scr))
+
+
+# 读取“是否置顶”设置（默认 true = 置顶）
+func _load_always_on_top() -> bool:
+	var cfg := ConfigFile.new()
+	if cfg.load(SETTINGS_PATH) == OK:
+		return bool(cfg.get_value("window", "always_on_top", true))
+	return true
+
+
+# 由设置界面的勾选框调用：勾选=置顶；取消=可被其它窗口遮挡。并持久化保存
+func set_always_on_top(enabled: bool) -> void:
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, enabled)
+	var cfg := ConfigFile.new()
+	cfg.load(SETTINGS_PATH)  # 不存在则为空配置，忽略返回值
+	cfg.set_value("window", "always_on_top", enabled)
+	cfg.save(SETTINGS_PATH)
 
 
 # --- 3. 穿透 region 维护 ---
