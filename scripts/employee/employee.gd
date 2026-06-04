@@ -499,10 +499,11 @@ func _speed_up_work() -> void:
 	
 	if get_work_progress_percent() >= 100.0:
 		_finish_and_generate_file()
+		
 func _spawn_speech_bubble(text_content: String) -> void:
 	# 🌟 打断机制：如果头上已经有一个气泡了，直接把它干掉
-	#if is_instance_valid(_active_bubble):
-		#_active_bubble.kill_bubble()
+	if is_instance_valid(_active_bubble):
+		_active_bubble.kill_bubble()
 		
 	_active_bubble = SPEECH_BUBBLE_SCENE.instantiate()
 	add_child(_active_bubble)
@@ -512,7 +513,7 @@ func _spawn_speech_bubble(text_content: String) -> void:
 	_active_bubble.z_index = 11 
 	
 	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
-	_active_bubble.position = Vector2(70, -70)
+	_active_bubble.position = Vector2(70, -27)
 	
 	# 呼叫接口，播放内容
 	_active_bubble.pop_up(text_content)
