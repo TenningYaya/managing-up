@@ -17,6 +17,7 @@ const DEBUG_PASSTHROUGH := false            # 需要排查时改 true，会打�
 var interactive_panels: Array[Control] = [] # 底部条之外、显示时也要进 region 的浮窗
 var _passthrough_active := false            # 全屏模式 true / 便签模式 false
 var _last_region := Rect2(-1, -1, -1, -1)   # 上次设置的 region，变化时才重设（省开销、避免闪烁）
+var _passthrough_suppressed := false        # 教程等需要“整屏可见可点”时为 true（临时关闭裁剪/穿透）
 
 # ➕ 获取包含 5排工位 的父节点
 @onready var desk_row = $FullGameMode/Background/WholeAlignment/DeskRow
@@ -47,10 +48,19 @@ func _ready():
 		$CanvasLayer/RecruitmentPanel,   # 可移动
 		$CanvasLayer/EmployeeWarehouse,  # 可移动
 		$CanvasLayer/EmployeePanel,      # 不可移动（平时隐藏，选中员工时才出现）
+		$CanvasLayer/OfficePanel,
 	]
+	# ⚠️ TutorialLayer 是 CanvasLayer（不是 Control，没有 get_global_rect），不能放进上面的数组。
+	#    而且教程运行时几乎铺满全屏（黑幕挖洞 + 对话/提示到处出现），用包围盒也圈不住。
+	#    所以教程改用“整屏不穿透”策略（见 suppress_passthrough），由 tutorial_layer.gd 结束时释放。
 
 	# 👉 全屏模式：启用 region 穿透
 	_passthrough_active = true
+
+	# 教程进行中：先整屏可见可点（教程 UI 铺满全屏，不能被 region 裁掉），
+	# 教程结束（tutorial_layer 被销毁）时会调用 suppress_passthrough(false) 自动恢复。
+	if has_node("TutorialLayer") and not Gamemanager.is_tutorial_completed:
+		_passthrough_suppressed = true
 
 	print("window mode: ", DisplayServer.window_get_mode())
 
@@ -73,6 +83,11 @@ func _cover_current_screen() -> void:
 # 这样开关/拖动面板、改分辨率都会自动跟随，且不会每帧调用原生 API。
 func _process(_dt):
 	if not _passthrough_active:
+		return
+	# 教程等场景：临时整屏可见可点，不做 region 裁剪（只在刚进入抑制时清一次）
+	if _passthrough_suppressed:
+		if _last_region != Rect2(-1, -1, -1, -1):
+			_clear_region()
 		return
 	var region := _compute_region()
 	if region != _last_region:
@@ -112,6 +127,13 @@ func _apply_region(r: Rect2) -> void:
 func _clear_region() -> void:
 	_last_region = Rect2(-1, -1, -1, -1)
 	DisplayServer.window_set_mouse_passthrough(PackedVector2Array())
+
+
+# 给外部（如 tutorial_layer）调用：
+#   true  = 临时整屏可见可点（关闭裁剪/穿透），适合教程、全屏菜单等铺满全屏的 UI
+#   false = 恢复正常 region 穿透（下一帧 _process 自动重建 region）
+func suppress_passthrough(active: bool) -> void:
+	_passthrough_suppressed = active
 
 
 # --- 4. 输入监听 ---

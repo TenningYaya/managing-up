@@ -30,7 +30,11 @@ var is_esc_pressing := false
 var is_waiting_for_final_click := false
 var current_target_employee = null
 
+var _main_ref: Node = null  # 主场景 Main，用于教程结束时恢复鼠标穿透
+
 func _ready() -> void:
+	_main_ref = get_parent()  # TutorialLayer 是 Main 的直接子节点
+
 	# 1. 游戏一上来，第一时间藏起所有 UI，防止屏幕闪烁
 	dialogue_ui.hide()
 	blocker_ui.hide()
@@ -48,6 +52,12 @@ func _ready() -> void:
 	# 4. 如果确实没完成（新游戏），则执行你原本真实的启动逻辑！
 	if steps.size() > 0:
 		play_step(0)
+
+
+# 教程被销毁时（通关 / ESC跳过 / 一开始就已完成）统一在这里恢复主场景的鼠标穿透
+func _exit_tree() -> void:
+	if is_instance_valid(_main_ref) and _main_ref.has_method("suppress_passthrough"):
+		_main_ref.suppress_passthrough(false)
 
 func play_step(index: int) -> void:
 	if index >= steps.size():
