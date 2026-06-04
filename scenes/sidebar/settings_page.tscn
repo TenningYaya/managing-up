@@ -74,6 +74,26 @@ func _on_delete_save_pressed() -> void:
 		SaveManager.delete_save()
 	else:
 		push_error(\"错误：在 SaveManager 中找不到 delete_save 方法\")
+
+# —— Always on Top 勾选框 ——
+func _ready() -> void:
+	_sync_always_on_top_checkbox()
+
+func _on_visibility_changed() -> void:
+	if visible:
+		_sync_always_on_top_checkbox()
+
+func _sync_always_on_top_checkbox() -> void:
+	# 让勾选框反映窗口当前真实的置顶状态（用 no_signal 避免触发 toggled）
+	$\"Always on Top/CheckBox\".set_pressed_no_signal(
+		DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP))
+
+func _on_always_on_top_toggled(toggled_on: bool) -> void:
+	var main_node = get_tree().current_scene
+	if main_node and main_node.has_method(\"set_always_on_top\"):
+		main_node.set_always_on_top(toggled_on)  # 由 Main 改 flag 并持久化
+	else:
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, toggled_on)
 "
 
 [node name="SettingsPage" type="Control" unique_id=517570582]
@@ -153,12 +173,11 @@ text = "     Show NPC Names"
 layout_mode = 2
 
 [node name="Always on Top" type="HBoxContainer" parent="." unique_id=185401597]
-visible = false
 layout_mode = 0
 offset_left = 2.0
-offset_top = 224.0
+offset_top = 258.0
 offset_right = 272.0
-offset_bottom = 248.00006
+offset_bottom = 282.0
 
 [node name="Label" type="Label" parent="Always on Top" unique_id=1259048178]
 layout_mode = 2
@@ -242,5 +261,7 @@ text = "Delet Save"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="toggled" from="Always on Top/CheckBox" to="." method="_on_always_on_top_toggled"]
 [connection signal="pressed" from="Save & Quit" to="." method="_on_save__quit_pressed"]
 [connection signal="pressed" from="Delete Save" to="." method="_on_delete_save_pressed"]
