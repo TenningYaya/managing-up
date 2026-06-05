@@ -18,6 +18,15 @@ var current_state = State.IDLE
 var headhunt_time_left: float = 0.0
 var _pending_amount = 0
 
+# --- 普通招募：免费简历自动出现计时器 ---
+# 出现节奏：前 3 个每 2 分钟，第 4~10 个每 10 分钟，之后每 15 分钟。
+# 剩余时间与已出现数量都会被 SaveManager 记进存档。
+const FREE_RECRUIT_INTERVAL_EARLY: float = 120.0   # 前 3 个：每 2 分钟
+const FREE_RECRUIT_INTERVAL_MID: float = 600.0     # 第 4~10 个：每 10 分钟
+const FREE_RECRUIT_INTERVAL_LATE: float = 900.0    # 之后：每 15 分钟
+var free_recruit_count: int = 0                     # 已自动出现过的免费普通简历数量
+var free_recruit_time_left: float = FREE_RECRUIT_INTERVAL_EARLY  # 距离下一个免费简历出现的剩余秒数
+
 @onready var employee_scene = preload("res://scenes/employee/employee.tscn")
 
 # 🌟 字典映射：后期加其他等级（比如 UR），只需在这里加上对应的场景路径
@@ -41,6 +50,12 @@ func _process(delta):
 			current_state = State.READY
 			_on_headhunt_finished()
 
+	# 普通招募：教程完成后才开始计时，时间一到就免费送一份简历到普通招募板（左侧）
+	if Gamemanager.is_tutorial_completed:
+		free_recruit_time_left -= delta
+		if free_recruit_time_left <= 0:
+			_spawn_free_recruit()
+
 # --- 核心业务：普通招聘 (自动触发) ---
 func auto_generate_normal():
 	if is_tutorial_mode:
@@ -52,6 +67,21 @@ func auto_generate_normal():
 	var new_emp = _create_data(rarity)
 	normal_pool.append(new_emp)
 	new_resumes_arrived.emit()
+
+# 计时结束：免费生成一份普通简历，并把计时器重置到下一个间隔
+func _spawn_free_recruit() -> void:
+	auto_generate_normal()  # 复用既有普通招募逻辑（R 90% / SR 10%），会塞进 normal_pool 并发 new_resumes_arrived
+	free_recruit_count += 1
+	free_recruit_time_left = _get_free_recruit_interval()
+
+# 根据已出现数量决定下一个免费简历要等多久
+func _get_free_recruit_interval() -> float:
+	if free_recruit_count < 3:
+		return FREE_RECRUIT_INTERVAL_EARLY   # 前 3 个：每 2 分钟
+	elif free_recruit_count < 10:
+		return FREE_RECRUIT_INTERVAL_MID     # 第 4~10 个：每 10 分钟
+	else:
+		return FREE_RECRUIT_INTERVAL_LATE    # 之后：每 15 分钟
 
 # --- 核心业务：猎头招聘 (玩家触发) ---
 func start_headhunt(amount: int, duration: float):

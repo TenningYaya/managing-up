@@ -4,6 +4,7 @@ extends Control
 # ================= UI 节点获取 =================
 @onready var normal_viewer = $VBoxContainer/NormalPanel/MarginContainer/NormalViewer
 @onready var normal_no_resume = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel
+@onready var lbl_normal_countdown = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel/LblEmpty
 
 @onready var headhunt_box_idle = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle
 @onready var headhunt_box_recruiting = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting
@@ -48,6 +49,10 @@ func _process(_delta):
 	# 只有在猎头寻访中，才去更新文字，超级省性能
 	if RecruitmentManager.current_state == RecruitmentManager.State.RECRUITING:
 		countdown_label.text = "              %.1f" % RecruitmentManager.headhunt_time_left
+
+	# 普通招募：等待面板可见时，刷新“下一个免费简历”的倒计时
+	if lbl_normal_countdown.visible:
+		lbl_normal_countdown.text = _format_countdown(RecruitmentManager.free_recruit_time_left)
 
 # ================= 核心：数据下发与同步 =================
 func _on_new_resumes_arrived():
@@ -100,9 +105,17 @@ func _update_normal_ui():
 	if normal_viewer.current_resumes.is_empty():
 		normal_no_resume.show()
 		normal_viewer.hide()
+		# 教程完成后，在等待面板上显示距离下一个免费招募出现的倒计时
+		lbl_normal_countdown.visible = Gamemanager.is_tutorial_completed
 	else:
 		normal_no_resume.hide()
 		normal_viewer.show()
+		lbl_normal_countdown.visible = false
+
+# 把剩余秒数格式化成 MM:SS
+func _format_countdown(seconds: float) -> String:
+	var total = int(ceil(max(seconds, 0.0)))
+	return "%02d:%02d" % [total / 60, total % 60]
 
 func _update_headhunt_ui():
 	var current_state = RecruitmentManager.current_state

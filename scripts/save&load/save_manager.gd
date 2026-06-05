@@ -34,7 +34,12 @@ func delete_save() -> void:
 	# 🌟 顺手复位教程期间会被打开的两个交互总闸，防止在教程进行中删档时残留禁用状态。
 	Gamemanager.is_employee_interaction_disabled = false
 	Gamemanager.is_reject_button_disabled = false
-	
+
+	# 🌟 普通招募免费简历计时器也要清零：RecruitmentManager 是 autoload，不随场景重载复位，
+	#    不手动归零的话删档重开会沿用上一局的剩余时间与已出现数量。
+	RecruitmentManager.free_recruit_count = 0
+	RecruitmentManager.free_recruit_time_left = RecruitmentManager.FREE_RECRUIT_INTERVAL_EARLY
+
 	if EmployeeManager.get("my_employees") != null:
 		EmployeeManager.my_employees.clear()
 	
@@ -104,6 +109,8 @@ func save_game() -> void:
 		"current_state": RecruitmentManager.current_state,
 		"headhunt_time_left": RecruitmentManager.headhunt_time_left,
 		"pending_amount": RecruitmentManager._pending_amount,
+		"free_recruit_count": RecruitmentManager.free_recruit_count,
+		"free_recruit_time_left": RecruitmentManager.free_recruit_time_left,
 		"normal_pool": _serialize_resume_pool(RecruitmentManager.normal_pool),
 		"headhunt_pool": _serialize_resume_pool(RecruitmentManager.headhunt_pool),
 	}
@@ -276,6 +283,10 @@ func _restore_recruitment(rec_data: Dictionary) -> void:
 	RecruitmentManager.current_state = int(rec_data.get("current_state", 0))
 	RecruitmentManager.headhunt_time_left = float(rec_data.get("headhunt_time_left", 0.0))
 	RecruitmentManager._pending_amount = int(rec_data.get("pending_amount", 0))
+
+	# 普通招募免费简历计时器（已出现数量 & 剩余时间）。旧存档没有这两项时按全新计时处理。
+	RecruitmentManager.free_recruit_count = int(rec_data.get("free_recruit_count", 0))
+	RecruitmentManager.free_recruit_time_left = float(rec_data.get("free_recruit_time_left", RecruitmentManager.FREE_RECRUIT_INTERVAL_EARLY))
 	
 	# 4. 通知面板刷新（如果此刻面板已打开）
 	if RecruitmentManager.has_signal("new_resumes_arrived"):
