@@ -42,3 +42,4 @@ stretch_mode = 5
 
 [node name="BubbleClicked" type="AudioStreamPlayer" parent="." unique_id=1982684811]
 stream = ExtResource("3_du1jm")
+bus = &"SFX"

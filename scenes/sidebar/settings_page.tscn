@@ -9,15 +9,22 @@
 [sub_resource type="GDScript" id="GDScript_nb64h"]
 script/source = "extends Control
 
-# 假设你的 BGM 在音频总线（Bus）的第 1 条，音效在第 2 条
-# 你可以在编辑器最下方的 Audio 面板里查看或添加
-var bgm_bus_index = AudioServer.get_bus_index(\"Master\") 
+# BGM 走 Music 总线，其余音效走 SFX 总线（定义在 res://default_bus_layout.tres）
+var music_bus_index = AudioServer.get_bus_index(\"Music\")
+var sfx_bus_index = AudioServer.get_bus_index(\"SFX\")
 const CONFIRM_DIALOG = preload(\"res://scenes/sidebar/confirm_dialog.tscn\")
 
-func _on_bgm_slider_value_changed(value):
-	# value 通常是 0 到 100，我们需要把它转成音量分贝
-	# linear_to_db 是 Godot 自带的函数
-	AudioServer.set_bus_volume_db(bgm_bus_index, linear_to_db(value / 100.0))
+@onready var _music_slider: HSlider = $\"Master Volume/HSlider\"
+@onready var _sfx_slider: HSlider = $\"Sound Effects Volume/HSlider\"
+var _settings_opened := false  # 是否已打开过设置页（避免加载阶段误存盘）
+
+func _on_music_slider_value_changed(value: float) -> void:
+	# value 范围 0~100，转换成分贝设置到 Music 总线（控制 BGM）
+	AudioServer.set_bus_volume_db(music_bus_index, linear_to_db(value / 100.0))
+
+func _on_sfx_slider_value_changed(value: float) -> void:
+	# 控制所有音效（YesSound / NoSound / BubbleSound / ClickedSound 等）
+	AudioServer.set_bus_volume_db(sfx_bus_index, linear_to_db(value / 100.0))
 
 func _on_fullscreen_toggled(toggled_on):
 	# 使用“屏幕管家”切换全屏
@@ -60,6 +67,9 @@ func _execute_save_and_quit() -> void:
 	else:
 		push_error(\"错误：找不到 SaveManager 或 save_game 方法，请检查 Autoload 设置\")
 
+	# 退出前把音量设置也存下来
+	_persist_audio_volumes()
+
 	# 2. 稍微等待一帧或给个打印反馈（可选），然后彻底退出
 	print(\"正在退出游戏...\")
 	get_tree().quit()
@@ -78,10 +88,39 @@ func _on_delete_save_pressed() -> void:
 # —— Always on Top 勾选框 ——
 func _ready() -> void:
 	_sync_always_on_top_checkbox()
+	_init_volume_sliders()
+
+func _init_volume_sliders() -> void:
+	# 设定范围并连接信号；滑块位置在每次打开设置时由 _sync_volume_sliders() 同步
+	# （子节点 _ready 早于 Main._ready 读取存档，所以这里不能依赖最终音量）
+	_music_slider.min_value = 0
+	_music_slider.max_value = 100
+	_sfx_slider.min_value = 0
+	_sfx_slider.max_value = 100
+	_sync_volume_sliders()
+	if not _music_slider.value_changed.is_connected(_on_music_slider_value_changed):
+		_music_slider.value_changed.connect(_on_music_slider_value_changed)
+	if not _sfx_slider.value_changed.is_connected(_on_sfx_slider_value_changed):
+		_sfx_slider.value_changed.connect(_on_sfx_slider_value_changed)
+
+func _sync_volume_sliders() -> void:
+	# 让滑块反映当前真实音量（启动时已从 settings.cfg 应用到总线，用 no_signal 避免误触发）
+	_music_slider.set_value_no_signal(db_to_linear(AudioServer.get_bus_volume_db(music_bus_index)) * 100.0)
+	_sfx_slider.set_value_no_signal(db_to_linear(AudioServer.get_bus_volume_db(sfx_bus_index)) * 100.0)
 
 func _on_visibility_changed() -> void:
 	if visible:
+		_settings_opened = true
 		_sync_always_on_top_checkbox()
+		_sync_volume_sliders()
+	elif _settings_opened:
+		# 离开设置页时把音量存盘（避免拖动时每帧写文件）
+		_persist_audio_volumes()
+
+func _persist_audio_volumes() -> void:
+	# 交给 Bgm autoload 持久化（音量在引擎启动时就由它应用，保证各场景一致）
+	if Bgm and Bgm.has_method(\"save_audio_volumes\"):
+		Bgm.save_audio_volumes()
 
 func _sync_always_on_top_checkbox() -> void:
 	# 让勾选框反映窗口当前真实的置顶状态（用 no_signal 避免触发 toggled）

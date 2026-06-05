@@ -18,7 +18,7 @@ const SETTINGS_PATH := "user://settings.cfg" # 轻量设置持久化（与游戏
 var interactive_panels: Array[Control] = [] # 底部条之外、显示时也要进 region 的浮窗
 var _passthrough_active := false            # 全屏模式 true / 便签模式 false
 var _last_region := Rect2(-1, -1, -1, -1)   # 上次设置的 region，变化时才重设（省开销、避免闪烁）
-var _passthrough_suppressed := false        # 教程等需要“整屏可见可点”时为 true（临时关闭裁剪/穿透）
+var _passthrough_suppress_count := 0        # >0 = 有界面（教程/弹窗…）要求整屏可见；引用计数，支持叠加
 
 # ➕ 获取包含 5排工位 的父节点
 @onready var desk_row = $FullGameMode/Background/WholeAlignment/DeskRow
@@ -61,7 +61,7 @@ func _ready():
 	# 教程进行中：先整屏可见可点（教程 UI 铺满全屏，不能被 region 裁掉），
 	# 教程结束（tutorial_layer 被销毁）时会调用 suppress_passthrough(false) 自动恢复。
 	if has_node("TutorialLayer") and not Gamemanager.is_tutorial_completed:
-		_passthrough_suppressed = true
+		_passthrough_suppress_count += 1
 
 	print("window mode: ", DisplayServer.window_get_mode())
 
@@ -102,8 +102,8 @@ func set_always_on_top(enabled: bool) -> void:
 func _process(_dt):
 	if not _passthrough_active:
 		return
-	# 教程等场景：临时整屏可见可点，不做 region 裁剪（只在刚进入抑制时清一次）
-	if _passthrough_suppressed:
+	# 教程/弹窗等场景：临时整屏可见可点，不做 region 裁剪（只在刚进入抑制时清一次）
+	if _passthrough_suppress_count > 0:
 		if _last_region != Rect2(-1, -1, -1, -1):
 			_clear_region()
 		return
@@ -147,11 +147,15 @@ func _clear_region() -> void:
 	DisplayServer.window_set_mouse_passthrough(PackedVector2Array())
 
 
-# 给外部（如 tutorial_layer）调用：
-#   true  = 临时整屏可见可点（关闭裁剪/穿透），适合教程、全屏菜单等铺满全屏的 UI
-#   false = 恢复正常 region 穿透（下一帧 _process 自动重建 region）
+# 给外部（教程 / 弹窗 / 全屏菜单等：铺满屏幕、或出现在底部条之外的 UI）调用：
+#   true  = 请求“临时整屏可见可点”（关闭裁剪/穿透）
+#   false = 释放该请求
+# 用引用计数，允许多个界面同时要求整屏（如教程中弹出对话框）；全部释放后下一帧自动重建 region。
 func suppress_passthrough(active: bool) -> void:
-	_passthrough_suppressed = active
+	if active:
+		_passthrough_suppress_count += 1
+	else:
+		_passthrough_suppress_count = max(0, _passthrough_suppress_count - 1)
 
 
 # --- 4. 输入监听 ---

@@ -1,8 +1,47 @@
-[gd_scene format=3 uid="uid://fmwqeqrcve7x"]
+[gd_scene load_steps=3 format=3 uid="uid://fmwqeqrcve7x"]
 
 [ext_resource type="AudioStream" uid="uid://dkot41ggc4c2d" path="res://audio/frozen_winter.wav" id="1_f8x3a"]
+
+[sub_resource type="GDScript" id="GDScript_bgm1"]
+script/source = "extends AudioStreamPlayer
+
+# Bgm 是 autoload，引擎启动时就开始播放（早于语言选择界面和主场景）。
+# 所以保存的音量必须在这里、启动时就应用到总线，否则在 main 加载前（如选语言界面）音量不生效。
+# 这里统一负责所有音量（Music + SFX）的读取与持久化。
+const SETTINGS_PATH := \"user://settings.cfg\"
+
+func _ready() -> void:
+	_load_audio_volumes()
+
+# 读取并应用已保存的音量（默认满音量 = 总线 0 dB）
+func _load_audio_volumes() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(SETTINGS_PATH) != OK:
+		return
+	_apply_bus_volume(\"Music\", cfg.get_value(\"audio\", \"music_volume\", 1.0))
+	_apply_bus_volume(\"SFX\", cfg.get_value(\"audio\", \"sfx_volume\", 1.0))
+
+func _apply_bus_volume(bus_name: String, linear: float) -> void:
+	var idx := AudioServer.get_bus_index(bus_name)
+	if idx != -1:
+		AudioServer.set_bus_volume_db(idx, linear_to_db(linear))
+
+# 由设置界面调用：把当前 Music / SFX 总线音量持久化（先 load 再 save，保留 always_on_top 等其它设置）
+func save_audio_volumes() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load(SETTINGS_PATH)
+	cfg.set_value(\"audio\", \"music_volume\", _bus_linear(\"Music\"))
+	cfg.set_value(\"audio\", \"sfx_volume\", _bus_linear(\"SFX\"))
+	cfg.save(SETTINGS_PATH)
+
+func _bus_linear(bus_name: String) -> float:
+	var idx := AudioServer.get_bus_index(bus_name)
+	return db_to_linear(AudioServer.get_bus_volume_db(idx)) if idx != -1 else 1.0
+"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" unique_id=1826572068]
 stream = ExtResource("1_f8x3a")
 volume_db = -5.707
 autoplay = true
+bus = &"Music"
+script = SubResource("GDScript_bgm1")

@@ -277,3 +277,4 @@ vertical_alignment = 1
 
 [node name="ClickedSound" type="AudioStreamPlayer" parent="." unique_id=914824273]
 stream = ExtResource("8_pgosc")
+bus = &"SFX"

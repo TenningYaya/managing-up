@@ -86,6 +86,8 @@ button_text = "Accept All"
 
 [node name="YesSound" type="AudioStreamPlayer" parent="." unique_id=697872995]
 stream = ExtResource("4_v240j")
+bus = &"SFX"
 
 [node name="NoSound" type="AudioStreamPlayer" parent="." unique_id=1284113507]
 stream = ExtResource("5_updwb")
+bus = &"SFX"

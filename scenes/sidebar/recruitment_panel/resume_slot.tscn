@@ -71,6 +71,8 @@ button_text = "No!"
 
 [node name="YesClicked" type="AudioStreamPlayer" parent="." unique_id=99149807]
 stream = ExtResource("6_4h6ub")
+bus = &"SFX"
 
 [node name="NoClicked" type="AudioStreamPlayer" parent="." unique_id=928697934]
 stream = ExtResource("7_7j1bg")
+bus = &"SFX"
