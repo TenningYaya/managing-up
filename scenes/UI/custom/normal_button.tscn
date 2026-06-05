@@ -10,11 +10,25 @@ offset_left = 70.0
 offset_top = 300.0
 offset_right = 210.0
 offset_bottom = 335.0
-texture_normal = ExtResource("1_jyq3c")
-texture_pressed = ExtResource("2_lhwd6")
 ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("3_wxv04")
+bg_normal = ExtResource("1_jyq3c")
+bg_pressed = ExtResource("2_lhwd6")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1835235405]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+region_rect = Rect2(0, 0, 50, 18)
+patch_margin_left = 9
+patch_margin_top = 6
+patch_margin_right = 10
+patch_margin_bottom = 7
 
 [node name="Label" type="Label" parent="." unique_id=238762939]
 layout_mode = 1

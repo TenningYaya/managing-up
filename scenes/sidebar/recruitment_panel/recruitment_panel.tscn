@@ -6,7 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://k2wtqt2pywqh" path="res://assets/background/Gemini_Generated_Image_ajpbxbajpbxbajpb.png" id="3_n1a40"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_rtmed"]
 [ext_resource type="Texture2D" uid="uid://djvxnh68fk6ub" path="res://assets/background/Gemini_Generated_Image_n5w3tmn5w3tmn5w3.png" id="6_ha1ar"]
+[ext_resource type="Texture2D" uid="uid://px3cj3eqq75y" path="res://assets/background/e8a8d7e5-a42b-48a7-b636-835168402b12.jpg" id="6_pyp0o"]
 [ext_resource type="Texture2D" uid="uid://16a3v6fvnsw0" path="res://assets/background/Gemini_Generated_Image_q23dcvq23dcvq23d.png" id="6_yahbh"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="7_yahbh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rtmed"]
 atlas = ExtResource("2_uc70r")
@@ -141,6 +143,12 @@ animations = [{
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rapbc"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_dauuc"]
+atlas = ExtResource("6_pyp0o")
+region = Rect2(0, 0, 851, 1024)
+
+[sub_resource type="Theme" id="Theme_kstv1"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ha1ar"]
 
 [node name="RecruitmentPanel" type="Control" unique_id=463444191 groups=["recruitment_panel"]]
@@ -245,7 +253,47 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_rapbc")
 layout_mode = 2
 mouse_filter = 2
 
+[node name="BoxIdle" type="PanelContainer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1917371333]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle" unique_id=1670909168]
+layout_mode = 2
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/MarginContainer" unique_id=1688474054]
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_dauuc")
+expand_mode = 1
+
+[node name="BoxIdle" type="MarginContainer" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle" unique_id=883206548]
+layout_mode = 2
+theme = SubResource("Theme_kstv1")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="BoxIdle" type="HBoxContainer" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BoxIdle" unique_id=1511652835]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="BtnHire1" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BoxIdle/BoxIdle" unique_id=2048579194 instance=ExtResource("7_yahbh")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+button_text = "HEADHUNT_1_BUTTON"
+
+[node name="BtnHire10" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BoxIdle/BoxIdle" unique_id=1739987893 instance=ExtResource("7_yahbh")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+button_text = "HEADHUNT_10_BUTTON"
+
 [node name="HeadhuntLocked" type="Control" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1391965391]
+visible = false
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeadhuntPanel/MarginContainer/HeadhuntLocked" unique_id=1333843923]
@@ -276,20 +324,8 @@ text = "Unlock with Headhunt Office"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BoxIdle" type="HBoxContainer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1511652835]
-layout_mode = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="BtnHire1" type="Button" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle" unique_id=776698174]
-layout_mode = 2
-text = "招聘 1次"
-
-[node name="BtnHire10" type="Button" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle" unique_id=2123207305]
-layout_mode = 2
-text = "招聘 10次"
-
 [node name="BoxRecruiting" type="Control" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1488066360]
+visible = false
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=1305613315]
@@ -321,6 +357,7 @@ autoplay = "wait_for_head_recruit"
 frame_progress = 0.4569082
 
 [node name="HeadViewer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=74954453 instance=ExtResource("1_pfe0p")]
+visible = false
 layout_mode = 2
 
 [node name="TitleBar" type="Panel" parent="." unique_id=1469736204]
@@ -358,7 +395,7 @@ text = "INGAME_TIP_NOT_ENOUGH_HIRE_COUNT"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BtnHire1" to="." method="_on_hire_1_pressed"]
-[connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BtnHire10" to="." method="_on_hire_10_pressed"]
+[connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BoxIdle/BoxIdle/BtnHire1" to="." method="_on_hire_1_pressed"]
+[connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BoxIdle/BoxIdle/BtnHire10" to="." method="_on_hire_10_pressed"]
 [connection signal="gui_input" from="TitleBar" to="." method="_on_title_bar_gui_input"]
 [connection signal="pressed" from="ClosePanel" to="." method="_on_close_panel_pressed"]

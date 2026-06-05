@@ -33,4 +33,6 @@ OFFICE_CULTURE_TIP_1,功能介绍：掌控公司大格局的战略中心。可�
 OFFICE_CULTURE_TIP_2,使用方法：建成后自动激活基础政策。你可以随时点击或悬停在这间办公室上，在三种政策（末位淘汰/项目奖金/绩效考核）中自由切换。,How to use: Automatically activates a default policy once built. Click or hover over this office at any time to freely switch between three policies (Last Place Elimination / Project Bonus / Performance Review).,
 OFFICE_UNLOCK_REQUIREMENT,解锁需要：职级,Unlock Requires: Lv
 ,,,
-"INGAME_TIP_NOT_ENOUGH_HIRE_COUNT","KPI不够了！老板拒绝了扩招申请","Not enough KPI! Boss says no headcount"
+"INGAME_TIP_NOT_ENOUGH_HIRE_COUNT","KPI不够了！老板拒绝了扩招申请","Not enough KPI! Boss says no headcount",
+HEADHUNT_1_BUTTON,寻访人才 x1\n$100,Headhunt x1\n$100
+HEADHUNT_10_BUTTON,寻访人才 x10\n$1000,Headhunt x10\n$1000

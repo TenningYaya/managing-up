@@ -51,10 +51,7 @@ func _process(_delta):
 
 # ================= 核心：数据下发与同步 =================
 func _on_new_resumes_arrived():
-	# --- 普通招聘的补货逻辑 ---
 	if RecruitmentManager.normal_pool.size() > 0:
-		# 哪怕 Viewer 里已经有人了，我们也把全量数据同步过去
-		# 这样 Viewer 内部会自动把新出来的 9 个人加到数组末尾
 		normal_viewer.load_resumes(RecruitmentManager.normal_pool.duplicate())
 	_update_normal_ui()
 	

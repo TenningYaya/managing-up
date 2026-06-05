@@ -289,10 +289,11 @@ offset_bottom = 1080.0
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2052431275]
 
 [node name="EmployeePanel" parent="CanvasLayer" unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
+visible = false
 offset_left = 1601.0
-offset_top = 324.0
+offset_top = 250.0
 offset_right = 1922.0
-offset_bottom = 714.0
+offset_bottom = 640.0
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
 layout_mode = 3
@@ -401,9 +402,9 @@ offset_bottom = 650.0
 [node name="RecruitmentPanel" parent="CanvasLayer" unique_id=463444191 instance=ExtResource("20_gqmmt")]
 visible = false
 offset_left = 911.0
-offset_top = 212.0
+offset_top = 197.0
 offset_right = 1622.0
-offset_bottom = 650.0
+offset_bottom = 641.0
 
 [node name="QuoteEditor" parent="CanvasLayer" unique_id=1617537307 instance=ExtResource("22_jscy8")]
 visible = false
