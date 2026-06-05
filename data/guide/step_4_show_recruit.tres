@@ -7,5 +7,5 @@ script = ExtResource("1_8o0xd")
 target_group = "recruitment_button"
 wait_signal = "intro_dialogue_finished"
 speaker = 1
-dialogue_lines = Array[String](["TUTORIAL_STEP_04_01", "TUTORIAL_STEP_04_02"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_04_02"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

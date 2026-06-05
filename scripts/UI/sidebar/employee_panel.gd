@@ -17,6 +17,7 @@ class_name EmployeePanel
 @onready var experience_bar: EmployeeAbility = $PanelBg/EmployeePage/Information/Abilities/ExperienceBar
 
 @onready var progress_bar: TextureProgressBar = $PanelBg/EmployeePage/Information/ProgressBar
+@onready var working_status: Label = $PanelBg/EmployeePage/Information/ProgressBar/WorkingStatus
 
 @onready var buffs_container: HFlowContainer = $PanelBg/EmployeePage/PanelContainer/MarginContainer/VBoxContainer/Buffs
 const BUFF_TAG_SCENE = preload("res://scenes/sidebar/employee_panel/buff_tag.tscn")
@@ -89,11 +90,8 @@ func _input(event: InputEvent) -> void:
 		# 2. 如果点在任何一个员工身上，也绝对不能关
 		# 因为员工自己的 _gui_input 会去调用 open_panel()，如果这里关了就会冲突
 		if _is_pos_on_any_employee(event.global_position):
-			print("[Panel] 点击在员工身上，保持面板开启")
 			return
-		
-		# 3. 只有点在既不是面板、也不是员工的“纯空白地带”，才执行关闭
-		print("[Panel] 点击了空白处，关闭面板")
+
 		close_panel()
 			
 func open_panel(employee: Employee) -> void:
@@ -207,12 +205,14 @@ func _refresh_progress_bar() -> void:
 		progress_bar.value = 0
 		return
 
-	progress_bar.value = current_employee.get_work_progress_percent()
-
+	var progress = current_employee.get_work_progress_percent()
+	progress_bar.value = progress
+	working_status.text = "%d%%" % progress
+	print("【调试】原始进度值是: ", progress)
 
 func _on_work_progress_changed(progress_percent: float) -> void:
 	progress_bar.value = progress_percent
-
+	working_status.text = "%d%%" % int(progress_percent)
 
 func _on_work_started() -> void:
 	progress_bar.value = 0
@@ -411,9 +411,6 @@ func _add_buff_label(buff_name: String, hover_description: String) -> void:
 	
 	buff_tag.tooltip_text = hover_description
 	
-	# 🌟 关键修改：如果是教程锁死状态，我们确保它对鼠标输入更加敏感
-	# 将 MOUSE_FILTER_STOP 改为 MOUSE_FILTER_PASS
-	# 这样鼠标事件即使经过遮罩层，也能通过某种方式传达给图标
 	if is_locked_by_tutorial:
 		buff_tag.mouse_filter = Control.MOUSE_FILTER_PASS
 	else:
@@ -436,7 +433,6 @@ func _is_pos_on_any_employee(global_pos: Vector2) -> bool:
 	return false
 
 func force_bind_and_refresh(employee: Employee) -> void:
-	print("[Panel Debug] 强制绑定员工: ", employee.employee_name)
 	current_employee = employee
 	
 	# 强制将引用传递给每一个子组件，哪怕它们之前是空的
