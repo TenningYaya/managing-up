@@ -526,39 +526,54 @@ func _setup_illustration_step(step: TutorialStep) -> void:
 		_on_step_completed()  
 	)
 
-## 子函数 4：第 9 步 - 疯狂连点特定员工关卡（白框+隐身黑布）
 func _setup_specific_employee_click_step() -> void:
 	var employees = get_tree().get_nodes_in_group("employees")
-	if employees.size() > 0:
-		current_target = employees[0] 
-		# 1. 强制显示并锁定面板
-		var panel = get_tree().get_first_node_in_group("employee_panel")
-		if panel:
-			panel.show()
-			# 这里调用你刚才加的“霸体”方法，防止玩家点别处把它关了
-			if panel.has_method("lock_for_tutorial"):
-				panel.lock_for_tutorial()
+	current_target = null
+	
+	# 🌟 修复 1：精准找出真正在打工的那个人，绝不能无脑拿 [0]！
+	for emp in employees:
+		# 只要他在工位上，或者正在工作，就是我们的真命天子
+		if emp.get("current_seat") != null or emp.get("is_working") == true:
+			current_target = emp
+			break
 			
-			# 🌟 核心：喂入数据，进度条立刻就能动起来
-			if panel.has_method("setup"):
-				panel.setup(current_target)
-		# 2. 原有的视觉辅助逻辑保持不变
-		var target_rect = current_target.get_global_rect()
-		blocker_ui.modulate.a = 0.0 
-		blocker_ui._arrange_curtains(target_rect)
-		blocker_ui.hole_rect = target_rect
-		blocker_ui.is_hole_clickable = true 
+	# 如果实在没找到在打工的，兜底拿第一个
+	if current_target == null and employees.size() > 0:
+		current_target = employees[0]
 		
-		var frame = ReferenceRect.new()
-		frame.name = "TutorialWhiteFrame"
-		frame.border_color = Color.WHITE
-		frame.border_width = 4.0
-		frame.editor_only = false
-		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE 
-		frame.global_position = target_rect.position
-		frame.size = target_rect.size
-		add_child(frame)
+	if current_target == null:
+		printerr("【大总管严重报错】找不到任何员工来点击！")
+		return
 
+	# 1. 强制显示并锁定面板
+	var panel = get_tree().get_first_node_in_group("employee_panel")
+	if panel:
+		panel.show()
+		if panel.has_method("lock_for_tutorial"):
+			panel.lock_for_tutorial()
+		
+		# 🌟 修复 2：必须调用 open_panel，绝对不能调 setup！
+		# 因为只有 open_panel 才会重新连接进度条的实时信号！
+		if panel.has_method("open_panel"):
+			panel.open_panel(current_target)
+
+	# 2. 原有的视觉辅助逻辑保持不变
+	var target_rect = current_target.get_global_rect()
+	blocker_ui.modulate.a = 0.0 
+	blocker_ui._arrange_curtains(target_rect)
+	blocker_ui.hole_rect = target_rect
+	blocker_ui.is_hole_clickable = true 
+	
+	var frame = ReferenceRect.new()
+	frame.name = "TutorialWhiteFrame"
+	frame.border_color = Color.WHITE
+	frame.border_width = 4.0
+	frame.editor_only = false
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE 
+	frame.global_position = target_rect.position
+	frame.size = target_rect.size
+	add_child(frame)
+	
 ## 子函数 5：第 7、8 步 - 启动后台盯梢雷达
 func _setup_radar_step() -> void:
 	print("【大总管】捕捉到后台数据暗号 [", current_signal_name, "]，开启雷达，拒绝物理连线。")
@@ -687,12 +702,12 @@ func _on_step_completed() -> void:
 	if screenshot_on_blocker:
 		screenshot_on_blocker.queue_free()
 	
-	#if current_target and is_instance_valid(current_target) and "z_index" in current_target:
-		#if current_target.is_in_group("employees"):
-			#current_target.z_index = 1
-		#else:
-			#current_target.z_index = 0
-		#current_target.z_as_relative = true
+	var employee_panel = get_tree().get_first_node_in_group("employee_panel")
+	if is_instance_valid(employee_panel):
+		var buff_tip = employee_panel.get_node_or_null("TutorialBuffTip")
+		if is_instance_valid(buff_tip):
+			buff_tip.queue_free()
+			print("【大总管】已精准清除遗留的 Buff 提示框！")
 		
 func setup_tutorial_hiring():
 	# 1. 这里填你的三个路径

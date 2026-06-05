@@ -192,6 +192,24 @@ texture_under = ExtResource("4_bfpbm")
 texture_over = ExtResource("5_fq3kw")
 texture_progress = ExtResource("6_p7uvh")
 
+[node name="WorkingStatus" type="Label" parent="PanelBg/EmployeePage/Information/ProgressBar" unique_id=2102564438]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_ajc7u")
+text = "18"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="PanelContainer" type="PanelContainer" parent="PanelBg/EmployeePage" unique_id=338952969 groups=["employee_buffs"]]
 custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
@@ -232,47 +250,20 @@ vertical_alignment = 1
 [node name="Buffs" type="HFlowContainer" parent="PanelBg/EmployeePage/PanelContainer/MarginContainer/VBoxContainer" unique_id=147567325]
 layout_mode = 2
 
-[node name="ExplainDispatch" type="NinePatchRect" parent="PanelBg/EmployeePage/PanelContainer" unique_id=24523839 groups=["explain_dispatch"]]
-visible = false
-texture_filter = 1
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-texture = SubResource("AtlasTexture_uoiyf")
-region_rect = Rect2(0, 0, 336, 256)
-patch_margin_left = 64
-patch_margin_top = 18
-patch_margin_right = 40
-patch_margin_bottom = 13
-
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelBg/EmployeePage/PanelContainer/ExplainDispatch" unique_id=54891090]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 30.0
-offset_right = 215.0
-offset_bottom = 80.0
-
-[node name="Label" type="Label" parent="PanelBg/EmployeePage/PanelContainer/ExplainDispatch/VBoxContainer" unique_id=1732137519]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Dispatch: make idle co-worker active"
-
-[node name="Label2" type="Label" parent="PanelBg/EmployeePage/PanelContainer/ExplainDispatch/VBoxContainer" unique_id=1723660653]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Recall: make active co-worker idle"
-
 [node name="Manage" type="HBoxContainer" parent="PanelBg/EmployeePage" unique_id=656689347]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 7
 
 [node name="DispatchButton" parent="PanelBg/EmployeePage/Manage" unique_id=2048579194 instance=ExtResource("3_r7cc6")]
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 size_flags_horizontal = 3
 ignore_texture_size = false
 button_text = "Dispatch"
 
 [node name="NormalButton2" parent="PanelBg/EmployeePage/Manage" unique_id=1722932454 instance=ExtResource("3_r7cc6")]
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 size_flags_horizontal = 3
 ignore_texture_size = false
@@ -291,3 +282,42 @@ offset_right = -827.0
 offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ExplainDispatch" type="NinePatchRect" parent="PanelBg" unique_id=24523839 groups=["explain_dispatch"]]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -7.0
+offset_right = 3.0
+offset_bottom = 95.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_uoiyf")
+region_rect = Rect2(0, 0, 336, 256)
+patch_margin_left = 64
+patch_margin_top = 18
+patch_margin_right = 40
+patch_margin_bottom = 13
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelBg/ExplainDispatch" unique_id=54891090]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 30.0
+offset_right = 259.0
+offset_bottom = 80.0
+
+[node name="Label" type="Label" parent="PanelBg/ExplainDispatch/VBoxContainer" unique_id=1732137519]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Dispatch: make idle co-worker active"
+
+[node name="Label2" type="Label" parent="PanelBg/ExplainDispatch/VBoxContainer" unique_id=1723660653]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Recall: make active co-worker idle"
