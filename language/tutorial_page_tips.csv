@@ -1,5 +1,7 @@
 id,zh,en,
 TUTORIAL_PAGE_0,如果你不想被老板抓住，记得在关键时刻Tab+Ctrl进入备忘录隐藏模式哦！,"If you don't want to get caught by your boss, remember to press Tab+Ctrl to enter the hidden memo mode at crucial moments!"
+TUTORIAL_PAGE_1,拖拽地图,Drag the Map
+TUTORIAL_PAGE_2,按鼠标中键可以左右拖拽地图,Press the middle mouse button to drag the map left and right
 TUTORIAL_PAGE_A_TITLE,A. 招聘系统,A. Recruitment System,
 TUTORIAL_PAGE_A_DESC,点击桌上的招聘系统按钮，进入招聘界面。消耗 KPI 可以进行普通招募抽卡，获得新员工加入团队。,Click the Recruitment System button on the desk to access the recruitment interface. You can spend KPI to perform standard recruitment draws and acquire new employees to join your team.,
 TUTORIAL_PAGE_B_TITLE,B. 员工等级,B. Employee Tiers,

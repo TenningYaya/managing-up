@@ -43,6 +43,16 @@ theme_override_fonts/font = ExtResource("2_tehtr")
 text = "TUTORIAL_PAGE_0"
 autowrap_mode = 3
 
+[node name="Label2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=402947239]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+text = "TUTORIAL_PAGE_1"
+
+[node name="Label3" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=439651840]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tehtr")
+text = "TUTORIAL_PAGE_2"
+
 [node name="Recruitment" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1582098235]
 auto_translate_mode = 1
 custom_minimum_size = Vector2(200, 0)
