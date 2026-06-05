@@ -1,24 +1,22 @@
 extends Control
 
-# --- 1. 变量定义 ---
-var is_sticky = false
-
-# 拖拽相关变量（便签模式下拖动整个 OS 窗口）
-var is_dragging = false
-var mouse_offset = Vector2i()
-
 # ➕ 鼠标穿透相关
 # 原理：在 Windows 上，只有 DisplayServer.window_set_mouse_passthrough(region) 能把点击
-#      “穿透”到其它程序；WINDOW_FLAG_MOUSE_PASSTHROUGH 只会穿透到“本程序自己的窗口”，没用。
+#      "穿透"到其它程序；WINDOW_FLAG_MOUSE_PASSTHROUGH 只会穿透到"本程序自己的窗口"，没用。
 #      region 内 = 可点击且会绘制；region 外 = 既穿透点击、又显示桌面（窗口被裁剪掉那块）。
-#      因此 region 必须覆盖“所有需要被看见/被点到”的区域 = 底部条 + 当前可见的浮窗。
+#      因此 region 必须覆盖"所有需要被看见/被点到"的区域 = 底部条 + 当前可见的浮窗。
 const BOTTOM_STRIP_HEIGHT := 435.0          # 底部固定窗口高度（画布坐标，随分辨率缩放）
 const DEBUG_PASSTHROUGH := false            # 需要排查时改 true，会打印每次 region 更新
 const SETTINGS_PATH := "user://settings.cfg" # 轻量设置持久化（与游戏存档分离，删档也不影响）
 var interactive_panels: Array[Control] = [] # 底部条之外、显示时也要进 region 的浮窗
-var _passthrough_active := false            # 全屏模式 true / 便签模式 false
+var _passthrough_active := false            # 全屏模式 true / 便签模式同样 true（只是 panels 不同）
 var _last_region := Rect2(-1, -1, -1, -1)   # 上次设置的 region，变化时才重设（省开销、避免闪烁）
 var _passthrough_suppress_count := 0        # >0 = 有界面（教程/弹窗…）要求整屏可见；引用计数，支持叠加
+
+# --- 便签模式 ---
+var _is_sticky_mode := false
+var _sticky_note: Control = null      # 运行时实例，与主场景完全独立
+var _sticky_canvas: CanvasLayer = null
 
 # ➕ 获取包含 5排工位 的父节点
 @onready var desk_row = $FullGameMode/Background/WholeAlignment/DeskRow
@@ -29,7 +27,7 @@ func _ready():
 	SaveManager.load_game()
 
 	# —— 全屏透明覆盖窗口 ——
-	# ⚠️ 用“无边框窗口铺满屏幕”实现全屏，绝不能用 WINDOW_MODE_FULLSCREEN：
+	# ⚠️ 用"无边框窗口铺满屏幕"实现全屏，绝不能用 WINDOW_MODE_FULLSCREEN：
 	#    独占全屏会让透明背景和点击穿透同时失效。
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
@@ -40,7 +38,6 @@ func _ready():
 	_cover_current_screen()
 
 	$FullGameMode.show()
-	$StickyNote.hide()
 
 	# 底部条之外、显示时也要保持可点击+可见的浮窗。
 	# 其余 UI 都在底部 435 条内，由底部条统一覆盖。
@@ -53,7 +50,7 @@ func _ready():
 	]
 	# ⚠️ TutorialLayer 是 CanvasLayer（不是 Control，没有 get_global_rect），不能放进上面的数组。
 	#    而且教程运行时几乎铺满全屏（黑幕挖洞 + 对话/提示到处出现），用包围盒也圈不住。
-	#    所以教程改用“整屏不穿透”策略（见 suppress_passthrough），由 tutorial_layer.gd 结束时释放。
+	#    所以教程改用"整屏不穿透"策略（见 suppress_passthrough），由 tutorial_layer.gd 结束时释放。
 
 	# 👉 全屏模式：启用 region 穿透
 	_passthrough_active = true
@@ -71,6 +68,20 @@ func _ready():
 	# ➕ 游戏刚启动时，初始化一次桌子的显示状态
 	_update_desk_visibility()
 
+	# --- 创建独立的 StickyNote（独立 CanvasLayer，不受 Camera2D 影响）---
+	_sticky_canvas = CanvasLayer.new()
+	_sticky_canvas.layer = 100
+	add_child(_sticky_canvas)
+
+	_sticky_note = load("res://scenes/UI/sticky_note.tscn").instantiate()
+	_sticky_canvas.add_child(_sticky_note)
+
+	# 初始位置：屏幕右下角
+	await get_tree().process_frame
+	var vp := get_viewport().get_visible_rect().size
+	_sticky_note.position = vp - _sticky_note.size
+	_sticky_note.hide()
+
 
 # 让窗口铺满它当前所在的那块屏幕（支持任意分辨率 / 多显示器）
 func _cover_current_screen() -> void:
@@ -79,7 +90,7 @@ func _cover_current_screen() -> void:
 	DisplayServer.window_set_size(DisplayServer.screen_get_size(scr))
 
 
-# 读取“是否置顶”设置（默认 true = 置顶）
+# 读取"是否置顶"设置（默认 true = 置顶）
 func _load_always_on_top() -> bool:
 	var cfg := ConfigFile.new()
 	if cfg.load(SETTINGS_PATH) == OK:
@@ -97,7 +108,7 @@ func set_always_on_top(enabled: bool) -> void:
 
 
 # --- 3. 穿透 region 维护 ---
-# 每帧计算“底部条 + 可见浮窗”的包围盒，只有它变化时才重设 region。
+# 每帧计算"底部条 + 可见浮窗"的包围盒，只有它变化时才重设 region。
 # 这样开关/拖动面板、改分辨率都会自动跟随，且不会每帧调用原生 API。
 func _process(_dt):
 	if not _passthrough_active:
@@ -114,7 +125,10 @@ func _process(_dt):
 
 
 # 底部条（画布坐标 → 物理窗口像素）。get_screen_transform 已包含缩放与黑边偏移，兼容任意分辨率
+# 便签模式下返回空 Rect，region 只由 _sticky_note 决定
 func _band_physical_rect() -> Rect2:
+	if _is_sticky_mode:
+		return Rect2()
 	var vp := get_viewport().get_visible_rect().size
 	var band_canvas := Rect2(0.0, vp.y - BOTTOM_STRIP_HEIGHT, vp.x, BOTTOM_STRIP_HEIGHT)
 	return get_viewport().get_screen_transform() * band_canvas
@@ -123,9 +137,14 @@ func _band_physical_rect() -> Rect2:
 # region = 底部条 + 当前可见浮窗 的整体包围盒（物理像素，取整避免亚像素抖动反复重设）
 func _compute_region() -> Rect2:
 	var bb := _band_physical_rect()
+	var has_bb := bb != Rect2()
 	for panel in interactive_panels:
 		if is_instance_valid(panel) and panel.is_visible_in_tree():
-			bb = bb.merge(get_viewport().get_screen_transform() * panel.get_global_rect())
+			var r := get_viewport().get_screen_transform() * panel.get_global_rect()
+			bb = r if not has_bb else bb.merge(r)
+			has_bb = true
+	if not has_bb:
+		return Rect2()
 	return Rect2(bb.position.floor(), bb.size.ceil())
 
 
@@ -141,14 +160,14 @@ func _apply_region(r: Rect2) -> void:
 		print("[PT] region set to ", r)
 
 
-# 清除 region（整窗都可点击、不裁剪）——便签模式用
+# 清除 region（整窗都可点击、不裁剪）
 func _clear_region() -> void:
 	_last_region = Rect2(-1, -1, -1, -1)
 	DisplayServer.window_set_mouse_passthrough(PackedVector2Array())
 
 
 # 给外部（教程 / 弹窗 / 全屏菜单等：铺满屏幕、或出现在底部条之外的 UI）调用：
-#   true  = 请求“临时整屏可见可点”（关闭裁剪/穿透）
+#   true  = 请求"临时整屏可见可点"（关闭裁剪/穿透）
 #   false = 释放该请求
 # 用引用计数，允许多个界面同时要求整屏（如教程中弹出对话框）；全部释放后下一帧自动重建 region。
 func suppress_passthrough(active: bool) -> void:
@@ -161,64 +180,40 @@ func suppress_passthrough(active: bool) -> void:
 # --- 4. 输入监听 ---
 func _input(event):
 	if event.is_action_pressed("toggle_sticky_mode"):
-		toggle_mode()
-
-	if is_sticky:
-		handle_drag(event)
+		_toggle_mode()
 
 
 # --- 5. 模式切换逻辑 ---
-func toggle_mode():
-	is_sticky = !is_sticky
-
-	if is_sticky:
-		enter_sticky_mode()
+func _toggle_mode():
+	_is_sticky_mode = !_is_sticky_mode
+	if _is_sticky_mode:
+		_enter_sticky_mode()
 	else:
-		exit_sticky_mode()
+		_exit_sticky_mode()
 
 
-func enter_sticky_mode():
-	# UI切换
+func _enter_sticky_mode():
 	$FullGameMode.hide()
-	$StickyNote.show()
 	$CanvasLayer.hide()
-
-	# 👉 停止 region 维护，并清除裁剪：便签是个独立小窗口，整窗都要可点击
-	_passthrough_active = false
-	_clear_region()
-
-	# 缩小窗口（置顶在 _ready 已开启，无需重复设置）
-	DisplayServer.window_set_size(Vector2i(270, 360))
+	_sticky_note.show()
+	# 穿透 region 只暴露 StickyNote，其余全透
+	interactive_panels = [_sticky_note]
+	_last_region = Rect2(-1, -1, -1, -1)  # 强制下一帧重算
 
 
-func exit_sticky_mode():
-	# UI恢复
-	$StickyNote.hide()
+func _exit_sticky_mode():
+	_sticky_note.hide()
 	$FullGameMode.show()
 	$CanvasLayer.show()
-
-	# 恢复全屏覆盖
+	# 恢复游戏面板列表
+	interactive_panels = [
+		$CanvasLayer/RecruitmentPanel,
+		$CanvasLayer/EmployeeWarehouse,
+		$CanvasLayer/EmployeePanel,
+		$CanvasLayer/OfficePanel,
+	]
 	_cover_current_screen()
-
-	# 👉 重新启用 region 穿透（下一帧 _process 会重建 region）
-	_passthrough_active = true
-
-
-# --- 6. 便签拖拽逻辑（拖动整个 OS 窗口）---
-func handle_drag(event):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				is_dragging = true
-				var mouse_pos = DisplayServer.mouse_get_position()
-				var window_pos = DisplayServer.window_get_position()
-				mouse_offset = mouse_pos - window_pos
-			else:
-				is_dragging = false
-
-	if event is InputEventMouseMotion and is_dragging:
-		var current_mouse_pos = DisplayServer.mouse_get_position()
-		DisplayServer.window_set_position(current_mouse_pos - mouse_offset)
+	_last_region = Rect2(-1, -1, -1, -1)  # 强制下一帧重算
 
 
 # ================================
