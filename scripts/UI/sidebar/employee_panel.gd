@@ -60,6 +60,10 @@ func _ready() -> void:
 	progress_bar.max_value = 100
 	progress_bar.value = 0
 	
+	efficiency_bar.tooltip_text = tr("TOOLTIP_EMP_EFFICIENCY")
+	quality_bar.tooltip_text = tr("TOOLTIP_EMP_QUALITY")
+	experience_bar.tooltip_text = tr("TOOLTIP_EMP_EXPERIENCE")
+	
 	# 绑定底部按钮事件
 	dispatch_btn.pressed.connect(_on_dispatch_pressed)
 	fire_btn.pressed.connect(_on_fire_pressed)

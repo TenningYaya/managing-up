@@ -38,3 +38,7 @@ OFFICE_UNLOCK_REQUIREMENT,解锁需要：职级,Unlock Requires: Lv
 "INGAME_TIP_NOT_ENOUGH_HIRE_COUNT","KPI不够了！老板拒绝了扩招申请","Not enough KPI! Boss says no headcount",
 HEADHUNT_1_BUTTON,寻访人才 x1\n$100,Headhunt x1\n$100
 HEADHUNT_10_BUTTON,寻访人才 x10\n$1000,Headhunt x10\n$1000
+,,,
+TOOLTIP_EMP_EFFICIENCY,决定文件产出速度。效率越高，单次工作所需时间越短。,Increases file production speed. \nHigher efficiency reduces the time required to finish a file.
+TOOLTIP_EMP_QUALITY,提高产出高质量文件的概率。高质量文件能兑换更多的 KPI。,Increases the chance of producing \nhigh-quality files which yield more KPI.
+TOOLTIP_EMP_EXPERIENCE,提高单次产出文件时额外获得美金的概率。,Increases the probability of earning \nextra Dollars when a file is completed.
