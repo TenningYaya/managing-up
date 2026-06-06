@@ -43,6 +43,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="UpgradeTriggerBtn" type="TextureButton" parent="." unique_id=1124786311]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

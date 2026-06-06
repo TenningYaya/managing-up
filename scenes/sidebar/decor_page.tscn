@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://dkl49cj8m1a3b"]
+
+[ext_resource type="Script" uid="uid://c7dm3epgnkpt2" path="res://scripts/UI/sidebar/decor_page.gd" id="1_decor"]
+[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_decor"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_decor"]
+[ext_resource type="AudioStream" uid="uid://764twux58mia" path="res://audio/gem_collect.wav" id="4_decor"]
+
+[node name="DecorPage" type="Control" unique_id=200000001]
+custom_minimum_size = Vector2(246, 334)
+layout_mode = 0
+offset_right = 246.0
+offset_bottom = 334.0
+script = ExtResource("1_decor")
+
+[node name="BG" type="TextureRect" parent="." unique_id=200000002]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_decor")
+expand_mode = 1
+
+[node name="VBoxLayout" type="VBoxContainer" parent="." unique_id=200000003]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = -8.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="VBoxLayout" unique_id=200000004]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_decor")
+theme_override_font_sizes/font_size = 28
+text = "decor"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ThumbnailPanel" type="PanelContainer" parent="VBoxLayout" unique_id=200000005]
+custom_minimum_size = Vector2(0, 86)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxLayout/ThumbnailPanel" unique_id=200000006]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="ThumbnailRow" type="HBoxContainer" parent="VBoxLayout/ThumbnailPanel/MarginContainer" unique_id=200000007]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+theme_override_constants/separation = 6
+
+[node name="ButtonsList" type="VBoxContainer" parent="VBoxLayout" unique_id=200000009]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+alignment = 0
+
+[node name="ClickedSound" type="AudioStreamPlayer" parent="." unique_id=200000010]
+stream = ExtResource("4_decor")
+bus = &"SFX"

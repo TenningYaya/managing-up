@@ -26,6 +26,7 @@ var _flash_tween: Tween
 @onready var btn_settings: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/settings
 @onready var btn_upgrades: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades
 @onready var btn_tutorial: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/tutorial
+@onready var btn_decor: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor
 
 @onready var home_button: BaseButton = $PhoneWrapper/HomeButton
 
@@ -33,6 +34,7 @@ var _flash_tween: Tween
 @onready var settings_page: Control = $PhoneWrapper/Screen/AppDisplayArea/SettingsPage
 @onready var upgrades_page: Control = $PhoneWrapper/Screen/AppDisplayArea/UpgradesPage
 @onready var tutorial_page: Control = $PhoneWrapper/Screen/AppDisplayArea/TutorialPage
+@onready var decor_page: Control = $PhoneWrapper/Screen/AppDisplayArea/DecorPage
 
 
 func _ready() -> void:
@@ -68,6 +70,10 @@ func _ready() -> void:
 
 	btn_tutorial.pressed.connect(func():
 		open_app(tutorial_page)
+	)
+
+	btn_decor.pressed.connect(func():
+		open_app(decor_page)
 	)
 
 	# =====================================================
@@ -164,6 +170,7 @@ func hide_all_pages() -> void:
 	settings_page.visible = false
 	upgrades_page.visible = false
 	tutorial_page.visible = false
+	decor_page.visible = false
 
 
 func lock_for_tutorial() -> void:
