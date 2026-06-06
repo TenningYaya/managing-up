@@ -24,6 +24,18 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yskv6"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reddot"]
+bg_color = Color(0.886275, 0.149020, 0.149020, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
 [node name="MobileSidebar" type="Control" unique_id=2025363917]
 layout_mode = 3
 anchors_preset = 3
@@ -119,6 +131,16 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "UPGRADES"
 
+[node name="RedDot" type="Panel" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades" unique_id=300000010]
+visible = false
+layout_mode = 0
+offset_left = 56.0
+offset_top = 4.0
+offset_right = 76.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_reddot")
+
 [node name="tutorial" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=425357062 groups=["tutorial_app_icon"]]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
@@ -187,6 +209,16 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 12
 text = "DECOR"
 horizontal_alignment = 1
+
+[node name="RedDot" type="Panel" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor" unique_id=300000011]
+visible = false
+layout_mode = 0
+offset_left = 56.0
+offset_top = 4.0
+offset_right = 76.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_reddot")
 
 [node name="AppDisplayArea" type="Control" parent="PhoneWrapper/Screen" unique_id=1568197251]
 layout_mode = 1
