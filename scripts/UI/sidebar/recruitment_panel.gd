@@ -21,6 +21,10 @@ var dragging = false
 var drag_offset = Vector2()
 
 func _ready():
+	#RecruitmentManager.normal_pool.clear()
+	#RecruitmentManager.headhunt_pool.clear()
+	#RecruitmentManager.new_resumes_arrived.emit()
+	
 	# 1. 绑定【录用】信号
 	normal_viewer.on_hire_attempted.connect(_hire_from_pool.bind(RecruitmentManager.normal_pool, normal_viewer))
 	headhunt_viewer.on_hire_attempted.connect(_hire_from_pool.bind(RecruitmentManager.headhunt_pool, headhunt_viewer))
@@ -84,7 +88,7 @@ func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 		
 		# 4. 把这个“员工原件”从全局简历池里彻底划掉
 		pool.erase(emp)
-		
+		RecruitmentManager.new_resumes_arrived.emit()
 		# 5. 强制触发一次数量检测，确保 UI 状态更新
 		if pool == RecruitmentManager.normal_pool:
 			last_normal_count = pool.size()
@@ -99,7 +103,7 @@ func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 func _reject_from_pool(emp: Employee, pool: Array):
 	# Viewer 内部已经把复印件删了，我们只需要在这里悄悄把原件也删了即可
 	pool.erase(emp)
-
+	RecruitmentManager.new_resumes_arrived.emit()
 # ================= UI 显示更新控制 =================
 func _update_normal_ui():
 	if normal_viewer.current_resumes.is_empty():

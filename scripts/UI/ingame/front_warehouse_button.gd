@@ -1,3 +1,4 @@
+#front_warehouse_button
 extends Button
 
 func _on_pressed() -> void:

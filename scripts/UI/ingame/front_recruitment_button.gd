@@ -1,3 +1,4 @@
+#front_recruitment_button
 extends Button
 
 func _on_pressed() -> void:

@@ -422,7 +422,7 @@ func _finish_and_generate_file():
 	if gm and gm.has_method("add_kpi"):
 		gm.add_kpi(final_kpi)
 	# ======= 3. 概率获得美金 =======
-	var dollar_chance = (1.0 + 0.5 * experience) / 100.0
+	var dollar_chance = (1.0 + experience) / 100.0
 	if randf() <= dollar_chance:
 		if gm and gm.has_method("add_dollar"):
 			gm.add_dollar(dollar_reward)

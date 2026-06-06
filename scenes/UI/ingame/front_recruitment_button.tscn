@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://yc8lrfrrdl2y" path="res://scenes/UI/ingame/front_desk.tscn" id="1_sbhnu"]
 [ext_resource type="Script" uid="uid://dl6bqlxtsm4cs" path="res://scripts/UI/ingame/front_recruitment_button.gd" id="1_vyr0d"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_vyr0d"]
+[ext_resource type="Texture2D" uid="uid://d26pm8riux0d0" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/4 - Items/6.png" id="4_kkvm4"]
+[ext_resource type="Script" uid="uid://btesatv56866u" path="res://scripts/UI/ingame/recruitment_badge.gd" id="5_b65id"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kkvm4"]
 atlas = ExtResource("2_vyr0d")
@@ -28,3 +30,14 @@ offset_top = 4.0
 offset_right = 66.0
 offset_bottom = 44.0
 texture = SubResource("AtlasTexture_kkvm4")
+
+[node name="ResumeUnhandled" type="TextureRect" parent="." unique_id=599359427]
+z_index = 6
+texture_filter = 1
+layout_mode = 0
+offset_left = 61.0
+offset_top = -19.0
+offset_right = 101.0
+offset_bottom = 21.0
+texture = ExtResource("4_kkvm4")
+script = ExtResource("5_b65id")
