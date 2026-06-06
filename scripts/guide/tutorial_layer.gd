@@ -594,61 +594,60 @@ func _setup_specific_employee_click_step() -> void:
 func _setup_radar_step() -> void:
 	print("【大总管】捕捉到后台数据暗号 [", current_signal_name, "]，开启雷达，拒绝物理连线。")
 	set_process(true)
-# ==========================================
-# 📍 小字位置计算逻辑 (支持自由像素微调！)
-# ==========================================
+	
 func _arrange_tip(step: TutorialStep, target_rect: Rect2) -> void:
-	# 1. 安全清理：如果上一步的 Tips 还在，直接超度它
 	if is_instance_valid(current_tip_instance):
 		current_tip_instance.queue_free()
 		current_tip_instance = null
 		
-	# 2. 如果这剧本压根没写提示小字，直接收工
-	if step.tip_text == "":
-		return
+	if step.tip_text == "": return
 		
-	# 3. 动态实例化新 Tips 场景，并塞进大总管的肚子里
 	current_tip_instance = TUTORIAL_TIP_SCENE.instantiate() as TutorialTip
-	add_child(current_tip_instance)
-	
-	# 4. 灌入文字（它自己内部会算好宽高）
+	self.add_child(current_tip_instance) 
+	current_tip_instance.z_index = 4096 
 	current_tip_instance.set_tip(step.tip_text)
 	
-	# 等一帧，确保物理宽高刷新完毕，我们要拿它的最新 size 算排版
 	await get_tree().process_frame
+	
+	# 造出来之后，直接丢给追踪器进行第一次定位
+	_update_tip_position(target_rect)
+
+func _update_tip_position(target_rect: Rect2) -> void:
 	if not is_instance_valid(current_tip_instance): return
 	
+	var step = steps[current_step_index]
+	var screen_size = get_viewport().get_visible_rect().size
+	var tip_size = current_tip_instance.size
 	var final_pos = Vector2.ZERO
-	var screen_size = get_viewport().get_visible_rect().size / 2.0
 	
 	if target_rect.size == Vector2.ZERO:
-		final_pos.x = (screen_size.x - current_tip_instance.size.x) / 2.0
-		# Y 轴固定在屏幕高度 - Tip自身高度 - 80像素的空隙
-		final_pos.y = screen_size.y - current_tip_instance.size.y - 80.0
+		final_pos.x = (screen_size.x - tip_size.x) / 2.0
+		final_pos.y = screen_size.y - tip_size.y - 80.0
 	else:
-		# 原有逻辑：根据方位贴在目标旁边
-		var tip_size = current_tip_instance.size
 		match step.tip_position:
 			TutorialStep.TipPos.TOP:
 				final_pos.x = target_rect.position.x + (target_rect.size.x - tip_size.x) / 2.0
 				final_pos.y = target_rect.position.y - tip_size.y - 10.0
-			# ... (下面代码保持不变) ...
 			TutorialStep.TipPos.BOTTOM:
 				final_pos.x = target_rect.position.x + (target_rect.size.x - tip_size.x) / 2.0
 				final_pos.y = target_rect.position.y + target_rect.size.y + 10.0
-			# (省略其他方位代码...)
-		
-		# 加上偏移
+			TutorialStep.TipPos.LEFT:
+				final_pos.x = target_rect.position.x - tip_size.x - 10.0
+				final_pos.y = target_rect.position.y + (target_rect.size.y - tip_size.y) / 2.0
+			TutorialStep.TipPos.RIGHT:
+				final_pos.x = target_rect.position.x + target_rect.size.x + 10.0
+				final_pos.y = target_rect.position.y + (target_rect.size.y - tip_size.y) / 2.0
+				
 		final_pos.x += step.tip_offset_x
 		final_pos.y += step.tip_offset_y
-	
-	var temp_tip = get_node_or_null("TutorialBuffTip")
-	if temp_tip:
-		temp_tip.queue_free()
 		
-	# 7. 啪的一声拍在最终位置上！
+	# 🌟【终极防挤压护盾】：强行把坐标锁死在屏幕有效区域内！
+	# 这样就算目标是全屏面板，Tip 也只会乖乖贴在屏幕边缘，绝不会飞出去被挤压！
+	final_pos.x = clamp(final_pos.x, 10, screen_size.x - tip_size.x - 10)
+	final_pos.y = clamp(final_pos.y, 10, screen_size.y - tip_size.y - 10)
+	
 	current_tip_instance.global_position = final_pos
-
+	
 func _on_step_completed() -> void:
 	# 1. 每次点击，先停掉闪烁，复原透明度
 	if is_instance_valid(current_tip_instance):
@@ -873,7 +872,8 @@ func _process(delta: float) -> void:
 			
 		blocker_ui.hole_rect = real_rect
 		blocker_ui.is_hole_clickable = (step.step_type != TutorialStep.Type.DIALOGUE)
-			
+		_update_tip_position(real_rect)
+		
 func _finish_all_tutorials() -> void:
 	Gamemanager.is_employee_interaction_disabled = false
 	Gamemanager.is_reject_button_disabled = false
@@ -893,8 +893,8 @@ func _finish_all_tutorials() -> void:
 	if current_target and current_target.has_signal(current_signal_name):
 		current_target.disconnect(current_signal_name, current_callable)
 	Gamemanager.tutorial_allow_camera_drag = false 
-	if current_callable_ghost and get_viewport().input.is_connected(current_callable_ghost):
-		get_viewport().input.disconnect(current_callable_ghost)
+	#if current_callable_ghost and get_viewport().input.is_connected(current_callable_ghost):
+		#get_viewport().input.disconnect(current_callable_ghost)
 	# 彻底销毁教程 UI
 	queue_free()
 
@@ -910,9 +910,8 @@ func _show_final_label() -> void:
 	if locked_ui_node and locked_ui_node.has_method("unlock_from_tutorial"):
 		locked_ui_node.unlock_from_tutorial()
 	
+	# 🌟 收回拖拽特权（保留这一行即可，下面两行全删了！）
 	Gamemanager.tutorial_allow_camera_drag = false 
-	if current_callable_ghost and get_viewport().input.is_connected(current_callable_ghost):
-		get_viewport().input.disconnect(current_callable_ghost)
 		
 	end_label.show() 
 	
