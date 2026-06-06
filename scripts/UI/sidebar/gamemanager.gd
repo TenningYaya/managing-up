@@ -34,6 +34,7 @@ var has_culture_center: bool = false
 var is_tutorial_completed: bool = false
 var is_employee_interaction_disabled: bool = false
 var is_reject_button_disabled: bool = false
+var tutorial_allow_camera_drag: bool = false
 
 # 定义总览面板需要的变量
 var total_hits: int = 0

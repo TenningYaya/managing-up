@@ -32,6 +32,7 @@ enum DialoguePos { CENTER_PHONE, RIGHT_PHONE, TOP_WINDOW, BOTTOM_WINDOW }
 ## 是否在这一步锁定该 UI，不允许它被任何玩家操作意外关闭（通常 FOCUS_CLICK 时设为 true）
 @export var lock_ui_lifecycle: bool = false
 @export var disable_employee_interaction: bool = true
+@export var show_blocker: bool = true
 
 @export_group("Dialogue UI")
 @export var speaker: Speaker = Speaker.BOSS

@@ -19,6 +19,7 @@ var current_callable_ghost: Callable
 
 var current_step_index: int = 0
 var yes_click_count: int = 0
+var drag_distance_accumulator: float = 0.0
 
 # 用来记录当前正在监听的节点和信号，方便过关后“卸磨杀驴”断开连接
 var current_target: Node = null
@@ -154,7 +155,7 @@ func play_step(index: int) -> void:
 			_handle_focus_click(step)
 		TutorialStep.Type.WAIT_EVENT:
 			_handle_wait_event(step)
-
+		
 func _handle_dialogue(step: TutorialStep) -> void:
 	tip_ui.hide()
 	
@@ -440,37 +441,41 @@ func _handle_focus_click(step: TutorialStep) -> void:
 				_on_step_completed()
 
 func _handle_wait_event(step: TutorialStep) -> void:
+	# 🌟 重点 1：进入等待事件步，第一时间踢走对话框！
+	dialogue_ui.hide()
+	kpi_ui.hide()
+	
 	# 1. 职场霸凌：强行灰掉所有拒绝按钮
 	_disable_reject_buttons_if_needed(step)
 	
 	# 2. 视觉高亮：让黑布去目标区域挖洞
 	_apply_wait_event_highlight(step)
 	
-	# 3. 🌟 关卡分流闸门：根据不同暗号，各回各家，各找各妈
+	# 3. 🌟 关卡分流
 	if step.illustration_texture != null:
 		_setup_illustration_step(step)
-		return # 带图关卡，到此为止
+		return 
 		
-	var target = get_tree().get_first_node_in_group(step.target_group)
-	if not target:
-		return # 找不到节点，直接断后，防止崩溃
-		
-	current_target = target
+	# 这里的逻辑只有在有 target_group 时才执行
+	if step.target_group != "":
+		var target = get_tree().get_first_node_in_group(step.target_group)
+		if target:
+			current_target = target
+			_arrange_tip(step, target.get_global_rect())
+	
 	current_signal_name = step.wait_signal
 	current_callable = Callable(self, "_on_step_completed")
 	
-	_arrange_tip(step, target.get_global_rect())
-	
 	match current_signal_name:
+		"tutorial_drag_camera":
+			_handle_camera_drag_tutorial(step) # 👈 这里会执行咱们写的拖拽逻辑
 		"tutorial_click_specific_employee":
 			_setup_specific_employee_click_step()
-			
 		"all_colleagues_placed", "employee_panel_opened":
 			_setup_radar_step()
-			
 		_:
-			# 🌟 只有真正老实本分的普通 Godot 信号，才配走到这里连物理线
-			target.connect(current_signal_name, current_callable)
+			if current_target:
+				current_target.connect(current_signal_name, current_callable)
 
 
 # ====================================================
@@ -485,18 +490,29 @@ func _disable_reject_buttons_if_needed(step: TutorialStep) -> void:
 			if btn is BaseButton:
 				btn.disabled = true
 
-## 子函数 2：处理常规高亮挖洞
 func _apply_wait_event_highlight(step: TutorialStep) -> void:
 	if step.target_group != "":
 		var target = get_tree().get_first_node_in_group(step.target_group)
 		if target:
 			var target_rect = target.get_global_rect()
-			blocker_ui.show()
-			blocker_ui._arrange_curtains(target_rect)
-			blocker_ui.hole_rect = target_rect
-			blocker_ui.is_hole_clickable = true 
+			
+			# 🌟 核心判断：读剧本里的开关！
+			if step.show_blocker:
+				blocker_ui.show()
+				blocker_ui._arrange_curtains(target_rect)
+				blocker_ui.is_hole_clickable = true 
+				blocker_ui.mouse_filter = Control.MOUSE_FILTER_STOP # 挡住黑幕区域的点击
+			else:
+				# 开关关掉了：直接隐藏黑布，并且变成纯幽灵！
+				blocker_ui.hide()
+				blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE 
+				
+			# ⚠️ 极其重要：不管黑布显不显示，必须把位置存下来！
+			# 这样下一步的 _arrange_tip 才能拿着这个位置去算小字放在哪！
+			blocker_ui.hole_rect = target_rect 
 	else:
 		blocker_ui.hide()
+		blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 ## 子函数 3：第 20 步 - 弹属性截图与无敌叉号
 func _setup_illustration_step(step: TutorialStep) -> void:
@@ -602,27 +618,29 @@ func _arrange_tip(step: TutorialStep, target_rect: Rect2) -> void:
 	await get_tree().process_frame
 	if not is_instance_valid(current_tip_instance): return
 	
-	# 5. 根据剧本指定的方位（TOP/BOTTOM/LEFT/RIGHT），死死贴在目标矩形旁边
-	var tip_size = current_tip_instance.size
 	var final_pos = Vector2.ZERO
+	var screen_size = get_viewport().get_visible_rect().size / 2.0
 	
-	match step.tip_position:
-		TutorialStep.TipPos.TOP:
-			final_pos.x = target_rect.position.x + (target_rect.size.x - tip_size.x) / 2.0
-			final_pos.y = target_rect.position.y - tip_size.y - 10.0 # 往上挪，留10像素空隙
-		TutorialStep.TipPos.BOTTOM:
-			final_pos.x = target_rect.position.x + (target_rect.size.x - tip_size.x) / 2.0
-			final_pos.y = target_rect.position.y + target_rect.size.y + 10.0
-		TutorialStep.TipPos.LEFT:
-			final_pos.x = target_rect.position.x - tip_size.x - 10.0
-			final_pos.y = target_rect.position.y + (target_rect.size.y - tip_size.y) / 2.0
-		TutorialStep.TipPos.RIGHT:
-			final_pos.x = target_rect.position.x + target_rect.size.x + 10.0
-			final_pos.y = target_rect.position.y + (target_rect.size.y - tip_size.y) / 2.0
-			
-	# 6. 加上你在剧本里预留的“像素级自由微调偏移”
-	final_pos.x += step.tip_offset_x
-	final_pos.y += step.tip_offset_y
+	if target_rect.size == Vector2.ZERO:
+		final_pos.x = (screen_size.x - current_tip_instance.size.x) / 2.0
+		# Y 轴固定在屏幕高度 - Tip自身高度 - 80像素的空隙
+		final_pos.y = screen_size.y - current_tip_instance.size.y - 80.0
+	else:
+		# 原有逻辑：根据方位贴在目标旁边
+		var tip_size = current_tip_instance.size
+		match step.tip_position:
+			TutorialStep.TipPos.TOP:
+				final_pos.x = target_rect.position.x + (target_rect.size.x - tip_size.x) / 2.0
+				final_pos.y = target_rect.position.y - tip_size.y - 10.0
+			# ... (下面代码保持不变) ...
+			TutorialStep.TipPos.BOTTOM:
+				final_pos.x = target_rect.position.x + (target_rect.size.x - tip_size.x) / 2.0
+				final_pos.y = target_rect.position.y + target_rect.size.y + 10.0
+			# (省略其他方位代码...)
+		
+		# 加上偏移
+		final_pos.x += step.tip_offset_x
+		final_pos.y += step.tip_offset_y
 	
 	var temp_tip = get_node_or_null("TutorialBuffTip")
 	if temp_tip:
@@ -747,6 +765,25 @@ func _input(event: InputEvent) -> void:
 		elif not event.pressed:
 			is_esc_pressing = false # 松开了
 			esc_hold_time = 0.0     # 计时清零
+	
+	if current_signal_name == "tutorial_drag_camera":
+		if event is InputEventMouseMotion:
+			if event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
+				drag_distance_accumulator += event.relative.length()
+				# print("【教程】当前拖拽进度: ", drag_distance_accumulator)
+				
+				var threshold = 2000.0 # 拖拽阈值
+				if drag_distance_accumulator > threshold:
+					print("【教程】拖拽距离达标，翻篇！")
+					
+					# 善后：收回特权，恢复黑布
+					Gamemanager.tutorial_allow_camera_drag = false 
+					blocker_ui.mouse_filter = Control.MOUSE_FILTER_STOP
+					
+					# 清空信号并翻篇
+					current_signal_name = "" 
+					_on_step_completed()
+					
 	if current_signal_name == "tutorial_click_specific_employee":
 		# 严格判定：必须是鼠标事件 + 左键 + 按下的那一瞬间
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -826,10 +863,15 @@ func _process(delta: float) -> void:
 	
 	# 如果它终于进到屏幕里了（X坐标小于屏幕宽度，且体积不为0）
 	if real_rect.position.x < get_viewport().get_visible_rect().size.x and real_rect.size.x > 0:
-		blocker_ui.show()
-		blocker_ui._arrange_curtains(real_rect)
-		blocker_ui.hole_rect = real_rect
+		
 		var step = steps[current_step_index]
+		if step.show_blocker:
+			blocker_ui.show()
+			blocker_ui._arrange_curtains(real_rect)
+		else:
+			blocker_ui.hide()
+			
+		blocker_ui.hole_rect = real_rect
 		blocker_ui.is_hole_clickable = (step.step_type != TutorialStep.Type.DIALOGUE)
 			
 func _finish_all_tutorials() -> void:
@@ -850,7 +892,9 @@ func _finish_all_tutorials() -> void:
 	# 强制清理：断开所有逻辑，清空黑布
 	if current_target and current_target.has_signal(current_signal_name):
 		current_target.disconnect(current_signal_name, current_callable)
-	
+	Gamemanager.tutorial_allow_camera_drag = false 
+	if current_callable_ghost and get_viewport().input.is_connected(current_callable_ghost):
+		get_viewport().input.disconnect(current_callable_ghost)
 	# 彻底销毁教程 UI
 	queue_free()
 
@@ -865,6 +909,10 @@ func _show_final_label() -> void:
 	
 	if locked_ui_node and locked_ui_node.has_method("unlock_from_tutorial"):
 		locked_ui_node.unlock_from_tutorial()
+	
+	Gamemanager.tutorial_allow_camera_drag = false 
+	if current_callable_ghost and get_viewport().input.is_connected(current_callable_ghost):
+		get_viewport().input.disconnect(current_callable_ghost)
 		
 	end_label.show() 
 	
@@ -883,3 +931,11 @@ func _create_temp_box() -> StyleBoxFlat:
 	style.content_margin_top = 5; style.content_margin_bottom = 5
 	return style
 	
+func _handle_camera_drag_tutorial(step: TutorialStep) -> void:
+	# 🌟 1. 物理撤退：黑布不仅隐藏，还要取消鼠标拦截
+	blocker_ui.hide()
+	blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE 
+	
+	# 🌟 2. 发放特权与重置数据
+	Gamemanager.tutorial_allow_camera_drag = true 
+	drag_distance_accumulator = 0.0

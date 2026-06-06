@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://i7gi5q4tnos8"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_uya28"]
+
+[resource]
+script = ExtResource("1_uya28")
+step_type = 2
+target_group = "recruitment_button"
+wait_signal = "tutorial_drag_camera"
+show_blocker = false
+tip_text = "TUTORIAL_STEP_34_02_01"
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

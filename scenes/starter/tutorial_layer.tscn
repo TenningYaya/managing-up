@@ -4,8 +4,10 @@
 [ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="2_xpm57"]
 [ext_resource type="Resource" uid="uid://b1qi4he5wdivo" path="res://data/guide/step_1_boss_talk.tres" id="3_rb526"]
 [ext_resource type="Script" uid="uid://b5473owjrbxqe" path="res://scripts/guide/tutorial_blocker.gd" id="3_ufyfw"]
+[ext_resource type="Resource" uid="uid://c0suu8mjs0ut0" path="res://data/guide/step_34_1_teach_drag.tres" id="3_uiswp"]
 [ext_resource type="PackedScene" uid="uid://c18bskwtiitsq" path="res://scenes/starter/dialogue_intro_ui.tscn" id="3_xpm57"]
 [ext_resource type="Resource" uid="uid://ynde0egvpgw2" path="res://data/guide/step_2_click_tutorialAI.tres" id="4_rb526"]
+[ext_resource type="Resource" uid="uid://i7gi5q4tnos8" path="res://data/guide/step_34_2_drag_screen.tres" id="4_rgopl"]
 [ext_resource type="Resource" uid="uid://cpmmw4cv6t7j7" path="res://data/guide/step_3_KPI_showup.tres" id="5_7e6m1"]
 [ext_resource type="Resource" uid="uid://nc1gt10bgic3" path="res://data/guide/step_4_show_recruit.tres" id="6_gtvb8"]
 [ext_resource type="Resource" uid="uid://b21vvjbul2tdh" path="res://data/guide/step_5_press_recruit.tres" id="7_2853m"]
@@ -42,7 +44,7 @@
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_rsvao")
-steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_rb526"), ExtResource("5_7e6m1"), ExtResource("6_gtvb8"), ExtResource("7_2853m"), ExtResource("8_hfnrs"), ExtResource("9_5i7fk"), ExtResource("10_q1uf3"), ExtResource("11_lacx5"), ExtResource("12_umdh6"), ExtResource("13_6ltp6"), ExtResource("14_lopl3"), ExtResource("15_r5pud"), ExtResource("16_tf07h"), ExtResource("17_fv23i"), ExtResource("18_hmtbv"), ExtResource("19_8oaor"), ExtResource("20_0ssyf"), ExtResource("21_jf5bc"), ExtResource("22_31up7"), ExtResource("23_31up7"), ExtResource("24_u7clx"), ExtResource("25_27ngn"), ExtResource("26_5k7lp"), ExtResource("27_kso1c"), ExtResource("28_mkknv"), ExtResource("29_qpdar"), ExtResource("30_ta3sa"), ExtResource("31_ygfsw"), ExtResource("32_5k7lp"), ExtResource("33_kso1c")])
+steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_rb526"), ExtResource("5_7e6m1"), ExtResource("6_gtvb8"), ExtResource("7_2853m"), ExtResource("8_hfnrs"), ExtResource("9_5i7fk"), ExtResource("10_q1uf3"), ExtResource("11_lacx5"), ExtResource("12_umdh6"), ExtResource("13_6ltp6"), ExtResource("14_lopl3"), ExtResource("15_r5pud"), ExtResource("16_tf07h"), ExtResource("17_fv23i"), ExtResource("18_hmtbv"), ExtResource("19_8oaor"), ExtResource("20_0ssyf"), ExtResource("21_jf5bc"), ExtResource("22_31up7"), ExtResource("23_31up7"), ExtResource("24_u7clx"), ExtResource("25_27ngn"), ExtResource("26_5k7lp"), ExtResource("27_kso1c"), ExtResource("28_mkknv"), ExtResource("29_qpdar"), ExtResource("30_ta3sa"), ExtResource("31_ygfsw"), ExtResource("32_5k7lp"), ExtResource("3_uiswp"), ExtResource("4_rgopl"), ExtResource("33_kso1c")])
 TUTORIAL_TIP_SCENE = ExtResource("34_kso1c")
 
 [node name="TipUI" type="Label" parent="." unique_id=16516687]
