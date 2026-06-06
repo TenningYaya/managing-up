@@ -340,8 +340,9 @@ func _start_new_work_cycle():
 	var final_eff = get_final_efficiency()
 	var random_factor = randf_range(0.8, 1.2)
 	
-	# 3. 锁定这一轮的时长
-	current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
+	var raw_duration = base_file_production_time - (final_eff * base_reduction_time * random_factor)
+	# 顺手把保底的最短时间也从 2.0 减半到 1.0秒，防止后期高级员工撞墙卡死
+	current_cycle_duration = maxf(1.0, raw_duration * 0.5)
 	
 func _stop_work(reset_progress: bool = true) -> void:
 	is_working = false
@@ -415,12 +416,11 @@ func _finish_and_generate_file():
 		dollar_reward = 1
 		
 	# ======= 2. 兑换 KPI =======
-	var final_kpi = int(base_kpi_value * kpi_multiplier)
+	var final_kpi = int(round(base_kpi_value * kpi_multiplier * 0.75))
 	
 	var gm = _get_game_manager()
 	if gm and gm.has_method("add_kpi"):
 		gm.add_kpi(final_kpi)
-	
 	# ======= 3. 概率获得美金 =======
 	var dollar_chance = (1.0 + 0.5 * experience) / 100.0
 	if randf() <= dollar_chance:
