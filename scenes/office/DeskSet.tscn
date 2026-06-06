@@ -46,7 +46,7 @@ texture = SubResource("AtlasTexture_72mnh")
 expand_mode = 1
 
 [node name="Desk" type="TextureRect" parent="." unique_id=345841938]
-z_index = 2
+z_index = 3
 layout_mode = 0
 offset_top = 27.0
 offset_right = 86.4
@@ -55,7 +55,7 @@ texture = SubResource("AtlasTexture_bef2k")
 expand_mode = 1
 
 [node name="Computer" type="TextureRect" parent="." unique_id=1888207587]
-z_index = 2
+z_index = 4
 layout_mode = 0
 offset_left = 27.0
 offset_top = 36.0
@@ -85,7 +85,7 @@ mouse_filter = 2
 
 [node name="Plant" type="TextureRect" parent="." unique_id=2113325948]
 visible = false
-z_index = 2
+z_index = 4
 layout_mode = 0
 offset_left = 1.0
 offset_top = -6.0
@@ -97,7 +97,7 @@ expand_mode = 1
 
 [node name="CoffeeCup" type="TextureRect" parent="." unique_id=558371051]
 visible = false
-z_index = 2
+z_index = 4
 layout_mode = 0
 offset_left = 65.0
 offset_top = 42.0
@@ -109,7 +109,7 @@ expand_mode = 1
 
 [node name="AdvancedComputer" type="TextureRect" parent="." unique_id=318501407]
 visible = false
-z_index = 2
+z_index = 4
 layout_mode = 0
 offset_left = 19.0
 offset_top = 30.0

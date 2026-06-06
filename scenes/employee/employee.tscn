@@ -54,7 +54,7 @@ animations = [{
 }]
 
 [node name="Employee" type="Control" unique_id=1834787427]
-z_index = 1
+z_index = 2
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 3
 anchors_preset = 0
