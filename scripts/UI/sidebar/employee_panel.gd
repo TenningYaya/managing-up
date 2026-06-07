@@ -212,7 +212,6 @@ func _refresh_progress_bar() -> void:
 	var progress = current_employee.get_work_progress_percent()
 	progress_bar.value = progress
 	working_status.text = "%d%%" % progress
-	print("【调试】原始进度值是: ", progress)
 
 func _on_work_progress_changed(progress_percent: float) -> void:
 	progress_bar.value = progress_percent

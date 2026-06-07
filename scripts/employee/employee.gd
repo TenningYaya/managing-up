@@ -141,6 +141,7 @@ func _input(event: InputEvent) -> void:
 							active_slacking_bubble.resolve(true)
 						else:
 							_speed_up_work()
+							_on_employee_clicked()
 		
 		# 右键打开面板，同理也做全局保护
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
@@ -391,7 +392,6 @@ func _finish_and_generate_file():
 	# ======= 1. 计算文件质量 =======
 	var init_score = randf_range(1.0, 100.0)
 	
-	# 🌟 修复：必须调用这个，才能把办公室的 Buff 全算进去！
 	var total_qual = get_final_quality() 
 	
 	# 最终评分 = 初始评分 * (100 + 质量*2)%
@@ -423,12 +423,17 @@ func _finish_and_generate_file():
 		gm.add_kpi(final_kpi)
 	# ======= 3. 概率获得美金 =======
 	var dollar_chance = (1.0 + experience) / 100.0
+	var did_get_dollar = false
 	if randf() <= dollar_chance:
 		if gm and gm.has_method("add_dollar"):
 			gm.add_dollar(dollar_reward)
+			did_get_dollar = true
 
 	# 🌟 新增：触发头顶冒出动画
 	_spawn_file_vfx(file_grade)
+	var file_vfx_node = _spawn_file_vfx(file_grade)
+	if did_get_dollar and is_instance_valid(file_vfx_node):
+		_spawn_dollar_vfx(file_vfx_node)
 	_clear_snack_buff()
 	
 	if is_in_meeting:
@@ -457,7 +462,7 @@ func _on_slacking_resolved(by_click: bool) -> void:
 	_start_new_work_cycle()
 
 # 生成特效的函数
-func _spawn_file_vfx(grade: String) -> void:
+func _spawn_file_vfx(grade: String) -> Node:
 	var vfx = FILE_VFX_SCENE.instantiate()
 	add_child(vfx) # 把特效挂在员工身上
 	
@@ -467,9 +472,8 @@ func _spawn_file_vfx(grade: String) -> void:
 	
 	# 调用特效自己的播放逻辑
 	vfx.play_vfx(grade)
+	return vfx
 	
-	_spawn_dollar_vfx(vfx)
-
 func _spawn_dollar_vfx(vfx) -> void:
 # 实例化并播放特效
 	var burst_vfx = DOLLAR_BURST_VFX_SCENE.instantiate()
@@ -484,7 +488,7 @@ func _spawn_dollar_vfx(vfx) -> void:
 	# 播放！
 	if burst_vfx.has_method("play_burst_vfx"):
 		burst_vfx.play_burst_vfx()
-
+	
 func _speed_up_work() -> void:
 	if not is_working:
 		return

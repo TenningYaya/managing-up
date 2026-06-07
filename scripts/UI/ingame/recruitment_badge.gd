@@ -17,7 +17,6 @@ func _ready():
 func _on_resumes_updated():
 	# 强制打印调试信息，看看它到底为什么觉得还有简历
 	var count = RecruitmentManager.get_unread_count()
-	print("【调试】当前剩余简历数: ", count)
 	
 	if count > 0:
 		show()
