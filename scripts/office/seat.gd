@@ -24,10 +24,10 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	var rect: Rect2 = Rect2(drop_area.position, drop_area.size)
-	draw_rect(rect, Color(0, 1, 0, 0.3), false, 2.0)
-	draw_circle(snap_point.position, 5.0, Color.RED)
-
+	#var rect: Rect2 = Rect2(drop_area.position, drop_area.size)
+	#draw_rect(rect, Color(0, 1, 0, 0.3), false, 2.0)
+	#draw_circle(snap_point.position, 5.0, Color.RED)
+	pass
 
 func _process(_delta: float) -> void:
 	queue_redraw()
