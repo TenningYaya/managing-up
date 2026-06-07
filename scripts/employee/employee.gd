@@ -74,7 +74,11 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	z_index = 1
 	randomize()
-
+	if visual_component and visual_component.has_method("play_action"):
+		if current_seat != null:
+			visual_component.play_action("idle") # 有座，坐下敲键盘
+		else:
+			visual_component.play_action("walk") # 没座，立刻原地踏步
 	if employee_name == "":
 		employee_name = name
 
@@ -203,6 +207,10 @@ func _start_drag() -> void:
 	_clear_all_vfx()
 	
 	dragging = true
+	
+	if visual_component and visual_component.has_method("play_action"):
+		visual_component.play_action("walk")
+		
 	drag_offset = get_global_mouse_position() - global_position
 	drag_start_position = global_position
 	drag_start_seat = current_seat
@@ -212,8 +220,6 @@ func _start_drag() -> void:
 		_calculate_interrupted_reward()
 		current_seat.clear_occupant()
 		current_seat = null
-
-
 
 func _end_drag() -> void:
 	dragging = false
@@ -321,7 +327,10 @@ func _start_work() -> void:
 	is_working = true
 	work_started.emit() 
 	EmployeeManager.employee_map_status_changed.emit()
-	# 🚀 剩下的脏活累活（算属性、算时间）全交给循环函数
+
+	if visual_component and visual_component.has_method("play_action"):
+		visual_component.play_action("idle")
+		
 	_start_new_work_cycle()
 
 func _start_new_work_cycle():

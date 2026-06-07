@@ -51,20 +51,8 @@
 [ext_resource type="Texture2D" uid="uid://cerch3pqbicxr" path="res://assets/figures/1.char SR/acc/hat_pumpkin_purple.png" id="48_7k5jk"]
 [ext_resource type="Texture2D" uid="uid://db7uhupcq5yvs" path="res://assets/figures/1.char SR/acc/hat_witch.png" id="49_m5cy6"]
 
-[sub_resource type="Animation" id="Animation_nc5v7"]
+[sub_resource type="Animation" id="Animation_kp8jg"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Body:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
 
 [sub_resource type="Animation" id="Animation_lpiy5"]
 resource_name = "idle"
@@ -82,10 +70,28 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3, 4]
 }
 
+[sub_resource type="Animation" id="Animation_m5cy6"]
+resource_name = "walk"
+length = 1.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1pebh"]
 _data = {
-&"RESET": SubResource("Animation_nc5v7"),
-&"idle": SubResource("Animation_lpiy5")
+&"RESET": SubResource("Animation_kp8jg"),
+&"idle": SubResource("Animation_lpiy5"),
+&"walk": SubResource("Animation_m5cy6")
 }
 
 [node name="SrVisual" type="Node2D" unique_id=609203685]
@@ -107,9 +113,8 @@ hat_color_counts = Array[int]([1, 1, 1, 1, 1])
 [node name="Body" type="Sprite2D" parent="." unique_id=718598502]
 texture_filter = 1
 texture = ExtResource("2_mmcof")
-hframes = 5
-region_enabled = true
-region_rect = Rect2(0, 256, 160, 32)
+hframes = 8
+frame = 4
 
 [node name="Eyes" type="Sprite2D" parent="." unique_id=367460134]
 visible = false
@@ -135,4 +140,4 @@ z_index = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=297607943]
 libraries/ = SubResource("AnimationLibrary_1pebh")
-autoplay = &"idle"
+autoplay = &"walk"

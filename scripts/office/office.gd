@@ -15,9 +15,11 @@ class_name Office
 # 引用下方的子节点用来换图
 @onready var texture_display: TextureRect = $TextureRect
 @onready var manage_btn: TextureButton = $ManageButton
+@onready var empty_hint: TextureRect = $EmptyOfficeHint
 
 var current_type: Gamemanager.OfficeType = Gamemanager.OfficeType.NONE
 var logic_node: OfficeLogic = null 
+var _hint_tween: Tween = null
 
 # ==========================================
 # 🌟 核心中枢：确保数据和表现同步，无死循环
@@ -218,7 +220,10 @@ func _update_visuals() -> void:
 			# 🌟 关键：确保这里拿到了 tex_locked！
 			texture_display.texture = tex_locked
 			texture_display.show()
-		#if manage_btn: manage_btn.hide()
+		if empty_hint:
+			empty_hint.hide()
+			if _hint_tween and _hint_tween.is_valid():
+				_hint_tween.kill()
 		return
 		
 	# 解锁状态：恢复地板贴图
@@ -234,7 +239,55 @@ func _update_visuals() -> void:
 	if texture_display:
 		texture_display.texture = target_tex
 		texture_display.show()
-		
+	
+	if empty_hint:
+		if current_type == Gamemanager.OfficeType.NONE:
+			empty_hint.show()
+			_play_hint_wobble_animation() # 启动摇摆！
+		else:
+			empty_hint.hide()
+			# 有功能了，杀掉动画，把角度归零，省内存且干净
+			if _hint_tween and _hint_tween.is_valid():
+				_hint_tween.kill()
+			empty_hint.rotation = 0.0
+			
 	## 根据是否有功能决定管理按钮的显示
 	if manage_btn:
 		manage_btn.hide()
+
+func _play_hint_wobble_animation():
+	if not empty_hint: return
+	
+	empty_hint.pivot_offset = empty_hint.size / 2.0
+	
+	if _hint_tween and _hint_tween.is_valid():
+		_hint_tween.kill()
+		
+	# 确保起始角度是 0
+	empty_hint.rotation = 0.0
+	
+	_hint_tween = create_tween().set_loops()
+	
+	var angle = deg_to_rad(10.0)
+	var t_short = 0.12 # 从中心到两侧的时间，速度比之前快了好几倍
+	var t_long = 0.24  # 从左侧直接甩到右侧的时间（距离翻倍，时间翻倍，保持速度一致）
+	
+	# ================= 第 1 次晃动 =================
+	# 1. 往右甩
+	_hint_tween.tween_property(empty_hint, "rotation", angle, t_short).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	# 2. 从右边直接甩到最左边
+	_hint_tween.tween_property(empty_hint, "rotation", -angle, t_long).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# 3. 回到正中心
+	_hint_tween.tween_property(empty_hint, "rotation", 0.0, t_short).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	# ================= 第 2 次晃动 =================
+	# 1. 往右甩
+	_hint_tween.tween_property(empty_hint, "rotation", angle, t_short).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	# 2. 从右边直接甩到最左边
+	_hint_tween.tween_property(empty_hint, "rotation", -angle, t_long).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# 3. 回到正中心
+	_hint_tween.tween_property(empty_hint, "rotation", 0.0, t_short).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	# ================= 停顿休息 =================
+	# 原地停顿 1 秒钟
+	_hint_tween.tween_interval(1.0)

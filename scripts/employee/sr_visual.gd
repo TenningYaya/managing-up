@@ -38,6 +38,12 @@ extends Node2D
 @export var hat_pool: Array[Texture2D] = []
 @export var hat_color_counts: Array[int] = []
 
+const ANIM_CONFIG = {
+	"idle": {"y": 256, "w": 32, "f": 5},
+	"walk": {"y": 0, "w": 32, "f": 8}   # 🌟 你说的新动画：第一行(y=0)，8帧
+	# 以后有新的直接往下加，比如："work": {"y": 128, "w": 32, "f": 4}
+}
+
 func _process(_delta: float) -> void:
 	if body == null: return
 	
@@ -145,8 +151,6 @@ func setup_visual(_seed: int, _style_data: Dictionary, rarity: Employee.Rarity =
 		acc_hat.set_meta("color_idx", hc_idx)
 		acc_hat.set_meta("total_colors", h_total)
 
-	play_action("idle")
-
 # 辅助函数：防止没拿到节点报错
 func _ready_nodes():
 	body = get_node("Body")
@@ -160,9 +164,15 @@ func _ready_nodes():
 # ==========================================
 # 3. 动作与裁剪逻辑
 # ==========================================
-func play_action(_action_name: String) -> void:
-	var act = {"y": 256, "w": 32, "f": 5} 
+func play_action(action_name: String) -> void:
+	# 1. 查字典，拿配置。如果传进来的名字不对，默认退回 idle 防报错
+	if not ANIM_CONFIG.has(action_name):
+		push_warning("找不到动画配置: " + action_name + "，默认播放 idle")
+		action_name = "idle"
+		
+	var act = ANIM_CONFIG[action_name]
 	
+	# 2. 应用裁剪
 	_apply_region(body, act, 0, 1) 
 	
 	if hair.texture:
@@ -179,7 +189,6 @@ func play_action(_action_name: String) -> void:
 		var c_total = clothes_bottom.get_meta("total_colors", 1)
 		_apply_region(clothes_bottom, act, c_idx, c_total) 
 		
-	# 🌟 应用饰品裁剪
 	if acc_glasses.texture:
 		var g_idx = acc_glasses.get_meta("color_idx", 0)
 		var g_total = acc_glasses.get_meta("total_colors", 1)
@@ -190,8 +199,11 @@ func play_action(_action_name: String) -> void:
 		var hat_total = acc_hat.get_meta("total_colors", 1)
 		_apply_region(acc_hat, act, hat_idx, hat_total)
 
-	if anim_player.has_animation("idle"):
-		anim_player.play("idle")
+	# 3. 呼叫 AnimationPlayer 播放真正的动画
+	if anim_player.has_animation(action_name):
+		anim_player.play(action_name)
+	else:
+		print("【警告】AnimationPlayer 里没找到名为 '", action_name, "' 的动画轨！")
 
 func _apply_region(sprite: Sprite2D, act: Dictionary, color_idx: int, total_colors: int):
 	sprite.region_enabled = true
