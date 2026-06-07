@@ -19,6 +19,7 @@ var last_office_status: bool = false
 
 var dragging = false
 var drag_offset = Vector2()
+var _tip_tween: Tween = null
 
 func _ready():
 	#RecruitmentManager.normal_pool.clear()
@@ -162,23 +163,36 @@ func _execute_headhunt(amount: int):
 		show_floating_tip("INGAME_TIP_NOT_ENOUGH_DOLLAR")
 
 func show_floating_tip(text_key: String) -> void:
+	# 🌟【核心修复】：如果上一个动画还在跑，立刻杀掉它！
+	if _tip_tween and _tip_tween.is_valid():
+		_tip_tween.kill()
+		
 	# 1. 设置文字
 	hire_tip_label.text = tr(text_key)
 	
-	# 2. 强行把这个 Label 提到最前面
+	# 🌟【关键修改】：根据语言动态设置字号
+	# 只需要给 Label 的 LabelSettings 赋值，Godot 会自动处理更新
+	var settings = LabelSettings.new()
+	settings.font_color = Color.RED
+	if TranslationServer.get_locale().begins_with("zh"):
+		settings.font_size = 14  # 中文设小一点
+	else:
+		settings.font_size = 16  # 英文保持默认大小
+	
+	hire_tip_label.label_settings = settings
+	
+	# 2. 强行提到最前面，并恢复完全不透明
 	hire_tip_label.show()
 	hire_tip_label.z_index = 100 
+	hire_tip_label.modulate.a = 1.0 # 🌟 确保每次点都先恢复 100% 可见
 	
-	# 3. 如果之前有正在执行的动画，先杀掉，防止冲突
-	var tween = create_tween()
+	# 3. 创建新的专属动画，并把它存到变量里
+	_tip_tween = create_tween()
 	
-	# 4. 简单的动画：显示一段时间，然后渐隐
-	hire_tip_label.modulate.a = 1.0 # 确保它是可见的
-	tween.tween_interval(1.0)       # 停留 1 秒
-	tween.tween_property(hire_tip_label, "modulate:a", 0.0, 0.5) # 0.5秒渐变消失
-	
-	# 动画结束自动隐藏
-	tween.tween_callback(func(): hire_tip_label.hide())
+	# 4. 动画序列：停留 1 秒 -> 0.5 秒渐隐 -> 隐藏节点
+	_tip_tween.tween_interval(1.0)       
+	_tip_tween.tween_property(hire_tip_label, "modulate:a", 0.0, 0.5) 
+	_tip_tween.tween_callback(func(): hire_tip_label.hide())
 	
 func _on_hire_1_pressed(): _execute_headhunt(1)
 func _on_hire_10_pressed(): _execute_headhunt(10)

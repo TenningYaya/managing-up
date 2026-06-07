@@ -6,7 +6,7 @@ extends Node
 # ==========================================
 signal employee_added(employee_data: Employee)
 signal employee_removed(employee_data: Employee)
-
+signal employee_map_status_changed
 # ==========================================
 # 核心数据 (Data)
 # ==========================================

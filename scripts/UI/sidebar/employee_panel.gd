@@ -283,7 +283,7 @@ func _on_dispatch_pressed() -> void:
 				current_employee.get_parent().remove_child(current_employee)
 				
 		progress_bar.value = 0
-		
+		EmployeeManager.employee_map_status_changed.emit()
 	else:
 		if current_employee.get_parent():
 			current_employee.get_parent().remove_child(current_employee)

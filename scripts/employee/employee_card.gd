@@ -29,7 +29,8 @@ func _ready():
 	# 只要有人被空投，或者有人被开除，就触发自查
 	Gamemanager.request_employee_drop.connect(_on_map_changed)
 	EmployeeManager.employee_removed.connect(_on_map_changed)
-
+	EmployeeManager.employee_map_status_changed.connect(_on_map_changed)
+	
 func _on_map_changed(_data = null):
 	if not is_inside_tree() or is_queued_for_deletion():
 		return

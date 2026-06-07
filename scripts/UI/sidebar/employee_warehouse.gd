@@ -49,7 +49,7 @@ func _ready() -> void:
 	
 	Gamemanager.request_employee_drop.connect(_on_map_needs_refresh)
 	EmployeeManager.employee_removed.connect(_on_map_needs_refresh)
-	
+	EmployeeManager.employee_map_status_changed.connect(_on_map_needs_refresh)
 	sort_menu.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	
 func _unhandled_input(event: InputEvent) -> void:
@@ -181,9 +181,15 @@ func _toggle_employee_selection(emp: Employee):
 	
 	# 刷新名片的选中视觉效果
 	for card in grid.get_children():
-		if card.get("my_employee_data") == emp:
-			card.is_selected = selected_employees.has(emp)
-			break
+		var card_emp = card.get("my_employee_data")
+		if card_emp != null:
+			# 🌟 核心：只认身份证号，不管名字是不是叫 Marry！
+			if card_emp.get_instance_id() == emp.get_instance_id():
+				card.is_selected = selected_employees.has(emp)
+				
+				# 🌟 修复二：不要 break！有时候重新排列或刷新时，
+				# UI 列表里可能残留着没清理干净的影子卡片。
+				# 不 break 能确保所有绑定了这个人的卡片都能更新状态。
 			
 	_update_bulk_buttons_state()
 

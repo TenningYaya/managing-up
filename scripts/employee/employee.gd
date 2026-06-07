@@ -320,7 +320,7 @@ func _start_work() -> void:
 	# 🌟 这里只负责状态切换和总信号
 	is_working = true
 	work_started.emit() 
-	
+	EmployeeManager.employee_map_status_changed.emit()
 	# 🚀 剩下的脏活累活（算属性、算时间）全交给循环函数
 	_start_new_work_cycle()
 
