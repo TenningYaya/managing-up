@@ -159,7 +159,7 @@ func _execute_headhunt(amount: int):
 		RecruitmentManager.start_headhunt(amount, duration)
 		_update_headhunt_ui() # 点击后立刻刷一下 UI 显示倒计时
 	else:
-		print("老板，Dollar 不够！")
+		show_floating_tip("INGAME_TIP_NOT_ENOUGH_DOLLAR")
 
 func show_floating_tip(text_key: String) -> void:
 	# 1. 设置文字

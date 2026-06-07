@@ -37,6 +37,7 @@ OFFICE_CULTURE_TIP_2,使用方法：建成后自动激活基础政策。你可�
 OFFICE_UNLOCK_REQUIREMENT,解锁需要：职级,Unlock Requires: Lv
 ,,,
 "INGAME_TIP_NOT_ENOUGH_HIRE_COUNT","KPI不够了！老板拒绝了扩招申请","Not enough KPI! Boss says no headcount",
+INGAME_TIP_NOT_ENOUGH_DOLLAR,项目资金不足！多点钱再招人吧,Not enough funds! Need more funds to hire.
 HEADHUNT_1_BUTTON,寻访人才 x1\n$100,Headhunt x1\n$100
 HEADHUNT_10_BUTTON,寻访人才 x10\n$1000,Headhunt x10\n$1000
 ,,,
