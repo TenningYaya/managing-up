@@ -40,8 +40,8 @@ extends Node2D
 
 const ANIM_CONFIG = {
 	"idle": {"y": 256, "w": 32, "f": 5},
-	"walk": {"y": 0, "w": 32, "f": 8}   # 🌟 你说的新动画：第一行(y=0)，8帧
-	# 以后有新的直接往下加，比如："work": {"y": 128, "w": 32, "f": 4}
+	"walk": {"y": 0, "w": 32, "f": 8},   # 🌟 你说的新动画：第一行(y=0)，8帧
+	"slack": {"y": 768, "w": 32, "f": 1}
 }
 
 func _process(_delta: float) -> void:

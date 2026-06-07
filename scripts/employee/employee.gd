@@ -450,8 +450,10 @@ func _finish_and_generate_file():
 		return # 直接结束，不走下面的摸鱼随机数
 		
 	# 结算完毕，开启下一轮
-	if not is_in_meeting and randf() <= 0.02:
+	if not is_in_meeting and randf() <= 0.9:
 		is_slacking = true
+		if visual_component and visual_component.has_method("play_action"):
+			visual_component.play_action("slack")
 		is_working = false
 		active_slacking_bubble = SLACKING_BUBBLE_SCENE.instantiate()
 		add_child(active_slacking_bubble)
@@ -463,7 +465,8 @@ func _finish_and_generate_file():
 func _on_slacking_resolved(by_click: bool) -> void:
 	is_slacking = false
 	is_working = true
-	
+	if visual_component and visual_component.has_method("play_action"):
+		visual_component.play_action("idle")
 	if by_click:
 		var reward_amount = randi_range(1, 2)
 		Gamemanager.add_dollar(reward_amount)

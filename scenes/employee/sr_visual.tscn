@@ -53,6 +53,18 @@
 
 [sub_resource type="Animation" id="Animation_kp8jg"]
 length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_lpiy5"]
 resource_name = "idle"
@@ -68,6 +80,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="Animation" id="Animation_7k5jk"]
+resource_name = "slack"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_m5cy6"]
@@ -91,6 +119,7 @@ tracks/0/keys = {
 _data = {
 &"RESET": SubResource("Animation_kp8jg"),
 &"idle": SubResource("Animation_lpiy5"),
+&"slack": SubResource("Animation_7k5jk"),
 &"walk": SubResource("Animation_m5cy6")
 }
 
@@ -114,7 +143,6 @@ hat_color_counts = Array[int]([1, 1, 1, 1, 1])
 texture_filter = 1
 texture = ExtResource("2_mmcof")
 hframes = 8
-frame = 4
 
 [node name="Eyes" type="Sprite2D" parent="." unique_id=367460134]
 visible = false
