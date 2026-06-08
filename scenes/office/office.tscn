@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://ci86d46lyn7w5" path="res://assets/office/Culture.png" id="7_yexkw"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="8_2u0tt"]
 [ext_resource type="Texture2D" uid="uid://45w50bbhsdcy" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/0.png" id="11_41xxe"]
+[ext_resource type="PackedScene" uid="uid://cyeom2d65rx2y" path="res://scenes/vfx/blingbling.tscn" id="12_e1yc2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_88o6m"]
 texture = ExtResource("1_88o6m")
@@ -44,6 +45,8 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_16a3e"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_88o6m")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1yc2"]
 
 [node name="Office" type="Control" unique_id=1395701316]
 custom_minimum_size = Vector2(288, 150)
@@ -139,3 +142,25 @@ offset_bottom = 31.25
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("11_41xxe")
+
+[node name="Updated" type="PanelContainer" parent="." unique_id=1734189334]
+visible = false
+clip_children = 1
+z_index = 999
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 13.0
+offset_right = -169.8
+offset_bottom = -100.200005
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2.5, 2.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_e1yc2")
+
+[node name="Blingbling" parent="Updated" unique_id=1851591675 instance=ExtResource("12_e1yc2")]
+position = Vector2(122.399994, -36)
+scale = Vector2(0.35555547, 0.34678572)
+frame = 10
+frame_progress = 0.99278116

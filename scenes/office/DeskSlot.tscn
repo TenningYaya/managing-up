@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://c4kcga8k3qdlx" path="res://scripts/office/DeskSlot.gd" id="1_fqahj"]
 [ext_resource type="PackedScene" uid="uid://dfnm7sh1rtiky" path="res://scenes/office/DeskSet.tscn" id="1_ohn7j"]
 [ext_resource type="Texture2D" uid="uid://bc0tvvk0fdqit" path="res://assets/UI/ingame/升级.png" id="3_pfl3o"]
+[ext_resource type="PackedScene" uid="uid://cyeom2d65rx2y" path="res://scenes/vfx/blingbling.tscn" id="4_gujpp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gujpp"]
 
 [node name="DeskSlot" type="Control" unique_id=974996053]
 custom_minimum_size = Vector2(262, 328)
@@ -59,3 +62,20 @@ texture_disabled = ExtResource("3_pfl3o")
 texture_focused = ExtResource("3_pfl3o")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="Updated" type="PanelContainer" parent="." unique_id=1060102552]
+visible = false
+clip_children = 1
+z_index = 999
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gujpp")
+
+[node name="Blingbling" parent="Updated" unique_id=1851591675 instance=ExtResource("4_gujpp")]
+position = Vector2(167, 137.99998)
+scale = Vector2(0.5361111, 0.60571426)
+frame_progress = 0.8792389

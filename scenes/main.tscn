@@ -247,15 +247,19 @@ layout_mode = 2
 
 [node name="DeskSlot2" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=2027690692 instance=ExtResource("2_sugp2")]
 layout_mode = 2
+unlock_at_level = 2
 
 [node name="DeskSlot3" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=850074374 instance=ExtResource("2_sugp2")]
 layout_mode = 2
+unlock_at_level = 3
 
 [node name="DeskSlot4" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=1607838477 instance=ExtResource("2_sugp2")]
 layout_mode = 2
+unlock_at_level = 4
 
 [node name="DeskSlot5" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=715536118 instance=ExtResource("2_sugp2")]
 layout_mode = 2
+unlock_at_level = 5
 
 [node name="employees" type="Control" parent="FullGameMode" unique_id=489643899]
 layout_mode = 1
@@ -419,5 +423,6 @@ offset_right = 281.0
 offset_bottom = 646.0
 
 [node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
+visible = false
 
 [connection signal="pressed" from="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

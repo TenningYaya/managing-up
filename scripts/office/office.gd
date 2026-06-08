@@ -16,10 +16,12 @@ class_name Office
 @onready var texture_display: TextureRect = $TextureRect
 @onready var manage_btn: TextureButton = $ManageButton
 @onready var empty_hint: TextureRect = $EmptyOfficeHint
+@onready var updated: CanvasItem = $Updated
 
 var current_type: Gamemanager.OfficeType = Gamemanager.OfficeType.NONE
 var logic_node: OfficeLogic = null 
 var _hint_tween: Tween = null
+var _is_initialized: bool = false
 
 # ==========================================
 # 🌟 核心中枢：确保数据和表现同步，无死循环
@@ -62,15 +64,16 @@ func _ready() -> void:
 	
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
-
+	_is_initialized = true
+	
 # 全局等级变动时，自动判断生死
 func _on_level_changed(new_level: int) -> void:
-	# 🌟 单向解锁：等级够了就解锁；等级不够时【不再主动回锁】。
-	# 这样读档后任何一次 level_changed 信号，都不会把已解锁
-	# （无论是按等级解锁还是存档恢复的）办公室重新锁上。
 	if new_level >= unlock_at_level:
+		# 🌟【核心判断】：如果之前是锁着的，且游戏已经初始化完了，说明这就是纯纯的实时升级瞬间！
+		if is_locked and _is_initialized:
+			_play_upgrade_bounce_fx() # 爆裂闪烁！
+			
 		self.is_locked = false
-		print("[Office] ", name, " 已解锁，当前职级：M", new_level)
 
 # ==========================================
 # 🌟 读档自愈：向 SaveManager 索取本办公室的存档状态并应用
@@ -291,3 +294,28 @@ func _play_hint_wobble_animation():
 	# ================= 停顿休息 =================
 	# 原地停顿 1 秒钟
 	_hint_tween.tween_interval(1.0)
+
+func _play_upgrade_bounce_fx() -> void:
+	if not updated: return
+	
+	# 1. 激活显示，并把不透明度(Alpha)拉满
+	updated.show()
+	updated.modulate.a = 1.0
+	
+	# 2. 自动让序列帧/粒子重新播放
+	if updated.has_method("play"):
+		updated.play()
+	elif updated.has_method("restart"):
+		updated.restart()
+		
+	# 3. 🎬 重新编排高级动画序列：
+	var fx_tween = create_tween()
+	
+	# ⏳ 核心改动：前 3.5 秒什么都不做，让特效大放异彩
+	fx_tween.tween_interval(3.5)
+	
+	# 📉 最后的 1.5 秒内，快速平滑地淡出到 0.0 (总计刚好 5 秒)
+	fx_tween.tween_property(updated, "modulate:a", 0.0, 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	
+	# 4. 彻底消失后隐藏节点，省下显卡渲染力
+	fx_tween.tween_callback(updated.hide)
