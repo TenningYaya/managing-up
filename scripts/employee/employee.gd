@@ -36,7 +36,7 @@ var work_elapsed: float = 0.0
 #current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
 #对应GDD：
 #同事的最终文件生产时间 =（基础文件生产时间-（同事工作效率+同事工作效率补正）*减幅基数*（80-120随机数）%）
-var base_kpi_value: int = 30
+var base_kpi_value: int = 18
 var base_file_production_time: float = 600.0 # 基础文件生产时间
 var base_reduction_time: int = 30 # 减幅基数
 var current_cycle_duration: float = 10.0
@@ -415,16 +415,16 @@ func _finish_and_generate_file():
 	# 评级判定
 	if final_score >= 95.0:
 		file_grade = "Gold"
-		kpi_multiplier = 2.0
-		dollar_reward = 3
+		kpi_multiplier = 3.0
+		dollar_reward = 5
 	elif final_score >= 71.0:
 		file_grade = "Blue"
-		kpi_multiplier = 1.5
-		dollar_reward = 2
+		kpi_multiplier = 2.0
+		dollar_reward = 3
 	elif final_score >= 31.0:
 		file_grade = "Green"
 		kpi_multiplier = 1.2
-		dollar_reward = 1
+		dollar_reward = 2
 		
 	# ======= 2. 兑换 KPI =======
 	var final_kpi = int(round(base_kpi_value * kpi_multiplier * 0.75))
@@ -433,7 +433,7 @@ func _finish_and_generate_file():
 	if gm and gm.has_method("add_kpi"):
 		gm.add_kpi(final_kpi)
 	# ======= 3. 概率获得美金 =======
-	var dollar_chance = (1.0 + experience) / 100.0
+	var dollar_chance = (10.0 + 5.0 * get_final_experience()) / 100.0
 	var did_get_dollar = false
 	if randf() <= dollar_chance:
 		if gm and gm.has_method("add_dollar"):
