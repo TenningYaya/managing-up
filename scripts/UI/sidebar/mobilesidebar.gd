@@ -164,7 +164,6 @@ func open_phone() -> void:
 # =====================================================
 func close_phone() -> void:
 	if _is_locked_by_tutorial:
-		print("【教程锁死】KPI宝拒绝关闭手机！")
 		return
 
 	if not is_open:

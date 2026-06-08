@@ -55,6 +55,13 @@ func _ready():
 	# 👉 全屏模式：启用 region 穿透
 	_passthrough_active = true
 
+	# ⚠️ window_set_mouse_passthrough 设的是“窗口”级全局状态。场景重载（删档重开教程 / 改语言）
+	#    不会重建窗口，上一个 Main 实例残留在 DisplayServer 里的旧 region 会原样保留；而新 Main 的
+	#    _last_region 又被初始化回哨兵值，导致 _process 在抑制态（教程中 suppress_count>0）下判定
+	#    “没设过 region 无需清”，于是旧 region 继续裁屏——教程里居中偏上的 KPI宝(画布 y≈538) 正好
+	#    落在旧 region 之外被裁掉、看不见。所以这里强制清一次，让新 Main 从“整窗可见”的干净状态开始。
+	_clear_region()
+
 	# 教程进行中：先整屏可见可点（教程 UI 铺满全屏，不能被 region 裁掉），
 	# 教程结束（tutorial_layer 被销毁）时会调用 suppress_passthrough(false) 自动恢复。
 	if has_node("TutorialLayer") and not Gamemanager.is_tutorial_completed:
