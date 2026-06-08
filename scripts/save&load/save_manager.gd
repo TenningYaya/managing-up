@@ -20,7 +20,7 @@ func delete_save() -> void:
 		DirAccess.remove_absolute(SAVE_PATH)
 		print("存档已物理删除")
 	
-	Gamemanager.kpi = 3000
+	Gamemanager.kpi = 2000
 	Gamemanager.dollar = 100
 	Gamemanager.player_level = 1
 	Gamemanager.total_hits = 0
