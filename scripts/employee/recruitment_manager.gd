@@ -166,25 +166,40 @@ func load_tutorial_resumes() -> void:
 		if not scene: continue
 		var new_emp = scene.instantiate() as Employee
 		
-		# 1. 抓取你截图里的那个 SrVisual
-		var visual = new_emp.get_node_or_null("SrVisual")
-		if not visual: # 防呆：如果名字改了，用地毯式搜索
+		# =========================================================
+		# 💥 1. 揪出预制体里那个陈年老皮套，直接扬了！
+		# =========================================================
+		var old_visual = new_emp.get_node_or_null("SrVisual")
+		if not old_visual:
 			for child in new_emp.get_children():
 				if child.has_method("generate_portrait_texture"):
-					visual = child
+					old_visual = child
 					break
 					
-		if visual:
-			# 🌟 核心抢救 1：强行注入 DNA，让他们把衣服和头发穿戴整齐！
-			if visual.has_method("setup_visual"):
-				visual.setup_visual(seed_counter, new_emp.dna, new_emp.rarity)
-				seed_counter += 1 # 换下一个人时长相变动一下
-				
-			# 🌟 核心抢救 2：穿戴整齐后，立刻咔嚓拍照贴到简历上
-			if visual.has_method("generate_portrait_texture"):
-				new_emp.portrait = visual.generate_portrait_texture()
-		else:
-			printerr("【警报】没找到叫 SrVisual 的外观节点！")
+		if old_visual:
+			old_visual.name = "TrashVisual" # 改名防冲突
+			old_visual.queue_free() # 送它上路
+			
+		# =========================================================
+		# 💥 2. 换回你原本的字典，根据员工稀有度直接拿新皮套！
+		# =========================================================
+		var target_scene = visual_scenes[new_emp.rarity] # 👈 用你现有的字典获取
+		var fresh_visual = target_scene.instantiate()
+		new_emp.add_child(fresh_visual)
+		
+		# 🌟【致命命脉】：把灵魂（Employee）和皮套（Visual）的神经元接上！
+		# 之前普通员工正常就是因为有这一句，教程员工少了这一句，工位就没办法控制它裁剪！
+		new_emp.visual_component = fresh_visual 
+		
+		# =========================================================
+		# 💥 3. 穿衣、理发、拍照
+		# =========================================================
+		if fresh_visual.has_method("setup_visual"):
+			fresh_visual.setup_visual(seed_counter, new_emp.dna, new_emp.rarity)
+			seed_counter += 1 
+			
+		if fresh_visual.has_method("generate_portrait_texture"):
+			new_emp.portrait = fresh_visual.generate_portrait_texture()
 			
 		normal_pool.append(new_emp)
 		

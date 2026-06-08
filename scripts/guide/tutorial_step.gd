@@ -6,7 +6,8 @@ class_name TutorialStep
 enum Type { 
 	DIALOGUE,     # 纯对话 (如果填了 target_group 则会自动触发“只高亮解说不卡点击”的特效)
 	FOCUS_CLICK,  # 强行挖洞点击 (黑布挖洞 + Tips 提示 + 强迫点击按钮三位一体)
-	WAIT_EVENT    # 纯逻辑等待
+	WAIT_EVENT,    # 纯逻辑等待
+	WAIT_TIME
 }
 
 enum Speaker { 
@@ -20,6 +21,7 @@ enum DialoguePos { CENTER_PHONE, RIGHT_PHONE, TOP_WINDOW, BOTTOM_WINDOW }
 ## 这一步引导的交互类型
 @export var step_type: Type = Type.DIALOGUE
 ## 这一步需要监听的目标节点组名（例如 "recruitment_button"），不需要挖洞则留空
+@export var wait_seconds: float = 3.0
 @export var target_group: String = ""
 ## 触发下一步所需的引擎信号（例如 "pressed"、"project_name_confirmed"）
 @export var wait_signal: String = "pressed"

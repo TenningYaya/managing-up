@@ -10,7 +10,7 @@ extends CanvasLayer
 @onready var tip_ui: Label = $TipUI # 或者你的 PanelContainer
 @onready var end_label: Label = $FinishLabel # 假设你的 Label 叫这个，且它是 TutorialManager 的子节点
 @onready var kpi_ui = $kpi_ChatBubble
-
+@onready var invisible_shield: ColorRect = $InvisibleShield
 @onready var locked_ui_node: Node = null
 var extra_locked_node: Node = null
 var _global_flash_tween: Tween = null
@@ -155,6 +155,8 @@ func play_step(index: int) -> void:
 			_handle_focus_click(step)
 		TutorialStep.Type.WAIT_EVENT:
 			_handle_wait_event(step)
+		TutorialStep.Type.WAIT_TIME:
+			_handle_wait_time(step)
 		
 func _handle_dialogue(step: TutorialStep) -> void:
 	tip_ui.hide()
@@ -477,10 +479,34 @@ func _handle_wait_event(step: TutorialStep) -> void:
 			if current_target:
 				current_target.connect(current_signal_name, current_callable)
 
-
-# ====================================================
-# 📦 拆分出来的专属功能小魔盒（通通贴在主函数下面）
-# ====================================================
+func _handle_wait_time(step: TutorialStep) -> void:
+	# 1. 彻底把之前的对话框、KPI宝、小字提示通通踢走，还给屏幕一片清爽
+	dialogue_ui.hide()
+	kpi_ui.hide()
+	if is_instance_valid(current_tip_instance):
+		current_tip_instance.queue_free()
+		
+	# 2. 核心视觉动作：因为这一步不需要挖洞，直接把黑幕藏起来
+	blocker_ui.hide()
+	blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	# 3. 核心防御动作：降下你在编辑器里做好的全屏透明防弹玻璃，拦截所有互动！
+	if invisible_shield:
+		invisible_shield.show()
+		
+	print("【大总管】进入专属观赏步，防弹玻璃已升起，静静等待 ", step.wait_seconds, " 秒...")
+	
+	# 4. 稳稳地等够剧本里配的时间（比如 3.0 秒）
+	await get_tree().create_timer(step.wait_seconds).timeout
+	
+	# 5. 时间到！善后打扫
+	if invisible_shield:
+		invisible_shield.hide()
+		
+	print("【大总管】观赏步结束，自动撤销玻璃，进入下一步。")
+	
+	# 6. 丝滑翻篇，直接调用下一步！
+	play_step(current_step_index + 1)
 
 ## 子函数 1：禁用拒绝按钮
 func _disable_reject_buttons_if_needed(step: TutorialStep) -> void:

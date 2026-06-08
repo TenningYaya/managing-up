@@ -75,12 +75,14 @@ func _ready() -> void:
 	z_index = 1
 	randomize()
 	if visual_component and visual_component.has_method("play_action"):
+		#visual_component.setup_visual()
 		if current_seat != null:
 			visual_component.play_action("idle") # 有座，坐下敲键盘
 		else:
 			visual_component.play_action("walk") # 没座，立刻原地踏步
 	if employee_name == "":
 		employee_name = name
+	# 🌟【新增兜底逻辑】：统一给所有出生的员工强行穿衣服、切剪影！
 
 func setup_employee(new_rarity: Rarity) -> void:
 	rarity = new_rarity

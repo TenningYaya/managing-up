@@ -31,6 +31,7 @@
 [ext_resource type="Resource" uid="uid://d2lfn81rl2txt" path="res://data/guide/step_27_upgrade_page.tres" id="25_27ngn"]
 [ext_resource type="Resource" uid="uid://cjdfxbuui5c0w" path="res://data/guide/step_28_press_upgrade.tres" id="26_5k7lp"]
 [ext_resource type="Resource" uid="uid://bjl2a62hj35cw" path="res://data/guide/step_29_boss_pet.tres" id="27_kso1c"]
+[ext_resource type="Resource" uid="uid://dqq83ip3kmap7" path="res://data/guide/step_28_1_show_upgrade_outcome.tres" id="27_rgopl"]
 [ext_resource type="Resource" uid="uid://ysc5lu6f5pqy" path="res://data/guide/step_30_explain_office.tres" id="28_mkknv"]
 [ext_resource type="Resource" uid="uid://c7yrg2baad1rh" path="res://data/guide/step_31_click_office.tres" id="29_qpdar"]
 [ext_resource type="Resource" uid="uid://biv0bllp51ve5" path="res://data/guide/step_32_chose_function.tres" id="30_ta3sa"]
@@ -44,7 +45,7 @@
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_rsvao")
-steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_rb526"), ExtResource("5_7e6m1"), ExtResource("6_gtvb8"), ExtResource("7_2853m"), ExtResource("8_hfnrs"), ExtResource("9_5i7fk"), ExtResource("10_q1uf3"), ExtResource("11_lacx5"), ExtResource("12_umdh6"), ExtResource("13_6ltp6"), ExtResource("14_lopl3"), ExtResource("15_r5pud"), ExtResource("16_tf07h"), ExtResource("17_fv23i"), ExtResource("18_hmtbv"), ExtResource("19_8oaor"), ExtResource("20_0ssyf"), ExtResource("21_jf5bc"), ExtResource("22_31up7"), ExtResource("23_31up7"), ExtResource("24_u7clx"), ExtResource("25_27ngn"), ExtResource("26_5k7lp"), ExtResource("27_kso1c"), ExtResource("28_mkknv"), ExtResource("29_qpdar"), ExtResource("30_ta3sa"), ExtResource("31_ygfsw"), ExtResource("32_5k7lp"), ExtResource("3_uiswp"), ExtResource("4_rgopl"), ExtResource("33_kso1c")])
+steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_rb526"), ExtResource("5_7e6m1"), ExtResource("6_gtvb8"), ExtResource("7_2853m"), ExtResource("8_hfnrs"), ExtResource("9_5i7fk"), ExtResource("10_q1uf3"), ExtResource("11_lacx5"), ExtResource("12_umdh6"), ExtResource("13_6ltp6"), ExtResource("14_lopl3"), ExtResource("15_r5pud"), ExtResource("16_tf07h"), ExtResource("17_fv23i"), ExtResource("18_hmtbv"), ExtResource("19_8oaor"), ExtResource("20_0ssyf"), ExtResource("21_jf5bc"), ExtResource("22_31up7"), ExtResource("23_31up7"), ExtResource("24_u7clx"), ExtResource("25_27ngn"), ExtResource("26_5k7lp"), ExtResource("27_rgopl"), ExtResource("27_kso1c"), ExtResource("28_mkknv"), ExtResource("29_qpdar"), ExtResource("30_ta3sa"), ExtResource("31_ygfsw"), ExtResource("32_5k7lp"), ExtResource("3_uiswp"), ExtResource("4_rgopl"), ExtResource("33_kso1c")])
 TUTORIAL_TIP_SCENE = ExtResource("34_kso1c")
 
 [node name="TipUI" type="Label" parent="." unique_id=16516687]
@@ -108,3 +109,12 @@ offset_left = -282.0
 offset_top = -37.0
 offset_right = -282.0
 offset_bottom = -37.0
+
+[node name="InvisibleShield" type="ColorRect" parent="." unique_id=355510228]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
