@@ -22,15 +22,14 @@ var _flash_tween: Tween
 # 玩家升级各级费用（与 upgrades_page.gd 保持一致）
 const PLAYER_UPGRADE_COST := {1: 50, 2: 1000, 3: 5000, 4: 15000}
 
-const SHAKE_FREQ := 46.0          # 抖动频率
-const SHAKE_AMP := 5.0            # 抖动幅度（像素）
-const FIRST_SHAKE_DURATION := 10.0   # 刚出现可升级时抖动持续时间
-const REMINDER_SHAKE_DURATION := 5.0 # 周期提醒每次抖动时间
+const TILT_FREQ := 2.5            # 倾斜频率（Hz，每秒来回次数）
+const TILT_ANGLE := 15.0          # 最大倾斜角度（度）
+const FIRST_SHAKE_DURATION := 10.0   # 刚出现可升级时动画持续时间
+const REMINDER_SHAKE_DURATION := 5.0 # 周期提醒每次动画时间
 const REMINDER_INTERVAL := 900.0     # 周期提醒间隔（15 分钟）
 
 var _was_upgradable := false      # 上一次判定是否有可升级内容
 var _shake_time_left := 0.0       # 剩余抖动时间
-var _trigger_home := Vector2.ZERO # Trigger 原始位置
 var _reminder_timer: Timer = null
 
 # =====================================================
@@ -116,7 +115,8 @@ func _ready() -> void:
 	# 等几帧确保存档加载完成、desk_slots 组就绪后做首次判定
 	await get_tree().process_frame
 	await get_tree().process_frame
-	_trigger_home = trigger_btn.position
+	# 布局稳定后设置旋转轴为图标中心点
+	trigger_btn.pivot_offset = trigger_btn.size / 2.0
 	_refresh_upgrade_hints()
 
 
@@ -284,10 +284,10 @@ func _on_reminder_timeout() -> void:
 
 
 # =====================================================
-# 9. 震动动画（只抖 Trigger 触发器）
+# 9. 倾斜动画（Trigger 触发器左右摇摆 ±15°）
 # =====================================================
 func _start_shake(duration: float) -> void:
-	# 手机打开时 Trigger 是隐藏的，抖了也看不见，跳过
+	# 手机打开时 Trigger 是隐藏的，跳过
 	if is_open:
 		return
 	_shake_time_left = max(_shake_time_left, duration)
@@ -295,7 +295,7 @@ func _start_shake(duration: float) -> void:
 func _stop_shake() -> void:
 	_shake_time_left = 0.0
 	if is_instance_valid(trigger_btn):
-		trigger_btn.position = _trigger_home
+		trigger_btn.rotation_degrees = 0.0
 
 func _process(delta: float) -> void:
 	if _shake_time_left <= 0.0:
@@ -310,9 +310,7 @@ func _process(delta: float) -> void:
 
 	_shake_time_left -= delta
 	if _shake_time_left <= 0.0:
-		trigger_btn.position = _trigger_home
+		trigger_btn.rotation_degrees = 0.0
 	else:
 		var t := Time.get_ticks_msec() / 1000.0
-		var off_x := sin(t * SHAKE_FREQ) * SHAKE_AMP
-		var off_y := sin(t * SHAKE_FREQ * 1.3) * SHAKE_AMP * 0.5
-		trigger_btn.position = _trigger_home + Vector2(off_x, off_y)
+		trigger_btn.rotation_degrees = sin(t * TILT_FREQ * TAU) * TILT_ANGLE

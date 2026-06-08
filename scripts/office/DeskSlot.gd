@@ -37,19 +37,18 @@ func _on_level_changed(new_level: int) -> void:
 # 🌟 4. 专职判定生死的底层函数
 func _check_level_unlock(current_player_level: int) -> void:
 	if current_player_level >= unlock_at_level:
-		# 💥 【终极抓取】：如果当前是锁着的，且游戏已经初始化完毕，说明这就是实时升级解锁的黄金瞬间！
 		if is_locked and _is_initialized:
-			_play_upgrade_bounce_fx() # 爆裂闪烁！
-			
+			_play_upgrade_bounce_fx()
+
 		is_locked = false
-		
-		# 这里可以顺便把原本隐藏的桌子 show() 出来，或者恢复它的交互
-		self.show() 
+		modulate.a = 1.0
+		mouse_filter = MOUSE_FILTER_STOP
 		upgrade_trigger_btn.disabled = false
 	else:
 		is_locked = true
-		# 如果等级不够，开局时可以先藏起来或者变灰
-		self.hide() 
+		# 用透明度隐藏而不是 hide()，保持在 HBoxContainer 中占位，防止布局变化导致已部署员工位置偏移
+		modulate.a = 0.0
+		mouse_filter = MOUSE_FILTER_IGNORE
 		upgrade_trigger_btn.disabled = true
 
 func _on_slot_clicked():
