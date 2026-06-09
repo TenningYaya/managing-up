@@ -210,7 +210,7 @@ func _reset_all_highlights() -> void:
 
 func _get_cost(level: int) -> int:
 	match level:
-		1: return 200
-		2: return 500
-		3: return 1000
+		1: return 1000
+		2: return 3000
+		3: return 10000
 	return 0
