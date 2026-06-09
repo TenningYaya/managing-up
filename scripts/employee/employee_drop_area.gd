@@ -45,9 +45,14 @@ func _on_hire_received(employee_data):
 			#count += 1
 	#return count
 func get_drop_area_employee_count() -> int:
-	# 直接去全地图抓取带有 "dropped_employee" 标签的人
-	var dropped_nodes = get_tree().get_nodes_in_group("dropped_employee")
-	return dropped_nodes.size()
+	# 只统计“仍在 drop area 里等待”的员工：在掉落组里、但还没坐到工位上的。
+	# 已经被拖到工位上的员工 (current_seat != null) 不占用 drop area 名额，
+	# 否则场上满 10 人后即使全部就座也无法继续 dispatch。
+	var count := 0
+	for emp in get_tree().get_nodes_in_group("dropped_employee"):
+		if emp.get("current_seat") == null:
+			count += 1
+	return count
 
 func spawn_and_drop(employee_data):
 	if employee_data == null: return
