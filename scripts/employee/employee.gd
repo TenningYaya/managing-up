@@ -62,6 +62,7 @@ var _move_tween: Tween = null
 var _active_bubble: SpeechBubble = null
 const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
 const SPEECH_BUBBLE_SCENE = preload("res://scenes/vfx/speech_bubble.tscn")
+const URGE_BUBBLE_SCENE = preload("res://scenes/vfx/urge_bubble.tscn")
 const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
 var is_slacking: bool = false
 var active_slacking_bubble = null
@@ -417,15 +418,15 @@ func _finish_and_generate_file():
 	if final_score >= 95.0:
 		file_grade = "Gold"
 		kpi_multiplier = 3.0
-		dollar_reward = 5
+		dollar_reward = 10
 	elif final_score >= 71.0:
 		file_grade = "Blue"
 		kpi_multiplier = 2.0
-		dollar_reward = 3
+		dollar_reward = 6
 	elif final_score >= 31.0:
 		file_grade = "Green"
 		kpi_multiplier = 1.2
-		dollar_reward = 2
+		dollar_reward = 4
 		
 	# ======= 2. 兑换 KPI =======
 	var final_kpi = int(round(base_kpi_value * kpi_multiplier * 0.75))
@@ -433,6 +434,7 @@ func _finish_and_generate_file():
 	var gm = _get_game_manager()
 	if gm and gm.has_method("add_kpi"):
 		gm.add_kpi(final_kpi)
+		
 	# ======= 3. 概率获得美金 =======
 	var dollar_chance = (10.0 + 5.0 * get_final_experience()) / 100.0
 	var did_get_dollar = false
@@ -524,7 +526,7 @@ func _spawn_speech_bubble(text_content: String) -> void:
 	if is_instance_valid(_active_bubble):
 		_active_bubble.kill_bubble()
 		
-	_active_bubble = SPEECH_BUBBLE_SCENE.instantiate()
+	_active_bubble = URGE_BUBBLE_SCENE.instantiate()
 	add_child(_active_bubble)
 	
 	_active_bubble.scale = Vector2(0.3, 0.3)
