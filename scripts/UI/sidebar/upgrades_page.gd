@@ -19,17 +19,17 @@ const UPGRADE_DATA = {
 		{"title": "+ OFFICE × 1", "desc": "Unlock and gain your first independent office."},
 		{"title": "+ UNLOCK PANTRY", "desc": "New office function: Pantry, available for staff."}
 	]},
-	2: { "cost": 2000, "next_level": "M3", "benefits": [
+	2: { "cost": 5000, "next_level": "M3", "benefits": [
 		{"title": "+ DESK SLOT × 1 ROW", "desc": "Expand desk slots to 3 rows. Max level increased to 3."},
 		{"title": "+ OFFICE × 1", "desc": "Expand the number of offices to 2."},
 		{"title": "+ UNLOCK HEADHUNT", "desc": "New office function: Headhunt, to recruit advanced talents."}
 	]},
-	3: { "cost": 10000, "next_level": "M4", "benefits": [
+	3: { "cost": 30000, "next_level": "M4", "benefits": [
 		{"title": "+ DESK SLOT × 1 ROW", "desc": "Expand desk slots to 4 rows. Max level increased to 4."},
 		{"title": "+ OFFICE × 1", "desc": "Expand the number of offices to 3."},
 		{"title": "+ UNLOCK MEETING", "desc": "New office function: Meeting, for team collaboration."}
 	]},
-	4: { "cost": 30000, "next_level": "M5", "benefits": [
+	4: { "cost": 100000, "next_level": "M5", "benefits": [
 		{"title": "+ DESK SLOT × 1 ROW", "desc": "Expand desk slots to 5 rows. Max level remains at 4."},
 		{"title": "+ OFFICE × 1", "desc": "Expand the number of offices to 4."},
 		{"title": "+ UNLOCK CULTURE", "desc": "New office function: Culture, to boost company morale."}
