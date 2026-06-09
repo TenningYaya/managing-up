@@ -95,7 +95,7 @@ func _on_headhunt_finished():
 		var rarity = Employee.Rarity.R
 		
 		# 1. 判定稀有度
-		if roll <= 0.02: 
+		if roll <= 0.04: 
 			rarity = Employee.Rarity.SSR
 		elif roll <= 0.17: 
 			rarity = Employee.Rarity.SR

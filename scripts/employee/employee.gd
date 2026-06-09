@@ -471,7 +471,7 @@ func _on_slacking_resolved(by_click: bool) -> void:
 	if visual_component and visual_component.has_method("play_action"):
 		visual_component.play_action("idle")
 	if by_click:
-		var reward_amount = randi_range(1, 2)
+		var reward_amount = randi_range(2, 4)
 		Gamemanager.add_dollar(reward_amount)
 			
 	_start_new_work_cycle()
@@ -581,7 +581,6 @@ func get_final_experience() -> int:
 	return total
 
 
-
 func _try_get_snack_buff() -> void:
 	# 条件判定：如果已经在吃、或者在摸鱼、或者零食名额满了，就不发
 	if current_snack_buff != SnackBuff.NONE: return
@@ -610,17 +609,20 @@ func _clear_snack_buff() -> void:
 		buff_status_changed.emit()
 
 		# 2. 击鼓传花：立刻让下一个人接盘 Buff
-		var tree = Engine.get_main_loop() # 用这种方式拿场景树最安全，节点死了也能拿到
+		var tree = Engine.get_main_loop() 
 		if tree is SceneTree:
 			var all_emps = tree.get_nodes_in_group("employees")
+			
+			# 🌟【神级补丁】：把数组顺序彻底打乱！打破场景树的阶级固化！
+			all_emps.shuffle() 
+			
 			for emp in all_emps:
 				# 条件：不是自己 + 正在打工 + 当前没吃零食
 				if emp != self and emp.is_working and emp.current_snack_buff == SnackBuff.NONE:
 					emp._try_get_snack_buff()
-					# 如果这个人成功吃到了（因为 _try_get 有 50% 概率），就立刻结束传递
+					# 如果这个人成功吃到了，就立刻结束传递
 					if emp.current_snack_buff != SnackBuff.NONE:
-						break 
-
+						break
 
 # 🌟 超级保险：只要员工被“收回(Recall)”或“开除(Fire)”，必定会触发这个内置函数
 func _exit_tree() -> void:
