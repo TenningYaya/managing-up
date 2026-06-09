@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://q7tpt6us2ywy" path="res://scripts/office/seat.gd" id="1_qny2q"]
 [ext_resource type="Texture2D" uid="uid://doy2ulgdnmxi7" path="res://assets/Office Tileset/Office Tileset All 48x48.png" id="2_65dcs"]
 [ext_resource type="Texture2D" uid="uid://dqg31jvjk4fa0" path="res://assets/UI/ingame/in_meeting.png" id="3_65dcs"]
+[ext_resource type="Texture2D" uid="uid://rnym1vbg4d7x" path="res://assets/UI/ingame/snacks/item372.png" id="4_121e0"]
+[ext_resource type="Texture2D" uid="uid://byjljf5kxjn7" path="res://assets/UI/ingame/snacks/item359.png" id="5_b6jb3"]
+[ext_resource type="Texture2D" uid="uid://bfpt2i20xsemx" path="res://assets/UI/ingame/snacks/item494.png" id="6_5cyor"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_72mnh"]
 atlas = ExtResource("2_65dcs")
@@ -84,7 +87,6 @@ offset_bottom = 44.2
 mouse_filter = 2
 
 [node name="Plant" type="TextureRect" parent="." unique_id=2113325948]
-visible = false
 z_index = 4
 layout_mode = 0
 offset_left = 1.0
@@ -96,7 +98,6 @@ texture = SubResource("AtlasTexture_qny2q")
 expand_mode = 1
 
 [node name="CoffeeCup" type="TextureRect" parent="." unique_id=558371051]
-visible = false
 z_index = 4
 layout_mode = 0
 offset_left = 65.0
@@ -138,3 +139,36 @@ grow_vertical = 2
 texture = ExtResource("3_65dcs")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="MilkteaBuff" type="TextureRect" parent="." unique_id=919411902]
+visible = false
+z_index = 4
+texture_filter = 1
+layout_mode = 0
+offset_left = 5.0
+offset_top = 40.0
+offset_right = 23.0
+offset_bottom = 59.0
+texture = ExtResource("4_121e0")
+
+[node name="SausageBuff" type="TextureRect" parent="." unique_id=40162335]
+visible = false
+z_index = 4
+texture_filter = 1
+layout_mode = 0
+offset_left = 5.0
+offset_top = 40.0
+offset_right = 23.0
+offset_bottom = 59.0
+texture = ExtResource("5_b6jb3")
+
+[node name="CakeBuff" type="TextureRect" parent="." unique_id=1998732351]
+visible = false
+z_index = 4
+texture_filter = 1
+layout_mode = 0
+offset_left = 5.0
+offset_top = 40.0
+offset_right = 23.0
+offset_bottom = 59.0
+texture = ExtResource("6_5cyor")

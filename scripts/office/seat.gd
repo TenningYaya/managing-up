@@ -1,3 +1,4 @@
+#seat.gd
 extends Control
 class_name DeskSeat
 
@@ -13,6 +14,10 @@ signal upgrade_level_changed(new_level: int)
 @onready var advanced_computer: CanvasItem = get_node_or_null("AdvancedComputer") as CanvasItem
 @onready var plant: CanvasItem = get_node_or_null("Plant") as CanvasItem
 @onready var meeting_icon: CanvasItem = get_node_or_null("MeetingIcon") as CanvasItem
+
+@onready var milktea_buff: CanvasItem = get_node_or_null("MilkteaBuff") as CanvasItem
+@onready var sausage_buff: CanvasItem = get_node_or_null("SausageBuff") as CanvasItem
+@onready var cake_buff: CanvasItem = get_node_or_null("CakeBuff") as CanvasItem
 
 var occupant: Control = null
 
@@ -39,11 +44,18 @@ func is_free() -> bool:
 
 func set_occupant(employee: Control) -> void:
 	occupant = employee
-
+	if occupant and occupant.has_signal("buff_status_changed"):
+		if not occupant.buff_status_changed.is_connected(_sync_buff_icons):
+			occupant.buff_status_changed.connect(_sync_buff_icons)
+			
+	# 坐下的瞬间主动刷新一次，防止员工换座位时把零食变没了
+	_sync_buff_icons()
 
 func clear_occupant() -> void:
 	occupant = null
-
+	if occupant and occupant.has_signal("buff_status_changed"):
+		if occupant.buff_status_changed.is_connected(_sync_buff_icons):
+			occupant.buff_status_changed.disconnect(_sync_buff_icons)
 
 func get_snap_global_position() -> Vector2:
 	return snap_point.global_position
@@ -126,3 +138,22 @@ func get_quality_buff() -> int:
 func set_meeting_state(is_meeting: bool) -> void:
 	if meeting_icon != null:
 		meeting_icon.visible = is_meeting
+
+func _sync_buff_icons() -> void:
+	# 1. 每次刷新前，闭着眼睛先把桌子扫空
+	if milktea_buff: milktea_buff.hide()
+	if sausage_buff: sausage_buff.hide()
+	if cake_buff: cake_buff.hide()
+	
+	# 2. 如果座位上没人，或者进来的只是个普通节点（没有吃零食属性），直接下班
+	if occupant == null or not "current_snack_buff" in occupant:
+		return
+		
+	# 3. 看看这人在吃啥，变魔术把对应的食物放在桌上！
+	match occupant.current_snack_buff:
+		Employee.SnackBuff.MILK_TEA:
+			if milktea_buff: milktea_buff.show()
+		Employee.SnackBuff.CAKE:
+			if cake_buff: cake_buff.show()
+		Employee.SnackBuff.SAUSAGE:
+			if sausage_buff: sausage_buff.show()

@@ -207,7 +207,7 @@ func load_tutorial_resumes() -> void:
 
 func calculate_hire_cost(emp: Employee) -> int:
 	# 以后想要修改招聘价格公式，只需要改这里这一行！
-	return (emp.efficiency + emp.quality + emp.experience) * 50
+	return (emp.efficiency + emp.quality + emp.experience) * 30
 
 func get_unread_count() -> int:
 	# 只要池子里还有简历，就视为有“未处理”的（或者你可以给 Employee 加一个 is_read 属性，如果不需要就直接看池子大小）

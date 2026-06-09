@@ -1,3 +1,4 @@
+#employee.gd
 extends Control
 class_name Employee
 
@@ -36,8 +37,8 @@ var work_elapsed: float = 0.0
 #current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
 #对应GDD：
 #同事的最终文件生产时间 =（基础文件生产时间-（同事工作效率+同事工作效率补正）*减幅基数*（80-120随机数）%）
-var base_kpi_value: int = 18
-var base_file_production_time: float = 600.0 # 基础文件生产时间
+var base_kpi_value: int = 30
+var base_file_production_time: float = 500.0 # 基础文件生产时间
 var base_reduction_time: int = 30 # 减幅基数
 var current_cycle_duration: float = 10.0
 @export_range(0.0, 1.0, 0.05) var interrupted_reward_ratio: float = 0.5
@@ -452,7 +453,7 @@ func _finish_and_generate_file():
 		return # 直接结束，不走下面的摸鱼随机数
 		
 	# 结算完毕，开启下一轮
-	if not is_in_meeting and randf() <= 0.9:
+	if not is_in_meeting and randf() <= 0.02:
 		is_slacking = true
 		if visual_component and visual_component.has_method("play_action"):
 			visual_component.play_action("slack")
@@ -508,7 +509,7 @@ func _speed_up_work() -> void:
 		return
 		
 	var total_duration = current_cycle_duration
-	var speed_up_amount = total_duration * 0.02
+	var speed_up_amount = total_duration * 0.04
 	work_elapsed += speed_up_amount
 	
 	# 🌟 这里的代码变清爽了！
@@ -586,8 +587,8 @@ func _try_get_snack_buff() -> void:
 	# if is_slacking: return # 假设你有这个摸鱼变量
 	if not OfficeManager.can_dispense_snack(): return
 	
-	# 50% 概率触发
-	if randf() > 0.5: return 
+	# 零食概率
+	if randf() > 0.9: return 
 	
 	# 成功获取！占领一个名额
 	OfficeManager.active_snack_buffs += 1

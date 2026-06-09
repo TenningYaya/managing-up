@@ -24,8 +24,8 @@ func pop_up(content: String) -> void:
 	
 	# 🌟 动画 1：向上飘移
 	# 这里的 -40 可以根据你想要飘的高度调整
-	var target_pos = position + Vector2(0, -50) 
-	_tween.tween_property(self, "position", target_pos, 1.0)
+	var target_pos = position + Vector2(0, -20) 
+	_tween.tween_property(self, "position", target_pos, 0.5)
 	
 	# 🌟 动画 2：淡入
 	_tween.tween_property(self, "modulate:a", 1.0, 0.3)
