@@ -23,4 +23,3 @@ func set_language(locale_code: String) -> void:
 	
 	# 2. 轰炸式广播：让所有连了这个信号的 UI 组件集体原地变形！
 	language_changed.emit()
-	print("【语言切换中心】语系已成功切换为：", locale_code)

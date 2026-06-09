@@ -130,7 +130,6 @@ func _gui_input(event: InputEvent) -> void:
 		_on_office_clicked()
 		
 func _on_office_clicked() -> void:
-	print("[Office] 点击主体，打开选型页签")
 	var panel = get_tree().get_first_node_in_group("office_panel")
 	if panel:
 		panel.open_panel(self, false)
@@ -172,7 +171,6 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 		Gamemanager.has_culture_center = false
 	
 	if is_instance_valid(logic_node) and logic_node.has_method("cleanup"):
-		print("[Office] 正在触发旧逻辑安全清理...")
 		logic_node.cleanup()
 	elif is_instance_valid(logic_node):
 		# 如果活着但没写 cleanup，直接超度
@@ -210,8 +208,6 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 	if logic_node != null:
 		add_child(logic_node)
 		logic_node.setup(self)
-	
-	print("办公室 ", name, " 已切换至: ", current_type)
 
 # ==========================================
 # 视觉显示逻辑 (核心：锁住强制显示灰图)

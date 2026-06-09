@@ -460,7 +460,7 @@ func _finish_and_generate_file():
 		is_working = false
 		active_slacking_bubble = SLACKING_BUBBLE_SCENE.instantiate()
 		add_child(active_slacking_bubble)
-		active_slacking_bubble.position = Vector2((size.x - 50) / 2.0, -80.0)
+		active_slacking_bubble.position = Vector2((size.x - 50) / 2.0, -50.0)
 		active_slacking_bubble.slacking_resolved.connect(_on_slacking_resolved)
 	else:
 		_start_new_work_cycle()
@@ -483,7 +483,7 @@ func _spawn_file_vfx(grade: String) -> Node:
 	
 	# 设置初始位置：员工头顶正上方
 	# 假设员工 size.y 是高度，往上挪一点
-	vfx.position = Vector2((size.x - 22) / 2.0, -20.0)
+	vfx.position = Vector2((size.x + 42) / 2.0, -20.0)
 	
 	# 调用特效自己的播放逻辑
 	vfx.play_vfx(grade)
@@ -589,7 +589,7 @@ func _try_get_snack_buff() -> void:
 	if not OfficeManager.can_dispense_snack(): return
 	
 	# 零食概率
-	if randf() > 0.9: return 
+	#if randf() > 0.99: return 
 	
 	# 成功获取！占领一个名额
 	OfficeManager.active_snack_buffs += 1

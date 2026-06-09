@@ -9,3 +9,6 @@ var my_office: Control
 # 当芯片被插入办公室时调用
 func setup(office: Control) -> void:
 	my_office = office
+
+func cleanup() -> void:
+	queue_free()
