@@ -38,7 +38,7 @@ var work_elapsed: float = 0.0
 #对应GDD：
 #同事的最终文件生产时间 =（基础文件生产时间-（同事工作效率+同事工作效率补正）*减幅基数*（80-120随机数）%）
 var base_kpi_value: int = 30
-var base_file_production_time: float = 500.0 # 基础文件生产时间
+var base_file_production_time: float = 300.0 # 基础文件生产时间
 var base_reduction_time: int = 30 # 减幅基数
 var current_cycle_duration: float = 10.0
 @export_range(0.0, 1.0, 0.05) var interrupted_reward_ratio: float = 0.5
