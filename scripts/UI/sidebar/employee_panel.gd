@@ -16,8 +16,9 @@ class_name EmployeePanel
 @onready var quality_bar: EmployeeAbility = $PanelBg/EmployeePage/Information/Abilities/QualityBar
 @onready var experience_bar: EmployeeAbility = $PanelBg/EmployeePage/Information/Abilities/ExperienceBar
 
-@onready var progress_bar: TextureProgressBar = $PanelBg/EmployeePage/Information/ProgressBar
-@onready var working_status: Label = $PanelBg/EmployeePage/Information/ProgressBar/WorkingStatus
+@onready var progress_bar: TextureProgressBar = $PanelBg/EmployeePage/Information/ProgressBar/ProgressBar
+@onready var working_status: Label = $PanelBg/EmployeePage/Information/ProgressBar/ProgressBar/WorkingStatus
+@onready var fire_vfx: CanvasItem = $PanelBg/EmployeePage/Information/ProgressBar/ProgressBar/FireVfx
 
 @onready var buffs_container: HFlowContainer = $PanelBg/EmployeePage/PanelContainer/MarginContainer/VBoxContainer/Buffs
 const BUFF_TAG_SCENE = preload("res://scenes/sidebar/employee_panel/buff_tag.tscn")
@@ -33,6 +34,7 @@ const BUFF_TAG_SCENE = preload("res://scenes/sidebar/employee_panel/buff_tag.tsc
 # 当前正在查看的员工数据引用
 var current_employee: Employee = null
 var is_locked_by_tutorial: bool = false
+var _shake_tween: Tween = null
 
 func lock_for_tutorial():
 	is_locked_by_tutorial = true
@@ -78,26 +80,50 @@ func _ready() -> void:
 	
 	set_process_input(true)
 
+#func _input(event: InputEvent) -> void:
+	#if is_locked_by_tutorial:
+		#return
+		#
+	## 只处理鼠标左键按下
+	#if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		#if not visible: 
+			#return
+		#
+		## 1. 如果点在面板内部，绝对不能关
+		#if _is_pos_inside_panel(event.global_position):
+			#return
+		#
+		## 2. 如果点在任何一个员工身上，也绝对不能关
+		## 因为员工自己的 _gui_input 会去调用 open_panel()，如果这里关了就会冲突
+		#if _is_pos_on_any_employee(event.global_position):
+			#return
+#
+		#close_panel()
+
 func _input(event: InputEvent) -> void:
 	if is_locked_by_tutorial:
 		return
 		
-	# 只处理鼠标左键按下
+	# 只在鼠标左键【按下】的瞬间做拦截判定
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if not visible: 
 			return
 		
-		# 1. 如果点在面板内部，绝对不能关
-		if _is_pos_inside_panel(event.global_position):
+		# 🌟 规则 1：点在面板自己身上？绝对不关！
+		# 使用 get_global_mouse_position() 匹配 UI 坐标
+		if _is_pos_inside_panel(get_global_mouse_position()):
 			return
 		
-		# 2. 如果点在任何一个员工身上，也绝对不能关
-		# 因为员工自己的 _gui_input 会去调用 open_panel()，如果这里关了就会冲突
-		if _is_pos_on_any_employee(event.global_position):
-			return
+		# 🌟 规则 2：点在当前正看着的员工身上？绝对不关！
+		# 利用员工自己的 2D 世界坐标系进行极其精准的碰撞检测
+		if current_employee != null and is_instance_valid(current_employee):
+			if current_employee.get_global_rect().has_point(current_employee.get_global_mouse_position()):
+				return
 
+		# 🌟 规则 3：既不是面板，也不是当前员工（比如点到了空地，或者另一个员工）
+		# 干净利落地关闭！
 		close_panel()
-			
+					
 func open_panel(employee: Employee) -> void:
 	if employee == null:
 		return
@@ -170,40 +196,35 @@ func _on_click_blocker_input(event: InputEvent) -> void:
 func _connect_current_employee() -> void:
 	if current_employee == null:
 		return
-
 	if not current_employee.work_progress_changed.is_connected(_on_work_progress_changed):
 		current_employee.work_progress_changed.connect(_on_work_progress_changed)
-
 	if not current_employee.work_started.is_connected(_on_work_started):
 		current_employee.work_started.connect(_on_work_started)
-
 	if not current_employee.work_stopped.is_connected(_on_work_stopped):
 		current_employee.work_stopped.connect(_on_work_stopped)
-
 	if not current_employee.tree_exiting.is_connected(_on_current_employee_tree_exiting):
 		current_employee.tree_exiting.connect(_on_current_employee_tree_exiting)
 	if not current_employee.buff_status_changed.is_connected(_refresh_buffs):
 		current_employee.buff_status_changed.connect(_refresh_buffs)
-
+	if not current_employee.work_speed_up_triggered.is_connected(_play_speedup_vfx):
+		current_employee.work_speed_up_triggered.connect(_play_speedup_vfx)
 
 func _disconnect_current_employee() -> void:
 	if current_employee == null:
 		return
-
 	if current_employee.work_progress_changed.is_connected(_on_work_progress_changed):
 		current_employee.work_progress_changed.disconnect(_on_work_progress_changed)
-
 	if current_employee.work_started.is_connected(_on_work_started):
 		current_employee.work_started.disconnect(_on_work_started)
-
 	if current_employee.work_stopped.is_connected(_on_work_stopped):
 		current_employee.work_stopped.disconnect(_on_work_stopped)
-
 	if current_employee.tree_exiting.is_connected(_on_current_employee_tree_exiting):
 		current_employee.tree_exiting.disconnect(_on_current_employee_tree_exiting)
 	if current_employee.buff_status_changed.is_connected(_refresh_buffs):
 		current_employee.buff_status_changed.disconnect(_refresh_buffs)
-
+	if current_employee.work_speed_up_triggered.is_connected(_play_speedup_vfx):
+		current_employee.work_speed_up_triggered.disconnect(_play_speedup_vfx)
+		
 func _refresh_progress_bar() -> void:
 	if current_employee == null:
 		progress_bar.value = 0
@@ -392,7 +413,6 @@ func _refresh_buffs() -> void:
 	if current_employee.get("current_snack_buff") != null:
 		var snack = int(current_employee.get("current_snack_buff"))
 	
-		print("[Panel Debug] 正在刷新 Buff, 当前 snack 值: ", snack)
 		
 		match snack:
 			1: # 对应你的 Milk Tea
@@ -401,10 +421,6 @@ func _refresh_buffs() -> void:
 				_add_buff_label("Cake", "Pantry Perk: Qual +3")
 			3: # 对应你的 Sausage
 				_add_buff_label("Sausage", "Pantry Perk: Exp +3")
-			_:
-				# 默认情况不显示，或者打印一下 debug
-				if snack != 0:
-					print("[Panel Debug] 未知的零食 ID: ", snack)
 
 func _add_buff_label(buff_name: String, hover_description: String) -> void:
 	var buff_tag = BUFF_TAG_SCENE.instantiate()
@@ -425,15 +441,15 @@ func _is_pos_inside_panel(global_pos: Vector2) -> bool:
 	# 这里的 $PanelBg 是你面板的实际可见区域
 	return $PanelBg.get_global_rect().has_point(global_pos)
 
-func _is_pos_on_any_employee(global_pos: Vector2) -> bool:
-	# 遍历所有在 "employees" 组里的节点
-	var all_employees = get_tree().get_nodes_in_group("employees")
-	for emp in all_employees:
-		if emp is Control:
-			# 检查鼠标位置是否在员工的矩形范围内
-			if emp.get_global_rect().has_point(global_pos):
-				return true
-	return false
+#func _is_pos_on_any_employee(global_pos: Vector2) -> bool:
+	## 遍历所有在 "employees" 组里的节点
+	#var all_employees = get_tree().get_nodes_in_group("employees")
+	#for emp in all_employees:
+		#if emp is Control:
+			## 检查鼠标位置是否在员工的矩形范围内
+			#if emp.get_global_rect().has_point(global_pos):
+				#return true
+	#return false
 
 func force_bind_and_refresh(employee: Employee) -> void:
 	current_employee = employee
@@ -451,3 +467,48 @@ func force_bind_and_refresh(employee: Employee) -> void:
 			AvatarHelper.apply_portrait(figure, employee.portrait, employee.rarity)
 		
 		show()
+
+func _play_speedup_vfx() -> void:
+	if _shake_tween:
+		_shake_tween.kill()
+		
+	# 还原所有初始状态
+	progress_bar.position = Vector2.ZERO 
+	progress_bar.scale = Vector2.ONE
+	working_status.modulate = Color.WHITE # 确保初始是白色
+	
+	if fire_vfx:
+		fire_vfx.show()
+		
+	_shake_tween = create_tween()
+	
+	# 🌟 核心：在变大变红的同时进行
+	_shake_tween.set_parallel(true)
+	
+	# 进度条变大 (保持你之前的逻辑)
+	_shake_tween.tween_property(progress_bar, "scale", Vector2(1.1, 1.1), 0.05).set_ease(Tween.EASE_OUT)
+	
+	# 🌟 字体瞬间变红 (Color.RED)
+	_shake_tween.tween_property(working_status, "modulate", Color.RED, 0.05)
+	
+	_shake_tween.set_parallel(false) # 后面的震动逻辑串行执行
+	
+	# 连续高频随机震动
+	for i in range(4):
+		var random_offset = Vector2(randf_range(-3, 3), randf_range(-3, 3))
+		_shake_tween.tween_property(progress_bar, "position", random_offset, 0.03)
+		
+	# 恢复原状
+	_shake_tween.set_parallel(true) # 同时恢复颜色和位置
+	_shake_tween.tween_property(progress_bar, "position", Vector2.ZERO, 0.03)
+	_shake_tween.tween_property(progress_bar, "scale", Vector2.ONE, 0.1).set_ease(Tween.EASE_IN_OUT)
+	
+	# 🌟 字体恢复白色 (回到原来的状态)
+	_shake_tween.tween_property(working_status, "modulate", Color.WHITE, 0.1)
+	
+	_shake_tween.set_parallel(false)
+	
+	# 动画完全结束后灭掉火苗
+	_shake_tween.tween_callback(func():
+		if fire_vfx: fire_vfx.hide()
+	)

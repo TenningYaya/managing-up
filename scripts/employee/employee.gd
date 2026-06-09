@@ -9,6 +9,7 @@ signal work_progress_changed(progress_percent: float)
 signal work_started()
 signal work_stopped()
 signal buff_status_changed
+signal work_speed_up_triggered
 
 #——————————员工信息————————————
 @export var employee_name: String = "Marry"
@@ -199,9 +200,6 @@ func _on_employee_clicked() -> void:
 	# 3. 核心执行逻辑
 	if target_panel and target_panel.has_method("open_panel"):
 		target_panel.open_panel(self)
-	else:
-		# 如果还是找不到，用 push_error 提醒，这比普通的 print 更容易在调试时被发现
-		push_error("错误：找不到 EmployeePanel。请检查：1.面板是否在场景里 2.是否加了'employee_panel'组")
 
 func _start_drag() -> void:
 	if _move_tween:
@@ -517,6 +515,7 @@ func _speed_up_work() -> void:
 	# 🌟 这里的代码变清爽了！
 	var chosen_text = SpeedupQuoteSave.get_random_quote()
 	_spawn_speech_bubble(chosen_text)
+	work_speed_up_triggered.emit()
 	
 	if get_work_progress_percent() >= 100.0:
 		_finish_and_generate_file()

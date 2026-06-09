@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://bkihwdvwxmcnv"]
+
+[ext_resource type="Texture2D" uid="uid://vupbqjo6hpu4" path="res://assets/progress bar/Red Effect Bullet Impact Explosion 32x32.png" id="1_qcfvl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rn7v0"]
+atlas = ExtResource("1_qcfvl")
+region = Rect2(352, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u4yfg"]
+atlas = ExtResource("1_qcfvl")
+region = Rect2(384, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2dmn4"]
+atlas = ExtResource("1_qcfvl")
+region = Rect2(416, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p1pwh"]
+atlas = ExtResource("1_qcfvl")
+region = Rect2(448, 192, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lkdij"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rn7v0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u4yfg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2dmn4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p1pwh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="Control" type="Control" unique_id=1111929699]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -20.0
+offset_top = -23.0
+offset_right = 20.0
+offset_bottom = 17.0
+
+[node name="WorkingOnfire" type="AnimatedSprite2D" parent="." unique_id=1364281615]
+texture_filter = 1
+position = Vector2(19, 11)
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_lkdij")
+autoplay = "default"
+frame_progress = 0.44826138
