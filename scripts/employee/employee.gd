@@ -153,7 +153,7 @@ func _input(event: InputEvent) -> void:
 		
 		# 右键打开面板，同理也做全局保护
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			if get_global_rect().has_point(event.global_position):
+			if get_global_rect().has_point(get_global_mouse_position()):
 				_on_employee_clicked()
 				get_viewport().set_input_as_handled()
 
