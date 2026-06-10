@@ -312,15 +312,19 @@ texture = ExtResource("6_yahbh")
 expand_mode = 1
 
 [node name="LblLocked" type="Label" parent="VBoxContainer/HeadhuntPanel/MarginContainer/HeadhuntLocked" unique_id=1511075694]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 61.0
-offset_right = 291.0
-offset_bottom = 78.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -139.5
+offset_top = 33.0
+offset_right = 140.5
+offset_bottom = 50.0
+grow_horizontal = 2
 theme_override_colors/font_color = Color(0.124199994, 0.26971337, 0.46, 1)
 theme_override_fonts/font = ExtResource("3_rtmed")
 theme_override_font_sizes/font_size = 20
-text = "Unlock with Headhunt Office"
+text = "RECRUIT_PN_UNLOCK_HEADHUNT"
 horizontal_alignment = 1
 vertical_alignment = 1
 

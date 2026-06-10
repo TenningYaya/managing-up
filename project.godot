@@ -74,7 +74,7 @@ toggle_sticky_mode={
 [internationalization]
 
 locale/translation_remaps={}
-locale/translations=PackedStringArray("res://language/tutorial_dialogue_tips.en.translation", "res://language/tutorial_dialogue_tips.zh.translation", "res://language/tutorial_page_tips.en.translation", "res://language/tutorial_page_tips.zh.translation")
+locale/translations=PackedStringArray("res://language/tutorial_dialogue_tips.en.translation", "res://language/tutorial_dialogue_tips.zh.translation", "res://language/tutorial_page_tips.en.translation", "res://language/tutorial_page_tips.zh.translation", "res://language/ingame.en.translation", "res://language/ingame.zh.translation")
 
 [physics]
 
