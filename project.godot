@@ -25,6 +25,7 @@ UiManager="*uid://b28l2m20rhhr4"
 SaveManager="*uid://blecxw437vfjb"
 SpeedupQuoteSave="*uid://cnggak636kbc8"
 Bgm="*uid://fmwqeqrcve7x"
+BanterManager="*uid://do3hs43bffhah"
 
 [display]
 
@@ -74,7 +75,7 @@ toggle_sticky_mode={
 [internationalization]
 
 locale/translation_remaps={}
-locale/translations=PackedStringArray("res://language/tutorial_dialogue_tips.en.translation", "res://language/tutorial_dialogue_tips.zh.translation", "res://language/tutorial_page_tips.en.translation", "res://language/tutorial_page_tips.zh.translation", "res://language/ingame.en.translation", "res://language/ingame.zh.translation")
+locale/translations=PackedStringArray("res://language/tutorial_dialogue_tips.en.translation", "res://language/tutorial_dialogue_tips.zh.translation", "res://language/tutorial_page_tips.en.translation", "res://language/tutorial_page_tips.zh.translation", "res://language/ingame.en.translation", "res://language/ingame.zh.translation", "res://language/ingame_banter.en.translation", "res://language/ingame_banter.zh.translation")
 
 [physics]
 

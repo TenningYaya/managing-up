@@ -1,6 +1,6 @@
-#speech_bubble.gd
+#urge_bubble.gd
 extends Node2D
-class_name SpeechBubble
+class_name UrgeBubble
 
 @onready var label: Label = $BubblePanel/TextLabel
 @onready var panel: PanelContainer = $BubblePanel
@@ -26,7 +26,7 @@ func pop_up(content: String) -> void:
 	# Vector2(0, -20): 目标偏移量，X为0表示横向不动，Y为-20表示向上移动20个像素
 	# 0.5: 完成这次上浮动作需要的时长，单位是秒
 	var target_pos = position + Vector2(0, -20) 
-	_tween.tween_property(self, "position", target_pos, 1.5)
+	_tween.tween_property(self, "position", target_pos, 0.5)
 	
 	# 🌟 动画 2：淡入
 	# 1.0: 目标透明度，1.0代表完全不透明（显示）
@@ -37,7 +37,7 @@ func pop_up(content: String) -> void:
 	# .set_delay(1): 延迟执行时间，单位是秒（即：保持显示状态停留 1 秒）
 	# 0.0: 目标透明度，0.0代表完全透明（消失）
 	# 0.5: 完成这次渐隐过程的时间，单位是秒
-	_tween.chain().tween_property(self, "modulate:a", 0.0, 0.5).set_delay(3)
+	_tween.chain().tween_property(self, "modulate:a", 0.0, 0.5).set_delay(1)
 	
 	# 🌟 结束：自动销毁
 	_tween.chain().tween_callback(queue_free)

@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dj3p3oddir7j8"
+
+[deps]
+
+files=["res://language/ingame_banter.zh.translation", "res://language/ingame_banter.en.translation"]
+
+source_file="res://language/ingame_banter.csv"
+dest_files=["res://language/ingame_banter.zh.translation", "res://language/ingame_banter.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

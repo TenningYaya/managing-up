@@ -21,7 +21,12 @@ func hire_employee(new_employee: Employee) -> void:
 	if new_employee not in my_employees:
 		my_employees.append(new_employee)
 		employee_added.emit(new_employee) # 通知仓库去生成UI名片
-
+		if new_employee.rarity == Employee.Rarity.SSR:
+			# 给一点延迟，等员工卡片生成好了、员工已经显示在地图上之后，再触发吐槽
+			# 这样效果更好，显得大家是“看到人来了”才有反应
+			get_tree().create_timer(0.5).timeout.connect(func():
+				BanterManager.trigger_banter("hired_ssr", 3)
+			)
 # 解雇/优化员工
 func fire_employee(employee: Employee) -> void:
 	if employee in my_employees:

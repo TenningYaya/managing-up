@@ -64,6 +64,8 @@ func drop_employee(data: Variant) -> void:
 	
 	# 刷新 UI 显示
 	_update_avatars()
+	#[员工吐槽中心]：会议开始
+	BanterManager.trigger_banter("meeting_start", randi_range(1, 2), attendees)
 
 # ==========================================
 # 悬停显示逻辑 (Dismiss 按钮)
@@ -132,7 +134,8 @@ func _open_employee_panel(emp):
 # ==========================================
 func dismiss_meeting():
 	if attendees.is_empty(): return
-	
+	#[员工吐槽中心]：会议结束
+	BanterManager.trigger_banter("meeting_end", 3, attendees.duplicate())
 	# 让所有参会人员滚回工位，清除会议 Buff
 	for emp in attendees:
 		if is_instance_valid(emp):

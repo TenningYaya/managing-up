@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://5g8asr8ks1cr"]
 
 [ext_resource type="Texture2D" uid="uid://bwuyo35a1vo05" path="res://assets/UI/ingame/urge_bubble.png" id="1_5bris"]
-[ext_resource type="Script" uid="uid://chosierm4mfab" path="res://scripts/UI/custom/speech_bubble.gd" id="1_amasu"]
+[ext_resource type="Script" uid="uid://ccqcyqbfd3g4r" path="res://scripts/UI/custom/urge_bubble.gd" id="1_amasu"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_amasu"]
 texture = ExtResource("1_5bris")
