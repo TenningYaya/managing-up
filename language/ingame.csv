@@ -1,4 +1,17 @@
-﻿id,zh,en
-RECRUIT_PN_REJECT_ALL,全都包了！,Reject All
-RECRUIT_PN_ACCEPT_ALL,统统抬走！,Accept All
+id,zh,en
+RECRUIT_PN_REJECT_ALL,统统抬走！,Reject All
+RECRUIT_PN_ACCEPT_ALL,全都包了！,Accept All
 RECRUIT_PN_UNLOCK_HEADHUNT,开设猎头办公室以解锁猎头功能,Unlock with Headhunt Office
+WAREHOUSE_BULK_FIRE,优化,Fire
+WAREHOUSE_BULK_RECALL,召回,Recall
+WAREHOUSE_BULK_DISPATCH,派遣,Dispatch
+WAREHOUSE_SELECT_ALL,全选,All
+WAREHOUSE_SELECT,选择,Select
+WAREHOUSE_CANCEL,取消,Cancel
+WAREHOUSE_SORT_STATS_HIGH,属性：最高,Stats: High
+WAREHOUSE_SORT_STATS_LOW,属性：最低,Stats: Low
+WAREHOUSE_SORT_HIRE_NEWEST,入职：最新,Hire: Newest
+WAREHOUSE_SORT_HIRE_OLDEST,入职：最久,Hire: Oldest
+WAREHOUSE_BULK_FIRE_TITLE,确定优化全部 {n} 名员工？,Optimize these {n} employees?
+WAREHOUSE_BULK_FIRE_CONFIRM,开除,Fire
+WAREHOUSE_BULK_FIRE_CANCEL,取消,Cancel

@@ -12,12 +12,20 @@ extends Control
 @onready var bulk_recall_btn = $BottomOperationBar/Recall
 @onready var bulk_dispatch_btn = $BottomOperationBar/Dispatch
 @onready var bulk_fire_popup = $BulkFirePopup
+@onready var bulk_select_all_btn = $BottomOperationBar/SelectAll
 
 var is_selection_mode: bool = false
 var selected_employees: Array[Employee] = []
 
 var dragging = false
 var drag_offset = Vector2()
+
+var sort_options = [
+	{"key": "WAREHOUSE_SORT_STATS_HIGH", "id": 0},
+	{"key": "WAREHOUSE_SORT_STATS_LOW", "id": 1},
+	{"key": "WAREHOUSE_SORT_HIRE_NEWEST", "id": 2},
+	{"key": "WAREHOUSE_SORT_HIRE_OLDEST", "id": 3}
+]
 
 func _ready() -> void:
 	# 这一行必须有，且 EmployeeManager 必须是 Autoload 的单例名
@@ -26,10 +34,13 @@ func _ready() -> void:
 	
 	# 1. 初始化下拉菜单选项
 	sort_menu.clear()
-	sort_menu.add_item("Stats: High", 0)
-	sort_menu.add_item("Stats: Low", 1)
-	sort_menu.add_item("Hire: Newest", 2)
-	sort_menu.add_item("Hire: Oldest", 3)
+
+
+# 2. 循环添加
+	sort_menu.clear()
+	for opt in sort_options:
+		# tr(opt.key) 会自动根据当前语言查出对应的文字（比如“属性最高”）
+		sort_menu.add_item(tr(opt.key), opt.id)
 	sort_menu.select(0)
 	# 2. 绑定切换事件
 	sort_menu.item_selected.connect(_on_sort_selected)
@@ -42,6 +53,7 @@ func _ready() -> void:
 	bulk_optimize_btn.pressed.connect(_on_bulk_optimize_pressed)
 	bulk_recall_btn.pressed.connect(_on_bulk_recall_pressed)
 	bulk_dispatch_btn.pressed.connect(_on_bulk_dispatch_pressed)
+	bulk_select_all_btn.pressed.connect(_on_bulk_select_all_pressed)
 	
 	# 初始化 UI 状态
 	bottom_op_bar.hide()
@@ -92,7 +104,7 @@ func _toggle_selection_mode():
 	
 	var btn_label = select_toggle_btn.get_node("Label")
 	if btn_label:
-		btn_label.text = "Cancel" if is_selection_mode else "Select"
+		btn_label.text = tr("WAREHOUSE_CANCEL") if is_selection_mode else tr("WAREHOUSE_SELECT")
 	
 func _on_employee_hired(new_employee: Employee) -> void:
 	var card_instance = card_scene.instantiate()
@@ -133,8 +145,6 @@ func add_employee_to_warehouse(new_employee_data: Employee):
 	
 	# 3. 把卡片塞进网格里 (它会自动排到正确的位置)
 	grid.add_child(card_instance)
-	
-
 
 # 刚才在 recruitment_panel 里留空的按钮方法
 func open_warehouse():
@@ -254,9 +264,11 @@ func _on_bulk_optimize_pressed():
 	if selected_employees.is_empty(): return
 	
 	# 1. 设置弹窗内容
-	bulk_fire_popup.title_text = "Optimize these " + str(selected_employees.size()) + " employees?"
-	bulk_fire_popup.confirm_label = "Fire"
-	bulk_fire_popup.cancel_label = "Cancel"
+	var title_template = tr("WAREHOUSE_BULK_FIRE_TITLE")
+	bulk_fire_popup.title_text = title_template.format({"n": selected_employees.size()})
+	
+	bulk_fire_popup.confirm_label = tr("WAREHOUSE_BULK_FIRE_CONFIRM")
+	bulk_fire_popup.cancel_label = tr("WAREHOUSE_BULK_FIRE_CANCEL")
 	
 	# 2. 连接信号（因为是专属弹窗，_ready里连一次就行，或者这里用简易连接）
 	# 稳妥起见，先断开旧连接防止重复
@@ -293,6 +305,30 @@ func _execute_bulk_fire():
 	_on_map_needs_refresh() # 刷新剩下的人的小绿标
 	bulk_fire_popup.hide()
 
+func _on_bulk_select_all_pressed() -> void:
+	# 先数数当前网格里有多少张有效卡片
+	var total_cards = grid.get_child_count()
+	if total_cards == 0:
+		return
+		
+	# 如果当前选中的人数等于卡片总数，说明已经是“全选”状态了，那么这次点击就是“取消全选”
+	if selected_employees.size() == total_cards:
+		selected_employees.clear()
+		# 遍历所有卡片，取消勾选效果
+		for card in grid.get_children():
+			card.is_selected = false
+	else:
+		# 否则，就是执行“全选”操作
+		selected_employees.clear() # 先清空，防止有重复的
+		for card in grid.get_children():
+			var emp_data = card.get("my_employee_data")
+			if emp_data != null:
+				selected_employees.append(emp_data)
+				card.is_selected = true # 强制点亮
+				
+	# 最后，别忘了更新底下一排开除/外派按钮的状态（比如全取消后要变灰）
+	_update_bulk_buttons_state()
+	
 # 辅助判定（逻辑同 Panel）
 func _check_emp_on_map(emp: Employee) -> bool:
 	if emp == null: return false

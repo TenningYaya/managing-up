@@ -94,7 +94,7 @@ theme_override_font_sizes/font_size = 20
 clip_contents = true
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
-button_text = "Select"
+button_text = "WAREHOUSE_SELECT"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1335615631]
 layout_mode = 1
@@ -120,35 +120,50 @@ columns = 4
 
 [node name="BottomOperationBar" type="HBoxContainer" parent="." unique_id=1005811720]
 custom_minimum_size = Vector2(270, 0)
-layout_mode = 0
-offset_left = 68.0
-offset_top = 461.0
-offset_right = 354.0
-offset_bottom = 501.0
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -192.0
+offset_top = -61.0
+offset_right = 192.0
+offset_bottom = -21.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_constants/separation = 8
 
 [node name="Fire" parent="BottomOperationBar" unique_id=1517868733 instance=ExtResource("3_wfpq7")]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
-button_text = "Fire"
+button_text = "WAREHOUSE_BULK_FIRE"
 
 [node name="Recall" parent="BottomOperationBar" unique_id=2043766289 instance=ExtResource("3_wfpq7")]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
-button_text = "Recall"
+button_text = "WAREHOUSE_BULK_RECALL"
 
 [node name="Dispatch" parent="BottomOperationBar" unique_id=1811702164 instance=ExtResource("3_wfpq7")]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
-button_text = "Dispatch"
+button_text = "WAREHOUSE_BULK_DISPATCH"
+
+[node name="SelectAll" parent="BottomOperationBar" unique_id=1921882511 instance=ExtResource("3_wfpq7")]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+button_text = "WAREHOUSE_SELECT_ALL"
 
 [node name="BulkFirePopup" parent="." unique_id=1050921675 instance=ExtResource("4_sdgeg")]
 visible = false
-layout_mode = 0
-offset_left = -690.0
-offset_top = 169.0
-offset_right = -690.0
-offset_bottom = 169.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="TitleBar" type="Panel" parent="." unique_id=809817917]
 layout_mode = 0
