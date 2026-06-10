@@ -116,7 +116,7 @@ func _input(event: InputEvent) -> void:
 		
 		# 🌟 规则 2：点在当前正看着的员工身上？绝对不关！
 		# 利用员工自己的 2D 世界坐标系进行极其精准的碰撞检测
-		if current_employee != null and is_instance_valid(current_employee):
+		if current_employee != null and is_instance_valid(current_employee) and current_employee.is_inside_tree():
 			if current_employee.get_global_rect().has_point(current_employee.get_global_mouse_position()):
 				return
 
