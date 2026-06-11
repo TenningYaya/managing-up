@@ -20,7 +20,7 @@ var _flash_tween: Tween
 # 升级提示（红点 + 震动）相关
 # =====================================================
 # 玩家升级各级费用（与 upgrades_page.gd 保持一致）
-const PLAYER_UPGRADE_COST := {1: 50, 2: 1000, 3: 5000, 4: 15000}
+const PLAYER_UPGRADE_COST := {1: 50, 2: 5000, 3: 30000, 4: 100000}
 
 const TILT_FREQ := 2.5            # 倾斜频率（Hz，每秒来回次数）
 const TILT_ANGLE := 15.0          # 最大倾斜角度（度）
@@ -256,9 +256,9 @@ func _can_upgrade_any_desk() -> bool:
 
 func _desk_cost(level: int) -> int:
 	match level:
-		1: return 200
-		2: return 500
-		3: return 1000
+		1: return 1000
+		2: return 3000
+		3: return 10000
 	return 0
 
 # 重新判定可升级状态：更新红点，并在"刚出现"时触发震动
