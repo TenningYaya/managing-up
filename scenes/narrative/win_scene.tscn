@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://duhr8yjrfqwpe"]
+
+[ext_resource type="Script" uid="uid://cy721geuelxy5" path="res://scripts/test/win_scene.gd" id="1_nckrh"]
+[ext_resource type="PackedScene" uid="uid://c18bskwtiitsq" path="res://scenes/starter/dialogue_intro_ui.tscn" id="2_57l6c"]
+
+[node name="WinScene" type="Control" unique_id=2140235828]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nckrh")
+win_dialogue_keys = Array[String](["WIN_SCENE_DIALOGUE_1", "WIN_SCENE_DIALOGUE_2", "WIN_SCENE_DIALOGUE_3", "WIN_SCENE_DIALOGUE_4", "WIN_SCENE_DIALOGUE_5", "WIN_SCENE_DIALOGUE_6", "WIN_SCENE_DIALOGUE_7"])
+
+[node name="DialogueIntroUI" parent="." unique_id=490138412 instance=ExtResource("2_57l6c")]
+layout_mode = 1

@@ -1,3 +1,4 @@
+#dialogue_intro_ui.gd
 extends Control
 
 signal intro_dialogue_finished

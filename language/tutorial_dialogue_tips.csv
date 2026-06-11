@@ -102,3 +102,12 @@ HINT_CONTINUE,[左键] 继续对话 | 长按 [空格] 跳过,[LMB] Continue | Ho
 BOSS_QUOTE_01,总感觉怪怪的你再改改,Something feels off, fix it again
 BOSS_QUOTE_02,快打包了什么时候做完啊,When are you finishing this?
 BOSS_QUOTE_03,老师这就是成图了吗,Is this really the final version?
+,,
+WIN_SCENE_DIALOGUE_1,说实话，我把项目交给你，纯粹是想在游轮上多待几天,"Honestly, I handed this project to you so I could squeeze in a few extra days on the yacht."
+WIN_SCENE_DIALOGUE_2,没想到这项目居然已经被你做成同类产品的Top 1了,"But I never expected you to actually push this project to the top."
+WIN_SCENE_DIALOGUE_3,一切都已经在正轨上了，你可以继续留在岗位上大搞赋能...,"Everything's on track, you can keep empowering the team..."
+WIN_SCENE_DIALOGUE_4,...或者干脆放下工作，来游轮上玩两天,"...or leave it and join me on the yacht for a few days."
+WIN_SCENE_DIALOGUE_5,不过...只是管理这样一个小项目，对你来说有点屈才了,"Though... managing a tiny program like this is a bit beneath your talent."
+WIN_SCENE_DIALOGUE_6,等时机成熟，我会再联系你的,"When the timing is right, I will reach out to you again."
+WIN_SCENE_DIALOGUE_7,"到那个时候，我准备告诉你一个公司深处的秘密……","And when that time comes, I'm prepared to let you in on an absolute secret..."
+WIN_SCENE_DIALOGUE_8,好好学，好好干，我一直是很看好你的，bye~,"Study hard, work hard. I've always believed in your. Bye~"
