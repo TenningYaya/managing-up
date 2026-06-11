@@ -6,9 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="2_lh86t"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_70tse"]
 [ext_resource type="Texture2D" uid="uid://b343jwsuuh7fn" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Buttons & Holders/13.png" id="4_lh86t"]
-[ext_resource type="Texture2D" uid="uid://cikjriby4i27n" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Icons/14.png" id="4_vc4hl"]
+[ext_resource type="Texture2D" uid="uid://ct6fwb5qd37kx" path="res://assets/sidebar/desk slot.png" id="5_1t8g2"]
 [ext_resource type="Texture2D" uid="uid://bf3w3mlc2krib" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Decoration/3.png" id="6_70tse"]
+[ext_resource type="Texture2D" uid="uid://4b2rmcwyl3pv" path="res://assets/sidebar/office.png" id="7_g6lrf"]
 [ext_resource type="Script" uid="uid://dx6lfbivooo7q" path="res://scripts/UI/custom/upgrade_button.gd" id="8_ciro5"]
+[ext_resource type="Texture2D" uid="uid://d3q7k2idorl8d" path="res://assets/sidebar/office party.png" id="8_nso6x"]
 [ext_resource type="AudioStream" uid="uid://764twux58mia" path="res://audio/gem_collect.wav" id="8_pgosc"]
 
 [node name="UpgradesPage" type="Control" unique_id=1808630414 groups=["upgrade_page"]]
@@ -86,19 +88,20 @@ stretch_mode = 5
 [node name="ICON" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/ICON_BG" unique_id=62875264]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = -1
+anchor_left = 0.647
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 0.647
 anchor_bottom = 0.5
-offset_left = -24.0
-offset_top = -32.0
-offset_right = 24.0
-offset_bottom = 32.0
+offset_left = -39.32
+offset_top = -33.0
+offset_right = 24.68
+offset_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_vc4hl")
-stretch_mode = 2
+texture = ExtResource("5_1t8g2")
+expand_mode = 2
+stretch_mode = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1" unique_id=435132132]
 layout_mode = 2
@@ -147,14 +150,15 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -24.0
+offset_left = -32.5
 offset_top = -32.0
-offset_right = 24.0
-offset_bottom = 32.0
+offset_right = 31.5
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_vc4hl")
-stretch_mode = 2
+texture = ExtResource("7_g6lrf")
+expand_mode = 2
+stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2" unique_id=2057847718]
 layout_mode = 2
@@ -205,12 +209,13 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -24.0
 offset_top = -32.0
-offset_right = 24.0
-offset_bottom = 32.0
+offset_right = 31.5
+offset_bottom = 41.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_vc4hl")
-stretch_mode = 2
+texture = ExtResource("8_nso6x")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3" unique_id=360240960]
 layout_mode = 2
