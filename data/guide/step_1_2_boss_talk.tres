@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://c17cnqxdcv68t"]
+
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_770di"]
+
+[resource]
+script = ExtResource("1_770di")
+dialogue_lines = Array[String](["TUTORIAL_STEP_01_03_02", "TUTORIAL_STEP_01_04", "TUTORIAL_STEP_01_05", "TUTORIAL_STEP_01_06", "TUTORIAL_STEP_01_07", "TUTORIAL_STEP_01_08"])
+metadata/_custom_type_script = "uid://la2mtrf0vlw7"

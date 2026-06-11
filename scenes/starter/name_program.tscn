@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://cmudbs8jy01bv"]
+
+[ext_resource type="Script" uid="uid://chdrhvsafxhir" path="res://scripts/guide/name_program.gd" id="1_ixv5g"]
+[ext_resource type="Texture2D" uid="uid://bh0c5caoifnt1" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/PNG Spritesheet/Map SpriteSheet.png" id="1_qej8v"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="2_c5ors"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_ixv5g"]
+
+[node name="NameProgram" type="Control" unique_id=187481383]
+custom_minimum_size = Vector2(350, 200)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ixv5g")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=602215461]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qej8v")
+region_rect = Rect2(638, 504, 417, 308)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=88031984]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=35890017]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=56210705]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.186459, 0.18645903, 0.18645903, 1)
+theme_override_fonts/font = ExtResource("2_ixv5g")
+theme_override_font_sizes/font_size = 30
+text = "NAME_INPUT_PROMPT"
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer" unique_id=1942313309]
+layout_mode = 2
+placeholder_text = "NAME_INPUT_PLACEHOLDER"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1551792259]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Cancel" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=2048579194 instance=ExtResource("2_c5ors")]
+layout_mode = 2
+size_flags_horizontal = 3
+button_text = "NAME_INPUT_CANCEL"
+
+[node name="Confirm" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=350344485 instance=ExtResource("2_c5ors")]
+layout_mode = 2
+size_flags_horizontal = 3
+button_text = "NAME_INPUT_CONFIRM"
+
+[node name="NameTooLongLabel" type="Label" parent="." unique_id=1012375390]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -89.0
+offset_top = -34.0
+offset_right = 89.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.8940833, 4.885271e-06, 8.663535e-07, 1)
+theme_override_fonts/font = ExtResource("2_ixv5g")
+text = "NAME_INPUT_REFUSED"
+horizontal_alignment = 1

@@ -36,6 +36,7 @@ var is_employee_interaction_disabled: bool = false
 var is_reject_button_disabled: bool = false
 var tutorial_allow_camera_drag: bool = false
 
+var project_name: String = ""
 # 定义总览面板需要的变量
 var total_hits: int = 0
 var total_time: float = 0.0

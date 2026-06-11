@@ -7,7 +7,8 @@ enum Type {
 	DIALOGUE,     # 纯对话 (如果填了 target_group 则会自动触发“只高亮解说不卡点击”的特效)
 	FOCUS_CLICK,  # 强行挖洞点击 (黑布挖洞 + Tips 提示 + 强迫点击按钮三位一体)
 	WAIT_EVENT,    # 纯逻辑等待
-	WAIT_TIME
+	WAIT_TIME,
+	NAME_INPUT
 }
 
 enum Speaker { 

@@ -2,11 +2,13 @@ id,zh,en
 TUTORIAL_STEP_01_01,早上坏，欢迎来新写字楼、新办公室,Bad morning! Welcome to the new office
 TUTORIAL_STEP_01_02,我知道早上上班的心情总是很艹蛋，因为我也是,"I know Monday mornings always feel like absolute garbage. Trust me, I feel the exact same way"
 TUTORIAL_STEP_01_03,所以，新项目组的工作就全交给你了,Which is exactly why I'm handing over the entire new project team to you!
-TUTORIAL_STEP_01_04,什么？你说你不会管人也不会取名字？,"Wait, you don't know how to name or manage a program?"
-TUTORIAL_STEP_01_05,嗯……你要知道，把你招进来的时候，我对你是有很高的期望的,"Well... I had extremely higher expectations for you when you're hired'"
+TUTORIAL_STEP_01_03_01,先给它取个名字吧！,First, give it a name!
+TUTORIAL_STEP_01_03_02,{project_name}，一听就有活儿，好拉风投,"{project_name}, now that's a name that screams funding potential!"
+TUTORIAL_STEP_01_04,什么？你说你不会管人？,"Wait, you don't know how to manage a program?"
+TUTORIAL_STEP_01_05,嗯……给你offer的时候，我对你是有很高的期望的,"Well... I had extremely higher expectations for you when offered you the offer'"
 TUTORIAL_STEP_01_06,再说了，现在AI什么的不是很好用吗？有事问AI去吧,"Besides, aren't AI tools all the rage now? Just go ask an AI"
 TUTORIAL_STEP_01_07,好了，我这边的游轮慈善晚宴都要开始了,"Alright, my charity gala is about to start"
-TUTORIAL_STEP_01_08,好好学，好好干,"Study hard, work hard"
+TUTORIAL_STEP_01_08,好好学，好好干 bye~,"Study hard, work hard. bye~"
 TUTORIAL_STEP_01_09,绩效好的话一切都好说，bye~,Get those KPI numbers up and everything will work out. Bye~
 ,,
 TUTORIAL_STEP_02_01,点击教程AI开始向上管理,Click the Tutorial AI to Managing-up
@@ -111,3 +113,9 @@ WIN_SCENE_DIALOGUE_5,不过...只是管理这样一个小项目，对你来说�
 WIN_SCENE_DIALOGUE_6,等时机成熟，我会再联系你的,"When the timing is right, I will reach out to you again."
 WIN_SCENE_DIALOGUE_7,"到那个时候，我准备告诉你一个公司深处的秘密……","And when that time comes, I'm prepared to let you in on an absolute secret..."
 WIN_SCENE_DIALOGUE_8,好好学，好好干，我一直是很看好你的，bye~,"Study hard, work hard. I've always believed in your. Bye~"
+,,
+NAME_INPUT_PROMPT,给项目组起名...,You Program is...
+NAME_INPUT_PLACEHOLDER,输入项目组名称……,Enter program name...
+NAME_INPUT_CANCEL,擦掉重填,Erase
+NAME_INPUT_CONFIRM,就这个了！,Confirm
+NAME_INPUT_REFUSED,名字太长了，再改改吧！,Name's too long, give it another shot!

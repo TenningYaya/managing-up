@@ -157,6 +157,8 @@ func play_step(index: int) -> void:
 			_handle_wait_event(step)
 		TutorialStep.Type.WAIT_TIME:
 			_handle_wait_time(step)
+		TutorialStep.Type.NAME_INPUT:
+			_handle_name_input(step)
 		
 func _handle_dialogue(step: TutorialStep) -> void:
 	tip_ui.hide()
@@ -227,7 +229,9 @@ func _dispatch_translated_dialogue(step: TutorialStep, signal_name: String, call
 	# 1. 物理清洗：将大写暗号在底层原地还原成当前语言的真话
 	var translated_lines: Array[String] = []
 	for line_key in step.dialogue_lines:
-		translated_lines.append(tr(line_key))
+		var line = tr(line_key)
+		line = line.format({"project_name": Gamemanager.project_name})
+		translated_lines.append(line)
 		
 	# 2. 核心分流与安全断连
 	if step.speaker == 1:  # KPI宝分支
@@ -964,3 +968,23 @@ func _handle_camera_drag_tutorial(step: TutorialStep) -> void:
 	# 🌟 2. 发放特权与重置数据
 	Gamemanager.tutorial_allow_camera_drag = true 
 	drag_distance_accumulator = 0.0
+
+func _handle_name_input(step: TutorialStep) -> void:
+	blocker_ui.show()
+	blocker_ui._arrange_curtains(Rect2(0, 0, 0, 0))
+	
+	var name_input_scene = load("res://scenes/starter/name_program.tscn")
+	var panel = name_input_scene.instantiate()
+	add_child(panel)
+	
+	# 居中
+	await get_tree().process_frame
+	var screen_size = get_viewport().get_visible_rect().size
+	panel.global_position = (screen_size - panel.size) / 2.0
+	
+	# 监听场景里的确认信号
+	panel.confirmed.connect(func(name_result: String):
+		Gamemanager.project_name = name_result if name_result.strip_edges() != "" else tr("DEFAULT_PROJECT_NAME")
+		panel.queue_free()
+		_on_step_completed()
+	)
