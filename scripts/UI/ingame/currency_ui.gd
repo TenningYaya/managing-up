@@ -97,8 +97,10 @@ func format_number(value: float) -> String:
 		return str(round(value / 100000000.0) / 10.0) + "B"
 	elif abs_value >= 1000000:
 		return str(round(value / 100000.0) / 10.0) + "M"
+	elif abs_value >= 10000:
+		return "%.1fK" % (value / 1000.0)
 	elif abs_value >= 1000:
-		return str(round(value / 100.0) / 10.0) + "K"
+		return "%.2fK" % (value / 1000.0)
 	else:
 		return str(int(value))
 
