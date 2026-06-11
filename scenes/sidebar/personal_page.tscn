@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://cmsc4bw6aqfh8"]
+
+[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_dxbfs"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_xuayt"]
+[ext_resource type="Texture2D" uid="uid://bf3w3mlc2krib" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Decoration/3.png" id="4_2ixrq"]
+[ext_resource type="PackedScene" uid="uid://doe15yvabaqje" path="res://scenes/settings/quote_editor.tscn" id="4_dxbfs"]
+[ext_resource type="PackedScene" uid="uid://ejvqpq34dhbg" path="res://scenes/settings/tile_changer.tscn" id="4_wdonu"]
+[ext_resource type="AudioStream" uid="uid://764twux58mia" path="res://audio/gem_collect.wav" id="8_iudua"]
+
+[node name="PersonalPage" type="Control" unique_id=1808630414]
+custom_minimum_size = Vector2(270, 360)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 270.0
+offset_bottom = 360.0
+
+[node name="ColorRect" type="TextureRect" parent="." unique_id=308287506]
+layout_mode = 0
+offset_right = 248.0
+offset_bottom = 336.0
+texture = ExtResource("2_dxbfs")
+expand_mode = 1
+
+[node name="upgrades" type="Label" parent="." unique_id=2091357471]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -178.0
+offset_top = 25.0
+offset_right = 179.0
+offset_bottom = 54.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_xuayt")
+theme_override_font_sizes/font_size = 34
+text = "Sidebar_personal_title"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainLayout" type="VBoxContainer" parent="." unique_id=1465389803]
+custom_minimum_size = Vector2(214, 277)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -7.5
+offset_right = -2.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainLayout" unique_id=1071642607]
+custom_minimum_size = Vector2(220, 222.16)
+layout_mode = 2
+size_flags_vertical = 6
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MainLayout/ScrollContainer" unique_id=261099223]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 10
+
+[node name="ItemsList" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer" unique_id=1013653389]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1517829118]
+layout_mode = 2
+texture = ExtResource("4_2ixrq")
+
+[node name="TileChanger" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=894433398 instance=ExtResource("4_wdonu")]
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1375197860]
+layout_mode = 2
+texture = ExtResource("4_2ixrq")
+
+[node name="QuoteEditor" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1617537307 instance=ExtResource("4_dxbfs")]
+layout_mode = 2
+
+[node name="ClickedSound" type="AudioStreamPlayer" parent="." unique_id=914824273]
+stream = ExtResource("8_iudua")
+bus = &"SFX"

@@ -187,7 +187,8 @@ func _on_accept_all_pressed() -> void:
 		var temp_list = current_resumes.duplicate()
 		for emp in temp_list:
 			on_hire_attempted.emit(emp)
-			
+		if EmployeeManager.has_method("hire_employees_batch"):
+			EmployeeManager.hire_employees_batch(temp_list)	
 		# 招募完后清空列表
 		current_resumes.clear()
 		current_page = 0

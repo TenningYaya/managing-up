@@ -60,7 +60,7 @@ var portrait: Texture2D      # 核心：生成的静态立绘
 
 #——————————动画————————————
 var _move_tween: Tween = null
-var _active_bubble: SpeechBubble = null
+var _active_bubble = null
 const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
 const SPEECH_BUBBLE_SCENE = preload("res://scenes/vfx/speech_bubble.tscn")
 const URGE_BUBBLE_SCENE = preload("res://scenes/vfx/urge_bubble.tscn")
@@ -537,6 +537,32 @@ func _spawn_speech_bubble(text_content: String) -> void:
 	
 	# 呼叫接口，播放内容
 	_active_bubble.pop_up(text_content)
+
+func _spawn_banter_bubble(text_content: String) -> void:
+	# 🌟 打断机制：如果头上已经有一个气泡了，直接把它干掉
+	if is_instance_valid(_active_bubble):
+		_active_bubble.kill_bubble()
+		
+	_active_bubble = SPEECH_BUBBLE_SCENE.instantiate()
+	add_child(_active_bubble)
+	
+	_active_bubble.scale = Vector2(0.3, 0.3)
+	# 设置层级，保证盖住员工和后面的东西
+	_active_bubble.z_index = 11 
+	
+	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
+	_active_bubble.position = Vector2(70, -27)
+	
+	# 呼叫接口，播放内容
+	_active_bubble.pop_up(text_content)
+
+func play_on_hired_banter() -> void:
+	# 1. 直接从 BanterManager 的题库里摸一句出来
+	var pool = BanterManager.QUOTES["new_hire"]
+	var random_key = pool[randi() % pool.size()]
+	
+	# 2. 翻译并呼叫你现成的气泡生成函数
+	_spawn_banter_bubble(tr(random_key))
 	
 func get_final_efficiency() -> int:
 	var total = efficiency	

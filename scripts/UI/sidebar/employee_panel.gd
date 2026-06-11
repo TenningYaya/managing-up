@@ -80,26 +80,6 @@ func _ready() -> void:
 	
 	set_process_input(true)
 
-#func _input(event: InputEvent) -> void:
-	#if is_locked_by_tutorial:
-		#return
-		#
-	## 只处理鼠标左键按下
-	#if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		#if not visible: 
-			#return
-		#
-		## 1. 如果点在面板内部，绝对不能关
-		#if _is_pos_inside_panel(event.global_position):
-			#return
-		#
-		## 2. 如果点在任何一个员工身上，也绝对不能关
-		## 因为员工自己的 _gui_input 会去调用 open_panel()，如果这里关了就会冲突
-		#if _is_pos_on_any_employee(event.global_position):
-			#return
-#
-		#close_panel()
-
 func _input(event: InputEvent) -> void:
 	if is_locked_by_tutorial:
 		return

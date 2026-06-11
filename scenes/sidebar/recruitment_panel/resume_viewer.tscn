@@ -74,15 +74,15 @@ theme_override_constants/margin_right = 15
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="RejectAll" parent="VBoxContainer/MarginContainer/OpreateAll" unique_id=2048579194 instance=ExtResource("3_lxgr6")]
-layout_mode = 2
-size_flags_horizontal = 3
-button_text = "Reject All"
-
 [node name="AcceptAll" parent="VBoxContainer/MarginContainer/OpreateAll" unique_id=549996692 instance=ExtResource("3_lxgr6")]
 layout_mode = 2
 size_flags_horizontal = 3
-button_text = "Accept All"
+button_text = "RECRUIT_PN_ACCEPT_ALL"
+
+[node name="RejectAll" parent="VBoxContainer/MarginContainer/OpreateAll" unique_id=2048579194 instance=ExtResource("3_lxgr6")]
+layout_mode = 2
+size_flags_horizontal = 3
+button_text = "RECRUIT_PN_REJECT_ALL"
 
 [node name="YesSound" type="AudioStreamPlayer" parent="." unique_id=697872995]
 stream = ExtResource("4_v240j")

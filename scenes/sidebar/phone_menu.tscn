@@ -12,9 +12,27 @@
 [ext_resource type="PackedScene" uid="uid://cef1cc6y8xrd6" path="res://scenes/sidebar/settings_page.tscn" id="7_uouet"]
 [ext_resource type="PackedScene" uid="uid://72jjpffy66yt" path="res://scenes/sidebar/upgrades_page.tscn" id="8_53q3r"]
 [ext_resource type="PackedScene" uid="uid://bc1pi0j86er70" path="res://scenes/sidebar/general_page.tscn" id="9_50qqt"]
+[ext_resource type="Texture2D" uid="uid://dge2s02wwjgdb" path="res://assets/sidebar/app/personal.png" id="9_ckm1g"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="10_53q3r"]
-[ext_resource type="Texture2D" path="res://assets/sidebar/app/decor.png" id="11_decor"]
-[ext_resource type="PackedScene" uid="uid://dkl49cj8m1a3b" path="res://scenes/sidebar/decor_page.tscn" id="12_decor"]
+[ext_resource type="Texture2D" uid="uid://by5vc26d4eg3t" path="res://assets/sidebar/app/decor.png" id="11_decor"]
+[ext_resource type="PackedScene" uid="uid://dkl5acj8m1a3b" path="res://scenes/sidebar/decor_page.tscn" id="12_decor"]
+[ext_resource type="PackedScene" uid="uid://cmsc4bw6aqfh8" path="res://scenes/sidebar/personal_page.tscn" id="15_nnubu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reddot"]
+bg_color = Color(0.886275, 0.14902, 0.14902, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nnubu"]
+atlas = ExtResource("4_diil0")
+region = Rect2(32, 32, 1184, 1184)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_53q3r"]
 
@@ -23,18 +41,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_diil0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yskv6"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reddot"]
-bg_color = Color(0.886275, 0.149020, 0.149020, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 1, 1, 1)
 
 [node name="MobileSidebar" type="Control" unique_id=2025363917]
 layout_mode = 3
@@ -144,7 +150,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_reddot")
 [node name="tutorial" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=425357062 groups=["tutorial_app_icon"]]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-texture_normal = ExtResource("4_diil0")
+texture_normal = SubResource("AtlasTexture_nnubu")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -202,10 +208,10 @@ stretch_mode = 5
 [node name="DECOR" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor" unique_id=300000002]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 65.0
+offset_top = 68.0
 offset_right = 78.0
-offset_bottom = 90.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+offset_bottom = 93.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "DECOR"
 horizontal_alignment = 1
@@ -219,6 +225,24 @@ offset_right = 76.0
 offset_bottom = 24.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_reddot")
+
+[node name="Personal" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=474381659]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+texture_normal = ExtResource("9_ckm1g")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="DECOR" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/Personal" unique_id=2117435846]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 68.0
+offset_right = 78.0
+offset_bottom = 93.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "	PERSONAL"
+horizontal_alignment = 1
 
 [node name="AppDisplayArea" type="Control" parent="PhoneWrapper/Screen" unique_id=1568197251]
 layout_mode = 1
@@ -254,6 +278,10 @@ offset_right = 270.0
 offset_bottom = 360.0
 
 [node name="DecorPage" parent="PhoneWrapper/Screen/AppDisplayArea" unique_id=300000003 instance=ExtResource("12_decor")]
+visible = false
+layout_mode = 0
+
+[node name="PersonalPage" parent="PhoneWrapper/Screen/AppDisplayArea" unique_id=552744011 instance=ExtResource("15_nnubu")]
 visible = false
 layout_mode = 0
 

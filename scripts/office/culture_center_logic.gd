@@ -23,22 +23,20 @@ func setup(office: Control) -> void:
 	# 🌟 修正 1：不要用 var btn，直接赋值给脚本顶部那个 manage_btn 变量！
 	manage_btn = my_office.manage_btn 
 	
-	# 绑定悬停和点击信号
-	#my_office.mouse_entered.connect(_on_office_mouse_entered)
-	#my_office.mouse_exited.connect(_on_office_mouse_exited)
-	
 	if manage_btn.pressed.is_connected(_on_manage_btn_pressed):
 		manage_btn.pressed.disconnect(_on_manage_btn_pressed)
 	manage_btn.pressed.connect(_on_manage_btn_pressed)
-	
 	switch_culture(CultureType.EFF_UP)
 	
 func switch_culture(type: CultureType) -> void:
+	
 	if cur_type == type: return
 	
 	_apply_culture_effect(cur_type, -1) # 撤销旧的
 	cur_type = type
 	_apply_culture_effect(cur_type, 1)  # 应用新的
+	#[员工吐槽中心]：文化室文化变更
+	BanterManager.trigger_banter("culture_change", 2)
 
 func _apply_culture_effect(type: CultureType, dir: int) -> void:
 	if type == CultureType.NONE: return

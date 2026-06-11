@@ -43,6 +43,7 @@ var _reminder_timer: Timer = null
 @onready var btn_upgrades: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades
 @onready var btn_tutorial: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/tutorial
 @onready var btn_decor: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor
+@onready var btn_personal: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/Personal
 
 @onready var home_button: BaseButton = $PhoneWrapper/HomeButton
 
@@ -51,6 +52,7 @@ var _reminder_timer: Timer = null
 @onready var upgrades_page: Control = $PhoneWrapper/Screen/AppDisplayArea/UpgradesPage
 @onready var tutorial_page: Control = $PhoneWrapper/Screen/AppDisplayArea/TutorialPage
 @onready var decor_page: Control = $PhoneWrapper/Screen/AppDisplayArea/DecorPage
+@onready var personal_page: Control = $PhoneWrapper/Screen/AppDisplayArea/PersonalPage
 
 @onready var dot_upgrades: Panel = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades/RedDot
 @onready var dot_decor: Panel = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor/RedDot
@@ -93,6 +95,10 @@ func _ready() -> void:
 
 	btn_decor.pressed.connect(func():
 		open_app(decor_page)
+	)
+	
+	btn_personal.pressed.connect(func():
+		open_app(personal_page)
 	)
 
 	# =====================================================
@@ -211,6 +217,7 @@ func hide_all_pages() -> void:
 	upgrades_page.visible = false
 	tutorial_page.visible = false
 	decor_page.visible = false
+	personal_page.visible = false
 
 
 func lock_for_tutorial() -> void:

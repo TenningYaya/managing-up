@@ -42,11 +42,6 @@ func setup_slot(emp: Employee) -> void:
 	# 看大总管脸色行事
 	if Gamemanager.is_reject_button_disabled:
 		reject_btn.disabled = true # 💥 进场直接变灰禁用！
-		
-	# 坑位自己算钱、自己改按钮文字！主控代码不用管了
-	#var total_stats = emp.efficiency + emp.quality + emp.experience
-	#var cost_kpi = total_stats * 10
-	#hire_btn.text = "Yes!"
 
 func _on_hire_pressed() -> void:
 	if current_employee:
