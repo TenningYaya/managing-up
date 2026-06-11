@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://bjepsmw3dnne6"]
 
 [ext_resource type="Script" uid="uid://cbtwlraomyyyg" path="res://scripts/UI/dialogue/chat_bubble.gd" id="1_s5yc6"]
-[ext_resource type="Texture2D" uid="uid://dxvgryiuvccae" path="res://assets/dialogue/boss_bcg (3).png" id="2_0vvax"]
+[ext_resource type="Texture2D" uid="uid://d2knp2u0urexp" path="res://assets/dialogue/boss.png" id="2_mvav7"]
 [ext_resource type="Texture2D" uid="uid://bpjksdfl02sm7" path="res://assets/dialogue/bubble.png" id="2_s5yc6"]
-[ext_resource type="Texture2D" uid="uid://bd0ud6an23ovi" path="res://assets/dialogue/boss_capitalist (1).png" id="3_vi3wl"]
 
 [node name="ChatBubble" type="HBoxContainer" unique_id=1941480218]
 offset_right = 376.0
@@ -22,16 +21,7 @@ custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
-texture = ExtResource("2_0vvax")
-expand_mode = 1
-stretch_mode = 4
-
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer" unique_id=1457467825]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-texture = ExtResource("3_vi3wl")
+texture = ExtResource("2_mvav7")
 expand_mode = 1
 stretch_mode = 4
 
