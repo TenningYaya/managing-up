@@ -1,28 +1,53 @@
 [gd_scene format=3 uid="uid://doe15yvabaqje"]
 
 [ext_resource type="Script" uid="uid://dqw6tnbj3u20k" path="res://scripts/UI/panel/quote_editor.gd" id="1_7ps1e"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_33up6"]
 
 [node name="QuoteEditor" type="VBoxContainer" unique_id=1617537307]
+offset_right = 183.0
+offset_bottom = 153.0
 script = ExtResource("1_7ps1e")
 
+[node name="Label" type="Label" parent="." unique_id=1146253798]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_33up6")
+theme_override_font_sizes/font_size = 16
+text = "Sidebar_personal_quote_title"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=746130785]
-custom_minimum_size = Vector2(200, 300)
+custom_minimum_size = Vector2(150, 100)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=2033802843]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer" unique_id=1324168274]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_right = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer" unique_id=2033802843]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=459132124]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer" unique_id=1827014698]
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer" unique_id=16099755]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Text your co-workers!"
+theme_override_font_sizes/font_size = 14
+placeholder_text = "Sidebar_personal_edit_quote"
 
 [node name="AddQuote" type="Button" parent="HBoxContainer" unique_id=2021766350]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-text = "Add"
+theme_override_font_sizes/font_size = 14
+text = "Sidebar_personal_add_quote"
+clip_text = true
 
 [connection signal="pressed" from="HBoxContainer/AddQuote" to="." method="_on_add_pressed"]

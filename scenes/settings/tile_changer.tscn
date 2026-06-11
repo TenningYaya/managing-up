@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://ejvqpq34dhbg"]
+
+[ext_resource type="Script" uid="uid://cwkg5ot7m848f" path="res://scripts/UI/sidebar/tile_changer.gd" id="1_7w0u4"]
+
+[node name="TileChanger" type="VBoxContainer" unique_id=894433398]
+custom_minimum_size = Vector2(217, 0)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_7w0u4")
+
+[node name="ToggleButton" type="Button" parent="." unique_id=1688919394]
+texture_filter = 1
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=1648930720]
+texture_filter = 1
+layout_mode = 2
+columns = 4

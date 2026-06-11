@@ -1,46 +1,34 @@
 # speedup_quote_save.gd (Autoload)
 extends Node
 
-const SAVE_PATH = "user://boss_quotes.json"
-
-# 默认台词
-var boss_quotes: Array = [
+# 🌟 不再需要独立的 SAVE_PATH 和 IO 操作了
+const DEFAULT_QUOTES: Array = [
 	"BOSS_QUOTE_01",
 	"BOSS_QUOTE_02", 
-    "BOSS_QUOTE_03"
+	"BOSS_QUOTE_03"
 ]
 
-#默认的存一下
-#var boss_quotes: Array = [
-	#"总感觉怪怪的你再改改",
-	#"快打包了什么时候做完啊",
-	#"老师这就是成图了吗"
-#]
+var boss_quotes: Array = []
 
 func _ready() -> void:
-	load_quotes()
+	# 启动时先塞默认值，稍后如果主存档里有，会被主存档覆盖
+	reset_to_default()
 
 func add_quote(text: String):
 	if text != "" and not boss_quotes.has(text):
 		boss_quotes.append(text)
-		save_quotes()
+		# 🌟 通知主存档系统去落盘
+		SaveManager.save_game()
 
 func remove_quote(index: int):
 	if boss_quotes.size() > 1: # 至少留一句，不然会报错
 		boss_quotes.remove_at(index)
-		save_quotes()
+		# 🌟 通知主存档系统去落盘
+		SaveManager.save_game()
 
 func get_random_quote() -> String:
 	return tr(boss_quotes[randi() % boss_quotes.size()])
 
-# --- 持久化存储 ---
-func save_quotes():
-	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	file.store_string(JSON.stringify(boss_quotes))
-
-func load_quotes():
-	if FileAccess.file_exists(SAVE_PATH):
-		var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
-		var json_data = JSON.parse_string(file.get_as_text())
-		if json_data is Array:
-			boss_quotes = json_data
+# 🌟 新增：重置为默认台词（供删档重开使用）
+func reset_to_default() -> void:
+	boss_quotes = DEFAULT_QUOTES.duplicate()

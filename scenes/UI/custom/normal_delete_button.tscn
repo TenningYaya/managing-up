@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cnnnpot5x7yky"]
+
+[ext_resource type="Texture2D" uid="uid://d187digmtfe35" path="res://assets/sidebar/other/trash.png" id="1_h7egv"]
+[ext_resource type="Texture2D" uid="uid://chnj2rsnhjvr7" path="res://assets/sidebar/other/trash (1).png" id="2_xj8ws"]
+[ext_resource type="Texture2D" uid="uid://c31oxpxllkgy0" path="res://assets/sidebar/other/trash (2).png" id="3_i24di"]
+
+[node name="NormalDeleteButton" type="TextureButton" unique_id=437346910]
+custom_minimum_size = Vector2(20, 20)
+texture_normal = ExtResource("1_h7egv")
+texture_pressed = ExtResource("2_xj8ws")
+texture_hover = ExtResource("3_i24di")
+ignore_texture_size = true
+stretch_mode = 5
