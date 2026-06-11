@@ -35,6 +35,7 @@ func _ready():
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_TRANSPARENT, true)     # 确保窗口可透明
 	get_viewport().transparent_bg = true
 
+	await get_tree().process_frame  # 等模式切换生效再查询可用区域
 	_cover_current_screen()
 
 	$FullGameMode.show()
@@ -90,11 +91,14 @@ func _ready():
 	_sticky_note.hide()
 
 
-# 让窗口铺满它当前所在的那块屏幕（支持任意分辨率 / 多显示器）
+# 让窗口铺满它当前所在的那块屏幕（支持任意分辨率 / 多显示器），排除任务栏
 func _cover_current_screen() -> void:
 	var scr := DisplayServer.window_get_current_screen()
-	DisplayServer.window_set_position(DisplayServer.screen_get_position(scr))
-	DisplayServer.window_set_size(DisplayServer.screen_get_size(scr))
+	var usable := DisplayServer.screen_get_usable_rect(scr)
+	print("[window] screen=", scr, " usable=", usable, " full=", DisplayServer.screen_get_size(scr))
+	DisplayServer.window_set_position(usable.position)
+	DisplayServer.window_set_size(usable.size)
+	print("[window] after set: pos=", DisplayServer.window_get_position(), " size=", DisplayServer.window_get_size(), " mode=", DisplayServer.window_get_mode())
 
 
 # 读取"是否置顶"设置（默认 true = 置顶）
