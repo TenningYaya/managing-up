@@ -555,6 +555,14 @@ func _spawn_banter_bubble(text_content: String) -> void:
 	
 	# 呼叫接口，播放内容
 	_active_bubble.pop_up(text_content)
+
+func play_on_hired_banter() -> void:
+	# 1. 直接从 BanterManager 的题库里摸一句出来
+	var pool = BanterManager.QUOTES["new_hire"]
+	var random_key = pool[randi() % pool.size()]
+	
+	# 2. 翻译并呼叫你现成的气泡生成函数
+	_spawn_banter_bubble(tr(random_key))
 	
 func get_final_efficiency() -> int:
 	var total = efficiency	

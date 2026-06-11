@@ -78,9 +78,6 @@ func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 	# 2. 检查并扣钱
 	if Gamemanager.spend_kpi(cost):
 		
-		# 🚨 关键：呼叫天窗掉落系统！
-		# 不要在这里写 EmployeeManager.hire_employee，
-		# 也不要写 Gamemanager.hire_employee，
 		# 只发这一个信号，剩下的交给 DropArea 处理。
 		Gamemanager.request_employee_drop.emit(emp)
 		

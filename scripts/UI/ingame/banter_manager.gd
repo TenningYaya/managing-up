@@ -16,6 +16,9 @@ const QUOTES = {
 	],
 	"hired_ssr": [
 		"BANTER_SSR_1", "BANTER_SSR_2", "BANTER_SSR_3", "BANTER_SSR_4"
+	],
+	"new_hire": [
+		"BANTER_NEW_HIRE_01", "BANTER_NEW_HIRE_02", "BANTER_NEW_HIRE_03", "BANTER_NEW_HIRE_04", "BANTER_NEW_HIRE_05"
 	]
 }
 
@@ -74,8 +77,6 @@ func trigger_banter(event_id: String, count: int = 0, specific_pool: Array = [])
 			continue 
 			
 		# 检查通过！正式录用！
-		final_selected_emps.append(emp)
-		
 		final_selected_emps.append(emp)
 		
 		var localized_text = tr(available_quotes[quote_index])

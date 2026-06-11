@@ -31,13 +31,13 @@ func pop_up(content: String) -> void:
 	# 🌟 动画 2：淡入
 	# 1.0: 目标透明度，1.0代表完全不透明（显示）
 	# 0.3: 完成淡入显示的时间，单位是秒
-	_tween.tween_property(self, "modulate:a", 1.0, 0.3)
+	_tween.tween_property(self, "modulate:a", 1.0, 1)
 	
 	# 🌟 动画 3：在上方停留一会后渐隐消失
 	# .set_delay(1): 延迟执行时间，单位是秒（即：保持显示状态停留 1 秒）
 	# 0.0: 目标透明度，0.0代表完全透明（消失）
 	# 0.5: 完成这次渐隐过程的时间，单位是秒
-	_tween.chain().tween_property(self, "modulate:a", 0.0, 0.5).set_delay(1)
+	_tween.chain().tween_property(self, "modulate:a", 0.0, 1).set_delay(1.5)
 	
 	# 🌟 结束：自动销毁
 	_tween.chain().tween_callback(queue_free)

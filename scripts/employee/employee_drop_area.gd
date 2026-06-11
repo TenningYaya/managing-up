@@ -29,8 +29,8 @@ func show_full_hint():
 
 func _on_hint_timer_timeout():
 	hint_label.hide()
+	
 func _on_hire_received(employee_data):
-
 	if get_drop_area_employee_count() >= MAX_DROP_EMPLOYEES:
 		send_to_warehouse(employee_data)
 		show_full_hint()
