@@ -11,6 +11,8 @@ const VISUAL_SCENES = {
 	0: preload("res://scenes/employee/sr_visual.tscn"),  
 }
 
+
+
 func _ready() -> void:
 	pass
 
@@ -34,6 +36,10 @@ func delete_save() -> void:
 	# 🌟 顺手复位教程期间会被打开的两个交互总闸，防止在教程进行中删档时残留禁用状态。
 	Gamemanager.is_employee_interaction_disabled = false
 	Gamemanager.is_reject_button_disabled = false
+	Gamemanager.project_name = "NewProject"
+	Gamemanager.player_avatar_index = 0
+	Gamemanager.player_avatar_texture = preload("res://assets/tutorial/avatars/player_avatar_1.png")
+	FloorManager.change_all_floors(0, Vector2i(0, 8))  # 换成你的默认地板坐标
 
 	# 🌟 普通招募免费简历计时器也要清零：RecruitmentManager 是 autoload，不随场景重载复位，
 	#    不手动归零的话删档重开会沿用上一局的剩余时间与已出现数量。
@@ -60,7 +66,17 @@ func save_game() -> void:
 		"total_hits": Gamemanager.total_hits,
 		"total_time": Gamemanager.total_time,
 		"max_desk_level": Gamemanager.max_desk_level,
-		"unlocked_desk_slots": Gamemanager.unlocked_desk_slots
+		"unlocked_desk_slots": Gamemanager.unlocked_desk_slots,
+		"project_name": Gamemanager.project_name,
+		"player_avatar_index": Gamemanager.player_avatar_index,
+		"player_avatar_path": Gamemanager.player_avatar_texture.resource_path if Gamemanager.player_avatar_texture else ""
+	}
+	
+	var floor_data = FloorManager.get_current_floor_data()
+	save_data["floor"] = {
+		"source_id": floor_data.get("source_id", 0),
+		"atlas_coords_x": floor_data.get("atlas_coords", Vector2i.ZERO).x,
+		"atlas_coords_y": floor_data.get("atlas_coords", Vector2i.ZERO).y,
 	}
 	
 	var offices_data = {}
@@ -320,7 +336,17 @@ func load_game() -> void:
 		Gamemanager.total_time = float(p_data.get("total_time", 0.0))
 		Gamemanager.max_desk_level = int(p_data.get("max_desk_level", 1))
 		Gamemanager.unlocked_desk_slots = int(p_data.get("unlocked_desk_slots", 1))
-		
+		Gamemanager.project_name = p_data.get("project_name", "NewProject")
+		Gamemanager.player_avatar_index = int(p_data.get("player_avatar_index", 0))
+		var avatar_path = p_data.get("player_avatar_path", "")
+		if avatar_path != "":
+			Gamemanager.player_avatar_texture = load(avatar_path)
+	
+	if save_data.has("floor"):
+		var f_data = save_data["floor"]
+		var coords = Vector2i(int(f_data.get("atlas_coords_x", 0)), int(f_data.get("atlas_coords_y", 8)))
+		FloorManager.change_all_floors(int(f_data.get("source_id", 0)), coords)
+	
 	if save_data.has("offices"):
 		# 缓存起来：晚于 load_game 才 _ready 的办公室会自己来取（自愈）
 		_loaded_office_data = save_data["offices"]
