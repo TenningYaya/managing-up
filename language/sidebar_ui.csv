@@ -1,4 +1,4 @@
-﻿id,zh,en
+id,zh,en
 Sidebar_menu_upgrades,升级,UPGRADES
 Sidebar_menu_tutorial,教程,TUTORIAL
 Sidebar_menu_general,总览,GENERAL
@@ -19,6 +19,8 @@ Sidebar_settings_delete_save,删除存档,Delete Save
 Sidebar_settings_save_quit,保存并退出,Save and Quit
 Sidebar_tutorial_title,教程,TUTORIAL
 Sidebar_personal_title,个性化,PERSONALIZE
-Sidebar_personal_quote_title,常用语,Templates
-Sidebar_personal_edit_quote,编辑同事寄语...,Edit quote...
+Sidebar_personal_quote_title,口头禅,Templates
+Sidebar_personal_edit_quote,编辑同事问候语...,Edit quote...
 Sidebar_personal_add_quote,添加,Add
+Sidebar_personal_tile,豪华地毯,Luxury Rugs
+Sidebar_personal_name_avatar,{name}项目组{avatar}总偏好调研报告,{avatar}{name} Project Preference Survey Report

@@ -11,7 +11,7 @@ const MAX_LEN_LATIN = 25
 @onready var name_too_long_label: Label = $NameTooLongLabel
 @onready var confirm_btn = $MarginContainer/VBoxContainer/HBoxContainer/Confirm
 @onready var cancel_btn = $MarginContainer/VBoxContainer/HBoxContainer/Cancel
-
+@export var cancel_closes_panel: bool = false
 var _refuse_tween: Tween = null
 
 
@@ -20,6 +20,20 @@ func _ready() -> void:
 	confirm_btn.pressed.connect(_on_confirm_pressed)
 	cancel_btn.pressed.connect(_on_cancel_pressed)
 	line_edit.text_changed.connect(_on_text_changed)
+	line_edit.grab_focus()
+	
+	# 根据是否在教程中切换取消键的文字
+	if Gamemanager.is_tutorial_completed:
+		cancel_btn.button_text = "NAME_INPUT_CANCEL_SETTINGS"
+	else:
+		cancel_btn.button_text = "NAME_INPUT_CANCEL"
+
+func _on_cancel_pressed() -> void:
+	if Gamemanager.is_tutorial_completed:
+		canceled.emit()
+		return
+	line_edit.clear()
+	name_too_long_label.hide()
 	line_edit.grab_focus()
 
 func _on_confirm_pressed() -> void:
@@ -30,11 +44,6 @@ func _on_confirm_pressed() -> void:
 		_show_refused_label()
 		return
 	confirmed.emit(text)
-
-func _on_cancel_pressed() -> void:
-	line_edit.clear()
-	name_too_long_label.hide()
-	line_edit.grab_focus()
 
 func _on_text_changed(_new_text: String) -> void:
 	# 玩家改了内容就把警告收起来，给他重新尝试的感觉
@@ -63,3 +72,9 @@ func _show_refused_label() -> void:
 	_refuse_tween.tween_interval(3.0)
 	_refuse_tween.tween_property(name_too_long_label, "modulate:a", 0.0, 0.5)
 	_refuse_tween.tween_callback(name_too_long_label.hide)
+
+func refresh_cancel_btn() -> void:
+	if Gamemanager.is_tutorial_completed:
+		cancel_btn.button_text = "NAME_INPUT_CANCEL_SETTINGS"
+	else:
+		cancel_btn.button_text = "NAME_INPUT_CANCEL"

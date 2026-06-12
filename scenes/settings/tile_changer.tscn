@@ -1,12 +1,23 @@
 [gd_scene format=3 uid="uid://ejvqpq34dhbg"]
 
 [ext_resource type="Script" uid="uid://cwkg5ot7m848f" path="res://scripts/UI/sidebar/tile_changer.gd" id="1_7w0u4"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_fcb8g"]
 
 [node name="TileChanger" type="VBoxContainer" unique_id=894433398]
 custom_minimum_size = Vector2(217, 0)
 offset_right = 40.0
 offset_bottom = 40.0
+theme_override_constants/separation = 10
 script = ExtResource("1_7w0u4")
+
+[node name="Label2" type="Label" parent="." unique_id=892946071]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_fcb8g")
+theme_override_font_sizes/font_size = 16
+text = "Sidebar_personal_tile"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
 
 [node name="ToggleButton" type="Button" parent="." unique_id=1688919394]
 texture_filter = 1

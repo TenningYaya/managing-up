@@ -64,6 +64,8 @@ employee_buffs=""
 explain_folders=""
 explain_dispatch=""
 floor_tilemap=""
+select_avatar=""
+name_program=""
 
 [input]
 

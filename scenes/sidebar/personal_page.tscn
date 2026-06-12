@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cmsc4bw6aqfh8"]
 
 [ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_dxbfs"]
+[ext_resource type="PackedScene" uid="uid://byenwff2ep3fp" path="res://scenes/starter/avatar_name_changer.tscn" id="3_kr5ev"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_xuayt"]
 [ext_resource type="Texture2D" uid="uid://bf3w3mlc2krib" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Decoration/3.png" id="4_2ixrq"]
 [ext_resource type="PackedScene" uid="uid://doe15yvabaqje" path="res://scenes/settings/quote_editor.tscn" id="4_dxbfs"]
@@ -66,6 +67,9 @@ theme_override_constants/margin_bottom = 10
 [node name="ItemsList" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer" unique_id=1013653389]
 layout_mode = 2
 alignment = 1
+
+[node name="AvatarNameChanger" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1405611163 instance=ExtResource("3_kr5ev")]
+layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1517829118]
 layout_mode = 2

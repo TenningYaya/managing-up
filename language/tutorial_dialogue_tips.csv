@@ -124,6 +124,7 @@ NAME_INPUT_PLACEHOLDER,输入项目组名称……,Enter program name...
 NAME_INPUT_CANCEL,擦掉重填,Erase
 NAME_INPUT_CONFIRM,就这个了！,Confirm
 NAME_INPUT_REFUSED,名字太长了，再改改吧！,Name's too long, give it another shot!
+NAME_INPUT_CANCEL_SETTINGS,不改名了！,Cancel
 ,,
 SELECT_AVATAR_PROMPT,选择您的头像,Select your Avatar
 SELECT_AVATAR_CONFIRM,完美！,Perfect!

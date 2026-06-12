@@ -10,6 +10,7 @@ custom_minimum_size = Vector2(350, 200)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_ixv5g")
+cancel_closes_panel = null
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=602215461]
 layout_mode = 1

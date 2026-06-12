@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://cni2mxor5mvyd" path="res://scripts/guide/select_avatar.gd" id="1_g85u3"]
 [ext_resource type="Texture2D" uid="uid://bh0c5caoifnt1" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/PNG Spritesheet/Map SpriteSheet.png" id="2_2gryt"]
-[ext_resource type="Texture2D" uid="uid://d27v2euv5fpxr" path="res://scenes/starter/avatars/player_avatar_1.png" id="2_hj2l5"]
-[ext_resource type="Texture2D" uid="uid://c3bo083hlyhsj" path="res://scenes/starter/avatars/player_avatar_2.png" id="3_1rk8h"]
+[ext_resource type="Texture2D" uid="uid://d27v2euv5fpxr" path="res://assets/tutorial/avatars/player_avatar_1.png" id="2_hj2l5"]
+[ext_resource type="Texture2D" uid="uid://c3bo083hlyhsj" path="res://assets/tutorial/avatars/player_avatar_2.png" id="3_1rk8h"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_43wmx"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="4_hj2l5"]
-[ext_resource type="Texture2D" uid="uid://cddknr3k0sl5y" path="res://scenes/starter/avatars/player_avatar_3.png" id="4_scgx6"]
+[ext_resource type="Texture2D" uid="uid://cddknr3k0sl5y" path="res://assets/tutorial/avatars/player_avatar_3.png" id="4_scgx6"]
 
 [node name="SelectAvatar" type="Control" unique_id=187481383]
 custom_minimum_size = Vector2(350, 200)

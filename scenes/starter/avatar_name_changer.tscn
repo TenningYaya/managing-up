@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://byenwff2ep3fp"]
+
+[ext_resource type="Script" uid="uid://1deioqr1t7hg" path="res://scripts/UI/sidebar/avatar_name_changer.gd" id="1_576e5"]
+
+[node name="AvatarNameChanger" type="PanelContainer" unique_id=1405611163]
+custom_minimum_size = Vector2(217, 0)
+script = ExtResource("1_576e5")
+
+[node name="SentenceBox" type="RichTextLabel" parent="." unique_id=511170269]
+layout_mode = 2
