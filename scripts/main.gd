@@ -101,12 +101,12 @@ func _cover_current_screen() -> void:
 	print("[window] after set: pos=", DisplayServer.window_get_position(), " size=", DisplayServer.window_get_size(), " mode=", DisplayServer.window_get_mode())
 
 
-# 读取"是否置顶"设置（默认 true = 置顶）
+# 读取“是否置顶”设置（默认 false = 不置顶，可被其它窗口遮挡；勾选后才置顶）
 func _load_always_on_top() -> bool:
 	var cfg := ConfigFile.new()
 	if cfg.load(SETTINGS_PATH) == OK:
-		return bool(cfg.get_value("window", "always_on_top", true))
-	return true
+		return bool(cfg.get_value("window", "always_on_top", false))
+	return false
 
 
 # 由设置界面的勾选框调用：勾选=置顶；取消=可被其它窗口遮挡。并持久化保存
