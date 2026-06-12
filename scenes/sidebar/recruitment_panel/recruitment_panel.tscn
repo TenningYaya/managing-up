@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_rtmed"]
 [ext_resource type="Texture2D" uid="uid://djvxnh68fk6ub" path="res://assets/background/Gemini_Generated_Image_n5w3tmn5w3tmn5w3.png" id="6_ha1ar"]
 [ext_resource type="Texture2D" uid="uid://px3cj3eqq75y" path="res://assets/background/e8a8d7e5-a42b-48a7-b636-835168402b12.jpg" id="6_pyp0o"]
+[ext_resource type="PackedScene" uid="uid://bx0a13254p4rr" path="res://scenes/UI/custom/Urge_HR_button.tscn" id="6_x4w7u"]
 [ext_resource type="Texture2D" uid="uid://16a3v6fvnsw0" path="res://assets/background/Gemini_Generated_Image_q23dcvq23dcvq23d.png" id="6_yahbh"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="7_yahbh"]
 
@@ -15,131 +16,6 @@ atlas = ExtResource("2_uc70r")
 region = Rect2(1488, 48, 336, 256)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvhvr"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n1a40"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(450, 1648, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ha1ar"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(498, 1648, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yahbh"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(546, 1648, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pyp0o"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(594, 1648, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q23uo"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(642, 1648, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x4w7u"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(690, 1648, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_a1di4"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(738, 1648, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ous86"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(786, 1648, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n7op5"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(450, 1600, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0je1i"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(498, 1600, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4il4s"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(546, 1600, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cliyy"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(594, 1600, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5m5kn"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(642, 1600, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ncww2"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(690, 1600, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j08lq"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(738, 1600, 28, 28)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c6o7r"]
-atlas = ExtResource("2_uc70r")
-region = Rect2(786, 1600, 28, 28)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_dauuc"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_n1a40")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ha1ar")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_yahbh")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pyp0o")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_q23uo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x4w7u")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_a1di4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ous86")
-}],
-"loop": true,
-"name": &"wait_for_head_recruit",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_n7op5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0je1i")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4il4s")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cliyy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5m5kn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ncww2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j08lq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_c6o7r")
-}],
-"loop": true,
-"name": &"wait_for_normal_recruit",
-"speed": 5.0
-}]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rapbc"]
 
@@ -215,14 +91,6 @@ grow_vertical = 2
 texture = ExtResource("3_n1a40")
 expand_mode = 1
 
-[node name="NormalWaitAnim" type="AnimatedSprite2D" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=581269795]
-position = Vector2(179, 63)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_dauuc")
-animation = &"wait_for_normal_recruit"
-autoplay = "wait_for_normal_recruit"
-frame_progress = 0.14773314
-
 [node name="LblEmpty" type="Label" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=1417925560]
 visible = false
 layout_mode = 0
@@ -235,7 +103,23 @@ text = "Waiting for resumes..."
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="HRButton" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=2048579194 instance=ExtResource("6_x4w7u")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -50.0
+offset_right = 75.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+button_text = "RECRUIT_HR_SPEEDUP_NORMAL"
+
 [node name="NormalViewer" parent="VBoxContainer/NormalPanel/MarginContainer" unique_id=931473494 instance=ExtResource("1_pfe0p")]
+visible = false
 layout_mode = 2
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer" unique_id=173082834]
@@ -254,6 +138,7 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="BoxIdle" type="PanelContainer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1917371333]
+visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle" unique_id=1670909168]
@@ -280,7 +165,7 @@ mouse_filter = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="BtnHire1" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BoxIdle/BoxIdle" unique_id=2048579194 instance=ExtResource("7_yahbh")]
+[node name="BtnHire1" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BoxIdle/BoxIdle" unique_id=2137239937 instance=ExtResource("7_yahbh")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -329,7 +214,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BoxRecruiting" type="Control" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1488066360]
-visible = false
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=1305613315]
@@ -352,13 +236,21 @@ offset_top = 168.0
 offset_right = 140.0
 offset_bottom = 191.0
 
-[node name="HeadWaitAnim" type="AnimatedSprite2D" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=1596821735]
-position = Vector2(188, 68)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_dauuc")
-animation = &"wait_for_head_recruit"
-autoplay = "wait_for_head_recruit"
-frame_progress = 0.4569082
+[node name="HRButton" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=1736700750 instance=ExtResource("6_x4w7u")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -50.0
+offset_right = 75.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+character_set = 1
+button_text = "RECRUIT_HR_SPEEDUP_HEAD"
 
 [node name="HeadViewer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=74954453 instance=ExtResource("1_pfe0p")]
 visible = false

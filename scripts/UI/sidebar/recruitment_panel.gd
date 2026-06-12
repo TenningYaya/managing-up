@@ -45,6 +45,11 @@ func _ready():
 	OfficeManager.recruitment_office_status_changed.connect(_on_office_status_updated)
 	RecruitmentManager.new_resumes_arrived.connect(_on_new_resumes_arrived) # 监听新简历到达
 	
+	var normal_hr = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel/HRButton
+	var head_hr = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/HRButton
+	normal_hr.viewer_ready.connect(_show_normal_viewer)
+	head_hr.viewer_ready.connect(_show_headhunt_viewer)
+
 	# 初始刷一遍 UI
 	_on_new_resumes_arrived()
 	_update_headhunt_ui()
@@ -61,14 +66,21 @@ func _process(_delta):
 
 # ================= 核心：数据下发与同步 =================
 func _on_new_resumes_arrived():
+	var normal_hr = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel/HRButton
 	if RecruitmentManager.normal_pool.size() > 0:
 		normal_viewer.load_resumes(RecruitmentManager.normal_pool.duplicate())
+		# load_resumes 内部会调 show()，如果动画还没放完要立刻压回去
+		if normal_hr and normal_hr.is_in_end_sequence:
+			normal_viewer.hide()
 	_update_normal_ui()
-	
+
 	# --- 猎头招聘的补货逻辑 ---
 	if RecruitmentManager.current_state == RecruitmentManager.State.READY:
 		if RecruitmentManager.headhunt_pool.size() > 0:
 			headhunt_viewer.load_resumes(RecruitmentManager.headhunt_pool.duplicate())
+			var head_hr = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/HRButton
+			if head_hr and head_hr.is_in_end_sequence:
+				headhunt_viewer.hide()
 	_update_headhunt_ui()
 
 func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
@@ -104,6 +116,9 @@ func _reject_from_pool(emp: Employee, pool: Array):
 	RecruitmentManager.new_resumes_arrived.emit()
 # ================= UI 显示更新控制 =================
 func _update_normal_ui():
+	var hr = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel/HRButton
+	if hr and hr.is_in_end_sequence:
+		return  # 等动画播完再说
 	if normal_viewer.current_resumes.is_empty():
 		normal_no_resume.show()
 		normal_viewer.hide()
@@ -144,7 +159,9 @@ func _update_headhunt_ui():
 		RecruitmentManager.State.RECRUITING:
 			headhunt_box_recruiting.show()
 		RecruitmentManager.State.READY:
-			headhunt_viewer.show()
+			var hr = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/HRButton
+			if not (hr and hr.is_in_end_sequence):
+				headhunt_viewer.show()
 
 # ================= 按键操作 =================
 func _on_office_status_updated(_is_active: bool):
@@ -206,3 +223,11 @@ func _on_title_bar_gui_input(event: InputEvent):
 
 func _on_close_panel_pressed() -> void:
 	self.hide()
+	
+func _show_normal_viewer() -> void:
+	normal_no_resume.hide()
+	normal_viewer.show()
+
+func _show_headhunt_viewer() -> void:
+	headhunt_box_recruiting.hide()
+	headhunt_viewer.show()

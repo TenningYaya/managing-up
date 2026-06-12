@@ -2,6 +2,8 @@
 extends Node
 
 signal new_resumes_arrived
+signal about_to_spawn_free_recruit   # 新增
+signal about_to_finish_headhunt   
 
 # 数据池：所有新简历都存在这里
 var normal_pool: Array[Employee] = []
@@ -70,7 +72,8 @@ func auto_generate_normal():
 
 # 计时结束：免费生成一份普通简历，并把计时器重置到下一个间隔
 func _spawn_free_recruit() -> void:
-	auto_generate_normal()  # 复用既有普通招募逻辑（R 90% / SR 10%），会塞进 normal_pool 并发 new_resumes_arrived
+	about_to_spawn_free_recruit.emit()  # 👈 在 new_resumes_arrived 之前发
+	auto_generate_normal()
 	free_recruit_count += 1
 	free_recruit_time_left = _get_free_recruit_interval()
 
@@ -90,6 +93,7 @@ func start_headhunt(amount: int, duration: float):
 	_pending_amount = amount 
 
 func _on_headhunt_finished():
+	about_to_finish_headhunt.emit()
 	for i in range(_pending_amount):
 		var roll = randf()
 		var rarity = Employee.Rarity.R

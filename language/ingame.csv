@@ -2,6 +2,8 @@ id,zh,en
 RECRUIT_PN_REJECT_ALL,统统抬走！,Reject All
 RECRUIT_PN_ACCEPT_ALL,全都包了！,Accept All
 RECRUIT_PN_UNLOCK_HEADHUNT,开设猎头办公室以解锁猎头功能,Unlock with Headhunt Office
+RECRUIT_HR_SPEEDUP_NORMAL,加急处理！,Rush It!
+RECRUIT_HR_SPEEDUP_HEAD,催催猎头！,Nudge the Hunter!
 WAREHOUSE_BULK_FIRE,优化,Fire
 WAREHOUSE_BULK_RECALL,召回,Recall
 WAREHOUSE_BULK_DISPATCH,派遣,Dispatch

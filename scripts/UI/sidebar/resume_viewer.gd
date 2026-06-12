@@ -181,7 +181,6 @@ func _on_accept_all_pressed() -> void:
 	
 	# 2. 判断 KPI
 	if Gamemanager.kpi >= total_cost:
-		print("大赦天下！全都要了！")
 		
 		# 3. 稳妥招募：复制名单，挨个触发招募信号
 		var temp_list = current_resumes.duplicate()
@@ -194,17 +193,12 @@ func _on_accept_all_pressed() -> void:
 		current_page = 0
 		_update_display()
 	else:
-		# 4. 钱不够时：什么都不做，只弹出提示
-		print("【招聘中心】KPI 不足，全招募失败！")
-
 		var panel = get_tree().get_first_node_in_group("recruitment_panel")
 		if panel and panel.has_method("show_floating_tip"):
 			panel.show_floating_tip("INGAME_TIP_NOT_ENOUGH_HIRE_COUNT")
 
 
 func _do_actual_reject_all() -> void:
-	print("正在一键拒绝所有员工...")
-	
 	# 🌟 复制一份数组，挨个通知外部：“这些人被拒了啊！”（为了触发你们可能的拒绝统计或KPI扣除）
 	var temp_list = current_resumes.duplicate()
 	for emp in temp_list:
@@ -239,6 +233,5 @@ func _show_ssr_warning_popup() -> void:
 	)
 	
 	popup.canceled.connect(func():
-		print("玩家后悔了，成功保住 SSR！")
 		popup.queue_free()      # 点错了，直接人间蒸发，不留痕迹
 	)
