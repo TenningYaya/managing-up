@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cj4whnoknitr7"]
 
-[ext_resource type="Script" uid="uid://ccqcyqbfd3g4r" path="res://scripts/UI/custom/urge_bubble.gd" id="1_mrhsk"]
+[ext_resource type="Script" uid="uid://chosierm4mfab" path="res://scripts/UI/custom/speech_bubble.gd" id="1_mrhsk"]
 [ext_resource type="Texture2D" uid="uid://ciogial2diqsq" path="res://assets/UI/ingame/chat_bubble.png" id="2_s31fi"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ufe56"]

@@ -8,7 +8,8 @@ enum Type {
 	FOCUS_CLICK,  # 强行挖洞点击 (黑布挖洞 + Tips 提示 + 强迫点击按钮三位一体)
 	WAIT_EVENT,    # 纯逻辑等待
 	WAIT_TIME,
-	NAME_INPUT
+	NAME_INPUT,
+	AVATAR_SELECT
 }
 
 enum Speaker { 

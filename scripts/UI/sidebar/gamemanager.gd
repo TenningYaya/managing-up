@@ -37,6 +37,8 @@ var is_reject_button_disabled: bool = false
 var tutorial_allow_camera_drag: bool = false
 
 var project_name: String = ""
+var player_avatar_index: int = 0
+var player_avatar_texture: Texture2D = null
 # 定义总览面板需要的变量
 var total_hits: int = 0
 var total_time: float = 0.0

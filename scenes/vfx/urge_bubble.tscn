@@ -13,16 +13,26 @@ texture_margin_bottom = 80.0
 [node name="UrgeBubble" type="Node2D" unique_id=1417449071]
 script = ExtResource("1_amasu")
 
-[node name="BubblePanel" type="PanelContainer" parent="." unique_id=1824319526]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2030918354]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=1134005063]
+layout_mode = 2
+theme_override_constants/margin_top = 25
+
+[node name="PlayerAvatar" type="TextureRect" parent="HBoxContainer/MarginContainer" unique_id=536853808]
+custom_minimum_size = Vector2(167, 167)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BubblePanel" type="PanelContainer" parent="HBoxContainer" unique_id=1824319526]
+layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_amasu")
 
-[node name="TextLabel" type="Label" parent="BubblePanel" unique_id=947483347]
+[node name="TextLabel" type="Label" parent="HBoxContainer/BubblePanel" unique_id=947483347]
 layout_mode = 2
 theme_override_colors/font_color = Color(6.180691e-05, 6.180692e-05, 6.180691e-05, 1)
 theme_override_font_sizes/font_size = 64

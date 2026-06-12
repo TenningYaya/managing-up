@@ -9,5 +9,5 @@ wait_signal = "intro_dialogue_finished"
 force_show_ui_group = "recruitment_panel"
 lock_ui_lifecycle = true
 speaker = 1
-dialogue_lines = Array[String](["TUTORIAL_STEP_06_01", "TUTORIAL_STEP_06_02", "TUTORIAL_STEP_06_03"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_06_01", "TUTORIAL_STEP_06_03"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

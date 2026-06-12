@@ -11,7 +11,6 @@
 [ext_resource type="Resource" uid="uid://b7msvq1f7dk4c" path="res://data/guide/step_1_1_name_program.tres" id="4_wimfn"]
 [ext_resource type="Resource" uid="uid://c17cnqxdcv68t" path="res://data/guide/step_1_2_boss_talk.tres" id="5_5ya2e"]
 [ext_resource type="Resource" uid="uid://cpmmw4cv6t7j7" path="res://data/guide/step_3_KPI_showup.tres" id="5_7e6m1"]
-[ext_resource type="Resource" uid="uid://nc1gt10bgic3" path="res://data/guide/step_4_show_recruit.tres" id="6_gtvb8"]
 [ext_resource type="Resource" uid="uid://b21vvjbul2tdh" path="res://data/guide/step_5_press_recruit.tres" id="7_2853m"]
 [ext_resource type="Resource" uid="uid://beuy3hxcsfu3j" path="res://data/guide/step_6_show_3_guys.tres" id="8_hfnrs"]
 [ext_resource type="Resource" uid="uid://dby0p1yf83dsl" path="res://data/guide/step_7_hire_cowhorse.tres" id="9_5i7fk"]
@@ -20,10 +19,11 @@
 [ext_resource type="Resource" uid="uid://dhym38klp1qfx" path="res://data/guide/step_10_watch_cowhouse.tres" id="12_umdh6"]
 [ext_resource type="Resource" uid="uid://dtfjdjwgxta1" path="res://data/guide/step_11_right_click_employee.tres" id="13_6ltp6"]
 [ext_resource type="Resource" uid="uid://dyl85oml2ph1p" path="res://data/guide/step_12_show_employee_panel.tres" id="14_lopl3"]
+[ext_resource type="Resource" uid="uid://chtvt8addfc62" path="res://data/guide/step_10_1_watch_cowhorse.tres" id="15_nbv83"]
 [ext_resource type="Resource" uid="uid://co283eup1di0n" path="res://data/guide/step_13_click_employee.tres" id="15_r5pud"]
 [ext_resource type="Resource" uid="uid://bi383uqormwnv" path="res://data/guide/step_14_good_workthief.tres" id="16_tf07h"]
 [ext_resource type="Resource" uid="uid://dqidm7f4ec2rm" path="res://data/guide/step_18_explain_dollars.tres" id="17_fv23i"]
-[ext_resource type="Resource" uid="uid://pk8v760khrsh" path="res://data/guide/step_19_explain_attributes.tres" id="18_hmtbv"]
+[ext_resource type="Resource" uid="uid://domb6ac3ngldc" path="res://data/guide/step_12_1_select_avatar.tres" id="17_nbv83"]
 [ext_resource type="Resource" uid="uid://bs531wck5ucr0" path="res://data/guide/step_21_explain_warehouse.tres" id="19_8oaor"]
 [ext_resource type="Resource" uid="uid://ba28sblyjobvf" path="res://data/guide/step_22_click_warehouse.tres" id="20_0ssyf"]
 [ext_resource type="Resource" uid="uid://b2ncs7h3ywsys" path="res://data/guide/step_23_explain_status.tres" id="21_jf5bc"]
@@ -47,7 +47,7 @@
 
 [node name="TutorialLayer" type="CanvasLayer" unique_id=48294334]
 script = ExtResource("1_rsvao")
-steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_wimfn"), ExtResource("5_5ya2e"), ExtResource("4_rb526"), ExtResource("5_7e6m1"), ExtResource("6_gtvb8"), ExtResource("7_2853m"), ExtResource("8_hfnrs"), ExtResource("9_5i7fk"), ExtResource("10_q1uf3"), ExtResource("11_lacx5"), ExtResource("12_umdh6"), ExtResource("13_6ltp6"), ExtResource("14_lopl3"), ExtResource("15_r5pud"), ExtResource("16_tf07h"), ExtResource("17_fv23i"), ExtResource("18_hmtbv"), ExtResource("19_8oaor"), ExtResource("20_0ssyf"), ExtResource("21_jf5bc"), ExtResource("22_31up7"), ExtResource("23_31up7"), ExtResource("24_u7clx"), ExtResource("25_27ngn"), ExtResource("26_5k7lp"), ExtResource("27_rgopl"), ExtResource("27_kso1c"), ExtResource("28_mkknv"), ExtResource("29_qpdar"), ExtResource("30_ta3sa"), ExtResource("31_ygfsw"), ExtResource("32_5k7lp"), ExtResource("3_uiswp"), ExtResource("4_rgopl"), ExtResource("33_kso1c")])
+steps = Array[ExtResource("2_xpm57")]([ExtResource("3_rb526"), ExtResource("4_wimfn"), ExtResource("5_5ya2e"), ExtResource("4_rb526"), ExtResource("5_7e6m1"), ExtResource("7_2853m"), ExtResource("8_hfnrs"), ExtResource("9_5i7fk"), ExtResource("10_q1uf3"), ExtResource("11_lacx5"), ExtResource("12_umdh6"), ExtResource("15_nbv83"), ExtResource("13_6ltp6"), ExtResource("14_lopl3"), ExtResource("17_nbv83"), ExtResource("15_r5pud"), ExtResource("16_tf07h"), ExtResource("17_fv23i"), ExtResource("19_8oaor"), ExtResource("20_0ssyf"), ExtResource("21_jf5bc"), ExtResource("22_31up7"), ExtResource("23_31up7"), ExtResource("24_u7clx"), ExtResource("25_27ngn"), ExtResource("26_5k7lp"), ExtResource("27_rgopl"), ExtResource("27_kso1c"), ExtResource("28_mkknv"), ExtResource("29_qpdar"), ExtResource("30_ta3sa"), ExtResource("31_ygfsw"), ExtResource("32_5k7lp"), ExtResource("3_uiswp"), ExtResource("4_rgopl"), ExtResource("33_kso1c")])
 TUTORIAL_TIP_SCENE = ExtResource("34_kso1c")
 
 [node name="TipUI" type="Label" parent="." unique_id=16516687]

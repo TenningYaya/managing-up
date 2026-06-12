@@ -4,7 +4,9 @@
 
 [resource]
 script = ExtResource("1_d1cqj")
-target_group = "desk_slot_1"
+target_group = "explain_folders"
+force_show_ui_group = "explain_folders"
+lock_ui_lifecycle = true
 speaker = 1
-dialogue_lines = Array[String](["TUTORIAL_STEP_10_01", "TUTORIAL_STEP_10_02", "TUTORIAL_STEP_10_03", "TUTORIAL_STEP_10_04"])
+dialogue_lines = Array[String](["TUTORIAL_STEP_10_01", "TUTORIAL_STEP_10_02", "TUTORIAL_STEP_10_03"])
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

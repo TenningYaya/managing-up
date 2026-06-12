@@ -9,4 +9,5 @@ target_group = "employees"
 wait_signal = "tutorial_click_specific_employee"
 disable_employee_interaction = false
 tip_text = "TUTORIAL_STEP_13_01"
+tip_position = 2
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

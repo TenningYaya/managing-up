@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="TutorialStep" format=3 uid="uid://43qtcst2muo6"]
 
-[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_qa2tm"]
-[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="1_v4kag"]
+[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_tmwht"]
+[ext_resource type="Script" uid="uid://la2mtrf0vlw7" path="res://scripts/guide/tutorial_step.gd" id="2_o62e4"]
 
 [resource]
-script = ExtResource("1_v4kag")
+script = ExtResource("2_o62e4")
 step_type = 2
 target_group = "employee_panel"
 wait_signal = "screenshot_close_pressed"
 force_show_ui_group = "employee_panel"
 lock_ui_lifecycle = true
-illustration_texture = ExtResource("1_qa2tm")
+illustration_texture = ExtResource("1_tmwht")
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

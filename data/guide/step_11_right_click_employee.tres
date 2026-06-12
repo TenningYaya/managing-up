@@ -9,4 +9,5 @@ target_group = "employees"
 wait_signal = "employee_panel_opened"
 disable_employee_interaction = false
 tip_text = "TUTORIAL_STEP_11_01"
+tip_position = 2
 metadata/_custom_type_script = "uid://la2mtrf0vlw7"

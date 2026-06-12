@@ -21,7 +21,7 @@ TUTORIAL_STEP_03_04,考虑到项目进度为“新建文件夹”，您肯定也
 TUTORIAL_STEP_04_01,您随时可以使用项目组的电脑！,"You can use the team's PC anytime!"
 TUTORIAL_STEP_04_02,打开电脑的招聘系统，查看项目组收到的简历,Open the Recruitment System on the PC to view job seeker's resumes.
 ,,
-TUTORIAL_STEP_05_01,打开招聘面板,Open the Recruitment System
+TUTORIAL_STEP_05_01,打开招聘面板，选择您的英雄,"Open the Recruitment System, select your heroes!"
 ,,
 TUTORIAL_STEP_06_01,您可以拒绝或者同意雇佣这些求职者，雇佣他们需要消耗KPI,You can reject or approve these applicants. Hiring them costs KPI.
 TUTORIAL_STEP_06_02,KPI就是工作成绩~向老板提要求的权利~您未来的小钱钱~,"KPI is your performance score — your leverage over the boss, and your future cash flow~"
@@ -33,17 +33,22 @@ TUTORIAL_STEP_08_01,现在，三位已经是您的同事啦！,"Now, all three a
 TUTORIAL_STEP_08_02,让同事闲着……啊不，没有工位坐就太不礼貌了,"Leaving your coworkers idle... or rather, without a desk to sit at — how impolite!"
 TUTORIAL_STEP_08_03,把同事拖拽到工位上，同事就会开始为项目组工作啦！,Drag your coworkers to their desks and they'll start working for the team!
 ,,
-TUTORIAL_STEP_09_01,将同事拖拽到工位,Drag coworkers to their desks.
+TUTORIAL_STEP_09_01,将同事拖拽……不，请到工位上,Drag your... oh, kindly guide your co-workers to their workstation.
 ,,
-TUTORIAL_STEP_10_01,哦！您看，他们多可爱啊！他们工作着的样子就像是天使一样,Oh! Look at them — aren't they adorable? They look just like little angels when they work!
-TUTORIAL_STEP_10_02,当然，作为老板的联系人，项目成果与您的辛劳密不可分~,"Of course, as the boss's point of contact, the project's success is inseparable from your hard work~"
-TUTORIAL_STEP_10_03,出于为项目负责的心态，我们当然要敦促同事尽快完成工作~,"In the spirit of project responsibility, we should naturally urge our coworkers to finish their work ASAP~"
-TUTORIAL_STEP_10_04,您可以右键点击同事，查看他们的当前工作进度,Right-click on a coworker to check their current work progress.
+TUTORIAL_STEP_10_01,每隔一段时间，同事就会产出一份文件,Every once in a while, your coworkers will produce a document.
+TUTORIAL_STEP_10_02,同事当然应该同甘共苦，所以这些也是您的绩效~,Coworkers should share in the ups and downs, so these results belong to your performance too~
+TUTORIAL_STEP_10_03,同事产生的文件质量越高，您的KPI就跟着水涨船高~,The higher the quality of the documents your coworkers produce, the higher your KPI will soar~
+,,
+TUTORIAL_STEP_10_01_01,哦！您看，他们多可爱啊！他们工作的样子就像是天使一样,Oh! Look at them — aren't they adorable? They look just like little angels when they work!
+TUTORIAL_STEP_10_01_02,您一定希望他们又可爱又有效率。,I'm sure you want them to be both adorable and efficient.
+TUTORIAL_STEP_10_01_03,”我的天使们什么时候才能产生下一份文件呢？”,“When will my little angels produce their next document?”
+TUTORIAL_STEP_10_01_04,点击一位同事，查看其工作量饱不饱和吧~,Click on a coworker to see if their workload is full~
 ,,
 TUTORIAL_STEP_11_01,右键点击同事，打开同事面板,Right-click a coworker to open their panel.
 ,,
-TUTORIAL_STEP_12_01,当进度条走到终点时，同事就会产出一份文件,"When the progress bar reaches the end, your coworker will produce a document."
-TUTORIAL_STEP_12_02,左键点击同事。发送一条条期待，一条条敦促，提高他们的生产进度~,"Left-click a coworker to send them encouragement and nudges, boosting their productivity~"
+TUTORIAL_STEP_12_01,当进度条走到终点时，同事本次的生产也就完成了,When the progress bar reaches the end, your coworker's current production is complete.
+TUTORIAL_STEP_12_02,感觉同事工作热情不够高涨？多发点消息鼓励一下他们吧~,Feeling like your coworkers' passion for work is lacking? Send them a few more messages to encourage them~
+TUTORIAL_STEP_12_03,不过首先，您得有一个账号！,But first, you'll need to have an account!
 ,,
 TUTORIAL_STEP_13_01,连续点击同事，鼓励他们尽快完成工作,Click a coworker repeatedly to encourage them to finish their work faster.
 ,,
@@ -114,8 +119,11 @@ WIN_SCENE_DIALOGUE_6,等时机成熟，我会再联系你的,"When the timing is
 WIN_SCENE_DIALOGUE_7,"到那个时候，我准备告诉你一个公司深处的秘密……","And when that time comes, I'm prepared to let you in on an absolute secret..."
 WIN_SCENE_DIALOGUE_8,好好学，好好干，我一直是很看好你的，bye~,"Study hard, work hard. I've always believed in your. Bye~"
 ,,
-NAME_INPUT_PROMPT,给项目组起名...,You Program is...
+NAME_INPUT_PROMPT,给项目组起名...,Your Program is...
 NAME_INPUT_PLACEHOLDER,输入项目组名称……,Enter program name...
 NAME_INPUT_CANCEL,擦掉重填,Erase
 NAME_INPUT_CONFIRM,就这个了！,Confirm
 NAME_INPUT_REFUSED,名字太长了，再改改吧！,Name's too long, give it another shot!
+,,
+SELECT_AVATAR_PROMPT,选择您的头像,Select your Avatar
+SELECT_AVATAR_CONFIRM,完美！,Perfect!

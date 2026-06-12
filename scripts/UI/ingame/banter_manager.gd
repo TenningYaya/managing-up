@@ -83,7 +83,7 @@ func trigger_banter(event_id: String, count: int = 0, specific_pool: Array = [])
 		
 		if emp.has_method("_spawn_banter_bubble"):
 			# 🌟 1. 核心需求：生成一个 0.0 到 3.0 秒之间的随机小数（比如 0.15s, 1.2s, 2.8s）
-			var random_delay = randf_range(0.0, 3.0)
+			var random_delay = randf_range(0.0, 1.0)
 			
 			# 🌟 2. 动态创建后台倒计时，时间到了自动触发冒泡
 			# 它就像一个异步线程，每个人拿到的时间不同，互不打扰，绝不会卡住游戏

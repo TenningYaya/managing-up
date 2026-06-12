@@ -159,6 +159,8 @@ func play_step(index: int) -> void:
 			_handle_wait_time(step)
 		TutorialStep.Type.NAME_INPUT:
 			_handle_name_input(step)
+		TutorialStep.Type.AVATAR_SELECT:
+			_handle_avatar_select(step)
 		
 func _handle_dialogue(step: TutorialStep) -> void:
 	tip_ui.hide()
@@ -985,6 +987,26 @@ func _handle_name_input(step: TutorialStep) -> void:
 	# 监听场景里的确认信号
 	panel.confirmed.connect(func(name_result: String):
 		Gamemanager.project_name = name_result if name_result.strip_edges() != "" else tr("DEFAULT_PROJECT_NAME")
+		panel.queue_free()
+		_on_step_completed()
+	)
+
+func _handle_avatar_select(step: TutorialStep) -> void:
+	dialogue_ui.hide()
+	kpi_ui.hide()
+	blocker_ui.show()
+	blocker_ui._arrange_curtains(Rect2(0, 0, 0, 0))
+	
+	var scene = load("res://scenes/starter/select_avatar.tscn")
+	var panel = scene.instantiate()
+	add_child(panel)
+	
+	await get_tree().process_frame
+	var screen_size = get_viewport().get_visible_rect().size
+	panel.global_position = (screen_size - panel.size) / 2.0
+	
+	panel.confirmed.connect(func(index: int):
+		Gamemanager.player_avatar_index = index
 		panel.queue_free()
 		_on_step_completed()
 	)

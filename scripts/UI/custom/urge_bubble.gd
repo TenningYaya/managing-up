@@ -2,18 +2,34 @@
 extends Node2D
 class_name UrgeBubble
 
-@onready var label: Label = $BubblePanel/TextLabel
-@onready var panel: PanelContainer = $BubblePanel
+@onready var label: Label = $HBoxContainer/BubblePanel/TextLabel
+@onready var panel: PanelContainer = $HBoxContainer/BubblePanel
+@onready var player_avatar: TextureRect = $HBoxContainer/MarginContainer/PlayerAvatar
 
 # 动画相关变量
 var _tween: Tween = null
 
 func _ready() -> void:
-	# 初始状态设为不可见和极小
-	scale = Vector2.ZERO
-
+	
+	player_avatar.custom_minimum_size = Vector2(167,167)
+	player_avatar.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	player_avatar.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	player_avatar.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	
+	if Gamemanager.player_avatar_texture:
+		player_avatar.texture = Gamemanager.player_avatar_texture
+	else:
+		player_avatar.hide()  # 没选头像就藏起来，不留空白
+	
 func pop_up(content: String) -> void:
-	label.text = content
+	print("Node2D scale: ", scale)
+	print("player_avatar global_rect: ", player_avatar.get_global_rect())
+	if Gamemanager.player_avatar_texture != null:
+		player_avatar.texture = Gamemanager.player_avatar_texture
+		player_avatar.show()
+	else:
+		player_avatar.hide()
+
 	
 	if _tween:
 		_tween.kill()
