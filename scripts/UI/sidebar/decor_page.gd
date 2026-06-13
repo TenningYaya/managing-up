@@ -9,6 +9,10 @@ const COLOR_NORMAL := Color(0.40, 0.42, 0.62, 1.0)
 const COLOR_HIGHLIGHT := Color(1.0, 0.82, 0.25, 1.0)
 const COLOR_MAXED := Color(0.26, 0.56, 0.32, 1.0)
 
+# 升级按钮的 modulate：可升级时正常，不可升级时压暗变灰
+const BTN_MODULATE_ENABLED := Color(1.0, 1.0, 1.0, 1.0)
+const BTN_MODULATE_DISABLED := Color(0.5, 0.5, 0.5, 1.0)
+
 const DESK_HIGHLIGHT := Color(1.6, 1.4, 0.6, 1.0)
 
 const BTN_NORMAL_PATH := "res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png"
@@ -134,6 +138,9 @@ func _update_button_states() -> void:
 		else:
 			label.text = "Lv.%d -> Lv.%d   %d KPI" % [lvl, lvl + 1, _get_cost(lvl)]
 			btn.disabled = not Gamemanager.has_enough_kpi(_get_cost(lvl))
+
+		# 不可升级（MAX / 等级不够 / KPI 不足）的按钮压暗变灰
+		btn.modulate = BTN_MODULATE_DISABLED if btn.disabled else BTN_MODULATE_ENABLED
 
 		if i < _slot_boxes.size():
 			_slot_boxes[i].color = COLOR_MAXED if lvl >= 4 else COLOR_NORMAL
