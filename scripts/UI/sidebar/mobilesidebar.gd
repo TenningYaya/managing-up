@@ -69,6 +69,9 @@ func _ready() -> void:
 	# 初始状态：显示手机桌面
 	show_home_screen()
 
+	# 应用菜单图标文字的中英翻译
+	_apply_menu_translations()
+
 	# =====================================================
 	# 连接 Sidebar 展开 / 收回按钮
 	# =====================================================
@@ -124,6 +127,15 @@ func _ready() -> void:
 	# 布局稳定后设置旋转轴为图标中心点
 	trigger_btn.pivot_offset = trigger_btn.size / 2.0
 	_refresh_upgrade_hints()
+
+
+func _apply_menu_translations() -> void:
+	btn_upgrades.get_node("upgrades").text = tr("Sidebar_menu_upgrades")
+	btn_tutorial.get_node("Tutorial").text = tr("Sidebar_menu_tutorial")
+	btn_general.get_node("GENERAL").text = tr("Sidebar_menu_general")
+	btn_settings.get_node("SETTINGS").text = tr("Sidebar_menu_settings")
+	btn_decor.get_node("DECOR").text = tr("Sidebar_menu_decor")
+	btn_personal.get_node("DECOR").text = tr("Sidebar_personal_title")
 
 
 func _input(event: InputEvent) -> void:

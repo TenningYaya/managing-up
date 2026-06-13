@@ -15,24 +15,24 @@ extends Control
 # --- Upgrade Configuration Data (保持不变) ---
 const UPGRADE_DATA = {
 	1: { "cost": 50, "next_level": "M2", "benefits": [
-		{"title": "+ DESK SLOT × 1 ROW", "desc": "Expand desk slots to 2 rows. Max level increased to 2."},
-		{"title": "+ OFFICE × 1", "desc": "Unlock and gain your first independent office."},
-		{"title": "+ UNLOCK PANTRY", "desc": "New office function: Pantry, available for staff."}
+		{"title": "Sidebar_UPGRADE_LV1_ITEM1_TITLE", "desc": "Sidebar_UPGRADE_LV1_ITEM1_DESC"},
+		{"title": "Sidebar_UPGRADE_LV1_ITEM2_TITLE", "desc": "Sidebar_UPGRADE_LV1_ITEM2_DESC"},
+		{"title": "Sidebar_UPGRADE_LV1_ITEM3_TITLE", "desc": "Sidebar_UPGRADE_LV1_ITEM3_DESC"}
 	]},
 	2: { "cost": 5000, "next_level": "M3", "benefits": [
-		{"title": "+ DESK SLOT × 1 ROW", "desc": "Expand desk slots to 3 rows. Max level increased to 3."},
-		{"title": "+ OFFICE × 1", "desc": "Expand the number of offices to 2."},
-		{"title": "+ UNLOCK HEADHUNT", "desc": "New office function: Headhunt, to recruit advanced talents."}
+		{"title": "Sidebar_UPGRADE_LV2_ITEM1_TITLE", "desc": "Sidebar_UPGRADE_LV2_ITEM1_DESC"},
+		{"title": "Sidebar_UPGRADE_LV2_ITEM2_TITLE", "desc": "Sidebar_UPGRADE_LV2_ITEM2_DESC"},
+		{"title": "Sidebar_UPGRADE_LV2_ITEM3_TITLE", "desc": "Sidebar_UPGRADE_LV2_ITEM3_DESC"}
 	]},
 	3: { "cost": 30000, "next_level": "M4", "benefits": [
-		{"title": "+ DESK SLOT × 1 ROW", "desc": "Expand desk slots to 4 rows. Max level increased to 4."},
-		{"title": "+ OFFICE × 1", "desc": "Expand the number of offices to 3."},
-		{"title": "+ UNLOCK MEETING", "desc": "New office function: Meeting, for team collaboration."}
+		{"title": "Sidebar_UPGRADE_LV3_ITEM1_TITLE", "desc": "Sidebar_UPGRADE_LV3_ITEM1_DESC"},
+		{"title": "Sidebar_UPGRADE_LV3_ITEM2_TITLE", "desc": "Sidebar_UPGRADE_LV3_ITEM2_DESC"},
+		{"title": "Sidebar_UPGRADE_LV3_ITEM3_TITLE", "desc": "Sidebar_UPGRADE_LV3_ITEM3_DESC"}
 	]},
 	4: { "cost": 100000, "next_level": "M5", "benefits": [
-		{"title": "+ DESK SLOT × 1 ROW", "desc": "Expand desk slots to 5 rows. Max level remains at 4."},
-		{"title": "+ OFFICE × 1", "desc": "Expand the number of offices to 4."},
-		{"title": "+ UNLOCK CULTURE", "desc": "New office function: Culture, to boost company morale."}
+		{"title": "Sidebar_UPGRADE_LV4_ITEM1_TITLE", "desc": "Sidebar_UPGRADE_LV4_ITEM1_DESC"},
+		{"title": "Sidebar_UPGRADE_LV4_ITEM2_TITLE", "desc": "Sidebar_UPGRADE_LV4_ITEM2_DESC"},
+		{"title": "Sidebar_UPGRADE_LV4_ITEM3_TITLE", "desc": "Sidebar_UPGRADE_LV4_ITEM3_DESC"}
 	]}
 }
 
@@ -46,13 +46,13 @@ func update_ui():
 	var current_level = Gamemanager.player_level # 直接从 Gamemanager 获取
 
 	if current_level >= 5:
-		cost_label.text = "REACHED MAX COMPANY LEVEL (M5)"
+		cost_label.text = tr("Sidebar_UPGRADE_MAX_TITLE")
 		upgrade_button.disabled = true
-		upgrade_btn_label.text = "MAX LEVEL"
-		
-		item1_title.text = "-"; item1_desc.text = "MAXED OUT"
-		item2_title.text = "-"; item2_desc.text = "MAXED OUT"
-		item3_title.text = "-"; item3_desc.text = "MAXED OUT"
+		upgrade_btn_label.text = tr("Sidebar_UPGRADE_BTN_MAXED")
+
+		item1_title.text = "-"; item1_desc.text = tr("Sidebar_UPGRADE_MAXED_OUT")
+		item2_title.text = "-"; item2_desc.text = tr("Sidebar_UPGRADE_MAXED_OUT")
+		item3_title.text = "-"; item3_desc.text = tr("Sidebar_UPGRADE_MAXED_OUT")
 		return
 
 	var data = UPGRADE_DATA[current_level]
@@ -63,18 +63,45 @@ func update_ui():
 	if cost >= 1000:
 		cost_str = cost_str.insert(cost_str.length() - 3, ",")
 
-	cost_label.text = "SPEND %s KPI TO\nUPGRADE FROM M%d->%s." % [cost_str, current_level, next_lv]
-	upgrade_btn_label.text = "M%d -> %s" % [current_level, next_lv]
+	cost_label.text = _fmt("Sidebar_UPGRADE_COST_FORMAT", [cost_str, current_level, next_lv])
+	upgrade_btn_label.text = _fmt("Sidebar_UPGRADE_BTN_FORMAT", [current_level, next_lv])
 
-	item1_title.text = data["benefits"][0]["title"]
-	item1_desc.text  = data["benefits"][0]["desc"]
-	item2_title.text = data["benefits"][1]["title"]
-	item2_desc.text  = data["benefits"][1]["desc"]
-	item3_title.text = data["benefits"][2]["title"]
-	item3_desc.text  = data["benefits"][2]["desc"]
+	item1_title.text = tr(data["benefits"][0]["title"])
+	item1_desc.text  = tr(data["benefits"][0]["desc"])
+	item2_title.text = tr(data["benefits"][1]["title"])
+	item2_desc.text  = tr(data["benefits"][1]["desc"])
+	item3_title.text = tr(data["benefits"][2]["title"])
+	item3_desc.text  = tr(data["benefits"][2]["desc"])
 
 	# 检查余额 [cite: 8, 9]
 	upgrade_button.disabled = not Gamemanager.has_enough_kpi(cost)
+
+# 安全格式化：
+# 1) 翻译缺失时 tr() 会原样返回 key（不含 %s/%d）；
+# 2) 翻译数据过期 / 占位符数量与参数不一致时，
+# 直接 % 会报 “not all arguments converted” 并崩溃。
+# 因此仅当占位符数量与参数数量一致时才做 % 格式化，否则原样返回，避免崩溃。
+func _fmt(key: String, args: Array) -> String:
+	var s := tr(key)
+	if s == key:
+		return s
+	if _count_format_specifiers(s) != args.size():
+		push_warning("翻译 '%s' 的占位符数量与参数(%d 个)不匹配，请重新导入翻译。" % [key, args.size()])
+		return s
+	return s % args
+
+# 统计 printf 风格占位符数量（%s/%d 等）；%% 为转义，不计入。
+func _count_format_specifiers(s: String) -> int:
+	var count := 0
+	var i := 0
+	while i < s.length():
+		if s[i] == "%":
+			if i + 1 < s.length() and s[i + 1] == "%":
+				i += 2 # 转义的 %%
+				continue
+			count += 1
+		i += 1
+	return count
 
 func _on_upgrade_button_pressed():
 	if Gamemanager.player_level >= 5: 

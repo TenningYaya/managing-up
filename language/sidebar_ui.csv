@@ -24,3 +24,55 @@ Sidebar_personal_edit_quote,编辑同事问候语...,Edit quote...
 Sidebar_personal_add_quote,添加,Add
 Sidebar_personal_tile,豪华地毯,Luxury Rugs
 Sidebar_personal_name_avatar,{name}项目组{avatar}总偏好调研报告,{avatar}{name} Project Preference Survey Report
+Sidebar_menu_upgrades,升级,UPGRADES
+Sidebar_menu_tutorial,教程,TUTORIAL
+Sidebar_menu_general,总览,GENERAL
+Sidebar_menu_settings,设置,SETTINGS
+Sidebar_menu_decor,装修,DECOR
+Sidebar_general_title,总览,GENERAL
+Sidebar_general_total_hit,总点击次数,Total Hit
+Sidebar_general_total_time,总时长,Total Time
+Siderbar_general_#_of_employee,员工总数,Number of Employee
+Siderbar_general_R_employee,R员工,R Employee
+Siderbar_general_SR_employee,SR员工,SR Employee
+Siderbar_general_SSR_employee,SSR员工,SSR Employee
+Sidebar_settings_title,设置,SETTINGS
+Sidebar_settings_BGM_volume,音乐音量,Music Volume
+Sidebar_settings_SFX_volume,音效音量,Sound Effects Volume
+Sidebar_settings_always_on_top,始终置顶,Always on Top
+Sidebar_settings_delete_save,删除存档,Delete Save
+Sidebar_settings_save_quit,保存并退出,Save and Quit
+Sidebar_tutorial_title,教程,TUTORIAL
+Sidebar_personal_title,个性化,PERSONALIZE
+Sidebar_personal_quote_title,常用语,Templates
+Sidebar_personal_edit_quote,编辑同事寄语...,Edit quote...
+Sidebar_personal_add_quote,添加,Add
+Sidebar_UPGRADE_LV1_ITEM1_TITLE,+ 工位 × 1 排,+ DESK SLOT × 1 ROW
+Sidebar_UPGRADE_LV1_ITEM1_DESC,工位扩展至 2 排，最高等级提升至 2。,Expand desk slots to 2 rows. Max level increased to 2.
+Sidebar_UPGRADE_LV1_ITEM2_TITLE,+ 办公室 × 1,+ OFFICE × 1
+Sidebar_UPGRADE_LV1_ITEM2_DESC,解锁并获得你的第一间独立办公室。,Unlock and gain your first independent office.
+Sidebar_UPGRADE_LV1_ITEM3_TITLE,+ 解锁 茶水间,+ UNLOCK PANTRY
+Sidebar_UPGRADE_LV1_ITEM3_DESC,新办公功能：茶水间，可供员工使用。,"New office function: Pantry, available for staff."
+Sidebar_UPGRADE_LV2_ITEM1_TITLE,+ 工位 × 1 排,+ DESK SLOT × 1 ROW
+Sidebar_UPGRADE_LV2_ITEM1_DESC,工位扩展至 3 排，最高等级提升至 3。,Expand desk slots to 3 rows. Max level increased to 3.
+Sidebar_UPGRADE_LV2_ITEM2_TITLE,+ 办公室 × 1,+ OFFICE × 1
+Sidebar_UPGRADE_LV2_ITEM2_DESC,办公室数量扩展至 2 间。,Expand the number of offices to 2.
+Sidebar_UPGRADE_LV2_ITEM3_TITLE,+ 解锁 猎头,+ UNLOCK HEADHUNT
+Sidebar_UPGRADE_LV2_ITEM3_DESC,新办公功能：猎头，用于招募高级人才。,"New office function: Headhunt, to recruit advanced talents."
+Sidebar_UPGRADE_LV3_ITEM1_TITLE,+ 工位 × 1 排,+ DESK SLOT × 1 ROW
+Sidebar_UPGRADE_LV3_ITEM1_DESC,工位扩展至 4 排，最高等级提升至 4。,Expand desk slots to 4 rows. Max level increased to 4.
+Sidebar_UPGRADE_LV3_ITEM2_TITLE,+ 办公室 × 1,+ OFFICE × 1
+Sidebar_UPGRADE_LV3_ITEM2_DESC,办公室数量扩展至 3 间。,Expand the number of offices to 3.
+Sidebar_UPGRADE_LV3_ITEM3_TITLE,+ 解锁 会议室,+ UNLOCK MEETING
+Sidebar_UPGRADE_LV3_ITEM3_DESC,新办公功能：会议室，用于团队协作。,"New office function: Meeting, for team collaboration."
+Sidebar_UPGRADE_LV4_ITEM1_TITLE,+ 工位 × 1 排,+ DESK SLOT × 1 ROW
+Sidebar_UPGRADE_LV4_ITEM1_DESC,工位扩展至 5 排，最高等级保持为 4。,Expand desk slots to 5 rows. Max level remains at 4.
+Sidebar_UPGRADE_LV4_ITEM2_TITLE,+ 办公室 × 1,+ OFFICE × 1
+Sidebar_UPGRADE_LV4_ITEM2_DESC,办公室数量扩展至 4 间。,Expand the number of offices to 4.
+Sidebar_UPGRADE_LV4_ITEM3_TITLE,+ 解锁 企业文化,+ UNLOCK CULTURE
+Sidebar_UPGRADE_LV4_ITEM3_DESC,新办公功能：企业文化，用于提升公司士气。,"New office function: Culture, to boost company morale."
+Sidebar_UPGRADE_COST_FORMAT,花费 %s KPI\n将 M%d 升级至 %s。,SPEND %s KPI TO\nUPGRADE FROM M%d->%s.
+Sidebar_UPGRADE_BTN_FORMAT,M%d -> %s,M%d -> %s
+Sidebar_UPGRADE_MAX_TITLE,已达到公司最高等级（M5）,REACHED MAX COMPANY LEVEL (M5)
+Sidebar_UPGRADE_BTN_MAXED,已满级,MAX LEVEL
+Sidebar_UPGRADE_MAXED_OUT,已满级,MAXED OUT

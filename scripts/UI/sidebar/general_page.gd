@@ -6,6 +6,10 @@ extends Control
 @onready var r_emp_label = $"VBoxContainer/R employee"
 @onready var sr_emp_label = $"VBoxContainer/SR employee"
 @onready var ssr_emp_label = $"VBoxContainer/SSR employee"
+@onready var title_label = $general
+
+func _ready():
+	title_label.text = tr("Sidebar_general_title")
 
 func _process(_delta):
 	# 如果面板不可见，就不要在后台空跑计算，节省性能
@@ -13,8 +17,8 @@ func _process(_delta):
 		return
 		
 	# 更新总时间和总点击
-	hit_label.text = "TOTAL HIT: " + str(Gamemanager.total_hits)
-	time_label.text = "TOTAL TIME: " + _format_time(Gamemanager.total_time)
+	hit_label.text = tr("Sidebar_general_total_hit") + ": " + str(Gamemanager.total_hits)
+	time_label.text = tr("Sidebar_general_total_time") + ": " + _format_time(Gamemanager.total_time)
 	
 	var total_count = EmployeeManager.my_employees.size()
 	var r_count = 0
@@ -31,10 +35,10 @@ func _process(_delta):
 			Employee.Rarity.SSR:
 				ssr_count += 1
 				
-	total_emp_label.text = "NUMBER OF EMPLOYEE: " + str(total_count)
-	r_emp_label.text = "R EMPLOYEE: " + str(r_count)
-	sr_emp_label.text = "SR EMPLOYEE: " + str(sr_count)
-	ssr_emp_label.text = "SSR EMPLOYEE: " + str(ssr_count)
+	total_emp_label.text = tr("Siderbar_general_#_of_employee") + ": " + str(total_count)
+	r_emp_label.text = tr("Siderbar_general_R_employee") + ": " + str(r_count)
+	sr_emp_label.text = tr("Siderbar_general_SR_employee") + ": " + str(sr_count)
+	ssr_emp_label.text = tr("Siderbar_general_SSR_employee") + ": " + str(ssr_count)
 
 func _format_time(seconds: float) -> String:
 	var mins = int(seconds / 60.0)

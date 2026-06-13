@@ -90,6 +90,17 @@ func _on_delete_save_pressed() -> void:
 func _ready() -> void:
 	_sync_always_on_top_checkbox()
 	_init_volume_sliders()
+	_apply_translations()
+
+
+func _apply_translations() -> void:
+	$settings.text = tr(\"Sidebar_settings_title\")
+	$\"Master Volume\".text = \"     \" + tr(\"Sidebar_settings_BGM_volume\")
+	$\"Sound Effects Volume\".text = \"     \" + tr(\"Sidebar_settings_SFX_volume\")
+	$\"Always on Top/Label\".text = \"     \" + tr(\"Sidebar_settings_always_on_top\")
+	$\"Save & Quit/Label\".text = tr(\"Sidebar_settings_save_quit\")
+	$\"Delete Save/Label\".text = tr(\"Sidebar_settings_delete_save\")
+
 
 func _init_volume_sliders() -> void:
 	# 设定范围并连接信号；滑块位置在每次打开设置时由 _sync_volume_sliders() 同步
