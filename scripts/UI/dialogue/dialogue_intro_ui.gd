@@ -153,12 +153,10 @@ func skip_dialogue() -> void:
 	if is_finished: return
 	
 	is_space_pressed = false 
-	print("长按空格触发，跳过对话！")
 	finish_intro_dialogue()
 
 func finish_intro_dialogue() -> void:
 	is_finished = true
-	print("对话结束，可以进入下一步。")
 
 	# 🌟 核心修改 A：立刻把对话主界面隐藏起来
 	hide() 

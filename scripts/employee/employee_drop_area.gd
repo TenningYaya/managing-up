@@ -14,14 +14,11 @@ const DROP_CANDIDATE_COUNT := 20
 const MIN_EMPLOYEE_SPACING := 80.0
 
 func _ready():
-	print("EmployeeDropArea ready")
-
 	hint_label.hide()
 	hint_timer.timeout.connect(_on_hint_timer_timeout)
 	
 	if not Gamemanager.request_employee_drop.is_connected(_on_hire_received):
 		Gamemanager.request_employee_drop.connect(_on_hire_received)
-		print("signal connected to EmployeeDropArea")
 
 func show_full_hint():
 	hint_label.show()

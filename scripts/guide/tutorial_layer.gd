@@ -374,7 +374,7 @@ func _handle_focus_click(step: TutorialStep) -> void:
 		var ui_node = get_tree().get_first_node_in_group(step.force_show_ui_group)
 		if ui_node:
 			if ui_node.is_visible_in_tree():
-				print("【大总管防刷脸补丁】Focus_Click 判定面板已存在，拒绝套娃刷新。")
+				pass
 			else:
 				if ui_node.has_method("lock_for_tutorial"):
 					ui_node.lock_for_tutorial()
@@ -386,7 +386,6 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	# 2. 抓取目标按钮
 	var target = get_tree().get_first_node_in_group(step.target_group)
 	if not target:
-		printerr("卡壳了！找不到组名为 '", step.target_group, "' 的节点！")
 		return
 		
 	var wait_timeout = 0.0
@@ -693,6 +692,7 @@ func _update_tip_position(target_rect: Rect2) -> void:
 	current_tip_instance.global_position = final_pos
 	
 func _on_step_completed() -> void:
+	print("【步骤切换时】project_name = ", Gamemanager.project_name)
 	# 1. 每次点击，先停掉闪烁，复原透明度
 	if is_instance_valid(current_tip_instance):
 		current_tip_instance.queue_free()
@@ -997,9 +997,11 @@ func _handle_name_input(step: TutorialStep) -> void:
 	# 监听场景里的确认信号
 	panel.confirmed.connect(func(name_result: String):
 		Gamemanager.project_name = name_result if name_result.strip_edges() != "" else tr("DEFAULT_PROJECT_NAME")
+		print("【教程】项目名已写入: ", Gamemanager.project_name)
 		panel.queue_free()
 		_on_step_completed()
 	)
+
 
 func _handle_avatar_select(step: TutorialStep) -> void:
 	dialogue_ui.hide()

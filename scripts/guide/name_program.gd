@@ -16,6 +16,8 @@ var _refuse_tween: Tween = null
 
 
 func _ready() -> void:
+	line_edit.text = ""              # ← 强制清空，防止场景里有默认值
+	confirm_btn.disabled = true
 	name_too_long_label.hide()
 	confirm_btn.pressed.connect(_on_confirm_pressed)
 	cancel_btn.pressed.connect(_on_cancel_pressed)
@@ -46,8 +48,8 @@ func _on_confirm_pressed() -> void:
 	confirmed.emit(text)
 
 func _on_text_changed(_new_text: String) -> void:
-	# 玩家改了内容就把警告收起来，给他重新尝试的感觉
 	name_too_long_label.hide()
+	confirm_btn.disabled = _new_text.strip_edges() == ""
 
 func _is_too_long(text: String) -> bool:
 	var limit = MAX_LEN_CJK if _has_cjk(text) else MAX_LEN_LATIN

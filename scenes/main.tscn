@@ -399,6 +399,7 @@ offset_right = 904.0
 offset_bottom = 650.0
 
 [node name="RecruitmentPanel" parent="CanvasLayer" unique_id=463444191 instance=ExtResource("20_gqmmt")]
+visible = false
 offset_left = 911.0
 offset_top = 158.0
 offset_right = 1622.0
@@ -431,6 +432,7 @@ offset_left = 1270.0
 offset_top = 740.0
 offset_right = 1620.0
 offset_bottom = 940.0
+cancel_closes_panel = false
 
 [node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
 

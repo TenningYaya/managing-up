@@ -1,13 +1,14 @@
 #avatar_name_changer.gd
 extends Control
 
-
 @onready var rich_label: RichTextLabel = $SentenceBox
 
 func _ready() -> void:
 	_build_sentence()
 
 func _build_sentence() -> void:
+	print("【名称显示】读取到 project_name: ", Gamemanager.project_name)  # ← 加这行
+	
 	rich_label.bbcode_enabled = true
 	rich_label.fit_content = true
 	rich_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -72,3 +73,7 @@ func _on_avatar_confirmed(index: int) -> void:
 		Gamemanager.player_avatar_texture = popup.avatar_textures[index]
 		popup.hide()
 	_build_sentence()
+	
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_VISIBILITY_CHANGED and is_visible_in_tree():
+		_build_sentence()

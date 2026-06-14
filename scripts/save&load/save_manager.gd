@@ -57,6 +57,7 @@ func delete_save() -> void:
 
 # ================= 存档核心逻辑 =================
 func save_game() -> void:
+	print("【存档】save_game 被调用，project_name = ", Gamemanager.project_name)
 	var save_data = {}
 	save_data["is_tutorial_completed"] = Gamemanager.is_tutorial_completed	
 	save_data["player"] = {
@@ -314,6 +315,7 @@ func _restore_recruitment(rec_data: Dictionary) -> void:
 
 # ================= 读取游戏基础逻辑 =================
 func load_game() -> void:
+	print("【存档】load_game 被调用")
 	if not FileAccess.file_exists(SAVE_PATH): return
 		
 	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
