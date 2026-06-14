@@ -8,6 +8,15 @@ extends Control
 @onready var item2_desc = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer/DescLabel
 @onready var item3_title = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer/TitleLabel
 @onready var item3_desc = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer/DescLabel
+@onready var item2_container = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2
+@onready var item3_container = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3
+@onready var item1_icon = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/ICON_BG/ICON
+@onready var separator1 = $MainLayout/ScrollContainer/MarginContainer/ItemsList/TextureRect
+@onready var separator2 = $MainLayout/ScrollContainer/MarginContainer/ItemsList/TextureRect2
+
+@export var lv5_icon: Texture2D
+
+var _default_item1_icon: Texture2D
 @onready var upgrade_button = $UpgradeButton
 @onready var upgrade_btn_label = $UpgradeButton/Label
 @onready var clicked_sound: AudioStreamPlayer = $ClickedSound
@@ -33,10 +42,18 @@ const UPGRADE_DATA = {
 		{"title": "Sidebar_UPGRADE_LV4_ITEM1_TITLE", "desc": "Sidebar_UPGRADE_LV4_ITEM1_DESC"},
 		{"title": "Sidebar_UPGRADE_LV4_ITEM2_TITLE", "desc": "Sidebar_UPGRADE_LV4_ITEM2_DESC"},
 		{"title": "Sidebar_UPGRADE_LV4_ITEM3_TITLE", "desc": "Sidebar_UPGRADE_LV4_ITEM3_DESC"}
+	]},
+	5: { "cost": 200000, "next_level": "M6", "benefits": [
+		{"title": "Sidebar_UPGRADE_LV5_ITEM1_TITLE", "desc": "Sidebar_UPGRADE_LV5_ITEM1_DESC"},
+		{"title": "Sidebar_UPGRADE_LV5_ITEM2_TITLE", "desc": "Sidebar_UPGRADE_LV5_ITEM2_DESC"},
+		{"title": "Sidebar_UPGRADE_LV5_ITEM3_TITLE", "desc": "Sidebar_UPGRADE_LV5_ITEM3_DESC"}
 	]}
 }
 
+const WIN_SCENE = preload("res://scenes/narrative/win_scene.tscn")
+
 func _ready():
+	_default_item1_icon = item1_icon.texture
 	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
 	# 也可以监听 GameManager 里的 kpi_changed 来实时刷新按钮状态
 	Gamemanager.kpi_changed.connect(func(_new_kpi): update_ui())
@@ -45,11 +62,16 @@ func _ready():
 func update_ui():
 	var current_level = Gamemanager.player_level # 直接从 Gamemanager 获取
 
-	if current_level >= 5:
+	if current_level >= 6:
 		cost_label.text = tr("Sidebar_UPGRADE_MAX_TITLE")
 		upgrade_button.disabled = true
 		upgrade_btn_label.text = tr("Sidebar_UPGRADE_BTN_MAXED")
 
+		item2_container.visible = true
+		item3_container.visible = true
+		separator1.visible = true
+		separator2.visible = true
+		item1_icon.texture = _default_item1_icon
 		item1_title.text = "-"; item1_desc.text = tr("Sidebar_UPGRADE_MAXED_OUT")
 		item2_title.text = "-"; item2_desc.text = tr("Sidebar_UPGRADE_MAXED_OUT")
 		item3_title.text = "-"; item3_desc.text = tr("Sidebar_UPGRADE_MAXED_OUT")
@@ -68,10 +90,18 @@ func update_ui():
 
 	item1_title.text = tr(data["benefits"][0]["title"])
 	item1_desc.text  = tr(data["benefits"][0]["desc"])
-	item2_title.text = tr(data["benefits"][1]["title"])
-	item2_desc.text  = tr(data["benefits"][1]["desc"])
-	item3_title.text = tr(data["benefits"][2]["title"])
-	item3_desc.text  = tr(data["benefits"][2]["desc"])
+
+	var show_extra: bool = current_level != 5
+	item2_container.visible = show_extra
+	item3_container.visible = show_extra
+	separator1.visible = show_extra
+	separator2.visible = show_extra
+	item1_icon.texture = lv5_icon if current_level == 5 else _default_item1_icon
+	if show_extra:
+		item2_title.text = tr(data["benefits"][1]["title"])
+		item2_desc.text  = tr(data["benefits"][1]["desc"])
+		item3_title.text = tr(data["benefits"][2]["title"])
+		item3_desc.text  = tr(data["benefits"][2]["desc"])
 
 	# 检查余额 [cite: 8, 9]
 	upgrade_button.disabled = not Gamemanager.has_enough_kpi(cost)
@@ -104,18 +134,26 @@ func _count_format_specifiers(s: String) -> int:
 	return count
 
 func _on_upgrade_button_pressed():
-	if Gamemanager.player_level >= 5: 
+	if Gamemanager.player_level >= 6:
 		return
-		
+
 	var cost = UPGRADE_DATA[Gamemanager.player_level]["cost"]
 
 	if Gamemanager.spend_kpi(cost):
-		# 更新等级，这里会自动触发你 Gamemanager 里的 level_changed 信号！ 
 		Gamemanager.player_level += 1
-		
-		# 同步更新你的工位状态 
 		Gamemanager.unlocked_desk_slots = Gamemanager.player_level
-		Gamemanager.max_desk_level = min(Gamemanager.player_level, 4) 
-		
+		Gamemanager.max_desk_level = min(Gamemanager.player_level, 4)
+
 		update_ui()
 		clicked_sound.play()
+
+		if Gamemanager.player_level == 6:
+			_show_win_scene()
+
+func _show_win_scene() -> void:
+	var canvas := CanvasLayer.new()
+	canvas.layer = 100
+	get_tree().root.add_child(canvas)
+	var win = WIN_SCENE.instantiate()
+	canvas.add_child(win)
+	win.tree_exited.connect(canvas.queue_free)

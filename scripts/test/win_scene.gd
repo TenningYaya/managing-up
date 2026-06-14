@@ -43,5 +43,5 @@ func start_win_sequence() -> void:
 # 4. 对话全部点完（或跳过）后的终极结算
 # ==========================================
 func _on_win_dialogue_completed() -> void:
-	print("通关对话播放完毕，收工！")
-	# 在这里执行你的返回主菜单或者显示制作人员名单逻辑
+	hide()
+	queue_free()
