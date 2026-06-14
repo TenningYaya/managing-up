@@ -152,7 +152,7 @@ func _on_upgrade_button_pressed():
 
 func _show_win_scene() -> void:
 	var canvas := CanvasLayer.new()
-	canvas.layer = 100
+	canvas.layer = 1000
 	get_tree().root.add_child(canvas)
 	var win = WIN_SCENE.instantiate()
 	canvas.add_child(win)

@@ -1,47 +1,38 @@
 #win_scene.gd
 extends Control
 
-# 抓取你拖进来的那个对话器组件
 @onready var dialogue_ui = $DialogueIntroUI
+@onready var final_confirm = $FinalConfirm
+@onready var title_label = $FinalConfirm/MarginContainer/VBoxContainer/Title
+@onready var content_label = $FinalConfirm/MarginContainer/VBoxContainer/Content
+@onready var know_it_btn = $FinalConfirm/MarginContainer/VBoxContainer/KnowIt
 
-# ==========================================
-# 🌟 核心修改 1：用 @export 暴露台词列表
-# 这样你就能在右侧 Inspector 里直接点 "Add Element" 无限加台词了！
-# 你在里面直接填你在 CSV 里配好的 ID，比如: WIN_DIALOGUE_01
-# ==========================================
 @export var win_dialogue_keys: Array[String] = []
 
 func _ready() -> void:
 	dialogue_ui.hide()
+	final_confirm.hide()
 	dialogue_ui.intro_dialogue_finished.connect(_on_win_dialogue_completed)
-	
-	# 给画面一秒的留白时间，再开启通关对话
 	get_tree().create_timer(1.0).timeout.connect(start_win_sequence)
 
 func start_win_sequence() -> void:
 	if win_dialogue_keys.is_empty():
-		push_warning("老板，你是不是忘了在 Inspector 里配通关台词了？")
+		push_warning("Inspector里的通关台词是空的")
 		_on_win_dialogue_completed()
 		return
-		
-	# ==========================================
-	# 🌟 核心修改 2：对接本地化系统 (Localization)
-	# 因为对话器内部直接使用了数组，为了百分百安全，我们在这里
-	# 把 Inspector 里的 Key 先用 tr() 翻译成当前语言的文本，再打包塞给对话器！
-	# ==========================================
+
 	var localized_lines: Array[String] = []
-	
 	for key in win_dialogue_keys:
-		# tr() 会自动去你的 CSV 里对暗号，对上了就变成中/英文，对不上就直接显示原字符串
-		var translated_text = tr(key) 
-		localized_lines.append(translated_text)
-	
-	# 把已经翻译好的“纯文本数组”灌入对话器，让它逐句播放
+		localized_lines.append(tr(key))
 	dialogue_ui.start_dialogue(localized_lines, 0, 0.0, 0.0, 0)
 
-# ==========================================
-# 4. 对话全部点完（或跳过）后的终极结算
-# ==========================================
 func _on_win_dialogue_completed() -> void:
+	title_label.text = tr("WIN_SCENE_FINAL_TITLE")
+	content_label.text = tr("WIN_SCENE_FINAL_CONTENT")
+	final_confirm.show()
+	await get_tree().process_frame
+	know_it_btn.pressed.connect(_on_know_it_pressed)
+
+func _on_know_it_pressed() -> void:
 	hide()
 	queue_free()

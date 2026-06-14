@@ -118,6 +118,9 @@ WIN_SCENE_DIALOGUE_5,不过...只是管理这样一个小项目，对你来说�
 WIN_SCENE_DIALOGUE_6,等时机成熟，我会再联系你的,"When the timing is right, I will reach out to you again."
 WIN_SCENE_DIALOGUE_7,"到那个时候，我准备告诉你一个公司深处的秘密……","And when that time comes, I'm prepared to let you in on an absolute secret..."
 WIN_SCENE_DIALOGUE_8,好好学，好好干，我一直是很看好你的，bye~,"Study hard, work hard. I've always believed in your. Bye~"
+WIN_SCENE_FINAL_TITLE,恭喜,Congratulations
+WIN_SCENE_FINAL_CONTENT,您已体验完当前版本的全部内容。我们将在后续更新中带来更多新世界观、新的职场和上司，以及可供抽打的新同事。敬请期待！,You've reached the end of the current version. Future updates will bring new worlds to conquer: fresh offices and bosses to navigate，and new coworkers to torment. Stay tuned!
+WIN_SCENE_FINAL_CONFIRM,知道了，退下吧,Got it! You're dismissed.
 ,,
 NAME_INPUT_PROMPT,给项目组起名...,Your Program is...
 NAME_INPUT_PLACEHOLDER,输入项目组名称……,Enter program name...
