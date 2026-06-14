@@ -399,11 +399,10 @@ offset_right = 904.0
 offset_bottom = 650.0
 
 [node name="RecruitmentPanel" parent="CanvasLayer" unique_id=463444191 instance=ExtResource("20_gqmmt")]
-visible = false
 offset_left = 911.0
-offset_top = 197.0
+offset_top = 158.0
 offset_right = 1622.0
-offset_bottom = 641.0
+offset_bottom = 617.0
 
 [node name="MobileSidebar" parent="CanvasLayer" unique_id=2025363917 groups=["sidebar_panel"] instance=ExtResource("14_pm3ni")]
 z_index = 100

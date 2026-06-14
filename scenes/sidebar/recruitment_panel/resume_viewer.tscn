@@ -22,7 +22,7 @@ offset_bottom = 40.0
 theme_override_constants/separation = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=13999434]
-custom_minimum_size = Vector2(280, 340)
+custom_minimum_size = Vector2(280, 360)
 layout_mode = 2
 theme_override_constants/separation = 4
 alignment = 1
@@ -67,6 +67,7 @@ flat = true
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1992433244]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_right = 15
 

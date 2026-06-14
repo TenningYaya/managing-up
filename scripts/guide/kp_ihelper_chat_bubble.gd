@@ -1,5 +1,7 @@
 extends Control
+
 signal dialogue_finished
+signal skip_all_requested
 
 @onready var label: RichTextLabel = $HBoxContainer/RichTextLabel
 
@@ -9,6 +11,20 @@ var _lines: Array[String] = []
 var _current_index: int = 0
 var _is_typing_done := false
 
+var _space_pressed_time := 0.0
+var _is_space_pressed := false
+const SKIP_HOLD_TIME := 1.0
+
+func _process(delta: float) -> void:
+	if not is_visible_in_tree():
+		return
+	if _is_space_pressed:
+		_space_pressed_time += delta
+		if _space_pressed_time >= SKIP_HOLD_TIME:
+			_is_space_pressed = false
+			_space_pressed_time = 0.0
+			skip_all_requested.emit()
+			
 # 🌟 改成接收整个数组
 func setup(dialogue_lines: Array[String]) -> void:
 	_lines = dialogue_lines
@@ -31,6 +47,16 @@ func _play_typewriter() -> void:
 	_is_typing_done = true
 
 func _input(event: InputEvent) -> void:
+	if not is_visible_in_tree():   # ← 加这行
+		return
+	if event is InputEventKey and event.keycode == KEY_SPACE:
+		if event.pressed and not event.echo:
+			_is_space_pressed = true
+		elif not event.pressed:
+			_is_space_pressed = false
+			_space_pressed_time = 0.0
+		get_viewport().set_input_as_handled()
+		return
 	if not _is_typing_done:
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

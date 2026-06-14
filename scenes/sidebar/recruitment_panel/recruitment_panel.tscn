@@ -34,7 +34,7 @@ anchors_preset = 0
 offset_left = -71.0
 offset_top = -10.0
 offset_right = 640.0
-offset_bottom = 438.0
+offset_bottom = 453.0
 script = ExtResource("1_tvhvr")
 
 [node name="Background" type="NinePatchRect" parent="." unique_id=97307330]
@@ -253,7 +253,6 @@ character_set = 1
 button_text = "RECRUIT_HR_SPEEDUP_HEAD"
 
 [node name="HeadViewer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=74954453 instance=ExtResource("1_pfe0p")]
-visible = false
 layout_mode = 2
 
 [node name="TitleBar" type="Panel" parent="." unique_id=1469736204]

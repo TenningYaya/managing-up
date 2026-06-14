@@ -113,7 +113,7 @@ func _trigger_hiring_banters(hired_list: Array) -> void:
 			break
 			
 	if has_ssr:
-		# 🌟 顺手把老员工的围观也往后稍稍，等新人开始吐槽了，老员工再惊呼，层次感更好
+		#[员工吐槽中心]空降ssr
 		get_tree().create_timer(1.0).timeout.connect(func():
 			BanterManager.trigger_banter("hired_ssr", 3)
 		)

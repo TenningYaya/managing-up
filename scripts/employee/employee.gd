@@ -533,7 +533,7 @@ func _spawn_speech_bubble(text_content: String) -> void:
 	_active_bubble.z_index = 11 
 	
 	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
-	_active_bubble.position = Vector2(70, -27)
+	_active_bubble.position = Vector2(20, -47)
 	
 	# 呼叫接口，播放内容
 	_active_bubble.pop_up(text_content)
@@ -557,11 +557,11 @@ func _spawn_banter_bubble(text_content: String) -> void:
 	_active_bubble.pop_up(text_content)
 
 func play_on_hired_banter() -> void:
-	# 1. 直接从 BanterManager 的题库里摸一句出来
+	# 员工进了仓库而不是 drop area，不在场景树里，无法生成气泡
+	if not is_inside_tree():
+		return
 	var pool = BanterManager.QUOTES["new_hire"]
 	var random_key = pool[randi() % pool.size()]
-	
-	# 2. 翻译并呼叫你现成的气泡生成函数
 	_spawn_banter_bubble(tr(random_key))
 	
 func get_final_efficiency() -> int:

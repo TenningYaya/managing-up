@@ -22,8 +22,7 @@ func _ready() -> void:
 		player_avatar.hide()  # 没选头像就藏起来，不留空白
 	
 func pop_up(content: String) -> void:
-	print("Node2D scale: ", scale)
-	print("player_avatar global_rect: ", player_avatar.get_global_rect())
+	label.text = content
 	if Gamemanager.player_avatar_texture != null:
 		player_avatar.texture = Gamemanager.player_avatar_texture
 		player_avatar.show()
@@ -53,7 +52,7 @@ func pop_up(content: String) -> void:
 	# .set_delay(1): 延迟执行时间，单位是秒（即：保持显示状态停留 1 秒）
 	# 0.0: 目标透明度，0.0代表完全透明（消失）
 	# 0.5: 完成这次渐隐过程的时间，单位是秒
-	_tween.chain().tween_property(self, "modulate:a", 0.0, 1).set_delay(1.5)
+	_tween.chain().tween_property(self, "modulate:a", 0.0, 1).set_delay(1)
 	
 	# 🌟 结束：自动销毁
 	_tween.chain().tween_callback(queue_free)

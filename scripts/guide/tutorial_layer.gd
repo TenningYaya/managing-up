@@ -21,7 +21,7 @@ var current_step_index: int = 0
 var yes_click_count: int = 0
 var drag_distance_accumulator: float = 0.0
 
-# 用来记录当前正在监听的节点和信号，方便过关后“卸磨杀驴”断开连接
+# 用来记录当前正在监听的节点和信号，方便过关后"卸磨杀驴"断开连接
 var current_target: Node = null
 var current_signal_name: String = ""
 var current_callable: Callable
@@ -242,12 +242,15 @@ func _dispatch_translated_dialogue(step: TutorialStep, signal_name: String, call
 		# 安全断连，谨防报错
 		if kpi_ui.is_connected("dialogue_finished", callback):
 			kpi_ui.disconnect("dialogue_finished", callback)
+		if not kpi_ui.is_connected("skip_all_requested", _skip_to_first_action_step):
+			kpi_ui.skip_all_requested.connect(_skip_to_first_action_step)
 		kpi_ui.dialogue_finished.connect(callback)
 		
 		kpi_ui.show()
 		var text_to_show = translated_lines[0] if translated_lines.size() > 0 else ""
 		kpi_ui.setup(translated_lines)
-		
+	
+	
 	else:  # Boss 或其他角色分支
 		kpi_ui.hide()
 		
@@ -263,7 +266,16 @@ func _dispatch_translated_dialogue(step: TutorialStep, signal_name: String, call
 			step.dialogue_offset_y, 
 			step.speaker
 		)
-			
+
+func _skip_to_first_action_step() -> void:
+	dialogue_ui.hide()
+	kpi_ui.hide()
+	for i in range(current_step_index, steps.size()):
+		if steps[i].step_type != TutorialStep.Type.DIALOGUE:
+			play_step(i)
+			return
+	_show_final_label()
+				
 ## 子功能 A：管理黑布挖洞与钢化玻璃物理隔绝
 func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
 	blocker_ui.show() # 只要进到这个函数，无论有没有 target，先保证黑幕是亮的！
@@ -693,7 +705,7 @@ func _on_step_completed() -> void:
 	
 	blocker_ui.hide()
 	
-	# 2. 🌟 核心拦截判定：如果是在等“招满三人”的步骤
+	# 2. 🌟 核心拦截判定：如果是在等"招满三人"的步骤
 	if current_signal_name == "all_preset_employees_hired":
 		var remaining_count = RecruitmentManager.normal_pool.size()
 		print("【大总管数人头】有员工入职了！当前简历池还剩：", remaining_count, " 人")
@@ -780,7 +792,7 @@ func setup_tutorial_hiring():
 func _input(event: InputEvent) -> void:
 	if not Gamemanager.is_tutorial_completed:
 		if event.is_action("ui_accept"):
-			# 把这个事件标记为“已处理”，引擎底层和所有按钮就再也收不到它了
+			# 把这个事件标记为"已处理"，引擎底层和所有按钮就再也收不到它了
 			get_viewport().set_input_as_handled() 
 			return # 强行打断，不准往下走
 			
@@ -925,9 +937,7 @@ func _finish_all_tutorials() -> void:
 	if current_target and current_target.has_signal(current_signal_name):
 		current_target.disconnect(current_signal_name, current_callable)
 	Gamemanager.tutorial_allow_camera_drag = false 
-	#if current_callable_ghost and get_viewport().input.is_connected(current_callable_ghost):
-		#get_viewport().input.disconnect(current_callable_ghost)
-	# 彻底销毁教程 UI
+
 	queue_free()
 
 func _show_final_label() -> void:
@@ -935,7 +945,7 @@ func _show_final_label() -> void:
 	Gamemanager.is_employee_interaction_disabled = false
 	Gamemanager.is_reject_button_disabled = false
 	blocker_ui.hide()
-	blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE # 强行让黑布变成“幽灵”，不挡鼠标
+	blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE # 强行让黑布变成"幽灵"，不挡鼠标
 	dialogue_ui.hide()
 	tip_ui.hide()
 	
@@ -944,7 +954,7 @@ func _show_final_label() -> void:
 	
 	# 🌟 收回拖拽特权（保留这一行即可，下面两行全删了！）
 	Gamemanager.tutorial_allow_camera_drag = false 
-		
+	SaveManager.save_game()
 	end_label.show() 
 	
 	# 等0.2秒防止点太快直接穿透

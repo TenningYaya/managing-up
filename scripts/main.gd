@@ -95,11 +95,8 @@ func _ready():
 func _cover_current_screen() -> void:
 	var scr := DisplayServer.window_get_current_screen()
 	var usable := DisplayServer.screen_get_usable_rect(scr)
-	print("[window] screen=", scr, " usable=", usable, " full=", DisplayServer.screen_get_size(scr))
 	DisplayServer.window_set_position(usable.position)
 	DisplayServer.window_set_size(usable.size)
-	print("[window] after set: pos=", DisplayServer.window_get_position(), " size=", DisplayServer.window_get_size(), " mode=", DisplayServer.window_get_mode())
-
 
 # 读取“是否置顶”设置（默认 false = 不置顶，可被其它窗口遮挡；勾选后才置顶）
 func _load_always_on_top() -> bool:
