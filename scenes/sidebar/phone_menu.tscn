@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cchun4tokcayg" path="res://assets/sidebar/Phone_2.png" id="1_8gi4e"]
 [ext_resource type="Script" uid="uid://dbiup6ouwg2e" path="res://scripts/UI/sidebar/mobilesidebar.gd" id="1_jt2no"]
 [ext_resource type="Texture2D" uid="uid://bvd528nbtp2lh" path="res://assets/sidebar/TriggerIcon.png" id="2_jt2no"]
-[ext_resource type="Texture2D" uid="uid://bp7arhki6nm0b" path="res://assets/background/Sidebar-background.png" id="2_nnubu"]
+[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_nnubu"]
 [ext_resource type="Texture2D" uid="uid://dlh7llvih2fei" path="res://assets/sidebar/app/upgrades.png" id="3_50qqt"]
 [ext_resource type="Texture2D" uid="uid://cde3nq5rhvsqe" path="res://assets/sidebar/app/tutorial.png" id="4_diil0"]
 [ext_resource type="Texture2D" uid="uid://bvt1p6cec31x6" path="res://assets/sidebar/app/general.png" id="5_yskv6"]

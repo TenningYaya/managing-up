@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://bw8epncov74qg"]
 
 [ext_resource type="Script" uid="uid://c0vbvo7f2w176" path="res://scripts/UI/sidebar/tutorial_page.gd" id="1_7bfc0"]
-[ext_resource type="Texture2D" uid="uid://bp7arhki6nm0b" path="res://assets/background/Sidebar-background.png" id="2_0ctye"]
+[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_4qc40"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_tehtr"]
 [ext_resource type="Texture2D" uid="uid://52xtuklk50um" path="res://assets/sidebar/tutorial1.png" id="3_0ctye"]
+[ext_resource type="Texture2D" uid="uid://c0o37s88t8hsx" path="res://assets/background/background-white.png" id="3_npf01"]
 
 [node name="TutorialPage" type="Control" unique_id=1808630414 groups=["upgrade_page"]]
 custom_minimum_size = Vector2(270, 360)
@@ -17,7 +18,18 @@ script = ExtResource("1_7bfc0")
 layout_mode = 0
 offset_right = 248.0
 offset_bottom = 336.0
-texture = ExtResource("2_0ctye")
+texture = ExtResource("2_4qc40")
+expand_mode = 1
+
+[node name="BG2" type="TextureRect" parent="." unique_id=1917341195]
+modulate = Color(1, 1, 1, 0.5019608)
+custom_minimum_size = Vector2(220, 310)
+layout_mode = 0
+offset_left = 13.0
+offset_top = 8.0
+offset_right = 233.0
+offset_bottom = 318.0
+texture = ExtResource("3_npf01")
 expand_mode = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1049627685]
