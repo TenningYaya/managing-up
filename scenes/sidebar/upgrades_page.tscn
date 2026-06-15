@@ -65,7 +65,7 @@ alignment = 1
 [node name="Label" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=439292396]
 custom_minimum_size = Vector2(225, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8070806, 0.36724484, 0.27068415, 0.9411765)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 22
 text = "Spend 10,000 KPI to upgrade from T0->T1."
@@ -111,6 +111,7 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/VBoxContainer" unique_id=82975487]
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 20
 text = "+ STAFF×6"
@@ -119,6 +120,7 @@ autowrap_mode = 2
 [node name="DescLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/VBoxContainer" unique_id=787904701]
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 14
 text = "You can recruit more people to join the workforce."
@@ -168,6 +170,7 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer" unique_id=1377390854]
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 20
 text = "+ STAFF×6"
@@ -176,6 +179,7 @@ autowrap_mode = 2
 [node name="DescLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer" unique_id=815085535]
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 14
 text = "You can recruit more people to join the workforce."
@@ -225,6 +229,7 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer" unique_id=1858416977]
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 20
 text = "+ STAFF×6"
@@ -233,6 +238,7 @@ autowrap_mode = 2
 [node name="DescLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer" unique_id=454053701]
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 14
 text = "You can recruit more people to join the workforce."
@@ -265,6 +271,7 @@ offset_right = 44.0
 offset_bottom = 7.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 20
 text = "M1->M2"
@@ -276,6 +283,7 @@ offset_left = 1.0
 offset_top = 43.0
 offset_right = 247.0
 offset_bottom = 72.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_70tse")
 theme_override_font_sizes/font_size = 34
 text = "upgrades"

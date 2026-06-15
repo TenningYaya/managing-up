@@ -23,6 +23,7 @@ offset_left = -4.0
 offset_top = 43.0
 offset_right = 244.0
 offset_bottom = 72.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 34
 text = "GENERAL"
@@ -44,18 +45,21 @@ offset_bottom = 210.04001
 
 [node name="total hit" type="Label" parent="VBoxContainer" unique_id=2116646967]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
 text = "     Totoal Hit: "
 
 [node name="total time" type="Label" parent="VBoxContainer" unique_id=633318783]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
 text = "     Totoal Time: "
 
 [node name="number of employee" type="Label" parent="VBoxContainer" unique_id=1990531081]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
 text = "     number of employee: 
@@ -63,18 +67,21 @@ text = "     number of employee:
 
 [node name="R employee" type="Label" parent="VBoxContainer" unique_id=212652451]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
 text = "     R employee: "
 
 [node name="SR employee" type="Label" parent="VBoxContainer" unique_id=533286580]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
 text = "     SR employee: "
 
 [node name="SSR employee" type="Label" parent="VBoxContainer" unique_id=1553403749]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
 text = "     SSR employee: "
