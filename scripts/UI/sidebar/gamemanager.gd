@@ -38,7 +38,8 @@ var tutorial_allow_camera_drag: bool = false
 
 var project_name: String = "NewProject"
 var player_avatar_index: int = 0
-var player_avatar_texture: Texture2D = preload("res://assets/tutorial/avatars/player_avatar_1.png") 
+var player_avatar_texture: Texture2D = preload("res://assets/tutorial/avatars/player_avatar_1.png")
+var has_selected_avatar: bool = false 
 # 定义总览面板需要的变量
 var total_hits: int = 0
 var total_time: float = 0.0

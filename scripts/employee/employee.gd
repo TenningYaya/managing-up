@@ -521,6 +521,8 @@ func _speed_up_work() -> void:
 		_finish_and_generate_file()
 		
 func _spawn_speech_bubble(text_content: String) -> void:
+	if not Gamemanager.has_selected_avatar:
+		return
 	# 🌟 打断机制：如果头上已经有一个气泡了，直接把它干掉
 	if is_instance_valid(_active_bubble):
 		_active_bubble.kill_bubble()

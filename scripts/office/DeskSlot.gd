@@ -41,13 +41,12 @@ func _check_level_unlock(current_player_level: int) -> void:
 			_play_upgrade_bounce_fx()
 
 		is_locked = false
-		modulate.a = 1.0
+		modulate = Color.WHITE
 		mouse_filter = MOUSE_FILTER_STOP
 		upgrade_trigger_btn.disabled = false
 	else:
 		is_locked = true
-		# 用透明度隐藏而不是 hide()，保持在 HBoxContainer 中占位，防止布局变化导致已部署员工位置偏移
-		modulate.a = 0.0
+		modulate = Color(0.5, 0.5, 0.5, 1.0)
 		mouse_filter = MOUSE_FILTER_IGNORE
 		upgrade_trigger_btn.disabled = true
 

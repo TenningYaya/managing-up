@@ -210,8 +210,9 @@ unlock_at_level = 2
 [node name="DeskRow" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=1158104807]
 layout_mode = 2
 
-[node name="DeskSlot" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=974996053 groups=["desk_slot_1"] instance=ExtResource("2_sugp2")]
+[node name="DeskSlot" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=974996053 instance=ExtResource("2_sugp2")]
 layout_mode = 2
+unlock_at_level = 4
 
 [node name="DeskSlot2" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=2027690692 instance=ExtResource("2_sugp2")]
 layout_mode = 2
@@ -252,13 +253,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="DeskSlot3" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=850074374 instance=ExtResource("2_sugp2")]
+[node name="DeskSlot3" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=850074374 groups=["desk_slot_1"] instance=ExtResource("2_sugp2")]
 layout_mode = 2
-unlock_at_level = 3
 
 [node name="DeskSlot4" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=1607838477 instance=ExtResource("2_sugp2")]
 layout_mode = 2
-unlock_at_level = 4
+unlock_at_level = 3
 
 [node name="DeskSlot5" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=715536118 instance=ExtResource("2_sugp2")]
 layout_mode = 2

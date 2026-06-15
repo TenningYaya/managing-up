@@ -346,6 +346,7 @@ func load_game() -> void:
 		var avatar_path = p_data.get("player_avatar_path", "")
 		if avatar_path != "":
 			Gamemanager.player_avatar_texture = load(avatar_path)
+			Gamemanager.has_selected_avatar = true
 	
 	if save_data.has("floor"):
 		var f_data = save_data["floor"]

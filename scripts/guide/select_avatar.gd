@@ -99,6 +99,7 @@ func _update_positions(animated: bool) -> void:
 func _on_confirm_pressed() -> void:
 	confirmed.emit(_selected_index)
 	Gamemanager.player_avatar_texture = avatar_textures[_selected_index]
+	Gamemanager.has_selected_avatar = true
 
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree():
