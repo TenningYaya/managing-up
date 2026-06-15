@@ -4,6 +4,7 @@ extends Control
 @onready var thumbnail_row: HBoxContainer = $VBoxLayout/ThumbnailPanel/MarginContainer/ThumbnailRow
 @onready var buttons_list: VBoxContainer = $VBoxLayout/ButtonsList
 @onready var clicked_sound: AudioStreamPlayer = $ClickedSound
+@onready var BG: TextureRect = $BG2
 
 const COLOR_NORMAL := Color(0.40, 0.42, 0.62, 1.0)
 const COLOR_HIGHLIGHT := Color(1.0, 0.82, 0.25, 1.0)
@@ -31,6 +32,7 @@ func _ready() -> void:
 		title_label.text = t
 	Gamemanager.level_changed.connect(func(_v): _refresh())
 	Gamemanager.kpi_changed.connect(func(_v): _update_button_states())
+	
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
