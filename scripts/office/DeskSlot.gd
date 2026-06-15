@@ -43,12 +43,42 @@ func _check_level_unlock(current_player_level: int) -> void:
 		is_locked = false
 		modulate = Color.WHITE
 		mouse_filter = MOUSE_FILTER_STOP
+		upgrade_trigger_btn.mouse_filter = MOUSE_FILTER_PASS
 		upgrade_trigger_btn.disabled = false
 	else:
 		is_locked = true
 		modulate = Color(0.5, 0.5, 0.5, 1.0)
-		mouse_filter = MOUSE_FILTER_IGNORE
+		mouse_filter = MOUSE_FILTER_STOP
+		upgrade_trigger_btn.mouse_filter = MOUSE_FILTER_IGNORE
 		upgrade_trigger_btn.disabled = true
+
+func _gui_input(event: InputEvent) -> void:
+	if is_locked and event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			_show_locked_hint()
+			accept_event()
+
+func _show_locked_hint() -> void:
+	if get_node_or_null("LockedHint"):
+		return
+	var label := Label.new()
+	label.name = "LockedHint"
+	label.text = tr("DeskSlot_locked_click_hint")
+	label.add_theme_color_override("font_color", Color(1, 0.2, 0.2, 1))
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.top_level = true
+	label.modulate.a = 0.0
+	add_child(label)
+	await get_tree().process_frame
+	label.global_position = global_position + Vector2(size.x / 2.0 - label.size.x / 2.0, -label.size.y + 40.0)
+	var start_y := label.global_position.y
+	var fade := create_tween()
+	fade.tween_property(label, "modulate:a", 1.0, 0.15)
+	fade.tween_interval(0.7)
+	fade.tween_property(label, "modulate:a", 0.0, 0.5)
+	fade.tween_callback(label.queue_free)
+	var move := create_tween()
+	move.tween_property(label, "global_position:y", start_y - 25.0, 1.35).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _on_slot_clicked():
 	var panel = get_tree().get_first_node_in_group("upgrade_panel")
