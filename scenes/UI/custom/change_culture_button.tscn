@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_ccmah"]
 [ext_resource type="Script" uid="uid://cotl14t6i0e58" path="res://scripts/UI/custom/change_culture_button.gd" id="2_kivqj"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_vamsw"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_vamsw"]
 
 [node name="ChangeCultureButton" type="TextureButton" unique_id=1466933540 groups=["culture_selection_buttons"]]
 custom_minimum_size = Vector2(220, 70)

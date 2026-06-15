@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cuswsof0qv1xl" path="res://scripts/UI/custom/popup_window.gd" id="1_e6jah"]
 [ext_resource type="Texture2D" uid="uid://bhdgpy4vms7ux" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Pixel Map Base/0.png" id="2_w7kwx"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="3_h5kr8"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_h5kr8"]
 [ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="4_b2s3b"]
 [ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="5_lsd13"]
 

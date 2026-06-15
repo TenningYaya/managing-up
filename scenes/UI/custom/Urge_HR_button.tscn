@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d08xeec3k57ag" path="res://scripts/UI/custom/hr_button.gd" id="1_apq0g"]
 [ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="2_bjxox"]
 [ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="3_b2yvu"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="4_f42g2"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="4_f42g2"]
 [ext_resource type="Texture2D" uid="uid://d0vasxqcnioe1" path="res://assets/figures/2.Office_Man_Character/Office_Man_Character/Sprite_Sheets/Office_Man_Faint.png" id="5_5vyci"]
 [ext_resource type="Texture2D" uid="uid://cmjpcy5xp7li" path="res://assets/figures/2.Office_Man_Character/Office_Man_Character/Sprite_Sheets/Office_Man_Idle.png" id="6_kqum8"]
 [ext_resource type="Texture2D" uid="uid://brsm1tcjlhr36" path="res://assets/figures/2.Office_Man_Character/Office_Man_Character/Sprite_Sheets/Office_Man_Run.png" id="7_3vr0a"]

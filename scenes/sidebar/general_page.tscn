@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bc1pi0j86er70"]
 
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="1_gwcfk"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="1_gwcfk"]
 [ext_resource type="Script" uid="uid://bfbvm6lqss5fr" path="res://scripts/UI/sidebar/general_page.gd" id="1_qayn5"]
 [ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_55vqi"]
 

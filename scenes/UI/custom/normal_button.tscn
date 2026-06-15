@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="1_jyq3c"]
 [ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="2_lhwd6"]
 [ext_resource type="Script" uid="uid://c4si68qc1dmk4" path="res://scripts/UI/custom/normal_button.gd" id="3_wxv04"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="4_x8uyb"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="4_x8uyb"]
 
 [node name="NormalButton" type="TextureButton" unique_id=2048579194]
 offset_left = 70.0

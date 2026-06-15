@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://sclbpjras5bi"]
 
 [ext_resource type="Script" uid="uid://cfcx88ve00apd" path="res://scripts/employee/employee_drop_area.gd" id="1_mvy5v"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_p5omb"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_p5omb"]
 
 [node name="EmployeeDropArea" type="Control" unique_id=1860369934]
 custom_minimum_size = Vector2(300, 360)

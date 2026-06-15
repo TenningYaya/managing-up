@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://donumjvunaopo" path="res://scripts/UI/ingame/currency_ui.gd" id="1_rsm8o"]
 [ext_resource type="Texture2D" uid="uid://csubs4ax3cbp0" path="res://assets/UI/KPI/kpi_screen.png" id="2_847bp"]
-[ext_resource type="FontFile" uid="uid://b7iihvkkic0k3" path="res://assets/fonts/DatDot-Regular.ttf" id="3_mpmo8"]
+[ext_resource type="FontVariation" uid="uid://cdatdot0cjkfb" path="res://assets/fonts/datdot_cjk.tres" id="3_mpmo8"]
 [ext_resource type="Texture2D" uid="uid://c22rjoomsvmdy" path="res://assets/UI/KPI/down.png" id="3_rsm8o"]
 [ext_resource type="Texture2D" uid="uid://cvwo4ejkdsipp" path="res://assets/UI/KPI/up.png" id="4_mpmo8"]
 

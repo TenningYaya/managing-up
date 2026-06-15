@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ejvqpq34dhbg"]
 
 [ext_resource type="Script" uid="uid://cwkg5ot7m848f" path="res://scripts/UI/sidebar/tile_changer.gd" id="1_7w0u4"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_fcb8g"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_fcb8g"]
 
 [node name="TileChanger" type="VBoxContainer" unique_id=894433398]
 custom_minimum_size = Vector2(217, 0)

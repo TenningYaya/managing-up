@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dndhwa02h345o"]
 
 [ext_resource type="Script" uid="uid://du0416hc37m1u" path="res://scripts/UI/custom/employee_information_bar.gd" id="1_3xefu"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="1_l47de"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="1_l47de"]
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="2_ve6y7"]
 
 [node name="EmployeeInformationBar" type="HBoxContainer" unique_id=922239808]

@@ -8,7 +8,7 @@
 [ext_resource type="StyleBox" uid="uid://cvnmvliyke1f0" path="res://data/UI/indigo_stylebox_hover.tres" id="4_vfn86"]
 [ext_resource type="StyleBox" uid="uid://dixbf21ulxawg" path="res://data/UI/indigo_stylebox_flat.tres" id="5_flfux"]
 [ext_resource type="StyleBox" uid="uid://c2rs0260hq3if" path="res://data/UI/indigo_stylebox_focus.tres" id="6_jfh5p"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="7_8bl1x"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="7_8bl1x"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0rffj"]
 atlas = ExtResource("3_g51u0")

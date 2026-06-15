@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://doe15yvabaqje"]
 
 [ext_resource type="Script" uid="uid://dqw6tnbj3u20k" path="res://scripts/UI/panel/quote_editor.gd" id="1_7ps1e"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_33up6"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_33up6"]
 
 [node name="QuoteEditor" type="VBoxContainer" unique_id=1617537307]
 offset_right = 183.0

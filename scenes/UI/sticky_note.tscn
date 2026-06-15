@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bbi44ww2puf63"]
 
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="1_tkmf7"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="1_tkmf7"]
 [ext_resource type="Script" path="res://scripts/UI/sticky_note.gd" id="2_stickysc"]
 
 [node name="StickyNote" type="Control" unique_id=616207233]

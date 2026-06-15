@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" format=3 uid="uid://cdatdot0cjkfb"]
+
+[ext_resource type="FontFile" uid="uid://b7iihvkkic0k3" path="res://assets/fonts/DatDot-Regular.ttf" id="1_base"]
+[ext_resource type="FontFile" uid="uid://cbmni0067v0k7" path="res://assets/fonts/ipix_12px.ttf" id="2_cjk"]
+
+[resource]
+base_font = ExtResource("1_base")
+fallbacks = Array[Font]([ExtResource("2_cjk")])

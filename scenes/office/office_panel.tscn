@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_kpljw"]
 [ext_resource type="Texture2D" uid="uid://cje2nxck7bbu" path="res://assets/computer/PNG/1.png" id="3_mixia"]
 [ext_resource type="Texture2D" uid="uid://w0pkc05aakr3" path="res://assets/UI/ingame/office_icons.jpg" id="3_wtdck"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="4_dvne8"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="4_dvne8"]
 [ext_resource type="PackedScene" uid="uid://b2l7mr7bb5b41" path="res://scenes/UI/panel/culture_panel.tscn" id="7_dvne8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e55uw"]

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://chdrhvsafxhir" path="res://scripts/guide/name_program.gd" id="1_ixv5g"]
 [ext_resource type="Texture2D" uid="uid://bh0c5caoifnt1" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/PNG Spritesheet/Map SpriteSheet.png" id="1_qej8v"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="2_c5ors"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_ixv5g"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_ixv5g"]
 
 [node name="NameProgram" type="Control" unique_id=187481383]
 custom_minimum_size = Vector2(350, 200)

@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://72jjpffy66yt" path="res://scenes/sidebar/upgrades_page.tscn" id="8_53q3r"]
 [ext_resource type="PackedScene" uid="uid://bc1pi0j86er70" path="res://scenes/sidebar/general_page.tscn" id="9_50qqt"]
 [ext_resource type="Texture2D" uid="uid://dge2s02wwjgdb" path="res://assets/sidebar/app/personal.png" id="9_ckm1g"]
-[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="10_53q3r"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="10_53q3r"]
 [ext_resource type="Texture2D" uid="uid://by5vc26d4eg3t" path="res://assets/sidebar/app/decor.png" id="11_decor"]
 [ext_resource type="PackedScene" uid="uid://dkl5acj8m1a3b" path="res://scenes/sidebar/decor_page.tscn" id="12_decor"]
 [ext_resource type="PackedScene" uid="uid://cmsc4bw6aqfh8" path="res://scenes/sidebar/personal_page.tscn" id="15_nnubu"]
