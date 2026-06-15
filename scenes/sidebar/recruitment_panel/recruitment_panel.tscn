@@ -226,6 +226,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BoxRecruiting" type="Control" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1488066360]
+visible = false
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=1305613315]
@@ -265,6 +266,7 @@ character_set = 1
 button_text = "RECRUIT_HR_SPEEDUP_HEAD"
 
 [node name="HeadViewer" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=74954453 instance=ExtResource("1_pfe0p")]
+visible = false
 layout_mode = 2
 
 [node name="TitleBar" type="Panel" parent="." unique_id=1469736204]

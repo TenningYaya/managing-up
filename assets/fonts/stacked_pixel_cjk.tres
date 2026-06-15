@@ -4,5 +4,5 @@
 [ext_resource type="FontFile" uid="uid://cbmni0067v0k7" path="res://assets/fonts/ipix_12px.ttf" id="2_cjk"]
 
 [resource]
-base_font = ExtResource("1_base")
 fallbacks = Array[Font]([ExtResource("2_cjk")])
+base_font = ExtResource("1_base")
