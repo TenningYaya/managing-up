@@ -42,57 +42,50 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=984241471]
-custom_minimum_size = Vector2(248, 0)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.123
-anchor_top = 0.111
-anchor_right = 0.156
-anchor_bottom = 0.183
-offset_left = -33.21
-offset_top = 35.04
-offset_right = 205.88
-offset_bottom = 205.04001
+layout_mode = 0
+offset_left = 34.0
+offset_top = 67.0
+offset_right = 233.0
+offset_bottom = 318.0
 
 [node name="total hit" type="Label" parent="VBoxContainer" unique_id=2116646967]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
-text = "     Totoal Hit: "
+text = "Totoal Hit: "
 
 [node name="total time" type="Label" parent="VBoxContainer" unique_id=633318783]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
-text = "     Totoal Time: "
+text = "Totoal Time: "
 
 [node name="number of employee" type="Label" parent="VBoxContainer" unique_id=1990531081]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
-text = "     number of employee: 
-"
+text = "number of employee: "
 
 [node name="R employee" type="Label" parent="VBoxContainer" unique_id=212652451]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
-text = "     R employee: "
+text = "R employee: "
 
 [node name="SR employee" type="Label" parent="VBoxContainer" unique_id=533286580]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
-text = "     SR employee: "
+text = "SR employee: "
 
 [node name="SSR employee" type="Label" parent="VBoxContainer" unique_id=1553403749]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
-text = "     SSR employee: "
+text = "SSR employee: "
