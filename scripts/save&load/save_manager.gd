@@ -129,7 +129,7 @@ func save_game() -> void:
 		"headhunt_time_left": RecruitmentManager.headhunt_time_left,
 		"pending_amount": RecruitmentManager._pending_amount,
 		"free_recruit_count": RecruitmentManager.free_recruit_count,
-		"free_recruit_time_left": RecruitmentManager.free_recruit_time_left,
+		"free_recruit_time_left": maxf(RecruitmentManager.free_recruit_time_left, 1.0),
 		"normal_pool": _serialize_resume_pool(RecruitmentManager.normal_pool),
 		"headhunt_pool": _serialize_resume_pool(RecruitmentManager.headhunt_pool),
 	}

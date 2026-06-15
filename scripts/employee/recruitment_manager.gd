@@ -28,6 +28,7 @@ const FREE_RECRUIT_INTERVAL_MID: float = 600.0     # 第 4~10 个：每 10 分�
 const FREE_RECRUIT_INTERVAL_LATE: float = 900.0    # 之后：每 15 分钟
 var free_recruit_count: int = 0                     # 已自动出现过的免费普通简历数量
 var free_recruit_time_left: float = FREE_RECRUIT_INTERVAL_EARLY  # 距离下一个免费简历出现的剩余秒数
+var _free_timer_paused: bool = false                # true 时冻结倒计时，等待 hr_button end sequence 结束
 
 @onready var employee_scene = preload("res://scenes/employee/employee.tscn")
 
@@ -53,7 +54,7 @@ func _process(delta):
 			_on_headhunt_finished()
 
 	# 普通招募：教程完成后才开始计时，时间一到就免费送一份简历到普通招募板（左侧）
-	if Gamemanager.is_tutorial_completed:
+	if Gamemanager.is_tutorial_completed and not _free_timer_paused:
 		free_recruit_time_left -= delta
 		if free_recruit_time_left <= 0:
 			_spawn_free_recruit()
@@ -70,12 +71,18 @@ func auto_generate_normal():
 	normal_pool.append(new_emp)
 	new_resumes_arrived.emit()
 
-# 计时结束：免费生成一份普通简历，并把计时器重置到下一个间隔
+# 计时结束：免费生成一份普通简历，冻结倒计时显示为 0，等 hr_button 结束后再重置
 func _spawn_free_recruit() -> void:
+	_free_timer_paused = true
+	free_recruit_time_left = 0.0
 	about_to_spawn_free_recruit.emit()  # 👈 在 new_resumes_arrived 之前发
 	auto_generate_normal()
 	free_recruit_count += 1
+
+# hr_button end sequence 结束后调用，重启倒计时
+func restart_free_timer() -> void:
 	free_recruit_time_left = _get_free_recruit_interval()
+	_free_timer_paused = false
 
 # 根据已出现数量决定下一个免费简历要等多久
 func _get_free_recruit_interval() -> float:

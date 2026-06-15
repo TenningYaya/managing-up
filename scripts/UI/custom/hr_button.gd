@@ -21,11 +21,16 @@ enum AnimState { WALK, RUN, RUNRUNRUN }
 @onready var bg_rect: NinePatchRect = $NinePatchRect
 @onready var normal_anim: AnimatedSprite2D = $Control/NormalAnim
 @onready var head_anim: AnimatedSprite2D = $Control/HeadAnim
+@onready var earth: TextureRect = $Control/earth
 
 const SPEED_UP_AMOUNT := 2.0
 const CONSECUTIVE_THRESHOLD := 1.0
 const RUN_THRESHOLD := 5
 const RUNRUNRUN_THRESHOLD := 15
+
+const EARTH_SPEED_WALK := 40.0
+const EARTH_SPEED_RUN := 90.0
+const EARTH_SPEED_RUNRUNRUN := 200.0
 
 var _anim_state: AnimState = AnimState.WALK
 var _click_count: int = 0
@@ -51,6 +56,18 @@ func _ready() -> void:
 			RecruitmentManager.about_to_spawn_free_recruit.connect(_on_about_to_complete)
 		CharacterSet.HEAD:
 			RecruitmentManager.about_to_finish_headhunt.connect(_on_about_to_complete)
+
+	await get_tree().process_frame
+	earth.pivot_offset = earth.size / 2.0
+
+func _process(delta: float) -> void:
+	if is_in_end_sequence:
+		return
+	var deg_per_sec: float = EARTH_SPEED_WALK
+	match _anim_state:
+		AnimState.RUN:       deg_per_sec = EARTH_SPEED_RUN
+		AnimState.RUNRUNRUN: deg_per_sec = EARTH_SPEED_RUNRUNRUN
+	earth.rotation_degrees -= deg_per_sec * delta
 
 func _setup_anim() -> void:
 	match character_set:
@@ -108,6 +125,8 @@ func _update_anim_state() -> void:
 
 func _on_about_to_complete() -> void:
 	if not is_visible_in_tree():
+		if character_set == CharacterSet.NORMAL:
+			RecruitmentManager.restart_free_timer()
 		return
 	if _anim_state == AnimState.WALK:
 		# 走路状态直接让 panel 正常显示，不拦截
@@ -139,3 +158,5 @@ func _reset_state() -> void:
 	_click_count = 0
 	_last_click_time = -999.0
 	_active_anim.play("walk")
+	if character_set == CharacterSet.NORMAL:
+		RecruitmentManager.restart_free_timer()
