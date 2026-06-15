@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" format=3 uid="uid://bp7rjqhx7ef2h"]
+
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="2_2dlja"]
+[ext_resource type="FontVariation" uid="uid://dn0lg0o2qbntk" path="res://assets/fonts/smaller_noto.tres" id="2_sg7mg"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_sg7mg")])
+base_font = ExtResource("2_2dlja")

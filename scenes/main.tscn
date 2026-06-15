@@ -288,9 +288,8 @@ script = ExtResource("13_a8y0u")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2052431275]
 
 [node name="EmployeePanel" parent="CanvasLayer" unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
-visible = false
 offset_left = 1601.0
-offset_top = 250.0
+offset_top = 232.0
 offset_right = 1922.0
 offset_bottom = 640.0
 

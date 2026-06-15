@@ -1,0 +1,7 @@
+[gd_resource type="FontVariation" format=3 uid="uid://dn0lg0o2qbntk"]
+
+[ext_resource type="FontFile" uid="uid://dqru2cpncd64t" path="res://assets/fonts/Simplified Chinese Normal/NotoSansSC-SemiBold.ttf" id="1_8lqfw"]
+
+[resource]
+base_font = ExtResource("1_8lqfw")
+spacing_top = -12

@@ -123,23 +123,26 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_oppgx")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_1hrmf")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_0khrq")
 current_tab = 0
+tab_0/title = "OFFICE_PN_TAB_OFFICE"
+tab_1/title = "OFFICE_PN_TAB_CULTURE"
 
 [node name="Office" type="MarginContainer" parent="TabContainer" unique_id=1786972547]
 layout_mode = 2
 metadata/_tab_index = 0
+metadata/_tab_name = "OFFICE_PN_TAB_OFFICE"
 
 [node name="OfficeButton" type="GridContainer" parent="TabContainer/Office" unique_id=1425084846]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 30
+theme_override_constants/v_separation = 35
 columns = 2
 
 [node name="ChangeOfficeButton" parent="TabContainer/Office/OfficeButton" unique_id=959548433 groups=["pantry_button"] instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 1
-button_text = "pantry"
+button_text = "OFFICE_PN_FUNC_PANTRY"
 normal_icon = SubResource("AtlasTexture_kpljw")
 office_description = "OFFICE_PANTRY_TIP_1"
 office_usage = "OFFICE_PANTRY_TIP_2"
@@ -147,7 +150,7 @@ office_usage = "OFFICE_PANTRY_TIP_2"
 [node name="ChangeOfficeButton3" parent="TabContainer/Office/OfficeButton" unique_id=2129935784 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 3
-button_text = "Headhunt"
+button_text = "OFFICE_PN_FUNC_HEADHUNT"
 normal_icon = SubResource("AtlasTexture_dvne8")
 office_description = "OFFICE_HEADHUNT_TIP_1"
 office_usage = "OFFICE_HEADHUNT_TIP_2"
@@ -155,7 +158,7 @@ office_usage = "OFFICE_HEADHUNT_TIP_2"
 [node name="ChangeOfficeButton2" parent="TabContainer/Office/OfficeButton" unique_id=2030963439 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 2
-button_text = "Meeting"
+button_text = "OFFICE_PN_FUNC_MEETING"
 normal_icon = SubResource("AtlasTexture_mixia")
 office_description = "OFFICE_MEETING_TIP_1"
 office_usage = "OFFICE_MEETING_TIP_2"
@@ -163,7 +166,7 @@ office_usage = "OFFICE_MEETING_TIP_2"
 [node name="ChangeOfficeButton4" parent="TabContainer/Office/OfficeButton" unique_id=277010416 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 4
-button_text = "Cullture"
+button_text = "OFFICE_PN_FUNC_CULTURE"
 normal_icon = SubResource("AtlasTexture_l2t2v")
 office_description = "OFFICE_CULTURE_TIP_1"
 office_usage = "OFFICE_CULTURE_TIP_2"
@@ -173,6 +176,7 @@ visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_kpljw")
 metadata/_tab_index = 1
+metadata/_tab_name = "OFFICE_PN_TAB_CULTURE"
 
 [node name="CultureScene" parent="TabContainer/Culture" unique_id=1580029639 instance=ExtResource("7_dvne8")]
 layout_mode = 1

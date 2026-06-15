@@ -42,7 +42,7 @@ z_index = 100
 layout_mode = 3
 anchors_preset = 0
 offset_left = -316.0
-offset_top = -391.0
+offset_top = -407.0
 script = ExtResource("1_sl25x")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1160354043]
@@ -93,9 +93,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -295.0
-offset_top = -344.0
+offset_top = -366.0
 offset_right = -25.0
-offset_bottom = 16.0
+offset_bottom = -6.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ajc7u")
@@ -277,14 +277,14 @@ size_flags_vertical = 3
 theme_override_constants/separation = 7
 
 [node name="DispatchButton" parent="PanelBg/EmployeePage/Manage" unique_id=2048579194 instance=ExtResource("3_r7cc6")]
-custom_minimum_size = Vector2(0, 25)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 ignore_texture_size = false
 button_text = "Dispatch"
 
 [node name="NormalButton2" parent="PanelBg/EmployeePage/Manage" unique_id=1722932454 instance=ExtResource("3_r7cc6")]
-custom_minimum_size = Vector2(0, 25)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 ignore_texture_size = false
