@@ -56,6 +56,7 @@ var _reminder_timer: Timer = null
 
 @onready var dot_upgrades: Panel = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades/RedDot
 @onready var dot_decor: Panel = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor/RedDot
+@onready var time_label: Label = $PhoneWrapper/Screen/Time
 
 
 func _ready() -> void:
@@ -117,6 +118,14 @@ func _ready() -> void:
 	_reminder_timer.one_shot = false
 	add_child(_reminder_timer)
 	_reminder_timer.timeout.connect(_on_reminder_timeout)
+
+	# 实时时钟：启动时立即显示，之后每秒刷新
+	_update_clock()
+	var clock_timer := Timer.new()
+	clock_timer.wait_time = 1.0
+	clock_timer.autostart = true
+	clock_timer.timeout.connect(_update_clock)
+	add_child(clock_timer)
 
 	Gamemanager.kpi_changed.connect(func(_v): _refresh_upgrade_hints())
 	Gamemanager.level_changed.connect(func(_v): _refresh_upgrade_hints())
@@ -333,3 +342,8 @@ func _process(delta: float) -> void:
 	else:
 		var t := Time.get_ticks_msec() / 1000.0
 		trigger_btn.rotation_degrees = sin(t * TILT_FREQ * TAU) * TILT_ANGLE
+
+
+func _update_clock() -> void:
+	var t := Time.get_time_dict_from_system()
+	time_label.text = "%02d:%02d" % [t.hour, t.minute]
