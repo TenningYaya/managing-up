@@ -207,41 +207,6 @@ layout_mode = 2
 layout_mode = 2
 unlock_at_level = 2
 
-[node name="EmployeeDropArea" parent="FullGameMode/Background/WholeAlignment" unique_id=1860369934 groups=["employee_droparea"] instance=ExtResource("3_jkv2x")]
-layout_mode = 2
-
-[node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1716905617 groups=["currency_board"] instance=ExtResource("11_trceg")]
-layout_mode = 0
-offset_left = -102.0
-offset_top = -69.0
-offset_right = 426.0
-offset_bottom = 1.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1047662462]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 86.0
-grow_horizontal = 2
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="FrontWarehouseButton" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer" unique_id=1938687981 groups=["warehouse_button"] instance=ExtResource("8_dp3eg")]
-layout_mode = 2
-
-[node name="FrontRecruitmentButton" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer" unique_id=1065910196 groups=["recruitment_button"] instance=ExtResource("9_0ld40")]
-layout_mode = 2
-
-[node name="TutorialDrag" type="Control" parent="FullGameMode/Background/WholeAlignment/EmployeeDropArea" unique_id=1000163950 groups=["tutorial_drag"]]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 276.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
 [node name="DeskRow" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=1158104807]
 layout_mode = 2
 
@@ -251,6 +216,41 @@ layout_mode = 2
 [node name="DeskSlot2" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=2027690692 instance=ExtResource("2_sugp2")]
 layout_mode = 2
 unlock_at_level = 2
+
+[node name="EmployeeDropArea" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=1860369934 groups=["employee_droparea"] instance=ExtResource("3_jkv2x")]
+layout_mode = 2
+
+[node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea" unique_id=1716905617 groups=["currency_board"] instance=ExtResource("11_trceg")]
+layout_mode = 0
+offset_left = -102.0
+offset_top = -69.0
+offset_right = 426.0
+offset_bottom = 1.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea" unique_id=1047662462]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 86.0
+grow_horizontal = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="FrontWarehouseButton" parent="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer" unique_id=1938687981 groups=["warehouse_button"] instance=ExtResource("8_dp3eg")]
+layout_mode = 2
+
+[node name="FrontRecruitmentButton" parent="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer" unique_id=1065910196 groups=["recruitment_button"] instance=ExtResource("9_0ld40")]
+layout_mode = 2
+
+[node name="TutorialDrag" type="Control" parent="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea" unique_id=1000163950 groups=["tutorial_drag"]]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="DeskSlot3" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=850074374 instance=ExtResource("2_sugp2")]
 layout_mode = 2
@@ -436,4 +436,4 @@ cancel_closes_panel = false
 
 [node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
 
-[connection signal="pressed" from="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]
+[connection signal="pressed" from="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

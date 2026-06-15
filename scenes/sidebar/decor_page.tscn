@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dkl5acj8m1a3b"]
 
 [ext_resource type="Script" uid="uid://c7dm3epgnkpt2" path="res://scripts/UI/sidebar/decor_page.gd" id="1_decor"]
-[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_decor"]
+[ext_resource type="Texture2D" uid="uid://bp7arhki6nm0b" path="res://assets/background/Sidebar-background.png" id="2_ycil8"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_decor"]
 [ext_resource type="AudioStream" uid="uid://764twux58mia" path="res://audio/gem_collect.wav" id="4_decor"]
 
@@ -21,7 +21,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_decor")
+texture = ExtResource("2_ycil8")
 expand_mode = 1
 
 [node name="VBoxLayout" type="VBoxContainer" parent="." unique_id=200000003]

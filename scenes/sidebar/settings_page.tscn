@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cef1cc6y8xrd6"]
 
+[ext_resource type="Texture2D" uid="uid://bp7arhki6nm0b" path="res://assets/background/Sidebar-background.png" id="1_0r8j3"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="1_wtuay"]
-[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="1_y6t76"]
 [ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="2_nb64h"]
 [ext_resource type="Script" uid="uid://cfp0jmuf1mdth" path="res://scripts/system/setting_language.gd" id="3_0r8j3"]
 [ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="3_utjtj"]
@@ -159,7 +159,7 @@ script = SubResource("GDScript_nb64h")
 layout_mode = 0
 offset_right = 248.0
 offset_bottom = 336.0
-texture = ExtResource("1_y6t76")
+texture = ExtResource("1_0r8j3")
 expand_mode = 1
 
 [node name="settings" type="Label" parent="." unique_id=1529637247]

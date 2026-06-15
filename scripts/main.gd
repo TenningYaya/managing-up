@@ -18,9 +18,6 @@ var _is_sticky_mode := false
 var _sticky_note: Control = null      # 运行时实例，与主场景完全独立
 var _sticky_canvas: CanvasLayer = null
 
-# ➕ 获取包含 5排工位 的父节点
-@onready var desk_row = $FullGameMode/Background/WholeAlignment/DeskRow
-
 # --- 2. Initialization ---
 func _ready():
 
@@ -70,11 +67,9 @@ func _ready():
 
 	print("window mode: ", DisplayServer.window_get_mode())
 
-	# ➕ 监听 Gamemanager 的玩家升级信号
-	Gamemanager.level_changed.connect(_on_player_level_changed)
-
-	# ➕ 游戏刚启动时，初始化一次桌子的显示状态
-	_update_desk_visibility()
+	# 注：工位的解锁显隐由各 DeskSlot 自己监听 level_changed 并按 unlock_at_level 处理
+	# （见 DeskSlot.gd），main 不再按容器位置统一控制——否则会误伤 DeskRow 里的
+	# EmployeeDropArea 等非工位节点，并打乱被它隔开的工位解锁等级。
 
 	# --- 创建独立的 StickyNote（独立 CanvasLayer，不受 Camera2D 影响）---
 	_sticky_canvas = CanvasLayer.new()
@@ -222,29 +217,3 @@ func _exit_sticky_mode():
 	]
 	_cover_current_screen()
 	_last_region = Rect2(-1, -1, -1, -1)  # 强制下一帧重算
-
-
-# ================================
-# ✅ 工位显示与隐藏控制逻辑
-# ================================
-
-func _on_player_level_changed(_new_level: int):
-	# 只要玩家升级（level_changed 发出信号），就重新检查并刷新桌子显示
-	_update_desk_visibility()
-
-func _update_desk_visibility():
-	if not desk_row: return
-	var slots = desk_row.get_children()
-
-	for i in range(slots.size()):
-		var slot = slots[i]
-		if i < Gamemanager.player_level:
-			# 解锁状态：完全可见，并启用升级按钮
-			slot.modulate.a = 1.0
-			if slot.has_node("UpgradeTriggerBtn"):
-				slot.get_node("UpgradeTriggerBtn").disabled = false
-		else:
-			# 未解锁状态：变成全透明（但保留布局占位），并禁用升级按钮防止误触
-			slot.modulate.a = 0.0
-			if slot.has_node("UpgradeTriggerBtn"):
-				slot.get_node("UpgradeTriggerBtn").disabled = true

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cmsc4bw6aqfh8"]
 
-[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_dxbfs"]
+[ext_resource type="Texture2D" uid="uid://bp7arhki6nm0b" path="res://assets/background/Sidebar-background.png" id="1_kr5ev"]
 [ext_resource type="PackedScene" uid="uid://byenwff2ep3fp" path="res://scenes/starter/avatar_name_changer.tscn" id="3_kr5ev"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_xuayt"]
 [ext_resource type="Texture2D" uid="uid://bf3w3mlc2krib" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Decoration/3.png" id="4_2ixrq"]
@@ -19,7 +19,7 @@ offset_bottom = 360.0
 layout_mode = 0
 offset_right = 248.0
 offset_bottom = 336.0
-texture = ExtResource("2_dxbfs")
+texture = ExtResource("1_kr5ev")
 expand_mode = 1
 
 [node name="upgrades" type="Label" parent="." unique_id=2091357471]

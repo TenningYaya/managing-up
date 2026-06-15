@@ -68,7 +68,7 @@ func _clear_dynamic_nodes() -> void:
 func _collect_desk_slots() -> void:
 	var raw := get_tree().get_nodes_in_group("desk_slots")
 	raw.sort_custom(func(a, b): return a.get_index() < b.get_index())
-	# 已解锁的桌子组数量 = 前 player_level 组（与 main.gd 的 _update_desk_visibility 一致）
+	# 已解锁的桌子组数量 = 前 player_level 组（每个 DeskSlot 的 unlock_at_level = 其序号）
 	var unlocked: int = mini(Gamemanager.player_level, raw.size())
 	for i in range(unlocked):
 		_desk_slots.append(raw[i])

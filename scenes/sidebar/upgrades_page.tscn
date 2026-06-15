@@ -3,9 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://bisb0rnth2kmb" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png" id="1_v0of0"]
 [ext_resource type="Script" uid="uid://da0wfxebqnghg" path="res://scripts/UI/sidebar/upgrades_page.gd" id="1_vc4hl"]
 [ext_resource type="Texture2D" uid="uid://ba1o2bcwdughw" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/5 - Icons/8.png" id="2_g6lrf"]
-[ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_gfse4"]
 [ext_resource type="Texture2D" uid="uid://bbmjqn7ar2071" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png" id="2_lh86t"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_70tse"]
+[ext_resource type="Texture2D" uid="uid://bp7arhki6nm0b" path="res://assets/background/Sidebar-background.png" id="3_g6lrf"]
 [ext_resource type="Texture2D" uid="uid://b343jwsuuh7fn" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Buttons & Holders/13.png" id="4_lh86t"]
 [ext_resource type="Texture2D" uid="uid://ct6fwb5qd37kx" path="res://assets/sidebar/desk slot.png" id="5_1t8g2"]
 [ext_resource type="Texture2D" uid="uid://bf3w3mlc2krib" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Decoration/3.png" id="6_70tse"]
@@ -27,7 +27,7 @@ lv5_icon = ExtResource("2_g6lrf")
 layout_mode = 0
 offset_right = 248.0
 offset_bottom = 336.0
-texture = ExtResource("2_gfse4")
+texture = ExtResource("3_g6lrf")
 expand_mode = 1
 
 [node name="MainLayout" type="VBoxContainer" parent="." unique_id=1465389803]
