@@ -17,3 +17,4 @@ WAREHOUSE_SORT_HIRE_OLDEST,入职：最久,Hire: Oldest
 WAREHOUSE_BULK_FIRE_TITLE,确定优化全部 {n} 名员工？,Optimize these {n} employees?
 WAREHOUSE_BULK_FIRE_CONFIRM,开除,Fire
 WAREHOUSE_BULK_FIRE_CANCEL,取消,Cancel
+DeskSlot_locked_click_hint,提升职级以扩大项目组规模,Upgrade your rank to expand the team
