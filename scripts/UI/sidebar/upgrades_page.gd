@@ -52,6 +52,9 @@ const UPGRADE_DATA = {
 
 const WIN_SCENE = preload("res://scenes/narrative/win_scene.tscn")
 
+# KPI 不足（按钮不可用）时，按钮变暗（明度降低）表示无法升级。
+const UPGRADE_DISABLED_DIM := Color(0.5, 0.5, 0.5)
+
 func _ready():
 	_default_item1_icon = item1_icon.texture
 	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
@@ -64,7 +67,7 @@ func update_ui():
 
 	if current_level >= 6:
 		cost_label.text = tr("Sidebar_UPGRADE_MAX_TITLE")
-		upgrade_button.disabled = true
+		_set_upgrade_enabled(false)
 		upgrade_btn_label.text = tr("Sidebar_UPGRADE_BTN_MAXED")
 
 		item2_container.visible = true
@@ -104,7 +107,13 @@ func update_ui():
 		item3_desc.text  = tr(data["benefits"][2]["desc"])
 
 	# 检查余额 [cite: 8, 9]
-	upgrade_button.disabled = not Gamemanager.has_enough_kpi(cost)
+	_set_upgrade_enabled(Gamemanager.has_enough_kpi(cost))
+
+# 根据是否可升级，同时设置按钮的可用状态与外观：
+# 不可用时按钮（含文字）整体变暗，提示 KPI 不足无法升级。
+func _set_upgrade_enabled(enabled: bool) -> void:
+	upgrade_button.disabled = not enabled
+	upgrade_button.modulate = Color.WHITE if enabled else UPGRADE_DISABLED_DIM
 
 # 安全格式化：
 # 1) 翻译缺失时 tr() 会原样返回 key（不含 %s/%d）；
