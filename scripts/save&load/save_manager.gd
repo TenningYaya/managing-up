@@ -50,6 +50,7 @@ func delete_save() -> void:
 		EmployeeManager.my_employees.clear()
 		
 	SpeedupQuoteSave.reset_to_default()
+	Gamemanager.sticky_note_text = ""
 	# 🌟 清空办公室存档缓存，否则开新档后办公室 _ready 会误用上一局的解锁记录
 	_loaded_office_data.clear()
 		
@@ -135,7 +136,9 @@ func save_game() -> void:
 	
 	# ================= 🌟 自定义催促台词存档 =================
 	save_data["boss_quotes"] = SpeedupQuoteSave.boss_quotes
-	
+
+	save_data["sticky_note_text"] = Gamemanager.sticky_note_text
+
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(save_data, "\t"))
 	file.close()
@@ -376,5 +379,8 @@ func load_game() -> void:
 		if typeof(save_data["boss_quotes"]) == TYPE_ARRAY:
 			# 复制一份覆盖当前内存
 			SpeedupQuoteSave.boss_quotes = save_data["boss_quotes"].duplicate()
-			
+
+	if save_data.has("sticky_note_text"):
+		Gamemanager.sticky_note_text = str(save_data["sticky_note_text"])
+
 	print("[SaveSystem] 游戏读取成功！")

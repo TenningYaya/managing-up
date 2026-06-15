@@ -3,6 +3,18 @@
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="1_tkmf7"]
 [ext_resource type="Script" path="res://scripts/UI/sticky_note.gd" id="2_stickysc"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_textedit"]
+bg_color = Color(1, 1, 0.6784314, 1)
+draw_center = true
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+
 [node name="StickyNote" type="Control" unique_id=616207233]
 layout_mode = 3
 anchors_preset = 0
@@ -30,3 +42,17 @@ theme_override_font_sizes/font_size = 24
 text = "Stickynote"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TextEdit" type="TextEdit" parent="." unique_id=300002001]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 36.0
+offset_right = 266.0
+offset_bottom = 356.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_tkmf7")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_textedit")
+theme_override_styles/focus = SubResource("StyleBoxFlat_textedit")
+wrap_mode = 1
+scroll_horizontal_enabled = false

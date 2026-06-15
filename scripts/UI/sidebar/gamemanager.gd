@@ -60,6 +60,7 @@ var dollar: int = 100:
 
 var max_desk_level: int = 1
 var unlocked_desk_slots: int = 1 # 解锁的工位排数
+var sticky_note_text: String = ""
 
 
 
