@@ -470,8 +470,8 @@ animations = [{
 custom_minimum_size = Vector2(150, 50)
 offset_left = 70.0
 offset_top = 300.0
-offset_right = 170.0
-offset_bottom = 350.0
+offset_right = 236.0
+offset_bottom = 362.0
 ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("1_apq0g")
@@ -481,9 +481,9 @@ bg_pressed = ExtResource("3_b2yvu")
 [node name="Control" type="Control" parent="." unique_id=894080602]
 anchors_preset = 0
 offset_left = 76.0
-offset_top = -98.0
+offset_top = -116.0
 offset_right = 76.0
-offset_bottom = -58.0
+offset_bottom = -76.0
 mouse_filter = 2
 
 [node name="earth" type="TextureRect" parent="Control" unique_id=111246672]
@@ -516,10 +516,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 13.0
-offset_right = 8.0
-offset_bottom = 13.0
 grow_horizontal = 2
 grow_vertical = 2
 region_rect = Rect2(0, 0, 50, 18)
@@ -535,22 +531,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -47.0
-offset_top = -7.0
-offset_right = 63.0
-offset_bottom = 33.0
+offset_left = -55.0
+offset_top = -25.0
+offset_right = 55.0
+offset_bottom = 26.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=749557877]
+[node name="Label" type="Label" parent="MarginContainer" unique_id=238762939]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 30
-
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer" unique_id=238762939]
-layout_mode = 2
 theme_override_fonts/font = ExtResource("4_f42g2")
-theme_override_font_sizes/font_size = 30
-text = "Faster!!"
+theme_override_font_sizes/font_size = 24
+text = "RECRUIT_HR_SPEEDUP_NORMAL"
 horizontal_alignment = 1
+vertical_alignment = 1

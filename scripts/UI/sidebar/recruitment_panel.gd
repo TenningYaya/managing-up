@@ -4,12 +4,12 @@ extends Control
 # ================= UI 节点获取 =================
 @onready var normal_viewer = $VBoxContainer/NormalPanel/MarginContainer/NormalViewer
 @onready var normal_no_resume = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel
-@onready var lbl_normal_countdown = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel/LblEmpty
+@onready var lbl_normal_countdown = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel/NormalCountdown
 
 @onready var headhunt_box_idle = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle
 @onready var headhunt_box_recruiting = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting
 @onready var headhunt_viewer = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadViewer
-@onready var countdown_label = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/LblCountdown
+@onready var countdown_label = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/HeadCountdown
 @onready var headhunt_locked = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadhuntLocked
 @onready var hire_tip_label: Label = $NotEnoughKPI
 
@@ -58,7 +58,7 @@ func _ready():
 func _process(_delta):
 	# 只有在猎头寻访中，才去更新文字，超级省性能
 	if RecruitmentManager.current_state == RecruitmentManager.State.RECRUITING:
-		countdown_label.text = "              %.1f" % RecruitmentManager.headhunt_time_left
+		countdown_label.text = _format_countdown(RecruitmentManager.headhunt_time_left)
 
 	# 普通招募：等待面板可见时，刷新“下一个免费简历”的倒计时
 	if lbl_normal_countdown.visible:
@@ -160,7 +160,9 @@ func _update_headhunt_ui():
 			headhunt_box_recruiting.show()
 		RecruitmentManager.State.READY:
 			var hr = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/HRButton
-			if not (hr and hr.is_in_end_sequence):
+			if hr and hr.is_in_end_sequence:
+				headhunt_box_recruiting.show()
+			else:
 				headhunt_viewer.show()
 
 # ================= 按键操作 =================

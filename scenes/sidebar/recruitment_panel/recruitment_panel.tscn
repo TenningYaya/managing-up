@@ -5,12 +5,12 @@
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_uc70r"]
 [ext_resource type="Texture2D" uid="uid://bthelqthib3yt" path="res://assets/UI/Back.png" id="3_q23uo"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_rtmed"]
-[ext_resource type="FontFile" uid="uid://cbmni0067v0k7" path="res://assets/fonts/ipix_12px.ttf" id="6_a1di4"]
 [ext_resource type="Texture2D" uid="uid://djvxnh68fk6ub" path="res://assets/background/Gemini_Generated_Image_n5w3tmn5w3tmn5w3.png" id="6_ha1ar"]
 [ext_resource type="Texture2D" uid="uid://px3cj3eqq75y" path="res://assets/background/e8a8d7e5-a42b-48a7-b636-835168402b12.jpg" id="6_pyp0o"]
 [ext_resource type="PackedScene" uid="uid://bx0a13254p4rr" path="res://scenes/UI/custom/Urge_HR_button.tscn" id="6_x4w7u"]
 [ext_resource type="Texture2D" uid="uid://16a3v6fvnsw0" path="res://assets/background/Gemini_Generated_Image_q23dcvq23dcvq23d.png" id="6_yahbh"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="7_yahbh"]
+[ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="11_x4w7u"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rtmed"]
 atlas = ExtResource("2_uc70r")
@@ -93,42 +93,47 @@ grow_vertical = 2
 texture = ExtResource("3_q23uo")
 expand_mode = 1
 
-[node name="LblEmpty" type="Label" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=1417925560]
-visible = false
-layout_mode = 0
-offset_left = 27.0
-offset_top = 84.0
-offset_right = 307.0
-offset_bottom = 104.0
+[node name="Normalrecruiting" type="Label" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=1662120914]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -125.0
+offset_right = 125.0
+offset_bottom = 23.0
+grow_horizontal = 2
 theme_override_fonts/font = ExtResource("3_rtmed")
 theme_override_font_sizes/font_size = 20
-text = "Waiting for resumes..."
+text = "RECRUIT_HR_WORKING_NORMAL"
+horizontal_alignment = 1
+
+[node name="NormalCountdown" type="Label" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=1417925560]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 70.0
+offset_right = 307.0
+offset_bottom = 91.0
+theme_override_fonts/font = ExtResource("3_rtmed")
+theme_override_font_sizes/font_size = 20
+text = "60"
 horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="HRButton" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=2048579194 instance=ExtResource("6_x4w7u")]
+custom_minimum_size = Vector2(150, 20)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -84.0
-offset_top = 107.5
-offset_right = 66.0
-offset_bottom = 207.5
+offset_left = -82.0
+offset_top = 113.5
+offset_right = 68.0
+offset_bottom = 163.5
 grow_horizontal = 2
 grow_vertical = 2
 button_text = "RECRUIT_HR_SPEEDUP_NORMAL"
-
-[node name="Label" type="Label" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=1662120914]
-layout_mode = 0
-offset_left = 72.0
-offset_top = 18.0
-offset_right = 268.0
-offset_bottom = 41.0
-theme_override_fonts/font = ExtResource("6_a1di4")
-text = "HR正在努力招聘中......"
 
 [node name="NormalViewer" parent="VBoxContainer/NormalPanel/MarginContainer" unique_id=931473494 instance=ExtResource("1_pfe0p")]
 visible = false
@@ -226,7 +231,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BoxRecruiting" type="Control" parent="VBoxContainer/HeadhuntPanel/MarginContainer" unique_id=1488066360]
-visible = false
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=1305613315]
@@ -242,12 +246,38 @@ grow_vertical = 2
 texture = ExtResource("6_ha1ar")
 expand_mode = 1
 
-[node name="LblCountdown" type="Label" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=777825294]
-layout_mode = 0
-offset_left = 139.0
-offset_top = 168.0
-offset_right = 140.0
-offset_bottom = 191.0
+[node name="HHrecruiting" type="Label" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=414835597]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -112.5
+offset_right = 112.5
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_rtmed")
+theme_override_font_sizes/font_size = 20
+text = "RECRUIT_HR_WORKING_HEAD"
+horizontal_alignment = 1
+
+[node name="HeadCountdown" type="Label" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=777825294]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -9.5
+offset_top = -138.5
+offset_right = 10.5
+offset_bottom = -101.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("11_x4w7u")
+theme_override_font_sizes/font_size = 20
+text = "60
+"
+horizontal_alignment = 1
 
 [node name="HRButton" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=1736700750 instance=ExtResource("6_x4w7u")]
 layout_mode = 1
@@ -256,10 +286,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -75.0
-offset_top = -50.0
-offset_right = 75.0
-offset_bottom = 50.0
+offset_left = -76.5
+offset_top = 113.5
+offset_right = 73.5
+offset_bottom = 163.5
 grow_horizontal = 2
 grow_vertical = 2
 character_set = 1

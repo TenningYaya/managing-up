@@ -11,8 +11,8 @@ enum AnimState { WALK, RUN, RUNRUNRUN }
 @export var button_text: String = "InputButtonName":
 	set(value):
 		button_text = value
-		if is_inside_tree() and has_node("MarginContainer/HBoxContainer/Label"):
-			$MarginContainer/HBoxContainer/Label.text = tr(button_text)
+		if is_inside_tree() and has_node("MarginContainer/Label"):
+			$MarginContainer/Label.text = tr(button_text)
 
 @export_group("NinePatch Background")
 @export var bg_normal: Texture2D
@@ -25,8 +25,8 @@ enum AnimState { WALK, RUN, RUNRUNRUN }
 
 const SPEED_UP_AMOUNT := 2.0
 const CONSECUTIVE_THRESHOLD := 1.0
-const RUN_THRESHOLD := 5
-const RUNRUNRUN_THRESHOLD := 15
+const RUN_THRESHOLD := 10
+const RUNRUNRUN_THRESHOLD := 20
 
 const EARTH_SPEED_WALK := 40.0
 const EARTH_SPEED_RUN := 90.0
@@ -39,8 +39,8 @@ var _active_anim: AnimatedSprite2D = null
 var is_in_end_sequence: bool = false  # public，供 panel 检查
 
 func _ready() -> void:
-	if has_node("MarginContainer/HBoxContainer/Label"):
-		$MarginContainer/HBoxContainer/Label.text = tr(button_text)
+	if has_node("MarginContainer/Label"):
+		$MarginContainer/Label.text = tr(button_text)
 
 	if bg_normal:
 		bg_rect.texture = bg_normal
