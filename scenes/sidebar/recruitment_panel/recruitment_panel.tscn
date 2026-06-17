@@ -234,6 +234,7 @@ vertical_alignment = 1
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=1305613315]
+visible = false
 custom_minimum_size = Vector2(280, 280)
 layout_mode = 1
 anchors_preset = 15
