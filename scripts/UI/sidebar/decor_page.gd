@@ -1,6 +1,6 @@
 extends Control
 
-@onready var title_label: Label = $VBoxLayout/TitleLabel
+@onready var title_label: Label = $TitleLabel2
 @onready var thumbnail_row: HBoxContainer = $VBoxLayout/ThumbnailPanel/MarginContainer/ThumbnailRow
 @onready var buttons_list: VBoxContainer = $VBoxLayout/ButtonsList
 @onready var clicked_sound: AudioStreamPlayer = $ClickedSound

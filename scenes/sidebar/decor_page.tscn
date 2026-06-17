@@ -36,28 +36,31 @@ offset_bottom = 318.0
 texture = ExtResource("3_5xswk")
 expand_mode = 1
 
+[node name="TitleLabel2" type="Label" parent="." unique_id=760807911]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 49.0
+offset_right = 245.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_decor")
+theme_override_font_sizes/font_size = 34
+text = "decor"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="VBoxLayout" type="VBoxContainer" parent="." unique_id=200000003]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 18.0
-offset_top = 6.0
+offset_top = 94.0
 offset_right = -18.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
-
-[node name="TitleLabel" type="Label" parent="VBoxLayout" unique_id=200000004]
-custom_minimum_size = Vector2(0, 36)
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_decor")
-theme_override_font_sizes/font_size = 28
-text = "decor"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="ThumbnailPanel" type="PanelContainer" parent="VBoxLayout" unique_id=200000005]
 custom_minimum_size = Vector2(0, 86)
