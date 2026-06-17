@@ -11,7 +11,7 @@ const EMPLOYEE_SCENE := preload("res://scenes/employee/employee.tscn")
 
 # 控制“均匀程度”的参数
 const DROP_CANDIDATE_COUNT := 20
-const MIN_EMPLOYEE_SPACING := 80.0
+const MIN_EMPLOYEE_SPACING := 120.0
 
 func _ready():
 	hint_label.hide()
