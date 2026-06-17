@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d1ryy3748h1xn" path="res://scripts/UI/sidebar/resume_viewer.gd" id="1_lxgr6"]
 [ext_resource type="PackedScene" uid="uid://dw8e3yggffqyn" path="res://scenes/sidebar/recruitment_panel/resume_slot.tscn" id="2_7ettr"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="3_lxgr6"]
-[ext_resource type="AudioStream" uid="uid://ccoub6b1gnx7n" path="res://audio/whistle.wav" id="4_v240j"]
+[ext_resource type="AudioStream" uid="uid://cgo4oirxjqauo" path="res://audio/regular recruitment.mp3" id="4_v240j"]
 [ext_resource type="AudioStream" uid="uid://lb8cf8cs17k4" path="res://audio/8_bit_negative_quick.wav" id="5_updwb"]
 
 [node name="ResumeViewer" type="Control" unique_id=931473494]

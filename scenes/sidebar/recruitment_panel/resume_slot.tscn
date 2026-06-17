@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bc073ucn8x6vx" path="res://data/background/resume_card_normal_bcg.tres" id="2_p7wyv"]
 [ext_resource type="Texture2D" uid="uid://cyyqqj8m063ct" path="res://data/background/resume_card_head_bcg.png" id="3_ovtm2"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="5_p7wyv"]
-[ext_resource type="AudioStream" uid="uid://ccoub6b1gnx7n" path="res://audio/whistle.wav" id="6_4h6ub"]
+[ext_resource type="AudioStream" uid="uid://cgo4oirxjqauo" path="res://audio/regular recruitment.mp3" id="6_4h6ub"]
 [ext_resource type="AudioStream" uid="uid://lb8cf8cs17k4" path="res://audio/8_bit_negative_quick.wav" id="7_7j1bg"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p7wyv"]
