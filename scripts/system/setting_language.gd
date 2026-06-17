@@ -7,24 +7,26 @@ const LOCALE_MAP = {
 }
 
 func _ready():
-	# 初始化时根据当前的系统语言设置下拉框的选中项
+	item_selected.connect(_on_item_selected)
+	_load_settings()
 	var current_locale = TranslationServer.get_locale()
 	for id in LOCALE_MAP:
-		if LOCALE_MAP[id] == current_locale:
+		if current_locale.begins_with(LOCALE_MAP[id]):
 			selected = id
 			break
 
-func _on_item_selected(index):
-	# 1. 获取对应的 Locale 代码
-	var locale_code = LOCALE_MAP.get(index, "en")
-	
-	# 2. 切换引擎的全局语言设置
+func _on_item_selected(index: int) -> void:
+	var locale_code: String = LOCALE_MAP.get(index, "en")
 	TranslationServer.set_locale(locale_code)
-	
-	# 3. (进阶) 保存配置到本地，防止下次打开重置
-	get_tree().reload_current_scene()
+	_save_settings(locale_code)
 
-func _save_settings(locale):
-	var config = ConfigFile.new()
+func _save_settings(locale: String) -> void:
+	var config := ConfigFile.new()
 	config.set_value("settings", "locale", locale)
 	config.save("user://settings.cfg")
+
+func _load_settings() -> void:
+	var config := ConfigFile.new()
+	if config.load("user://settings.cfg") == OK:
+		var locale: String = config.get_value("settings", "locale", "zh")
+		TranslationServer.set_locale(locale)

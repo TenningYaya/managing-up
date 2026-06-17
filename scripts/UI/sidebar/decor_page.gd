@@ -35,6 +35,8 @@ func _ready() -> void:
 	
 
 func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		title_label.text = tr("SIDEBAR_DECOR_TITLE")
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
 		if visible:
 			# 每次打开 app 都重建，保证按钮数量与当前桌子状态完全同步
