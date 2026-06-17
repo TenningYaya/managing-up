@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://b53selokcfudd"]
+
+[ext_resource type="Script" uid="uid://bnuwajprx2s3c" path="res://scripts/UI/ingame/dollar_reward.gd" id="1_cj4tp"]
+[ext_resource type="Texture2D" uid="uid://cvxcpdlq4d2ji" path="res://assets/UI/ingame/dollar/Dollar-1.png" id="2_cj4tp"]
+[ext_resource type="Texture2D" uid="uid://couhtnltaygs5" path="res://assets/UI/ingame/dollar/plus.png" id="3_dspgm"]
+
+[node name="DollarReward" type="Control" unique_id=2015093270]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_cj4tp")
+
+[node name="dollar" type="TextureRect" parent="." unique_id=1155118969]
+layout_mode = 0
+offset_left = -6.0
+offset_top = -7.0
+offset_right = 40.0
+offset_bottom = 27.0
+texture = ExtResource("2_cj4tp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="plus" type="TextureRect" parent="." unique_id=1625683729]
+layout_mode = 0
+offset_left = -20.0
+offset_right = -1.0
+offset_bottom = 19.0
+texture = ExtResource("3_dspgm")
+expand_mode = 1

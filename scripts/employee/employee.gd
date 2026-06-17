@@ -65,6 +65,7 @@ const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
 const SPEECH_BUBBLE_SCENE = preload("res://scenes/vfx/speech_bubble.tscn")
 const URGE_BUBBLE_SCENE = preload("res://scenes/vfx/urge_bubble.tscn")
 const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
+const DOLLAR_REWARD_SCENE = preload("res://scenes/vfx/dollar_reward.tscn")
 var is_slacking: bool = false
 var active_slacking_bubble = null
 const SLACKING_BUBBLE_SCENE = preload("res://scenes/UI/custom/SlackingBubble.tscn")
@@ -460,7 +461,7 @@ func _finish_and_generate_file():
 		is_working = false
 		active_slacking_bubble = SLACKING_BUBBLE_SCENE.instantiate()
 		add_child(active_slacking_bubble)
-		active_slacking_bubble.position = Vector2((size.x - 50) / 2.0, -50.0)
+		active_slacking_bubble.position = Vector2((size.x - 40) / 2.0, -50.0)
 		active_slacking_bubble.slacking_resolved.connect(_on_slacking_resolved)
 	else:
 		_start_new_work_cycle()
@@ -473,7 +474,14 @@ func _on_slacking_resolved(by_click: bool) -> void:
 	if by_click:
 		var reward_amount = randi_range(2, 4)
 		Gamemanager.add_dollar(reward_amount)
-			
+		var spawn_pos: Vector2 = global_position
+		if is_instance_valid(active_slacking_bubble):
+			spawn_pos = active_slacking_bubble.global_position
+		var reward_vfx := DOLLAR_REWARD_SCENE.instantiate()
+		get_tree().root.add_child(reward_vfx)
+		reward_vfx.global_position = spawn_pos + Vector2(10.0, 0.0)
+		reward_vfx.play()
+
 	_start_new_work_cycle()
 
 # 生成特效的函数
