@@ -16,9 +16,8 @@ const BTN_MODULATE_DISABLED := Color(0.5, 0.5, 0.5, 1.0)
 
 const DESK_HIGHLIGHT := Color(1.6, 1.4, 0.6, 1.0)
 
-const BTN_NORMAL_PATH := "res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/28.png"
-const BTN_PRESSED_PATH := "res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/27.png"
 const FONT_PATH := "res://assets/fonts/Stacked pixel.ttf"
+const NORMAL_BUTTON_SCENE := preload("res://scenes/UI/custom/normal_button.tscn")
 
 var _desk_slots: Array = []
 var _slot_boxes: Array[ColorRect] = []
@@ -90,30 +89,20 @@ func _build_thumbnail() -> void:
 		_slot_boxes.append(box)
 
 func _build_buttons() -> void:
-	var btn_normal := load(BTN_NORMAL_PATH) as Texture2D
-	var btn_pressed := load(BTN_PRESSED_PATH) as Texture2D
 	var font := load(FONT_PATH) as FontFile
 
 	for i in range(_desk_slots.size()):
-		var btn := TextureButton.new()
+		var btn = NORMAL_BUTTON_SCENE.instantiate()
 		btn.custom_minimum_size = Vector2(210, 30)
-		btn.texture_normal = btn_normal
-		btn.texture_pressed = btn_pressed
-		btn.texture_hover = btn_pressed
-		btn.texture_disabled = btn_normal
-		btn.ignore_texture_size = true
-		btn.stretch_mode = TextureButton.STRETCH_SCALE
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
-		var label := Label.new()
+		var label := btn.get_node("Label") as Label
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.add_theme_font_size_override("font_size", 15)
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		if font:
 			label.add_theme_font_override("font", font)
-		label.set_anchors_preset(Control.PRESET_FULL_RECT)
-		btn.add_child(label)
 
 		var idx := i
 		btn.mouse_entered.connect(func(): _on_hover(idx))
@@ -131,7 +120,7 @@ func _update_button_states() -> void:
 		var lvl: int = slot.slot_level
 		var max_allowed: int = Gamemanager.max_desk_level
 		var btn := btns[i] as TextureButton
-		var label := btn.get_child(0) as Label
+		var label := btn.get_node("Label") as Label
 
 		if lvl >= 4:
 			label.text = "Lv.%d  MAX" % lvl
