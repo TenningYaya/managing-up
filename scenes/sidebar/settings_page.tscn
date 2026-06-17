@@ -10,105 +10,64 @@
 script/source = "
 extends Control
 
-# BGM 走 Music 总线，其余音效走 SFX 总线（定义在 res://default_bus_layout.tres）
 var music_bus_index = AudioServer.get_bus_index(\"Music\")
 var sfx_bus_index = AudioServer.get_bus_index(\"SFX\")
 const CONFIRM_DIALOG = preload(\"res://scenes/sidebar/confirm_dialog.tscn\")
+const WINDOW_SIZE_FRACTIONS := [0.25, 0.33, 0.50, 0.66]
 
-@onready var _music_slider: HSlider = $\"Master Volume/HSlider\"
-@onready var _sfx_slider: HSlider = $\"Sound Effects Volume/HSlider\"
-var _settings_opened := false  # 是否已打开过设置页（避免加载阶段误存盘）
+@onready var _music_slider: HSlider = $\"ScrollContainer/VBoxContainer/Master Volume/HSlider\"
+@onready var _sfx_slider: HSlider = $\"ScrollContainer/VBoxContainer/Sound Effects Volume/HSlider\"
+var _settings_opened := false
+var _base_aspect: float = 16.0 / 9.0
 
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
-		_apply_translations()
-	
 func _on_music_slider_value_changed(value: float) -> void:
-	# value 范围 0~100，转换成分贝设置到 Music 总线（控制 BGM）
 	AudioServer.set_bus_volume_db(music_bus_index, linear_to_db(value / 100.0))
 
 func _on_sfx_slider_value_changed(value: float) -> void:
-	# 控制所有音效（YesSound / NoSound / BubbleSound / ClickedSound 等）
 	AudioServer.set_bus_volume_db(sfx_bus_index, linear_to_db(value / 100.0))
 
-func _on_fullscreen_toggled(toggled_on):
-	# 使用“屏幕管家”切换全屏
-	if toggled_on:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	else:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-
-func _on_npc_name_toggled(toggled_on):
-	# 这里你可以设置一个全局变量，或者发一个信号给你的游戏主逻辑
-	print(\"NPC名字显示状态：\", toggled_on)
-
-func _on_save_button_pressed():
-	# 这里执行保存逻辑（比如存入文件）
-	# 然后我们可以通过代码告诉侧边栏：“我点完了，你可以收起来了”
-	# 为了简单，我们先只打印一句话
-	print(\"设置已保存！\")
-
 func _on_save__quit_pressed() -> void:
-	# 1. 创建对话框
 	var dialog_instance = CONFIRM_DIALOG.instantiate()
-
-	# 2. 设置对话框文字（如果你的对话框脚本支持设置标题和内容）
 	if dialog_instance.has_method(\"set_texts\"):
 		dialog_instance.set_texts(\"保存并退出\", \"确定要保存当前进度并退出游戏吗？\")
-	
-	# 3. 核心：连接“确认”信号到执行函数
-	# 使用 CONNECT_ONE_SHOT 确保信号只触发一次，防止意外重复执行
 	dialog_instance.confirmed.connect(_execute_save_and_quit, CONNECT_ONE_SHOT)
-
-	# 4. 加入场景树显示
 	get_tree().root.add_child(dialog_instance)
-	
+
 func _execute_save_and_quit() -> void:
-	# 1. 调用全局单例 SaveManager 进行存档
-	# 这样可以确保玩家当前的 KPI、美金、员工位置和办公室状态都被写入 user://savegame.json
 	if SaveManager.has_method(\"save_game\"):
 		SaveManager.save_game()
 		print(\"存档成功...\")
 	else:
 		push_error(\"错误：找不到 SaveManager 或 save_game 方法，请检查 Autoload 设置\")
-
-	# 退出前把音量设置也存下来
 	_persist_audio_volumes()
-
-	# 2. 稍微等待一帧或给个打印反馈（可选），然后彻底退出
 	print(\"正在退出游戏...\")
 	get_tree().quit()
-	
-func _on_delete_saave_pressed() -> void:
-	pass
-
 
 func _on_delete_save_pressed() -> void:
-	# 直接调用全局单例中的删除方法
 	if SaveManager.has_method(\"delete_save\"):
 		SaveManager.delete_save()
 	else:
 		push_error(\"错误：在 SaveManager 中找不到 delete_save 方法\")
 
-# —— Always on Top 勾选框 ——
 func _ready() -> void:
+	var vp_w: int = ProjectSettings.get_setting(\"display/window/size/viewport_width\", 1280)
+	var vp_h: int = ProjectSettings.get_setting(\"display/window/size/viewport_height\", 720)
+	if vp_h > 0:
+		_base_aspect = float(vp_w) / float(vp_h)
 	_sync_always_on_top_checkbox()
 	_init_volume_sliders()
+	_init_window_size_dropdown()
 	_apply_translations()
-
 
 func _apply_translations() -> void:
 	$settings.text = tr(\"Sidebar_settings_title\")
-	$\"Master Volume\".text = \"     \" + tr(\"Sidebar_settings_BGM_volume\")
-	$\"Sound Effects Volume\".text = \"     \" + tr(\"Sidebar_settings_SFX_volume\")
-	$\"Always on Top/Label\".text = \"     \" + tr(\"Sidebar_settings_always_on_top\")
-	$\"Save & Quit/Label\".text = tr(\"Sidebar_settings_save_quit\")
-	$\"Delete Save/Label\".text = tr(\"Sidebar_settings_delete_save\")
-
+	$\"ScrollContainer/VBoxContainer/Master Volume\".text = \"     \" + tr(\"Sidebar_settings_BGM_volume\")
+	$\"ScrollContainer/VBoxContainer/Sound Effects Volume\".text = \"     \" + tr(\"Sidebar_settings_SFX_volume\")
+	$\"ScrollContainer/VBoxContainer/Always on Top/Label\".text = \"     \" + tr(\"Sidebar_settings_always_on_top\")
+	$\"ScrollContainer/VBoxContainer/Save & Quit/Label\".text = tr(\"Sidebar_settings_save_quit\")
+	$\"ScrollContainer/VBoxContainer/Delete Save/Label\".text = tr(\"Sidebar_settings_delete_save\")
 
 func _init_volume_sliders() -> void:
-	# 设定范围并连接信号；滑块位置在每次打开设置时由 _sync_volume_sliders() 同步
-	# （子节点 _ready 早于 Main._ready 读取存档，所以这里不能依赖最终音量）
 	_music_slider.min_value = 0
 	_music_slider.max_value = 100
 	_sfx_slider.min_value = 0
@@ -120,9 +79,32 @@ func _init_volume_sliders() -> void:
 		_sfx_slider.value_changed.connect(_on_sfx_slider_value_changed)
 
 func _sync_volume_sliders() -> void:
-	# 让滑块反映当前真实音量（启动时已从 settings.cfg 应用到总线，用 no_signal 避免误触发）
 	_music_slider.set_value_no_signal(db_to_linear(AudioServer.get_bus_volume_db(music_bus_index)) * 100.0)
 	_sfx_slider.set_value_no_signal(db_to_linear(AudioServer.get_bus_volume_db(sfx_bus_index)) * 100.0)
+
+func _init_window_size_dropdown() -> void:
+	var screen_h := DisplayServer.screen_get_size().y
+	var cur_h := DisplayServer.window_get_size().y
+	var best := 0
+	var best_diff := INF
+	for i in WINDOW_SIZE_FRACTIONS.size():
+		var diff := absf(cur_h - screen_h * WINDOW_SIZE_FRACTIONS[i])
+		if diff < best_diff:
+			best_diff = diff
+			best = i
+	$\"ScrollContainer/VBoxContainer/WindowSizeRow/WindowSize\".select(best)
+
+func _on_window_size_item_selected(index: int) -> void:
+	var mode := DisplayServer.window_get_mode()
+	if mode != DisplayServer.WINDOW_MODE_WINDOWED:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		await get_tree().process_frame
+	var screen := DisplayServer.screen_get_size()
+	var new_h := int(screen.y * WINDOW_SIZE_FRACTIONS[index])
+	var new_w := int(new_h * _base_aspect)
+	DisplayServer.window_set_size(Vector2i(new_w, new_h))
+	var new_pos := Vector2i((screen.x - new_w) / 2, (screen.y - new_h) / 2)
+	DisplayServer.window_set_position(new_pos)
 
 func _on_visibility_changed() -> void:
 	if visible:
@@ -130,23 +112,20 @@ func _on_visibility_changed() -> void:
 		_sync_always_on_top_checkbox()
 		_sync_volume_sliders()
 	elif _settings_opened:
-		# 离开设置页时把音量存盘（避免拖动时每帧写文件）
 		_persist_audio_volumes()
 
 func _persist_audio_volumes() -> void:
-	# 交给 Bgm autoload 持久化（音量在引擎启动时就由它应用，保证各场景一致）
 	if Bgm and Bgm.has_method(\"save_audio_volumes\"):
 		Bgm.save_audio_volumes()
 
 func _sync_always_on_top_checkbox() -> void:
-	# 让勾选框反映窗口当前真实的置顶状态（用 no_signal 避免触发 toggled）
-	$\"Always on Top/CheckBox\".set_pressed_no_signal(
+	$\"ScrollContainer/VBoxContainer/Always on Top/CheckBox\".set_pressed_no_signal(
 		DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP))
 
 func _on_always_on_top_toggled(toggled_on: bool) -> void:
 	var main_node = get_tree().current_scene
 	if main_node and main_node.has_method(\"set_always_on_top\"):
-		main_node.set_always_on_top(toggled_on)  # 由 Main 改 flag 并持久化
+		main_node.set_always_on_top(toggled_on)
 	else:
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, toggled_on)
 "
@@ -190,30 +169,103 @@ text = "SETTINGS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Save & Quit" parent="." unique_id=1439462519 instance=ExtResource("4_nbtn")]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=400787794]
 layout_mode = 0
-offset_left = 64.0
-offset_top = 87.0
-offset_right = 184.0
-offset_bottom = 112.0
-button_text = "Sidebar_settings_save_quit"
+offset_left = 13.0
+offset_top = 80.0
+offset_right = 233.0
+offset_bottom = 328.0
+horizontal_scroll_mode = 0
 
-[node name="Delete Save" parent="." unique_id=1514544423 instance=ExtResource("4_nbtn")]
-layout_mode = 0
-offset_left = 64.0
-offset_top = 117.0
-offset_right = 184.0
-offset_bottom = 142.0
-button_text = "Sidebar_settings_delete_save"
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=1612199418]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
 
-[node name="SettingLanguage" type="OptionButton" parent="." unique_id=1628868823]
-layout_mode = 0
-offset_left = 73.0
-offset_top = 147.0
-offset_right = 160.0
-offset_bottom = 178.0
+[node name="Master Volume" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1343181224]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "     Music Volume"
+
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/Master Volume" unique_id=134444878]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 26.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Sound Effects Volume" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1658383066]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "     Sound Effects Volume"
+
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/Sound Effects Volume" unique_id=863553752]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 26.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Always on Top" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=185401597]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Always on Top" unique_id=1259048178]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "     Always on Top  "
+
+[node name="CheckBox" type="CheckBox" parent="ScrollContainer/VBoxContainer/Always on Top" unique_id=1503150479]
+layout_mode = 2
+
+[node name="WindowSizeRow" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=1750000001]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/WindowSizeRow" unique_id=1750000002]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "     Window Size"
+
+[node name="WindowSize" type="OptionButton" parent="ScrollContainer/VBoxContainer/WindowSizeRow" unique_id=1750000003]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+item_count = 4
+popup/item_0/text = "25%"
+popup/item_0/id = 0
+popup/item_1/text = "33%"
+popup/item_1/id = 1
+popup/item_2/text = "50%"
+popup/item_2/id = 2
+popup/item_3/text = "66%"
+popup/item_3/id = 3
+
+[node name="SettingLanguage" type="OptionButton" parent="ScrollContainer/VBoxContainer" unique_id=1628868823]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 item_count = 2
 popup/item_0/text = "中文"
@@ -222,91 +274,32 @@ popup/item_1/text = "English"
 popup/item_1/id = 1
 script = ExtResource("3_0r8j3")
 
-[node name="Master Volume" type="Label" parent="." unique_id=1343181224]
-custom_minimum_size = Vector2(0, 52)
-layout_mode = 0
-offset_left = -1.0
-offset_top = 191.0
-offset_right = 226.0
-offset_bottom = 243.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("1_wtuay")
-theme_override_font_sizes/font_size = 20
-text = "     Music Volume"
-
-[node name="HSlider" type="HSlider" parent="Master Volume" unique_id=134444878]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 30.0
-offset_top = 26.0
-offset_right = -7.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Sound Effects Volume" type="Label" parent="." unique_id=1658383066]
-custom_minimum_size = Vector2(0, 52)
-layout_mode = 0
-offset_left = -3.0
-offset_top = 244.0
-offset_right = 224.0
-offset_bottom = 296.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_constants/line_spacing = 2
-theme_override_fonts/font = ExtResource("1_wtuay")
-theme_override_font_sizes/font_size = 20
-text = "     Sound Effects Volume"
-
-[node name="HSlider" type="HSlider" parent="Sound Effects Volume" unique_id=863553752]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 34.0
-offset_top = 26.0
-offset_right = -6.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Show NPC Names" type="HBoxContainer" parent="." unique_id=1839800091]
+[node name="Show NPC Names" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=1839800091]
 visible = false
-layout_mode = 0
-offset_left = 2.0
-offset_top = 194.0
-offset_right = 202.0
-offset_bottom = 218.0
+layout_mode = 2
 
-[node name="Label" type="Label" parent="Show NPC Names" unique_id=966059228]
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Show NPC Names" unique_id=966059228]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_wtuay")
 theme_override_font_sizes/font_size = 20
 text = "     Show NPC Names"
 
-[node name="CheckBox" type="CheckBox" parent="Show NPC Names" unique_id=824457907]
+[node name="CheckBox" type="CheckBox" parent="ScrollContainer/VBoxContainer/Show NPC Names" unique_id=824457907]
 layout_mode = 2
 
-[node name="Always on Top" type="HBoxContainer" parent="." unique_id=185401597]
-layout_mode = 0
-offset_left = 14.0
-offset_top = 294.0
-offset_right = 241.0
-offset_bottom = 318.0
-
-[node name="Label" type="Label" parent="Always on Top" unique_id=1259048178]
+[node name="Save & Quit" parent="ScrollContainer/VBoxContainer" unique_id=1439462519 instance=ExtResource("4_nbtn")]
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("1_wtuay")
-theme_override_font_sizes/font_size = 20
-text = "     Always on Top  "
+button_text = "Sidebar_settings_save_quit"
 
-[node name="CheckBox" type="CheckBox" parent="Always on Top" unique_id=1503150479]
+[node name="Delete Save" parent="ScrollContainer/VBoxContainer" unique_id=1514544423 instance=ExtResource("4_nbtn")]
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
+button_text = "Sidebar_settings_delete_save"
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
-[connection signal="pressed" from="Save & Quit" to="." method="_on_save__quit_pressed"]
-[connection signal="pressed" from="Delete Save" to="." method="_on_delete_save_pressed"]
-[connection signal="toggled" from="Always on Top/CheckBox" to="." method="_on_always_on_top_toggled"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/Always on Top/CheckBox" to="." method="_on_always_on_top_toggled"]
+[connection signal="item_selected" from="ScrollContainer/VBoxContainer/WindowSizeRow/WindowSize" to="." method="_on_window_size_item_selected"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/Save & Quit" to="." method="_on_save__quit_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/Delete Save" to="." method="_on_delete_save_pressed"]
