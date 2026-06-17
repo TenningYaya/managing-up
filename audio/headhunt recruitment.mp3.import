@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dclyxnbw8qds7"
+path="res://.godot/imported/headhunt recruitment.mp3-3eacad70a86219a886cda4400324663f.mp3str"
+
+[deps]
+
+source_file="res://audio/headhunt recruitment.mp3"
+dest_files=["res://.godot/imported/headhunt recruitment.mp3-3eacad70a86219a886cda4400324663f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

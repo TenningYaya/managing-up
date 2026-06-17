@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://fmwqeqrcve7x"]
+[gd_scene format=3 uid="uid://fmwqeqrcve7x"]
 
-[ext_resource type="AudioStream" uid="uid://dkot41ggc4c2d" path="res://audio/frozen_winter.wav" id="1_f8x3a"]
+[ext_resource type="AudioStream" uid="uid://bgr3totobbf3l" path="res://audio/BGM (2).mp3" id="1_qstf2"]
 
 [sub_resource type="GDScript" id="GDScript_bgm1"]
 script/source = "extends AudioStreamPlayer
@@ -40,8 +40,9 @@ func _bus_linear(bus_name: String) -> float:
 "
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" unique_id=1826572068]
-stream = ExtResource("1_f8x3a")
+stream = ExtResource("1_qstf2")
 volume_db = -5.707
 autoplay = true
 bus = &"Music"
+parameters/looping = true
 script = SubResource("GDScript_bgm1")

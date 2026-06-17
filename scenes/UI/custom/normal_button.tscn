@@ -6,6 +6,7 @@
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="4_x8uyb"]
 
 [node name="NormalButton" type="TextureButton" unique_id=2048579194]
+texture_filter = 1
 offset_left = 70.0
 offset_top = 300.0
 offset_right = 210.0

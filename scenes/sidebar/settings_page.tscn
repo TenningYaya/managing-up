@@ -19,6 +19,10 @@ const CONFIRM_DIALOG = preload(\"res://scenes/sidebar/confirm_dialog.tscn\")
 @onready var _sfx_slider: HSlider = $\"Sound Effects Volume/HSlider\"
 var _settings_opened := false  # 是否已打开过设置页（避免加载阶段误存盘）
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_apply_translations()
+	
 func _on_music_slider_value_changed(value: float) -> void:
 	# value 范围 0~100，转换成分贝设置到 Music 总线（控制 BGM）
 	AudioServer.set_bus_volume_db(music_bus_index, linear_to_db(value / 100.0))

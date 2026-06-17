@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_decor"]
 [ext_resource type="Texture2D" uid="uid://c0o37s88t8hsx" path="res://assets/background/background-white.png" id="3_5xswk"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_decor"]
-[ext_resource type="AudioStream" uid="uid://764twux58mia" path="res://audio/gem_collect.wav" id="4_decor"]
+[ext_resource type="AudioStream" uid="uid://cvg7fmx5clyvq" path="res://audio/desk upgrade.mp3" id="5_5xswk"]
 
 [node name="DecorPage" type="Control" unique_id=200000001]
 custom_minimum_size = Vector2(246, 334)
@@ -88,5 +88,5 @@ size_flags_vertical = 3
 theme_override_constants/separation = 10
 
 [node name="ClickedSound" type="AudioStreamPlayer" parent="." unique_id=200000010]
-stream = ExtResource("4_decor")
+stream = ExtResource("5_5xswk")
 bus = &"SFX"

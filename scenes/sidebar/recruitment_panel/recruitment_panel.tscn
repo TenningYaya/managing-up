@@ -94,6 +94,7 @@ texture = ExtResource("3_q23uo")
 expand_mode = 1
 
 [node name="Normalrecruiting" type="Label" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=1662120914]
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -106,6 +107,7 @@ theme_override_fonts/font = ExtResource("3_rtmed")
 theme_override_font_sizes/font_size = 20
 text = "RECRUIT_HR_WORKING_NORMAL"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="NormalCountdown" type="Label" parent="VBoxContainer/NormalPanel/MarginContainer/NoResumePanel" unique_id=1417925560]
 layout_mode = 0
@@ -248,18 +250,20 @@ texture = ExtResource("6_ha1ar")
 expand_mode = 1
 
 [node name="HHrecruiting" type="Label" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=414835597]
+custom_minimum_size = Vector2(225, 0)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -112.5
-offset_right = 112.5
+offset_left = -141.5
+offset_right = 138.5
 offset_bottom = 23.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("3_rtmed")
 theme_override_font_sizes/font_size = 20
 text = "RECRUIT_HR_WORKING_HEAD"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="HeadCountdown" type="Label" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=777825294]
 layout_mode = 1

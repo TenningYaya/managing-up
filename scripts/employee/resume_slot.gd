@@ -11,6 +11,13 @@ signal reject_requested(emp: Employee)
 @onready var hire_btn = $CardContainer/SelectionContainer/HireBtn
 @onready var reject_btn = $CardContainer/SelectionContainer/RejectBtn
 @onready var bg_texture_rect = $TextureRect # 你的背景节点
+@onready var yes_clicked: AudioStreamPlayer = $YesClicked
+@onready var no_clicked: AudioStreamPlayer = $NoClicked
+
+# 🌟 单卡【录用】音效：按稀有度区分（R / SR / SSR）
+const HIRE_SOUND_R := preload("res://audio/card_draw_1.wav")
+const HIRE_SOUND_SR := preload("res://audio/regular recruitment.mp3")
+const HIRE_SOUND_SSR := preload("res://audio/headhunt recruitment.mp3")
 
 
 var current_employee: Employee
@@ -45,8 +52,21 @@ func setup_slot(emp: Employee) -> void:
 
 func _on_hire_pressed() -> void:
 	if current_employee:
+		_play_hire_sound(current_employee.rarity)
 		hire_requested.emit(current_employee) # 把当前员工扔出去
 
 func _on_reject_pressed() -> void:
 	if current_employee:
+		no_clicked.play()
 		reject_requested.emit(current_employee)
+
+# 🌟 按稀有度切换录用音效后播放
+func _play_hire_sound(rarity: Employee.Rarity) -> void:
+	match rarity:
+		Employee.Rarity.SSR:
+			yes_clicked.stream = HIRE_SOUND_SSR
+		Employee.Rarity.SR:
+			yes_clicked.stream = HIRE_SOUND_SR
+		_:
+			yes_clicked.stream = HIRE_SOUND_R
+	yes_clicked.play()

@@ -140,6 +140,10 @@ func _ready() -> void:
 	_refresh_upgrade_hints()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_apply_menu_translations()
+
 func _apply_menu_translations() -> void:
 	btn_upgrades.get_node("upgrades").text = tr("Sidebar_menu_upgrades")
 	btn_tutorial.get_node("Tutorial").text = tr("Sidebar_menu_tutorial")

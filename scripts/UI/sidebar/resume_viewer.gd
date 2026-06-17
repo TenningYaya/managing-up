@@ -137,13 +137,13 @@ func load_resumes(resumes: Array[Employee]) -> void:
 	_update_display()
 
 func _on_slot_hire_requested(emp: Employee):
+	# 单卡录用音效由 ResumeSlot 按稀有度自行播放
 	on_hire_attempted.emit(emp)
-	yes_sound.play()
 
 func _on_slot_reject_requested(emp: Employee):
+	# 单卡拒绝音效由 ResumeSlot 自行播放
 	on_rejected.emit(emp)
 	remove_employee(emp)
-	no_sound.play()
 
 func _init_opreate_all_buttons() -> void:
 	if reject_all_btn:
@@ -182,6 +182,7 @@ func _on_accept_all_pressed() -> void:
 	# 2. 判断 KPI
 	if Gamemanager.kpi >= total_cost:
 		
+		yes_sound.play() # 🌟 一键全收音效：regular recruitment.mp3
 		# 3. 稳妥招募：复制名单，挨个触发招募信号
 		var temp_list = current_resumes.duplicate()
 		for emp in temp_list:
@@ -199,6 +200,7 @@ func _on_accept_all_pressed() -> void:
 
 
 func _do_actual_reject_all() -> void:
+	no_sound.play() # 🌟 一键全拒音效：8_bit_negative_quick.wav
 	# 🌟 复制一份数组，挨个通知外部：“这些人被拒了啊！”（为了触发你们可能的拒绝统计或KPI扣除）
 	var temp_list = current_resumes.duplicate()
 	for emp in temp_list:
