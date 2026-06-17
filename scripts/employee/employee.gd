@@ -491,7 +491,7 @@ func _spawn_file_vfx(grade: String) -> Node:
 	
 	# 设置初始位置：员工头顶正上方
 	# 假设员工 size.y 是高度，往上挪一点
-	vfx.position = Vector2((size.x + 42) / 2.0, -20.0)
+	vfx.position = Vector2((size.x - 20) / 2.0, -20.0)
 	
 	# 调用特效自己的播放逻辑
 	vfx.play_vfx(grade)

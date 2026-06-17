@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b6g2gu7oe2r5q"]
 
 [ext_resource type="Script" uid="uid://y2usywbksv3m" path="res://scripts/UI/ingame/dollar_bust_vfx.gd" id="1_bqnir"]
-[ext_resource type="Texture2D" uid="uid://b414yl7jw2fnp" path="res://assets/UI/ingame/dollar/dollar.png" id="2_hech7"]
+[ext_resource type="Texture2D" uid="uid://dqix4urk7cjqq" path="res://assets/UI/ingame/dollar/money_bag_fill.png" id="2_hech7"]
 
 [node name="DollarBust" type="Node2D" unique_id=1750076469]
 script = ExtResource("1_bqnir")
