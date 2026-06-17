@@ -288,11 +288,15 @@ script = ExtResource("13_a8y0u")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2052431275]
 
+<<<<<<< Updated upstream
 [node name="EmployeePanel" parent="CanvasLayer" unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
 offset_left = 1601.0
 offset_top = 232.0
 offset_right = 1922.0
 offset_bottom = 640.0
+=======
+[node name="SideMenu" parent="CanvasLayer" unique_id=1012173253 instance=ExtResource("4_jyhfs")]
+>>>>>>> Stashed changes
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
 layout_mode = 3
