@@ -108,9 +108,9 @@ mouse_filter = 2
 visible = false
 layout_mode = 1
 offset_left = -282.0
-offset_top = -37.0
+offset_top = -138.0
 offset_right = -282.0
-offset_bottom = -37.0
+offset_bottom = -138.0
 
 [node name="InvisibleShield" type="ColorRect" parent="." unique_id=355510228]
 visible = false

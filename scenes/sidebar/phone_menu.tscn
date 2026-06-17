@@ -42,6 +42,13 @@ region = Rect2(32, 32, 1184, 1184)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yskv6"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nnubu"]
+bg_color = Color(0.9137255, 0.9254902, 0.7921569, 0.45490196)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
 [node name="MobileSidebar" type="Control" unique_id=2025363917]
 layout_mode = 3
 anchors_preset = 3
@@ -328,3 +335,12 @@ offset_bottom = -153.0
 texture_normal = ExtResource("2_jt2no")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="TextureRect" type="Panel" parent="Trigger" unique_id=511519727]
+show_behind_parent = true
+layout_mode = 0
+offset_top = -8.0
+offset_right = 76.0
+offset_bottom = 74.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nnubu")

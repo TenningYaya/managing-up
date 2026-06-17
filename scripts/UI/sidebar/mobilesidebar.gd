@@ -6,6 +6,7 @@ extends Control
 # =====================================================
 @onready var phone_wrapper: Control = $PhoneWrapper
 @onready var trigger_btn: BaseButton = $Trigger
+#@onready var trigger_btn_bcg = $Trigger/TextureRect
 
 var is_open := false
 
@@ -66,6 +67,7 @@ func _ready() -> void:
 	phone_wrapper.position.x = closed_x
 	trigger_btn.show()
 	is_open = false
+	#trigger_btn_bcg.top_level = true
 
 	# 初始状态：显示手机桌面
 	show_home_screen()

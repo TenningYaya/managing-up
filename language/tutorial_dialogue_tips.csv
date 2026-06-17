@@ -2,10 +2,10 @@ id,zh,en
 TUTORIAL_STEP_01_01,早上坏，欢迎来新写字楼、新办公室,Bad morning! Welcome to the new office
 TUTORIAL_STEP_01_02,我知道早上上班的心情总是很艹蛋，因为我也是,"I know Monday mornings always feel like absolute garbage. Trust me, I feel the exact same way"
 TUTORIAL_STEP_01_03,所以，新项目组的工作就全交给你了,Which is exactly why I'm handing over the entire new project team to you!
-TUTORIAL_STEP_01_03_01,先给它取个名字吧！,First, give it a name!
+TUTORIAL_STEP_01_03_01,先给它取个名字吧！,"First, give it a name!"
 TUTORIAL_STEP_01_03_02,{project_name}，一听就有活儿，好拉风投,"{project_name}, now that's a name that screams funding potential!"
 TUTORIAL_STEP_01_04,什么？你说你不会管人？,"Wait, you don't know how to manage a program?"
-TUTORIAL_STEP_01_05,嗯……给你offer的时候，我对你是有很高的期望的,"Well... I had extremely higher expectations for you when offered you the offer'"
+TUTORIAL_STEP_01_05,嗯……给你offer的时候，我对你是有很高的期望的,"Well... I had extremely higher expectations for you when offered you the offer"
 TUTORIAL_STEP_01_06,再说了，现在AI什么的不是很好用吗？有事问AI去吧,"Besides, aren't AI tools all the rage now? Just go ask an AI"
 TUTORIAL_STEP_01_07,好了，我这边的游轮慈善晚宴都要开始了,"Alright, my charity gala is about to start"
 TUTORIAL_STEP_01_08,好好学，好好干 bye~,"Study hard, work hard. bye~"
@@ -13,68 +13,68 @@ TUTORIAL_STEP_01_09,绩效好的话一切都好说，bye~,Get those KPI numbers 
 ,,
 TUTORIAL_STEP_02_01,点击教程AI开始向上管理,Click the Tutorial AI to Managing-up
 ,,
-TUTORIAL_STEP_03_01,深挖同事剩余价值，赋能您的向上管理,"Maximize peer surplus value, and empower your upward management."
+TUTORIAL_STEP_03_01,深挖同事剩余价值，赋能您的向上管理。,"Maximize peer surplus value, and empower your upward management."
 TUTORIAL_STEP_03_02,KPI宝，您最贴心的工作管家！,"KPI Bao, your most thoughtful workplace assistant!"
-TUTORIAL_STEP_03_03,作为一个项目进度为“新建文件夹”的项目组的唯一成员,As the sole member of a project team whose current progress is literally "New Folder"...
-TUTORIAL_STEP_03_04,考虑到项目进度为“新建文件夹”，您肯定也不想一个人干活吧！首先，您需要一些同事,"Current progress is literally New Folder...I'm sure you don't want to do all the heavy lifting alone! First, you need some coworkers!"
+TUTORIAL_STEP_03_03,作为一个项目进度为“新建文件夹”的项目组的唯一成员，,As the sole member of a project team whose current progress is literally "New Folder"...
+TUTORIAL_STEP_03_04,项目进度为新建文件夹，您也不想一个人工作吧？首先，您需要一些同事。,"Current progress is literally New Folder...First, you need some coworkers!"
 ,,
 TUTORIAL_STEP_04_01,您随时可以使用项目组的电脑！,"You can use the team's PC anytime!"
 TUTORIAL_STEP_04_02,打开电脑的招聘系统，查看项目组收到的简历,Open the Recruitment System on the PC to view job seeker's resumes.
 ,,
 TUTORIAL_STEP_05_01,打开招聘面板，选择您的英雄,"Open the Recruitment System, select your heroes!"
 ,,
-TUTORIAL_STEP_06_01,您可以拒绝或者同意雇佣这些求职者，雇佣他们需要消耗KPI,You can reject or approve these applicants. Hiring them costs KPI.
-TUTORIAL_STEP_06_02,KPI就是工作成绩~向老板提要求的权利~您未来的小钱钱~,"KPI is your performance score — your leverage over the boss, and your future cash flow~"
-TUTORIAL_STEP_06_03,这几位是其他部门内推过来的，物美价廉，先凑活用吧！,These folks were referred from other departments — decent value for the price. They'll do for now!
+TUTORIAL_STEP_06_01,不过，说服老板招更多人可不容易。,However... convincing the Boss to grant more Headcount is no easy task.,
+TUTORIAL_STEP_06_02,与老板对话会消耗一种特殊token——KPI！它是您的业绩总和~,Talking to the Boss consumes a special token — KPI! It's the ultimate sum of your performance reviews~,
+TUTORIAL_STEP_06_03,这几位是其他部门内推过来的，来不及了先凑活吧！,"These folks were referred internally from other departments. There's no time left, just make do with them for now!"
 ,,
 TUTORIAL_STEP_07_01,点击同意将冰冷的简历变成温暖的人力资源,Click "Yes!" to turn a cold resume into a warm human resource.
 ,,
 TUTORIAL_STEP_08_01,现在，三位已经是您的同事啦！,"Now, all three are officially your coworkers!"
-TUTORIAL_STEP_08_02,让同事闲着……啊不，没有工位坐就太不礼貌了,"Leaving your coworkers idle... or rather, without a desk to sit at — how impolite!"
+TUTORIAL_STEP_08_02,让同事闲着……啊不，没有工位坐就太不礼貌了。,"Leaving your coworkers idle... or rather, without a desk to sit at — how impolite!"
 TUTORIAL_STEP_08_03,把同事拖拽到工位上，同事就会开始为项目组工作啦！,Drag your coworkers to their desks and they'll start working for the team!
 ,,
 TUTORIAL_STEP_09_01,将同事拖拽……不，请到工位上,Drag your... oh, kindly guide your co-workers to their workstation.
 ,,
-TUTORIAL_STEP_10_01,每隔一段时间，同事就会产出一份文件,Every once in a while, your coworkers will produce a document.
-TUTORIAL_STEP_10_02,同事当然应该同甘共苦，所以这些也是您的绩效~,Coworkers should share in the ups and downs, so these results belong to your performance too~
-TUTORIAL_STEP_10_03,同事产生的文件质量越高，您的KPI就跟着水涨船高~,The higher the quality of the documents your coworkers produce, the higher your KPI will soar~
+TUTORIAL_STEP_10_01,每隔一段时间，同事就会产出一份文件，这代表他们的工作成果~,"Every once in a while, your coworkers will deliver a deliverable. That's a testament to their hard work~"
+TUTORIAL_STEP_10_02,同事每有一份文件写，就有您的一份KPI可叠加~,"For every document they grind out, another sweet layer of KPI stacks up for you."
+TUTORIAL_STEP_10_03,同事产生的文件质量越高，您的KPI就跟着水涨船高~,"The higher the quality of their deliverables, the higher your own KPI will soar~"
 ,,
-TUTORIAL_STEP_10_01_01,哦！您看，他们多可爱啊！他们工作的样子就像是天使一样,Oh! Look at them — aren't they adorable? They look just like little angels when they work!
+TUTORIAL_STEP_10_01_01,哦！您看，他们多可爱啊！他们认真工作的样子就像是天使一样。,Oh! Look at them — aren't they adorable? They look just like little angels when they work!
 TUTORIAL_STEP_10_01_02,您一定希望他们又可爱又有效率。,I'm sure you want them to be both adorable and efficient.
 TUTORIAL_STEP_10_01_03,”我的天使们什么时候才能产生下一份文件呢？”,“When will my little angels produce their next document?”
 TUTORIAL_STEP_10_01_04,点击一位同事，查看其工作量饱不饱和吧~,Click on a coworker to see if their workload is full~
 ,,
 TUTORIAL_STEP_11_01,右键点击同事，打开同事面板,Right-click a coworker to open their panel.
 ,,
-TUTORIAL_STEP_12_01,当进度条走到终点时，同事本次的生产也就完成了,When the progress bar reaches the end, your coworker's current production is complete.
+TUTORIAL_STEP_12_01,当进度条走到终点时，同事本次的生产也就完成了。,"When the progress bar reaches the end, your coworker's current production is complete."
 TUTORIAL_STEP_12_02,感觉同事工作热情不够高涨？多发点消息鼓励一下他们吧~,Feeling like your coworkers' passion for work is lacking? Send them a few more messages to encourage them~
-TUTORIAL_STEP_12_03,不过首先，您得有一个账号！,But first, you'll need to have an account!
+TUTORIAL_STEP_12_03,不过首先，您得有一个账号！,"But first, you'll need to have an account!"
 ,,
 TUTORIAL_STEP_13_01,连续点击同事，鼓励他们尽快完成工作,Click a coworker repeatedly to encourage them to finish their work faster.
 ,,
-TUTORIAL_STEP_14_01,一收到您的暖心问候，同事们工作进度实时飞涨,"The moment your heartfelt greetings arrive, their work progress shoots up in real time!"
+TUTORIAL_STEP_14_01,一收到您的暖心问候，同事们工作进度实时飞涨。,"The moment your heartfelt greetings arrive, their work progress shoots up in real time!"
 TUTORIAL_STEP_14_02,显然，同事也感受到了您的热情，干劲更足了！,"Clearly, your coworkers can feel your enthusiasm — and it's fired them right up!"
 ,,
 TUTORIAL_STEP_17_01,多亏了您的努力，又一位迷途的同事悬崖勒马！公司的资产增加了！,"Thanks to your efforts, another wayward coworker has been pulled back from the brink! Company assets increased!"
 ,,
 TUTORIAL_STEP_18_01,由于老板不在家，公司的资产也约等于您的资产~,"Since the boss is away, the company's assets are basically your assets~"
-TUTORIAL_STEP_18_02,您可以将这些资产用于许多地方，比如获取更牛的员工,You can spend these assets in many ways — like recruiting even better employees.
+TUTORIAL_STEP_18_02,您可以将这些资产用于许多地方，比如获取更牛的员工。,You can spend these assets in many ways — like recruiting even better employees.
 ,,
 TUTORIAL_STEP_19_01,当进度条走到终点时，同事会产出文件！这是他们的工作成果~,"When the progress bar completes, your coworker produces a document — the fruit of their labor~"
 TUTORIAL_STEP_19_02,同事的工作成果会被直接转化为您的KPI，同时也有一定概率产出资产,"Their output converts directly into your KPI, and there's also a chance it generates assets."
 TUTORIAL_STEP_19_03,产出的效率和数额与同事的属性相关，您只要查看他们的数据就明白了！,Output speed and quantity depend on your coworkers' attributes — just check their stats and you'll see!
 ,,
-TUTORIAL_STEP_21_01,既然都是为项目负责，您当然可以优化项目组的人员结构！,"Since you're responsible for the project, you're absolutely entitled to optimize the team's structure!"
-TUTORIAL_STEP_21_02,查看您的人力资源中心，您可以在这里批量化地管理团队,Check your HR Center — you can manage the whole team in bulk right here.
+TUTORIAL_STEP_21_01,既然被老板授予了重任，您当然可以优化项目组的人员结构！,"Since you're responsible for the project, you're absolutely entitled to optimize the team's structure!"
+TUTORIAL_STEP_21_02,查看您的人力资源中心，您可以在这里批量化管理团队。,Check your HR Center — you can manage the whole team in bulk right here.
 ,,
 TUTORIAL_STEP_22_01,打开人力资源中心，查看同事的工作状态,Open the HR Center to check your coworkers' work status.
 ,,
 TUTORIAL_STEP_23_01,被派遣的同事将出现在等待区，就像刚才那样，从天而降~,"Dispatched coworkers will appear in the waiting area — dropping in from above, just like that~"
-TUTORIAL_STEP_23_02,如果等待区已经无处下脚了，优秀的同事们会进行自我管理,"If the waiting area is full, your capable coworkers will manage themselves."
-TUTORIAL_STEP_23_03,比如找点别的事情做，但这样他们就不会为我们产出KPI了,Like finding something else to do — but then they won't be generating KPI for us.
+TUTORIAL_STEP_23_02,如果等待区已经无处下脚了，优秀的同事们会进行自我管理。,"If the waiting area is full, your capable coworkers will manage themselves."
+TUTORIAL_STEP_23_03,比如去别的办公室找点事情做，但这样他们就不会为您产出KPI了。,Like finding something else to do in other program, but then they won't be generating KPI for us.
 ,,
-TUTORIAL_STEP_24_01,当然，您随时可以打开同事面板，再次将他们派遣到这个项目,"Of course, you can open a coworker's panel at any time to redeploy them to this project."
-TUTORIAL_STEP_24_02,或者让他们永久离开这个公司~这也是优化人员架构的必不可少的一环,Or let them permanently leave the company~ That's an essential part of optimizing your team structure.
+TUTORIAL_STEP_24_01,当然，您随时可以打开同事面板，再次将他们派遣到这个项目。,"Of course, you can open a coworker's panel at any time to redeploy them to this project."
+TUTORIAL_STEP_24_02,或者让他们永久离开这个公司，这也是优化人员架构的必不可少的一环~,Or let them permanently leave the company~ That's an essential part of optimizing your team structure.
 ,,
 TUTORIAL_STEP_25_01,表现很突出嘛。项目才开张了多久，就做出了一点成绩,Impressive. The project's barely started and you've already made some progress.
 TUTORIAL_STEP_25_02,很好，现在你攒够了绩效，可以申请提升职级了,Good. You've accumulated enough KPI now — you can apply for a promotion.
@@ -99,11 +99,11 @@ TUTORIAL_STEP_34_02,积攒更多KPI提升职级，您将解锁更多的办公室
 TUTORIAL_STEP_34_01_01,如果您觉得视野不够好，您可以按住中键调整视野！,"If the view isn't optimal, hold the middle mouse button to adjust it!"
 TUTORIAL_STEP_34_02_01,按住中键，拖拽游戏屏幕,Hold the middle mouse button and drag around
 ,,
-TUTORIAL_STEP_35_01,考虑到您日理百机，忘掉这些操作也是非常正常的,"Given how busy you are, forgetting all this is completely understandable."
-TUTORIAL_STEP_35_02,您随时可以查看职场手册，一键恢复记忆,You can check the Workplace Manual anytime to refresh your memory in one tap.
-TUTORIAL_STEP_35_03,至于为什么不是问我？那当然是因为：节约token是AI的传统美德,Why not just ask me instead? Simple — conserving tokens is a time-honored AI virtue.
+TUTORIAL_STEP_35_01,考虑到您日理百机，忘掉这些操作也是非常正常的~,"Given how busy you are, forgetting all this is completely understandable."
+TUTORIAL_STEP_35_02,您随时可以查看职场手册，一键恢复记忆。,You can check the Workplace Manual anytime to refresh your memory in one tap.
+TUTORIAL_STEP_35_03,至于为什么不是问我？那当然是因为：节约token是AI的传统美德~,Why not just ask me instead? Simple — conserving tokens is a time-honored AI virtue.
 TUTORIAL_STEP_35_04,那么，我先去培训其他工贼……啊不，工作人员了！,"Anyway, I'm off to train the other workplace thieves — I mean, staff members!"
-TUTORIAL_STEP_35_05,KPI宝，您最贴心的工作管家,"KPI Bao, your most thoughtful workplace assistant."
+TUTORIAL_STEP_35_05,KPI宝，您最贴心的工作管家——,"KPI Bao, your most thoughtful workplace assistant."
 TUTORIAL_STEP_35_06,更懂职场，更懂您！,We know the workplace. We know you.
 HINT_CONTINUE,[左键] 继续对话 | 长按 [空格] 跳过,[LMB] Continue | Hold [Space] to Skip
 BOSS_QUOTE_01,总感觉怪怪的你再改改,Something feels off, fix it again

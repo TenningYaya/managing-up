@@ -4,8 +4,10 @@ signal dialogue_finished
 signal skip_all_requested
 
 @onready var label: RichTextLabel = $HBoxContainer/RichTextLabel
+@onready var hbox: HBoxContainer = $HBoxContainer
 
 const CHAR_SPEED := 0.02
+const EN_EXTRA_WIDTH := 100.0  # 调这个值
 
 var _lines: Array[String] = []
 var _current_index: int = 0
@@ -14,6 +16,12 @@ var _is_typing_done := false
 var _space_pressed_time := 0.0
 var _is_space_pressed := false
 const SKIP_HOLD_TIME := 1.0
+
+func _ready() -> void:
+	if not TranslationServer.get_locale().begins_with("zh"):
+		offset_right += EN_EXTRA_WIDTH
+		hbox.offset_right += EN_EXTRA_WIDTH
+		label.custom_minimum_size.x += EN_EXTRA_WIDTH
 
 func _process(delta: float) -> void:
 	if not is_visible_in_tree():

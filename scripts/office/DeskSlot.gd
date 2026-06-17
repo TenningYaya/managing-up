@@ -55,7 +55,8 @@ func _check_level_unlock(current_player_level: int) -> void:
 func _gui_input(event: InputEvent) -> void:
 	if is_locked and event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			_show_locked_hint()
+			if Gamemanager.is_tutorial_completed:
+				_show_locked_hint()
 			accept_event()
 
 func _show_locked_hint() -> void:
