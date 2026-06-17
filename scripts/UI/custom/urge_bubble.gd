@@ -5,6 +5,7 @@ class_name UrgeBubble
 @onready var label: Label = $HBoxContainer/BubblePanel/TextLabel
 @onready var panel: PanelContainer = $HBoxContainer/BubblePanel
 @onready var player_avatar: TextureRect = $HBoxContainer/MarginContainer/PlayerAvatar
+@onready var urge_sfx: AudioStreamPlayer = $Urge
 
 # 动画相关变量
 var _tween: Tween = null
@@ -23,6 +24,8 @@ func _ready() -> void:
 	
 func pop_up(content: String) -> void:
 	label.text = content
+	# 播放“鞭打员工”音效（场景里的 Urge 节点不会自动播放，必须手动触发）
+	urge_sfx.play()
 	if Gamemanager.player_avatar_texture != null:
 		player_avatar.texture = Gamemanager.player_avatar_texture
 		player_avatar.show()
