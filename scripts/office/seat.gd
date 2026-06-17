@@ -44,6 +44,7 @@ func is_free() -> bool:
 
 func set_occupant(employee: Control) -> void:
 	occupant = employee
+	employee.z_index = z_index + 1  # 椅(z) < 员工(z+1) < 桌(z+3)
 	if occupant and occupant.has_signal("buff_status_changed"):
 		if not occupant.buff_status_changed.is_connected(_sync_buff_icons):
 			occupant.buff_status_changed.connect(_sync_buff_icons)
@@ -52,10 +53,12 @@ func set_occupant(employee: Control) -> void:
 	_sync_buff_icons()
 
 func clear_occupant() -> void:
+	if occupant:
+		occupant.z_index = 1  # 恢复默认
+		if occupant.has_signal("buff_status_changed"):
+			if occupant.buff_status_changed.is_connected(_sync_buff_icons):
+				occupant.buff_status_changed.disconnect(_sync_buff_icons)
 	occupant = null
-	if occupant and occupant.has_signal("buff_status_changed"):
-		if occupant.buff_status_changed.is_connected(_sync_buff_icons):
-			occupant.buff_status_changed.disconnect(_sync_buff_icons)
 
 func get_snap_global_position() -> Vector2:
 	return snap_point.global_position

@@ -27,8 +27,16 @@ func _ready():
 		
 	# 🌟 2. 刚进游戏时，先静默跑一次等级判定（此时 _is_initialized 还是 false，完美拦截读档特效）
 	_check_level_unlock(Gamemanager.player_level)
-	
+	_assign_row_z_indices()
+
 	_is_initialized = true
+
+func _assign_row_z_indices() -> void:
+	var cols: int = grid_container.columns
+	var children := grid_container.get_children()
+	for i in children.size():
+		var row: int = i / cols  # 0=后排, 1=中排, 2=前排
+		children[i].z_index = row * 10
 
 # 🌟 3. 全局等级变动时的核心监听函数
 func _on_level_changed(new_level: int) -> void:
