@@ -28,3 +28,6 @@ OFFICE_PN_FUNC_CULTURE,企业文化室,Culture
 OFFICE_SELECT_CULTURE,选择文化,Culture
 OFFICE_DISMISS_MEETING,解散会议,Dismiss
 DeskSlot_locked_click_hint,提升职级以扩大项目组规模,Upgrade your rank to expand the team
+SETTING_SL_CONFIRM_LABEL,确定要保存并退出吗？,Do you want to save and exit?
+SETTING_SL_CONFIRM_YES,退出,QUIT
+SETTING_SL_CONFIRM_NO,取消,Cancel
