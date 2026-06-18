@@ -281,7 +281,6 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="UpgradeButton" type="TextureButton" parent="." unique_id=1385535808 groups=["upgrade_button"]]
-visible = false
 layout_mode = 0
 offset_left = 72.0
 offset_top = 303.0

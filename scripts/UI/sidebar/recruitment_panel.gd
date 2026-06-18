@@ -50,6 +50,10 @@ func _ready():
 	normal_hr.viewer_ready.connect(_show_normal_viewer)
 	head_hr.viewer_ready.connect(_show_headhunt_viewer)
 
+	# 点 HR 按钮加速倒计时时，在对应倒计时正上方飘 "-Xs"（普通 / 猎头各一个）
+	normal_hr.sped_up.connect(func(amount): _spawn_speed_up_text(lbl_normal_countdown, amount))
+	head_hr.sped_up.connect(func(amount): _spawn_speed_up_text(countdown_label, amount))
+
 	# 初始刷一遍 UI
 	_on_new_resumes_arrived()
 	_update_headhunt_ui()
@@ -210,6 +214,48 @@ func show_floating_tip(text_key: String) -> void:
 	_tip_tween.tween_property(hire_tip_label, "modulate:a", 0.0, 0.5) 
 	_tip_tween.tween_callback(func(): hire_tip_label.hide())
 	
+# 在指定倒计时正上方飘出 "-Xs" 加速反馈（点 HR 按钮触发）。
+# 纯运行时创建，不改任何场景节点；连点会飘出多个、各自带横向抖动。
+func _spawn_speed_up_text(anchor: Control, amount: float) -> void:
+	if not is_instance_valid(anchor):
+		return
+	var lbl := Label.new()
+	lbl.text = "-%ds" % int(ceil(amount))
+	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lbl.z_index = 200
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var ls := LabelSettings.new()
+	ls.font_color = Color(1.0, 0.85, 0.2)        # 黄色：加速正反馈
+	ls.outline_color = Color(0.0, 0.0, 0.0, 0.7) # 黑描边，任何背景都看得清
+	ls.outline_size = 4
+	ls.font_size = 20
+	lbl.label_settings = ls
+	add_child(lbl)
+
+	await get_tree().process_frame  # 等 Godot 算出 lbl.size 才能居中
+	# 若这一帧内面板/倒计时被销毁（删档、切场景），lbl 会随父节点一起失效，直接退出
+	if not is_instance_valid(lbl):
+		return
+	if not is_instance_valid(anchor):
+		lbl.queue_free()
+		return
+
+	lbl.pivot_offset = lbl.size / 2.0
+	# 定位：倒计时正上方、水平居中，外加一点随机横向抖动，连点时不完全重叠
+	var jitter := randf_range(-10.0, 10.0)
+	var top_center := anchor.get_global_rect().position + Vector2(anchor.size.x / 2.0, 0.0)
+	lbl.global_position = top_center - Vector2(lbl.size.x / 2.0 - jitter, lbl.size.y + 2.0)
+	lbl.scale = Vector2(1.4, 1.4)
+
+	# 动画：弹出（回弹缩放）+ 上浮 + 渐隐，结束后自毁
+	var start_y := lbl.global_position.y
+	var t := create_tween()
+	t.set_parallel(true)
+	t.tween_property(lbl, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t.tween_property(lbl, "global_position:y", start_y - 30.0, 0.7).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+	t.tween_property(lbl, "modulate:a", 0.0, 0.7).set_ease(Tween.EASE_IN)
+	t.chain().tween_callback(lbl.queue_free)
+
 func _on_hire_1_pressed(): _execute_headhunt(1)
 func _on_hire_10_pressed(): _execute_headhunt(10)
 

@@ -2,6 +2,7 @@
 extends TextureButton
 
 signal viewer_ready
+signal sped_up(amount: float)  # 每次点击实际加速的秒数（>0 才发），供面板在倒计时上方飘 "-Xs"
 
 enum CharacterSet { NORMAL, HEAD }
 enum AnimState { WALK, RUN, RUNRUNRUN }
@@ -103,12 +104,20 @@ func _on_clicked() -> void:
 	_update_anim_state()
 
 func _speed_up_timer() -> void:
+	var reduced := 0.0
 	match character_set:
 		CharacterSet.NORMAL:
-			RecruitmentManager.free_recruit_time_left = maxf(0.0, RecruitmentManager.free_recruit_time_left - SPEED_UP_AMOUNT)
+			var before := RecruitmentManager.free_recruit_time_left
+			RecruitmentManager.free_recruit_time_left = maxf(0.0, before - SPEED_UP_AMOUNT)
+			reduced = before - RecruitmentManager.free_recruit_time_left
 		CharacterSet.HEAD:
 			if RecruitmentManager.current_state == RecruitmentManager.State.RECRUITING:
-				RecruitmentManager.headhunt_time_left = maxf(0.0, RecruitmentManager.headhunt_time_left - SPEED_UP_AMOUNT)
+				var before := RecruitmentManager.headhunt_time_left
+				RecruitmentManager.headhunt_time_left = maxf(0.0, before - SPEED_UP_AMOUNT)
+				reduced = before - RecruitmentManager.headhunt_time_left
+	# 真的减了时间才飘字（已经到 0 时连点不再重复提示）
+	if reduced > 0.0:
+		sped_up.emit(reduced)
 
 func _update_anim_state() -> void:
 	var new_state := _anim_state
