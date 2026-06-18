@@ -165,3 +165,8 @@ position = Vector2(122.399994, -36)
 scale = Vector2(0.35555547, 0.34678572)
 frame = 10
 frame_progress = 0.99278116
+
+[node name="Control" type="Control" parent="." unique_id=835399244]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
