@@ -13,7 +13,7 @@ extends Control
 var music_bus_index = AudioServer.get_bus_index(\"Music\")
 var sfx_bus_index = AudioServer.get_bus_index(\"SFX\")
 const CONFIRM_DIALOG = preload(\"res://scenes/sidebar/confirm_dialog.tscn\")
-const WINDOW_SIZE_FRACTIONS := [0.25, 0.33, 0.50, 0.66]
+const WINDOW_SIZE_FRACTIONS := [0.5, 0.75, 0.90, 0.99]
 
 @onready var _music_slider: HSlider = $\"ScrollContainer/VBoxContainer/Master Volume/HSlider\"
 @onready var _sfx_slider: HSlider = $\"ScrollContainer/VBoxContainer/Sound Effects Volume/HSlider\"
@@ -254,13 +254,13 @@ text = "     Window Size"
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 item_count = 4
-popup/item_0/text = "25%"
+popup/item_0/text = "50%"
 popup/item_0/id = 0
-popup/item_1/text = "33%"
+popup/item_1/text = "75%"
 popup/item_1/id = 1
-popup/item_2/text = "50%"
+popup/item_2/text = "90%"
 popup/item_2/id = 2
-popup/item_3/text = "66%"
+popup/item_3/text = "100%"
 popup/item_3/id = 3
 
 [node name="SettingLanguage" type="OptionButton" parent="ScrollContainer/VBoxContainer" unique_id=1628868823]
