@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="4_nbtn"]
 
 [sub_resource type="GDScript" id="GDScript_nb64h"]
-script/source = "
+script/source = "#settings_page.gd
 extends Control
 
 var music_bus_index = AudioServer.get_bus_index(\"Music\")
@@ -99,12 +99,13 @@ func _on_window_size_item_selected(index: int) -> void:
 	if mode != DisplayServer.WINDOW_MODE_WINDOWED:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		await get_tree().process_frame
-	var screen := DisplayServer.screen_get_size()
-	var new_h := int(screen.y * WINDOW_SIZE_FRACTIONS[index])
-	var new_w := int(new_h * _base_aspect)
+	var scr := DisplayServer.window_get_current_screen()
+	var usable := DisplayServer.screen_get_usable_rect(scr)
+	var new_h := int(usable.size.y * WINDOW_SIZE_FRACTIONS[index])
+	var new_w := usable.size.x
+	DisplayServer.window_set_min_size(Vector2i(0, 0))
 	DisplayServer.window_set_size(Vector2i(new_w, new_h))
-	var new_pos := Vector2i((screen.x - new_w) / 2, (screen.y - new_h) / 2)
-	DisplayServer.window_set_position(new_pos)
+	DisplayServer.window_set_position(Vector2i(usable.position.x, usable.end.y - new_h))
 
 func _on_visibility_changed() -> void:
 	if visible:

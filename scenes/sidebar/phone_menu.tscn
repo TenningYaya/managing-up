@@ -143,6 +143,7 @@ offset_bottom = 88.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "UPGRADES"
+horizontal_alignment = 1
 
 [node name="RedDot" type="Panel" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades" unique_id=300000010]
 visible = false
@@ -170,6 +171,7 @@ offset_bottom = 95.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "TUTORIAL"
+horizontal_alignment = 1
 
 [node name="general" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=426804594]
 custom_minimum_size = Vector2(80, 80)
@@ -187,6 +189,7 @@ offset_bottom = 95.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "GENERAL"
+horizontal_alignment = 1
 
 [node name="settings" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=375597110]
 custom_minimum_size = Vector2(80, 80)
@@ -204,6 +207,7 @@ offset_bottom = 90.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "SETTINGS"
+horizontal_alignment = 1
 
 [node name="decor" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=300000001]
 custom_minimum_size = Vector2(80, 80)

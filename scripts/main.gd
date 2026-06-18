@@ -1,3 +1,4 @@
+#main.gd
 extends Control
 
 # ➕ 鼠标穿透相关
@@ -18,6 +19,8 @@ var _is_sticky_mode := false
 var _sticky_note: Control = null      # 运行时实例，与主场景完全独立
 var _sticky_canvas: CanvasLayer = null
 
+const WINDOW_HEIGHT_FRACTION := 0.99
+
 # --- 2. Initialization ---
 func _ready():
 
@@ -27,13 +30,16 @@ func _ready():
 	# ⚠️ 用"无边框窗口铺满屏幕"实现全屏，绝不能用 WINDOW_MODE_FULLSCREEN：
 	#    独占全屏会让透明背景和点击穿透同时失效。
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	DisplayServer.window_set_min_size(Vector2i(0, 0))        # ← 加这行
+	DisplayServer.window_set_size(Vector2i(1920, 600))
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, _load_always_on_top())   # 读取设置，默认置顶
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_TRANSPARENT, true)     # 确保窗口可透明
 	get_viewport().transparent_bg = true
 
 	await get_tree().process_frame  # 等模式切换生效再查询可用区域
-	_cover_current_screen()
+	print("after second await: size=", DisplayServer.window_get_size())
+	await _cover_current_screen()
 
 	$FullGameMode.show()
 
@@ -87,12 +93,23 @@ func _ready():
 
 
 # 让窗口铺满它当前所在的那块屏幕（支持任意分辨率 / 多显示器），排除任务栏
-func _cover_current_screen() -> void:
+#func _cover_current_screen() -> void:
+	#var scr := DisplayServer.window_get_current_screen()
+	#var usable := DisplayServer.screen_get_usable_rect(scr)
+	##DisplayServer.window_set_position(usable.position)
+	##DisplayServer.window_set_size(Vector2i(usable.size.x, usable.size.y - 1))
+	#var default_y_offset := 50  # 这个值自己调，单位是物理像素
+	#DisplayServer.window_set_position(Vector2i(usable.position.x, usable.position.y - default_y_offset))
+	#DisplayServer.window_set_size(Vector2i(usable.size.x, usable.size.y - 1))
+	
+func _cover_current_screen():
 	var scr := DisplayServer.window_get_current_screen()
 	var usable := DisplayServer.screen_get_usable_rect(scr)
-	DisplayServer.window_set_position(usable.position)
-	DisplayServer.window_set_size(usable.size)
-
+	var win_h := int(usable.size.y * WINDOW_HEIGHT_FRACTION)
+	DisplayServer.window_set_min_size(Vector2i(0, 0))
+	DisplayServer.window_set_size(Vector2i(usable.size.x, win_h))
+	DisplayServer.window_set_position(Vector2i(usable.position.x, usable.end.y - win_h))
+	
 # 读取“是否置顶”设置（默认 false = 不置顶，可被其它窗口遮挡；勾选后才置顶）
 func _load_always_on_top() -> bool:
 	var cfg := ConfigFile.new()
@@ -184,8 +201,25 @@ func suppress_passthrough(active: bool) -> void:
 func _input(event):
 	if event.is_action_pressed("toggle_sticky_mode"):
 		_toggle_mode()
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_UP or event.keycode == KEY_DOWN:
+			_move_window_y(event.keycode == KEY_UP)
+			get_viewport().set_input_as_handled()
 
-
+func _move_window_y(up: bool) -> void:
+	var scr := DisplayServer.window_get_current_screen()
+	var usable := DisplayServer.screen_get_usable_rect(scr)
+	var dpi := DisplayServer.screen_get_dpi(scr)
+	var step_px := int(5.0 / 2.54 * dpi)
+	var pos := DisplayServer.window_get_position()
+	var win_h := DisplayServer.window_get_size().y
+	print("before: pos=", pos, " win_h=", win_h, " step=", step_px, " max_y=", usable.end.y - win_h)
+	pos.y += -step_px if up else step_px
+	pos.y = clampi(pos.y, usable.position.y, usable.end.y - win_h)
+	DisplayServer.window_set_position(pos)
+	print("after set: pos_now=", DisplayServer.window_get_position())
+	_last_region = Rect2(-1, -1, -1, -1)
+	
 # --- 5. 模式切换逻辑 ---
 func _toggle_mode():
 	_is_sticky_mode = !_is_sticky_mode

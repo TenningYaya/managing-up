@@ -160,6 +160,10 @@ expand_mode = 1
 
 [node name="GlassWall" parent="FullGameMode/Background/Floors" unique_id=1956728320 instance=ExtResource("6_2wyq8")]
 layout_mode = 0
+offset_left = 2049.0
+offset_top = -81.0
+offset_right = 2049.0
+offset_bottom = -81.0
 
 [node name="RightCover" type="TextureRect" parent="FullGameMode/Background" unique_id=1884332700]
 layout_mode = 0
