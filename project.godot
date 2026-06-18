@@ -13,7 +13,7 @@ config_version=5
 config/name="Managing Up"
 run/main_scene="uid://dsbjb26fr5nob"
 run/disable_stdout=true
-config/features=PackedStringArray("4.7", "Forward Plus")
+config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -32,7 +32,7 @@ FloorManager="*uid://cfssx3hpb6hxe"
 [display]
 
 window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_height=1081
 window/size/borderless=true
 window/size/transparent=true
 window/subwindows/embed_subwindows=false

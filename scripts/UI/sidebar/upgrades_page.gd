@@ -2,15 +2,15 @@ extends Control
 
 # --- Node References (保持不变) ---
 @onready var cost_label = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Label
-@onready var item1_title = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/VBoxContainer/TitleLabel
+@onready var item1_title = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/VBoxContainer/HBoxContainer/TitleLabel
 @onready var item1_desc = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/VBoxContainer/DescLabel
-@onready var item2_title = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer/TitleLabel
+@onready var item2_title = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer/HBoxContainer/TitleLabel
 @onready var item2_desc = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2/VBoxContainer/DescLabel
-@onready var item3_title = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer/TitleLabel
+@onready var item3_title = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer/HBoxContainer/TitleLabel
 @onready var item3_desc = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3/VBoxContainer/DescLabel
 @onready var item2_container = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item2
 @onready var item3_container = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item3
-@onready var item1_icon = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/ICON_BG/ICON
+@onready var item1_icon = $MainLayout/ScrollContainer/MarginContainer/ItemsList/Item1/VBoxContainer/HBoxContainer/ICON_BG/ICON
 @onready var separator1 = $MainLayout/ScrollContainer/MarginContainer/ItemsList/TextureRect
 @onready var separator2 = $MainLayout/ScrollContainer/MarginContainer/ItemsList/TextureRect2
 
