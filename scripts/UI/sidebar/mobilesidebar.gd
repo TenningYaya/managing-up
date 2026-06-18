@@ -272,10 +272,11 @@ func _can_upgrade_player() -> bool:
 # 是否有任意一组已掌握的桌子可升级
 func _can_upgrade_any_desk() -> bool:
 	var raw := get_tree().get_nodes_in_group("desk_slots")
-	raw.sort_custom(func(a, b): return a.get_index() < b.get_index())
-	var unlocked: int = mini(Gamemanager.player_level, raw.size())
-	for i in range(unlocked):
-		var slot = raw[i]
+	for slot in raw:
+		# 只看已解锁的桌子组（unlock_at_level <= 当前玩家等级），
+		# 不能用场景下标判断解锁——下标顺序与 unlock_at_level 并不一致。
+		if slot.unlock_at_level > Gamemanager.player_level:
+			continue
 		var lvl: int = slot.slot_level
 		if lvl < 4 and lvl < Gamemanager.max_desk_level and Gamemanager.has_enough_kpi(_desk_cost(lvl)):
 			return true
