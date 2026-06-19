@@ -38,15 +38,18 @@ offset_bottom = 360.0
 visible = false
 z_index = 12
 layout_mode = 0
-offset_left = 55.0
-offset_top = 19.0
-offset_right = 237.0
-offset_bottom = 64.0
+offset_left = 8.0
+offset_top = 88.0
+offset_right = 292.0
+offset_bottom = 178.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("2_p5omb")
+theme_override_font_sizes/font_size = 22
 text = "Waiting area full. Extra hires are sent to the warehouse."
 horizontal_alignment = 1
-vertical_alignment = 1
+vertical_alignment = 0
 autowrap_mode = 2
 
 [node name="HintTimer" type="Timer" parent="." unique_id=1059826637]
