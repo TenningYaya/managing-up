@@ -30,11 +30,15 @@ const BUFF_TAG_SCENE = preload("res://scenes/sidebar/employee_panel/buff_tag.tsc
 
 # --- 弹窗部分 ---
 @onready var popup_window = $PanelBg/PopupWindow
+@onready var title_bar = $TitleBar
 
 # 当前正在查看的员工数据引用
 var current_employee: Employee = null
 var is_locked_by_tutorial: bool = false
 var _shake_tween: Tween = null
+
+var dragging := false
+var drag_offset := Vector2()
 
 func lock_for_tutorial():
 	is_locked_by_tutorial = true
@@ -418,8 +422,13 @@ func _add_buff_label(buff_name: String, hover_description: String) -> void:
 	buffs_container.add_child(buff_tag)
 
 func _is_pos_inside_panel(global_pos: Vector2) -> bool:
-	# 这里的 $PanelBg 是你面板的实际可见区域
-	return $PanelBg.get_global_rect().has_point(global_pos)
+	# 面板可见区域 = 主体 PanelBg + 顶部 TitleBar（TitleBar 是 PanelBg 的同级节点，
+	# 不在 PanelBg 矩形内，所以必须单独判定，否则点 titlebar 会被当成“点到面板外”而关闭）
+	if $PanelBg.get_global_rect().has_point(global_pos):
+		return true
+	if title_bar and title_bar.get_global_rect().has_point(global_pos):
+		return true
+	return false
 
 #func _is_pos_on_any_employee(global_pos: Vector2) -> bool:
 	## 遍历所有在 "employees" 组里的节点
@@ -492,3 +501,18 @@ func _play_speedup_vfx() -> void:
 	_shake_tween.tween_callback(func():
 		if fire_vfx: fire_vfx.hide()
 	)
+
+
+func _on_title_bar_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			dragging = event.pressed
+			drag_offset = get_global_mouse_position() - global_position
+
+	if event is InputEventMouseMotion and dragging:
+		var target: Vector2 = get_global_mouse_position() - drag_offset
+		var vp := get_viewport_rect().size
+		# 限制在游戏窗口内：拖到边缘就停，不能跑出窗口外变半透明
+		target.x = clampf(target.x, 0.0, maxf(0.0, vp.x - size.x))
+		target.y = clampf(target.y, 0.0, maxf(0.0, vp.y - size.y))
+		global_position = target

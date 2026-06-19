@@ -177,7 +177,12 @@ func _on_title_bar_gui_input(event: InputEvent):
 			drag_offset = get_global_mouse_position() - global_position
 			
 	if event is InputEventMouseMotion and dragging:
-		global_position = get_global_mouse_position() - drag_offset
+		var target: Vector2 = get_global_mouse_position() - drag_offset
+		var vp := get_viewport_rect().size
+		# 限制在游戏窗口内：拖到边缘就停，不能跑出窗口外变半透明
+		target.x = clampf(target.x, 0.0, maxf(0.0, vp.x - size.x))
+		target.y = clampf(target.y, 0.0, maxf(0.0, vp.y - size.y))
+		global_position = target
 
 
 func _on_close_panel_pressed() -> void:

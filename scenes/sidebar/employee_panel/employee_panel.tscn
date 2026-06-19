@@ -37,6 +37,8 @@ region = Rect2(399, 2773, 176, 20)
 atlas = ExtResource("13_fnfi6")
 region = Rect2(1488, 48, 336, 256)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cr4tb"]
+
 [node name="EmployeePanel" type="Control" unique_id=1048843880]
 z_index = 100
 layout_mode = 3
@@ -342,3 +344,23 @@ text = "Dispatch: make idle co-worker active"
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Recall: make active co-worker idle"
+
+[node name="ClosePanel" type="Button" parent="." unique_id=1043703153]
+visible = false
+layout_mode = 0
+offset_left = 273.0
+offset_top = -1.0
+offset_right = 316.0
+offset_bottom = 26.0
+flat = true
+
+[node name="TitleBar" type="Panel" parent="." unique_id=1839338334]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -2.0
+offset_bottom = 35.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_cr4tb")
+
+[connection signal="gui_input" from="TitleBar" to="." method="_on_title_bar_gui_input"]
