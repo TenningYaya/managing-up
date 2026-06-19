@@ -22,11 +22,13 @@ func _on_item_selected(index: int) -> void:
 
 func _save_settings(locale: String) -> void:
 	var config := ConfigFile.new()
+	config.load("user://settings.cfg")  # 先读，避免覆盖掉 window/always_on_top 等其它设置
 	config.set_value("settings", "locale", locale)
 	config.save("user://settings.cfg")
 
 func _load_settings() -> void:
 	var config := ConfigFile.new()
 	if config.load("user://settings.cfg") == OK:
-		var locale: String = config.get_value("settings", "locale", "zh")
+		# 默认值用“当前 locale”而不是写死 "zh"，避免在没有 locale 记录时把语言强制掰回中文
+		var locale: String = config.get_value("settings", "locale", TranslationServer.get_locale())
 		TranslationServer.set_locale(locale)
