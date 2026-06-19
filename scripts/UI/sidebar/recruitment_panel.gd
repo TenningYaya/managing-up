@@ -1,6 +1,9 @@
 # recruitment_panel.gd
 extends Control
 
+# KPI 不足红字用的字体（LabelSettings 会覆盖主题字体，需在此补回像素 CJK 字体）
+const HIRE_TIP_FONT := preload("res://assets/fonts/stacked_pixel_cjk.tres")
+
 # ================= UI 节点获取 =================
 @onready var normal_viewer = $VBoxContainer/NormalPanel/MarginContainer/NormalViewer
 @onready var normal_no_resume = $VBoxContainer/NormalPanel/MarginContainer/NoResumePanel
@@ -199,28 +202,36 @@ func show_floating_tip(text_key: String) -> void:
 	# 1. 设置文字
 	hire_tip_label.text = tr(text_key)
 	
-	# 🌟【关键修改】：根据语言动态设置字号
+	# 🌟【关键修改】：根据语言动态设置字号；同时加大字号 + 黑色描边，让红字更显眼
 	# 只需要给 Label 的 LabelSettings 赋值，Godot 会自动处理更新
 	var settings = LabelSettings.new()
-	settings.font_color = Color.RED
+	settings.font = HIRE_TIP_FONT                  # 补回像素 CJK 字体（LabelSettings 会覆盖主题字体）
+	settings.font_color = Color(1, 0.16, 0.16)     # 更亮更纯的红
+	settings.outline_color = Color(0, 0, 0, 0.85)  # 黑描边，任何背景都看得清
+	settings.outline_size = 6
 	if TranslationServer.get_locale().begins_with("zh"):
-		settings.font_size = 14  # 中文设小一点
+		settings.font_size = 26  # 中文
 	else:
-		settings.font_size = 16  # 英文保持默认大小
-	
+		settings.font_size = 22  # 英文（更长，略小并配合自动换行）
+
 	hire_tip_label.label_settings = settings
-	
+
 	# 2. 强行提到最前面，并恢复完全不透明
 	hire_tip_label.show()
-	hire_tip_label.z_index = 100 
+	hire_tip_label.z_index = 100
 	hire_tip_label.modulate.a = 1.0 # 🌟 确保每次点都先恢复 100% 可见
-	
+
+	# 弹出缩放，进一步抓眼球
+	hire_tip_label.pivot_offset = hire_tip_label.size / 2.0
+	hire_tip_label.scale = Vector2(1.25, 1.25)
+
 	# 3. 创建新的专属动画，并把它存到变量里
 	_tip_tween = create_tween()
-	
-	# 4. 动画序列：停留 1 秒 -> 0.5 秒渐隐 -> 隐藏节点
-	_tip_tween.tween_interval(1.0)       
-	_tip_tween.tween_property(hire_tip_label, "modulate:a", 0.0, 0.5) 
+
+	# 4. 动画序列：弹出回弹 -> 停留 1 秒 -> 0.5 秒渐隐 -> 隐藏节点
+	_tip_tween.tween_property(hire_tip_label, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_tip_tween.tween_interval(1.0)
+	_tip_tween.tween_property(hire_tip_label, "modulate:a", 0.0, 0.5)
 	_tip_tween.tween_callback(func(): hire_tip_label.hide())
 	
 # 在指定倒计时正上方飘出 "-Xs" 加速反馈（点 HR 按钮触发）。

@@ -4,11 +4,11 @@
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_p5omb"]
 
 [node name="EmployeeDropArea" type="Control" unique_id=1860369934]
-custom_minimum_size = Vector2(300, 360)
+custom_minimum_size = Vector2(300, 330)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 300.0
-offset_bottom = 360.0
+offset_bottom = 330.0
 script = ExtResource("1_mvy5v")
 
 [node name="Skylight" type="Marker2D" parent="." unique_id=1484661661]
@@ -22,9 +22,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -113.0
-offset_top = -253.0
+offset_top = -200.0
 offset_right = 106.0
-offset_bottom = -16.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 color = Color(0, 0, 0, 0)

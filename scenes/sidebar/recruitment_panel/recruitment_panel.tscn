@@ -328,10 +328,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -185.5
-offset_top = 2.0
-offset_right = 186.5
-offset_bottom = 25.0
+offset_left = -220.0
+offset_top = 150.0
+offset_right = 220.0
+offset_bottom = 215.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.8829201, 3.6820024e-06, 8.663535e-07, 1)
 theme_override_fonts/font = ExtResource("3_rtmed")
@@ -339,6 +339,7 @@ theme_override_font_sizes/font_size = 20
 text = "INGAME_TIP_NOT_ENOUGH_HIRE_COUNT"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="OpenRecruit" type="AudioStreamPlayer" parent="." unique_id=715908278]
 stream = ExtResource("12_a1di4")
