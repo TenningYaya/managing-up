@@ -67,6 +67,12 @@ func _apply_translations() -> void:
 	$\"ScrollContainer/VBoxContainer/Save & Quit/Label\".text = tr(\"Sidebar_settings_save_quit\")
 	$\"ScrollContainer/VBoxContainer/Delete Save/Label\".text = tr(\"Sidebar_settings_delete_save\")
 
+# 语言切换时 TranslationServer 会给所有节点发 NOTIFICATION_TRANSLATION_CHANGED。
+# 用 tr() 在 _ready 里写死的文本不会自动刷新，收到通知后重跑一遍翻译即可。
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED:
+		_apply_translations()
+
 func _init_volume_sliders() -> void:
 	_music_slider.min_value = 0
 	_music_slider.max_value = 100

@@ -84,6 +84,13 @@ func _ready() -> void:
 	
 	set_process_input(true)
 
+# 语言切换时重刷三条属性 tooltip（tr 写死的不会自动刷新）
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		efficiency_bar.tooltip_text = tr("TOOLTIP_EMP_EFFICIENCY")
+		quality_bar.tooltip_text = tr("TOOLTIP_EMP_QUALITY")
+		experience_bar.tooltip_text = tr("TOOLTIP_EMP_EXPERIENCE")
+
 func _input(event: InputEvent) -> void:
 	if is_locked_by_tutorial:
 		return

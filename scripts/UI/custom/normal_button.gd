@@ -29,6 +29,11 @@ func _ready() -> void:
 	button_up.connect(_on_btn_up)
 	mouse_exited.connect(_on_btn_up) # 防止鼠标按住移出按钮时卡在按下状态
 
+# 语言切换时重新翻译按钮文字（tr 写死的不会自动刷新）
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and has_node("Label"):
+		$Label.text = tr(button_text)
+
 func _on_btn_down() -> void:
 	if not disabled and bg_pressed:
 		bg_rect.texture = bg_pressed

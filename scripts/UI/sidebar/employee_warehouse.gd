@@ -91,6 +91,16 @@ func _on_visibility_changed() -> void:
 		warehouse_sfx.play()
 
 
+# 语言切换时重建排序下拉的选项文字（OptionButton 的 item 文字是 tr 写死的，不会自动刷新）
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		var sel := sort_menu.selected
+		sort_menu.clear()
+		for opt in sort_options:
+			sort_menu.add_item(tr(opt.key), opt.id)
+		sort_menu.select(maxi(sel, 0))
+
+
 func _on_map_needs_refresh(_data = null):
 	# 给 0.1 秒等节点树删干净，然后全体起立！
 	get_tree().create_timer(0.1).timeout.connect(refresh_all_card_icons)

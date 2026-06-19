@@ -11,6 +11,11 @@ extends Control
 func _ready():
 	title_label.text = tr("Sidebar_general_title")
 
+# 语言切换时重刷标题（统计项在 _process 里每帧用 tr() 重设，可见时会自动跟随）
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		title_label.text = tr("Sidebar_general_title")
+
 func _process(_delta):
 	# 如果面板不可见，就不要在后台空跑计算，节省性能
 	if not visible:
