@@ -12,6 +12,7 @@ extends Control
 @onready var countdown_label = $VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting/HeadCountdown
 @onready var headhunt_locked = $VBoxContainer/HeadhuntPanel/MarginContainer/HeadhuntLocked
 @onready var hire_tip_label: Label = $NotEnoughKPI
+@onready var open_recruit_sfx = $OpenRecruit  # 打开招聘面板时的音效（节点名必须为 OpenRecruit）
 
 var last_normal_count: int = -1
 var last_headhunt_state: int = -1
@@ -25,7 +26,10 @@ func _ready():
 	#RecruitmentManager.normal_pool.clear()
 	#RecruitmentManager.headhunt_pool.clear()
 	#RecruitmentManager.new_resumes_arrived.emit()
-	
+
+	# 招聘面板变可见时播放音效，无论从哪条入口打开都会响
+	visibility_changed.connect(_on_visibility_changed)
+
 	# 1. 绑定【录用】信号
 	normal_viewer.on_hire_attempted.connect(_hire_from_pool.bind(RecruitmentManager.normal_pool, normal_viewer))
 	headhunt_viewer.on_hire_attempted.connect(_hire_from_pool.bind(RecruitmentManager.headhunt_pool, headhunt_viewer))
@@ -57,6 +61,11 @@ func _ready():
 	# 初始刷一遍 UI
 	_on_new_resumes_arrived()
 	_update_headhunt_ui()
+
+func _on_visibility_changed() -> void:
+	# 只在“变为可见”时响一次；hide() 时 visible=false，不播放
+	if visible and open_recruit_sfx:
+		open_recruit_sfx.play()
 
 # ================= 倒计时专属 (唯一需要 _process 的地方) =================
 func _process(_delta):

@@ -41,4 +41,5 @@ text = "Hello"
 
 [node name="Urge" type="AudioStreamPlayer" parent="." unique_id=1887328390]
 stream = ExtResource("3_hv7wv")
+volume_db = -20.0
 bus = &"SFX"

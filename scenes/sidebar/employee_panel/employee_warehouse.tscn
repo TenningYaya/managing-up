@@ -9,6 +9,7 @@
 [ext_resource type="StyleBox" uid="uid://dixbf21ulxawg" path="res://data/UI/indigo_stylebox_flat.tres" id="5_flfux"]
 [ext_resource type="StyleBox" uid="uid://c2rs0260hq3if" path="res://data/UI/indigo_stylebox_focus.tres" id="6_jfh5p"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="7_8bl1x"]
+[ext_resource type="AudioStream" uid="uid://cngfx72cw1nc" path="res://audio/main_scene_button/warehouse1.mp3" id="10_flfux"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0rffj"]
 atlas = ExtResource("3_g51u0")
@@ -91,8 +92,8 @@ theme = SubResource("Theme_b6rgt")
 theme_override_font_sizes/font_size = 20
 
 [node name="Select" parent="VBoxContainer" unique_id=2048579194 instance=ExtResource("3_wfpq7")]
-clip_contents = true
 custom_minimum_size = Vector2(130, 0)
+clip_contents = true
 layout_mode = 2
 button_text = "WAREHOUSE_SELECT"
 
@@ -177,6 +178,11 @@ offset_left = 394.0
 offset_right = 423.0
 offset_bottom = 24.0
 flat = true
+
+[node name="Warehouse" type="AudioStreamPlayer" parent="." unique_id=1883333775]
+stream = ExtResource("10_flfux")
+volume_db = 3.0
+bus = &"SFX"
 
 [connection signal="gui_input" from="TitleBar" to="." method="_on_title_bar_gui_input"]
 [connection signal="pressed" from="ClosePanel" to="." method="_on_close_panel_pressed"]

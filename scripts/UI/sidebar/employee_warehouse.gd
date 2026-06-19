@@ -14,6 +14,8 @@ extends Control
 @onready var bulk_fire_popup = $BulkFirePopup
 @onready var bulk_select_all_btn = $BottomOperationBar/SelectAll
 
+@onready var warehouse_sfx = $Warehouse
+
 var is_selection_mode: bool = false
 var selected_employees: Array[Employee] = []
 
@@ -31,6 +33,10 @@ func _ready() -> void:
 	# 这一行必须有，且 EmployeeManager 必须是 Autoload 的单例名
 	EmployeeManager.employee_added.connect(_on_employee_hired)
 	EmployeeManager.employee_removed.connect(_on_employee_fired)
+
+	# 仓库被打开（变可见）时播放音效。挂在 visibility_changed 上而不是某个 open 函数里，
+	# 这样无论从哪条入口打开（open_warehouse / currency_ui / recruitment_panel 直接 show）都会响。
+	visibility_changed.connect(_on_visibility_changed)
 	
 	# 1. 初始化下拉菜单选项
 	sort_menu.clear()
@@ -79,6 +85,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			hide()
 			# 如果你有侧边栏状态，记得这里也要同步重置（可选）
 			
+func _on_visibility_changed() -> void:
+	# 只在“变为可见”时响一次；hide() 时 visible=false，不播放
+	if visible and warehouse_sfx:
+		warehouse_sfx.play()
+
+
 func _on_map_needs_refresh(_data = null):
 	# 给 0.1 秒等节点树删干净，然后全体起立！
 	get_tree().create_timer(0.1).timeout.connect(refresh_all_card_icons)
@@ -149,7 +161,7 @@ func add_employee_to_warehouse(new_employee_data: Employee):
 # 刚才在 recruitment_panel 里留空的按钮方法
 func open_warehouse():
 	refresh_display() # 打开时根据当前选择的排序刷新一次
-	show()
+	show()  # 变可见会自动触发 _on_visibility_changed 播放音效
 
 func refresh_display():
 	# 1. 【彻底清理】：不仅是排队销毁，而是立刻从网格中移除

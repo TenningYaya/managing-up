@@ -87,7 +87,14 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if is_locked_by_tutorial:
 		return
-		
+
+	# 确认弹窗开着时，绝不做“点外面关闭”判定。
+	# 弹窗按钮在 PanelBg 矩形之外（见场景里 PopupWindow 的 offset_left=-827），
+	# 否则点确认会被当成“点到面板外”，在 confirmed 信号触发前就 close_panel() 把
+	# current_employee 清空，导致 execute_fire_employee 跳过移除逻辑、开除失效。
+	if popup_window and popup_window.visible:
+		return
+
 	# 只在鼠标左键【按下】的瞬间做拦截判定
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if not visible: 
@@ -301,7 +308,15 @@ func _on_dispatch_pressed() -> void:
 # 6. 优化(开除)弹窗逻辑
 # ==========================================
 func _on_fire_pressed() -> void:
-# 在显示弹窗前，动态设置一下文本（利用你写的 set 属性）
+	# 把整个员工面板提到同级最后 = 输入命中最优先。
+	# ⚠️ Godot 里 z_index 只改绘制顺序、不改输入命中顺序（输入按场景树同级顺序判定，
+	#    越靠后越先接收点击）。弹窗虽然靠 z_index 画在最上层，但点击会被排在后面的
+	#    RecruitmentPanel 抢走，导致点确认其实点到了背后的招聘面板、开除不执行。
+	var p := get_parent()
+	if p:
+		p.move_child(self, p.get_child_count() - 1)
+
+	# 在显示弹窗前，动态设置一下文本（利用你写的 set 属性）
 	popup_window.title_text = "Are you sure to fire " + current_employee.employee_name + " ？"
 	popup_window.confirm_label = "Sure"
 	popup_window.cancel_label = "Wait"

@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://16a3v6fvnsw0" path="res://assets/background/Gemini_Generated_Image_q23dcvq23dcvq23d.png" id="6_yahbh"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="7_yahbh"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="11_x4w7u"]
+[ext_resource type="AudioStream" uid="uid://clqpok0rg2ut3" path="res://audio/main_scene_button/open_recruit1.mp3" id="12_a1di4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rtmed"]
 atlas = ExtResource("2_uc70r")
@@ -338,6 +339,10 @@ theme_override_font_sizes/font_size = 20
 text = "INGAME_TIP_NOT_ENOUGH_HIRE_COUNT"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="OpenRecruit" type="AudioStreamPlayer" parent="." unique_id=715908278]
+stream = ExtResource("12_a1di4")
+bus = &"SFX"
 
 [connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BoxIdle/BoxIdle/BtnHire1" to="." method="_on_hire_1_pressed"]
 [connection signal="pressed" from="VBoxContainer/HeadhuntPanel/MarginContainer/BoxIdle/BoxIdle/BoxIdle/BtnHire10" to="." method="_on_hire_10_pressed"]
