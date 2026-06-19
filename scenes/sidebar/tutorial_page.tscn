@@ -44,7 +44,7 @@ horizontal_scroll_mode = 0
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=1982105119]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 4
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=183048977]
 auto_translate_mode = 1
@@ -52,20 +52,27 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_0"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Label2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=402947239]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_1"
+autowrap_mode = 2
 
 [node name="Label3" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=439651840]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_2"
+autowrap_mode = 2
 
 [node name="Recruitment" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1582098235]
 auto_translate_mode = 1
@@ -73,162 +80,162 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_A_TITLE"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Recruitment2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1132385072]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_A_DESC"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Employee Rarity" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=291339549]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_B_TITLE"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Employee Rarity2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1447198598]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_B_DESC"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Project Assignments" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=148088695]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_C_TITLE"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Project Assignments2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=460165213]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_C_DESC"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Employee Panel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=972860061]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_D_TITLE"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Employee Panel2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=818424192]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_D_DESC"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Stopping the Slacking" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=982672894]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_E_TITLE"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Stopping the Slacking2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1098929396]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_E_DESC"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="warehouse" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=2032361863]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_F_TITLE"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="warehouse2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=972653119]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_F_DESC"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Level Up" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1313639471]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_G_TITLE"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Level Up2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=989326270]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_G_DESC"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Office Upgrade" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=776125585]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_H_TITLE"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Office Upgrade2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1056027679]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_H_DESC"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Currency" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=298158768]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_I_TITLE"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="Currency2" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1064021660]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_tehtr")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 text = "TUTORIAL_PAGE_I_DESC"
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="tutorial" type="Label" parent="." unique_id=2091357471]
 layout_mode = 0

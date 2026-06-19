@@ -40,14 +40,15 @@ Sidebar_settings_title,设置,SETTINGS
 Sidebar_settings_BGM_volume,音乐音量,Music
 Sidebar_settings_SFX_volume,音效音量,SFX
 Sidebar_settings_always_on_top,始终置顶,Always on Top
-Sidebar_settings_delete_save,删除存档,Delete Save
-Sidebar_settings_save_quit,保存并退出,Save and Quit
+Sidebar_settings_delete_save,删除存档,Delete
+Sidebar_settings_save_quit,保存并退出,Quit
 Sidebar_settings_window_size,窗口大小,Window Size
 Sidebar_tutorial_title,教程,TUTORIAL
 Sidebar_personal_title,个性化,PERSONALIZE
 Sidebar_personal_quote_title,常用语,Templates
 Sidebar_personal_edit_quote,编辑同事寄语...,Edit quote...
 Sidebar_personal_add_quote,添加,Add
+Sidebar_UPGRADE_TITLE,升级,UPGRADES
 Sidebar_UPGRADE_LV1_ITEM1_TITLE,+ 工位 × 1 排,+ DESK ROW × 1
 Sidebar_UPGRADE_LV1_ITEM1_DESC,工位扩展至 2 排，最高等级提升至 2。,Expand desk slots to 2 rows. Max level increased to 2.
 Sidebar_UPGRADE_LV1_ITEM2_TITLE,+ 办公室 × 1,+ OFFICE × 1

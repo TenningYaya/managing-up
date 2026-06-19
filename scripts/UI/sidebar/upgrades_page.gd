@@ -16,6 +16,12 @@ extends Control
 
 @export var lv5_icon: Texture2D
 
+# 在 Inspector 里统一给三个 TitleLabel 调色（默认值=当前场景里的绿色，加上后外观不变）
+@export var title_color: Color = Color(0, 0.73333335, 0.1254902, 1):
+	set(value):
+		title_color = value
+		_apply_title_color()
+
 var _default_item1_icon: Texture2D
 @onready var upgrade_button = $UpgradeButton
 @onready var upgrade_btn_label = $UpgradeButton/Label
@@ -61,6 +67,12 @@ func _ready():
 	# 也可以监听 GameManager 里的 kpi_changed 来实时刷新按钮状态
 	Gamemanager.kpi_changed.connect(func(_new_kpi): update_ui())
 	update_ui()
+	_apply_title_color()
+
+# 语言切换时重跑 update_ui()，把标题/描述/花费文案按当前语言重设一遍
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		update_ui()
 
 func update_ui():
 	var current_level = Gamemanager.player_level # 直接从 Gamemanager 获取
@@ -114,6 +126,13 @@ func update_ui():
 func _set_upgrade_enabled(enabled: bool) -> void:
 	upgrade_button.disabled = not enabled
 	upgrade_button.modulate = Color.WHITE if enabled else UPGRADE_DISABLED_DIM
+
+# 把 title_color 统一刷到三个 TitleLabel 上。
+# 用 add_theme_color_override 覆盖各自在场景里写死的字色；节点还没就绪时（导出值在 _ready 前赋值）安全跳过。
+func _apply_title_color() -> void:
+	for lbl in [item1_title, item2_title, item3_title]:
+		if is_instance_valid(lbl):
+			lbl.add_theme_color_override("font_color", title_color)
 
 # 安全格式化：
 # 1) 翻译缺失时 tr() 会原样返回 key（不含 %s/%d）；
