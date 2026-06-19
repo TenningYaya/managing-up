@@ -583,7 +583,7 @@ func get_final_efficiency() -> int:
 	total += OfficeManager.culture_efficiency
 	# 来源 3：零食补正
 	if current_snack_buff == SnackBuff.MILK_TEA:
-		total += 3
+		total += 2
 	# 来源 4：会议室补正
 	total += meet_buff_eff
 	
@@ -623,8 +623,8 @@ func _try_get_snack_buff() -> void:
 	# if is_slacking: return # 假设你有这个摸鱼变量
 	if not OfficeManager.can_dispense_snack(): return
 	
-	# 零食概率
-	#if randf() > 0.99: return 
+	# 零食概率：80% 触发，20% 跳过（randf() ∈ [0,1)，>0.8 的概率正好是 0.2）
+	if randf() > 0.8: return
 	
 	# 成功获取！占领一个名额
 	OfficeManager.active_snack_buffs += 1
