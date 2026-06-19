@@ -22,7 +22,7 @@ func _ready():
 
 func show_full_hint():
 	hint_label.show()
-	hint_timer.start(1.0)
+	hint_timer.start(2.0)
 
 func _on_hint_timer_timeout():
 	hint_label.hide()
