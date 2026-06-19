@@ -5,11 +5,11 @@
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_uc70r"]
 [ext_resource type="Texture2D" uid="uid://bthelqthib3yt" path="res://assets/UI/Back.png" id="3_q23uo"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_rtmed"]
-[ext_resource type="Texture2D" uid="uid://djvxnh68fk6ub" path="res://assets/background/Gemini_Generated_Image_n5w3tmn5w3tmn5w3.png" id="6_ha1ar"]
 [ext_resource type="Texture2D" uid="uid://px3cj3eqq75y" path="res://assets/background/e8a8d7e5-a42b-48a7-b636-835168402b12.jpg" id="6_pyp0o"]
 [ext_resource type="PackedScene" uid="uid://bx0a13254p4rr" path="res://scenes/UI/custom/Urge_HR_button.tscn" id="6_x4w7u"]
 [ext_resource type="Texture2D" uid="uid://16a3v6fvnsw0" path="res://assets/background/Gemini_Generated_Image_q23dcvq23dcvq23d.png" id="6_yahbh"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="7_yahbh"]
+[ext_resource type="Texture2D" uid="uid://cp7pp5mo67cqp" path="res://assets/UI/Milky Way.png" id="10_a1di4"]
 [ext_resource type="FontFile" uid="uid://dqumspojfdh1c" path="res://assets/fonts/Stacked pixel.ttf" id="11_x4w7u"]
 [ext_resource type="AudioStream" uid="uid://clqpok0rg2ut3" path="res://audio/main_scene_button/open_recruit1.mp3" id="12_a1di4"]
 
@@ -237,7 +237,6 @@ vertical_alignment = 1
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=1305613315]
-visible = false
 custom_minimum_size = Vector2(280, 280)
 layout_mode = 1
 anchors_preset = 15
@@ -247,8 +246,9 @@ offset_top = -4.0
 offset_right = -9.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("6_ha1ar")
+texture = ExtResource("10_a1di4")
 expand_mode = 1
+stretch_mode = 5
 
 [node name="HHrecruiting" type="Label" parent="VBoxContainer/HeadhuntPanel/MarginContainer/BoxRecruiting" unique_id=414835597]
 custom_minimum_size = Vector2(225, 0)
