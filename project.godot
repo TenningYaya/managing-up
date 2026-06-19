@@ -16,7 +16,6 @@ run/disable_stdout=true
 config/features=PackedStringArray("4.6", "Forward Plus")
 run/flush_stdout_on_print=true
 config/icon="res://icon.svg"
-<<<<<<<Updatedupstreamrun/disable_stdout=true
 
 [autoload]
 

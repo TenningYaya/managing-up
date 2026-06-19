@@ -4,6 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://db34pir2hfarw" path="res://assets/UI/culture_panel/culture_eff.png" id="2_81qjf"]
 [ext_resource type="Texture2D" uid="uid://bwggrrfduonri" path="res://assets/UI/culture_panel/culture_qual.png" id="3_oea1h"]
 [ext_resource type="Texture2D" uid="uid://ch61hp0ntfwdh" path="res://assets/UI/culture_panel/culture_exp.png" id="4_yswu2"]
+[ext_resource type="Texture2D" uid="uid://25q0ijx3owye" path="res://assets/UI/culture_panel/culture_eff_Chinese.png" id="5_effzh"]
+[ext_resource type="Texture2D" uid="uid://chc6hn4alsvq8" path="res://assets/UI/culture_panel/culture_qual_Chinese.png" id="6_qualzh"]
+[ext_resource type="Texture2D" uid="uid://poqfwvdoogoj" path="res://assets/UI/culture_panel/culture_exp_Chinese.png" id="7_expzh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oea1h"]
 atlas = ExtResource("2_81qjf")
@@ -16,6 +19,18 @@ region = Rect2(87, 118, 1779, 547)
 [sub_resource type="AtlasTexture" id="AtlasTexture_oc1ty"]
 atlas = ExtResource("4_yswu2")
 region = Rect2(30, 145, 1890, 518)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_effzh"]
+atlas = ExtResource("5_effzh")
+region = Rect2(53, 108, 1493, 452)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qualzh"]
+atlas = ExtResource("6_qualzh")
+region = Rect2(66, 93, 1469, 454)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_expzh"]
+atlas = ExtResource("7_expzh")
+region = Rect2(25, 115, 1546, 445)
 
 [node name="CulturePanel" type="Control" unique_id=1580029639]
 layout_mode = 3
@@ -46,13 +61,16 @@ theme_override_constants/separation = 14
 layout_mode = 2
 culture_type = 1
 normal_icon = SubResource("AtlasTexture_oea1h")
+chinese_icon = SubResource("AtlasTexture_effzh")
 
 [node name="Qual" parent="MarginContainer/VBoxContainer" unique_id=1121197770 instance=ExtResource("1_42fho")]
 layout_mode = 2
 culture_type = 2
 normal_icon = SubResource("AtlasTexture_yswu2")
+chinese_icon = SubResource("AtlasTexture_qualzh")
 
 [node name="Exp" parent="MarginContainer/VBoxContainer" unique_id=1653694938 instance=ExtResource("1_42fho")]
 layout_mode = 2
 culture_type = 3
 normal_icon = SubResource("AtlasTexture_oc1ty")
+chinese_icon = SubResource("AtlasTexture_expzh")
