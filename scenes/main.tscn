@@ -190,6 +190,7 @@ mouse_filter = 2
 [node name="OfficeRow1" type="VBoxContainer" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=1474231141]
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="NewRoom1" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow1" unique_id=1395701316 instance=ExtResource("1_0wfyh")]
@@ -203,6 +204,7 @@ unlock_at_level = 4
 [node name="OfficeRow2" type="VBoxContainer" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=909741960]
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="NewRoom3" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=1041642994 groups=["office_1", "tutorial_office"] instance=ExtResource("1_0wfyh")]

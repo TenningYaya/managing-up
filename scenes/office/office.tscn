@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="8_2u0tt"]
 [ext_resource type="Texture2D" uid="uid://45w50bbhsdcy" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/0.png" id="11_41xxe"]
 [ext_resource type="PackedScene" uid="uid://cyeom2d65rx2y" path="res://scenes/vfx/blingbling.tscn" id="12_e1yc2"]
+[ext_resource type="Texture2D" uid="uid://cvaeui5fxlfqo" path="res://assets/background/around_office_1.png" id="13_y3s53"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_88o6m"]
 texture = ExtResource("1_88o6m")
@@ -170,3 +171,11 @@ frame_progress = 0.99278116
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="around_wall" type="TextureRect" parent="." unique_id=339709340]
+layout_mode = 0
+offset_left = 11.0
+offset_top = -6.0
+offset_right = 284.0
+offset_bottom = 154.0
+texture = ExtResource("13_y3s53")
