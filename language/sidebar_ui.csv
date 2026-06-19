@@ -16,7 +16,7 @@ Sidebar_settings_BGM_volume,音乐音量,Music Volume
 Sidebar_settings_SFX_volume,音效音量,Sound Effects Volume
 Sidebar_settings_always_on_top,始终置顶,Always on Top
 Sidebar_settings_delete_save,删除存档,Delete Save
-Sidebar_settings_save_quit,保存并退出,Save and Quit
+Sidebar_settings_save_quit,退出,Save and Quit
 Sidebar_tutorial_title,教程,TUTORIAL
 Sidebar_personal_title,个性化,PERSONALIZE
 Sidebar_personal_quote_title,口头禅,Templates
@@ -37,8 +37,8 @@ Siderbar_general_R_employee,R员工,R Employee
 Siderbar_general_SR_employee,SR员工,SR Employee
 Siderbar_general_SSR_employee,SSR员工,SSR Employee
 Sidebar_settings_title,设置,SETTINGS
-Sidebar_settings_BGM_volume,音乐音量,Music Volume
-Sidebar_settings_SFX_volume,音效音量,Sound Effects Volume
+Sidebar_settings_BGM_volume,音乐音量,Music
+Sidebar_settings_SFX_volume,音效音量,SFX
 Sidebar_settings_always_on_top,始终置顶,Always on Top
 Sidebar_settings_delete_save,删除存档,Delete Save
 Sidebar_settings_save_quit,保存并退出,Save and Quit

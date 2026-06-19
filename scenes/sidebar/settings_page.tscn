@@ -15,8 +15,8 @@ var sfx_bus_index = AudioServer.get_bus_index(\"SFX\")
 const CONFIRM_DIALOG = preload(\"res://scenes/sidebar/confirm_dialog.tscn\")
 const WINDOW_SIZE_FRACTIONS := [0.5, 0.75, 0.90, 0.99]
 
-@onready var _music_slider: HSlider = $\"ScrollContainer/VBoxContainer/Master Volume/HSlider\"
-@onready var _sfx_slider: HSlider = $\"ScrollContainer/VBoxContainer/Sound Effects Volume/HSlider\"
+@onready var _music_slider: HSlider = $\"ScrollContainer/VBoxContainer/Music/HSlider\"
+@onready var _sfx_slider: HSlider = $\"ScrollContainer/VBoxContainer/SFX/HSlider\"
 var _settings_opened := false
 var _base_aspect: float = 16.0 / 9.0
 
@@ -61,12 +61,12 @@ func _ready() -> void:
 
 func _apply_translations() -> void:
 	$settings.text = tr(\"Sidebar_settings_title\")
-	$\"ScrollContainer/VBoxContainer/Master Volume\".text = \"     \" + tr(\"Sidebar_settings_BGM_volume\")
-	$\"ScrollContainer/VBoxContainer/Sound Effects Volume\".text = \"     \" + tr(\"Sidebar_settings_SFX_volume\")
-	$\"ScrollContainer/VBoxContainer/Always on Top/Label\".text = \"     \" + tr(\"Sidebar_settings_always_on_top\")
-	$\"ScrollContainer/VBoxContainer/Save & Quit/Label\".text = tr(\"Sidebar_settings_save_quit\")
-	$\"ScrollContainer/VBoxContainer/Delete Save/Label\".text = tr(\"Sidebar_settings_delete_save\")
-
+	$\"ScrollContainer/VBoxContainer/Music/Master Volume\".text = tr(\"Sidebar_settings_BGM_volume\")
+	$\"ScrollContainer/VBoxContainer/SFX/Sound Effects Volume\".text = tr(\"Sidebar_settings_SFX_volume\")
+	$\"ScrollContainer/VBoxContainer/Always on Top/Label\".text = tr(\"Sidebar_settings_always_on_top\")
+	$\"ScrollContainer/VBoxContainer/Save/Save & Quit/Label\".text = tr(\"Sidebar_settings_save_quit\")
+	$\"ScrollContainer/VBoxContainer/Save/Delete Save/Label\".text = tr(\"Sidebar_settings_delete_save\")
+	$\"ScrollContainer/VBoxContainer/WindowSizeRow/Label\".text = tr(\"Sidebar_settings_window_size\")
 # 语言切换时 TranslationServer 会给所有节点发 NOTIFICATION_TRANSLATION_CHANGED。
 # 用 tr() 在 _ready 里写死的文本不会自动刷新，收到通知后重跑一遍翻译即可。
 func _notification(what: int) -> void:
@@ -141,8 +141,8 @@ func _on_always_on_top_toggled(toggled_on: bool) -> void:
 custom_minimum_size = Vector2(214, 277)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 249.0
+offset_bottom = 334.0
 script = SubResource("GDScript_nb64h")
 
 [node name="ColorRect" type="TextureRect" parent="." unique_id=1941575357]
@@ -177,11 +177,18 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=400787794]
-layout_mode = 0
-offset_left = 13.0
-offset_top = 80.0
-offset_right = 233.0
-offset_bottom = 328.0
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -107.0
+offset_top = -248.0
+offset_right = 107.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
 horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=1612199418]
@@ -189,45 +196,36 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
-[node name="Master Volume" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1343181224]
-custom_minimum_size = Vector2(0, 52)
+[node name="Music" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=954930844]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Master Volume" type="Label" parent="ScrollContainer/VBoxContainer/Music" unique_id=1343181224]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_wtuay")
 theme_override_font_sizes/font_size = 20
-text = "     Music Volume"
+text = "Music"
 
-[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/Master Volume" unique_id=134444878]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 26.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Sound Effects Volume" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1658383066]
-custom_minimum_size = Vector2(0, 52)
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/Music" unique_id=134444878]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="SFX" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=2044791405]
+layout_mode = 2
+
+[node name="Sound Effects Volume" type="Label" parent="ScrollContainer/VBoxContainer/SFX" unique_id=1658383066]
+layout_mode = 2
+size_flags_horizontal = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_wtuay")
 theme_override_font_sizes/font_size = 20
-text = "     Sound Effects Volume"
+text = "SFX"
 
-[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/Sound Effects Volume" unique_id=863553752]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 26.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/SFX" unique_id=863553752]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
 
 [node name="Always on Top" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=185401597]
 custom_minimum_size = Vector2(0, 28)
@@ -236,13 +234,18 @@ layout_mode = 2
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Always on Top" unique_id=1259048178]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 1
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_wtuay")
 theme_override_font_sizes/font_size = 20
-text = "     Always on Top  "
+text = "Always on Top  "
+vertical_alignment = 1
 
 [node name="CheckBox" type="CheckBox" parent="ScrollContainer/VBoxContainer/Always on Top" unique_id=1503150479]
+layout_direction = 3
 layout_mode = 2
+size_flags_horizontal = 8
+icon_alignment = 2
 
 [node name="WindowSizeRow" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=1750000001]
 custom_minimum_size = Vector2(0, 28)
@@ -254,11 +257,12 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_wtuay")
 theme_override_font_sizes/font_size = 20
-text = "     Window Size"
+text = "Window Size"
 
 [node name="WindowSize" type="OptionButton" parent="ScrollContainer/VBoxContainer/WindowSizeRow" unique_id=1750000003]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 13
 item_count = 4
 popup/item_0/text = "50%"
 popup/item_0/id = 0
@@ -295,18 +299,23 @@ text = "     Show NPC Names"
 [node name="CheckBox" type="CheckBox" parent="ScrollContainer/VBoxContainer/Show NPC Names" unique_id=824457907]
 layout_mode = 2
 
-[node name="Save & Quit" parent="ScrollContainer/VBoxContainer" unique_id=1439462519 instance=ExtResource("4_nbtn")]
-custom_minimum_size = Vector2(0, 28)
+[node name="Save" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=594964827]
 layout_mode = 2
+
+[node name="Save & Quit" parent="ScrollContainer/VBoxContainer/Save" unique_id=1439462519 instance=ExtResource("4_nbtn")]
+custom_minimum_size = Vector2(80, 33)
+layout_mode = 2
+size_flags_horizontal = 3
 button_text = "Sidebar_settings_save_quit"
 
-[node name="Delete Save" parent="ScrollContainer/VBoxContainer" unique_id=1514544423 instance=ExtResource("4_nbtn")]
-custom_minimum_size = Vector2(0, 28)
+[node name="Delete Save" parent="ScrollContainer/VBoxContainer/Save" unique_id=1514544423 instance=ExtResource("4_nbtn")]
+custom_minimum_size = Vector2(80, 33)
 layout_mode = 2
+size_flags_horizontal = 3
 button_text = "Sidebar_settings_delete_save"
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/Always on Top/CheckBox" to="." method="_on_always_on_top_toggled"]
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/WindowSizeRow/WindowSize" to="." method="_on_window_size_item_selected"]
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/Save & Quit" to="." method="_on_save__quit_pressed"]
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/Delete Save" to="." method="_on_delete_save_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/Save/Save & Quit" to="." method="_on_save__quit_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/Save/Delete Save" to="." method="_on_delete_save_pressed"]
