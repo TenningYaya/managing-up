@@ -1,20 +1,42 @@
 [gd_scene format=3 uid="uid://cmsc4bw6aqfh8"]
 
+[ext_resource type="Script" uid="uid://hfy6rsy5y8j3" path="res://scripts/UI/sidebar/personal_page.gd" id="1_iudua"]
 [ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="1_qdvm1"]
+[ext_resource type="Texture2D" uid="uid://d27v2euv5fpxr" path="res://assets/tutorial/avatars/player_avatar_1.png" id="2_5cnab"]
 [ext_resource type="Texture2D" uid="uid://c0o37s88t8hsx" path="res://assets/background/background-white.png" id="2_dxbfs"]
 [ext_resource type="PackedScene" uid="uid://byenwff2ep3fp" path="res://scenes/starter/avatar_name_changer.tscn" id="3_kr5ev"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_xuayt"]
+[ext_resource type="Texture2D" uid="uid://c3bo083hlyhsj" path="res://assets/tutorial/avatars/player_avatar_2.png" id="3_xx7m0"]
 [ext_resource type="Texture2D" uid="uid://bf3w3mlc2krib" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Decoration/3.png" id="4_2ixrq"]
+[ext_resource type="Texture2D" uid="uid://cddknr3k0sl5y" path="res://assets/tutorial/avatars/player_avatar_3.png" id="4_3hbdd"]
 [ext_resource type="PackedScene" uid="uid://doe15yvabaqje" path="res://scenes/settings/quote_editor.tscn" id="4_dxbfs"]
 [ext_resource type="PackedScene" uid="uid://ejvqpq34dhbg" path="res://scenes/settings/tile_changer.tscn" id="4_wdonu"]
+[ext_resource type="FontVariation" uid="uid://bp7rjqhx7ef2h" path="res://assets/fonts/doto_pixel_variation.tres" id="4_xuayt"]
 [ext_resource type="AudioStream" uid="uid://764twux58mia" path="res://audio/gem_collect.wav" id="8_iudua"]
+[ext_resource type="Texture2D" uid="uid://brk2vkrqcm7as" path="res://assets/sidebar/other/edit.png" id="9_ic3ra"]
+[ext_resource type="Texture2D" uid="uid://7603g14ky36c" path="res://assets/sidebar/other/edit (2).png" id="9_iudua"]
+[ext_resource type="Texture2D" uid="uid://cfaqfwgr61mqt" path="res://assets/sidebar/other/金箔纸.jpg" id="11_5cnab"]
 
-[node name="PersonalPage" type="Control" unique_id=1808630414]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xx7m0"]
+texture = ExtResource("11_5cnab")
+axis_stretch_vertical = 1
+
+[node name="PersonalPage" type="Control" unique_id=1808630414 node_paths=PackedStringArray("name_label", "name_edit", "edit_button", "avatar_button", "avatar_options", "avatar_options_grid", "mr_en", "mr_ch")]
 custom_minimum_size = Vector2(270, 360)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 270.0
 offset_bottom = 360.0
+script = ExtResource("1_iudua")
+name_label = NodePath("MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/ProgramName/NameLabel")
+name_edit = NodePath("MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/ProgramName/NameEdit")
+edit_button = NodePath("MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/ProgramName/EditButton")
+avatar_button = NodePath("MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/EditAvartar/Avatar")
+avatar_options = NodePath("MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/AvatarOptions")
+avatar_options_grid = NodePath("MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/AvatarOptions/MarginContainer/AvatarOptionsGrid")
+avatar_textures = Array[Texture2D]([ExtResource("2_5cnab"), ExtResource("3_xx7m0"), ExtResource("4_3hbdd")])
+mr_en = NodePath("MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/EditAvartar/MrEn")
+mr_ch = NodePath("MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/EditAvartar/MrCh")
 
 [node name="ColorRect" type="TextureRect" parent="." unique_id=308287506]
 layout_mode = 0
@@ -35,6 +57,7 @@ texture = ExtResource("2_dxbfs")
 expand_mode = 1
 
 [node name="upgrades" type="Label" parent="." unique_id=2091357471]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -57,8 +80,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -7.5
-offset_right = -2.5
+offset_left = -2.0
+offset_right = 3.0
+offset_bottom = -44.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 15
@@ -66,7 +90,7 @@ theme_override_constants/separation = 15
 [node name="ScrollContainer" type="ScrollContainer" parent="MainLayout" unique_id=1071642607]
 custom_minimum_size = Vector2(220, 222.16)
 layout_mode = 2
-size_flags_vertical = 6
+size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="MainLayout/ScrollContainer" unique_id=261099223]
@@ -81,7 +105,91 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 alignment = 1
 
+[node name="PersonalInfo" type="VBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1342841245]
+layout_mode = 2
+
+[node name="WelcomLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo" unique_id=41214428]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06469653, 0.06469653, 0.06469653, 1)
+theme_override_fonts/font = ExtResource("4_xuayt")
+theme_override_font_sizes/font_size = 26
+text = "Sidebar_personal_welcome"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ProgramName" type="HBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo" unique_id=626348673]
+layout_mode = 2
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/ProgramName" unique_id=1309475277]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06469653, 0.06469653, 0.06469653, 1)
+theme_override_fonts/font = ExtResource("4_xuayt")
+theme_override_font_sizes/font_size = 26
+text = "ProgramName"
+horizontal_alignment = 1
+
+[node name="NameEdit" type="LineEdit" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/ProgramName" unique_id=429894193]
+visible = false
+layout_mode = 2
+
+[node name="EditButton" type="TextureButton" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/ProgramName" unique_id=715112172]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture_normal = ExtResource("9_iudua")
+texture_pressed = ExtResource("9_ic3ra")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="EditAvartar" type="HBoxContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo" unique_id=613840004]
+layout_mode = 2
+alignment = 1
+
+[node name="MrEn" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/EditAvartar" unique_id=4107719]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.13333334, 0.13333334, 0.13333334, 1)
+text = "Leader"
+
+[node name="Avatar" type="Button" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/EditAvartar" unique_id=677059766]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="MrCh" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/EditAvartar" unique_id=192111109]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.13333334, 0.13333334, 0.13333334, 1)
+text = "领导"
+
+[node name="AvatarOptions" type="PanelContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo" unique_id=1546603428]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_xx7m0")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/AvatarOptions" unique_id=1327424521]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="AvatarOptionsGrid" type="GridContainer" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/AvatarOptions/MarginContainer" unique_id=1377697669]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 4
+
+[node name="GuideLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo" unique_id=268080613]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8627451, 0.13333334, 0.13333334, 1)
+theme_override_fonts/font = ExtResource("4_xuayt")
+theme_override_font_sizes/font_size = 26
+text = "Sidebar_personal_guide"
+horizontal_alignment = 1
+autowrap_mode = 3
+
 [node name="AvatarNameChanger" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1405611163 instance=ExtResource("3_kr5ev")]
+visible = false
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList" unique_id=1517829118]

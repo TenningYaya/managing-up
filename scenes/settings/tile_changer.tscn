@@ -12,6 +12,7 @@ script = ExtResource("1_7w0u4")
 
 [node name="Label2" type="Label" parent="." unique_id=892946071]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.13333334, 0.13333334, 0.13333334, 1)
 theme_override_fonts/font = ExtResource("2_fcb8g")
 theme_override_font_sizes/font_size = 16
 text = "Sidebar_personal_tile"

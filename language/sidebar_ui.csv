@@ -18,7 +18,7 @@ Sidebar_settings_always_on_top,始终置顶,Always on Top
 Sidebar_settings_delete_save,删除存档,Delete Save
 Sidebar_settings_save_quit,退出,Save and Quit
 Sidebar_tutorial_title,教程,TUTORIAL
-Sidebar_personal_title,个性化,PERSONALIZE
+Sidebar_personal_title,个性化,PERSONAL
 Sidebar_personal_quote_title,口头禅,Templates
 Sidebar_personal_edit_quote,编辑同事问候语...,Edit quote...
 Sidebar_personal_add_quote,添加,Add
@@ -44,7 +44,7 @@ Sidebar_settings_delete_save,删除存档,Delete
 Sidebar_settings_save_quit,保存并退出,Quit
 Sidebar_settings_window_size,窗口大小,Window Size
 Sidebar_tutorial_title,教程,TUTORIAL
-Sidebar_personal_title,个性化,PERSONALIZE
+Sidebar_personal_title,个性化,PERSONAL
 Sidebar_personal_quote_title,常用语,Templates
 Sidebar_personal_edit_quote,编辑同事寄语...,Edit quote...
 Sidebar_personal_add_quote,添加,Add
@@ -84,3 +84,5 @@ Sidebar_UPGRADE_BTN_FORMAT,M%d -> %s,M%d -> %s
 Sidebar_UPGRADE_MAX_TITLE,已达到公司最高等级（M6）,REACHED MAX COMPANY LEVEL (M6)
 Sidebar_UPGRADE_BTN_MAXED,已满级,MAX LEVEL
 Sidebar_UPGRADE_MAXED_OUT,已满级,MAXED OUT
+Sidebar_personal_welcome,欢迎项目组,WELCOME PROGRAM
+Sidebar_personal_guide,莅临指导！！！,FOR INSPECTION AND GUIDANCE!!!
