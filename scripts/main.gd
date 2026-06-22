@@ -19,7 +19,7 @@ var _is_sticky_mode := false
 var _sticky_note: Control = null      # 运行时实例，与主场景完全独立
 var _sticky_canvas: CanvasLayer = null
 
-const WINDOW_HEIGHT_FRACTION := 0.99
+var window_height_fraction := 0.99  # 当前窗口高度占可用屏幕高的比例；设置页可改、便签往返/重启后保持
 
 # --- 2. Initialization ---
 func _ready():
@@ -39,6 +39,7 @@ func _ready():
 
 	await get_tree().process_frame  # 等模式切换生效再查询可用区域
 	print("after second await: size=", DisplayServer.window_get_size())
+	window_height_fraction = _load_window_height_fraction()  # 读取上次保存的窗口大小比例
 	await _cover_current_screen()
 
 	$FullGameMode.show()
@@ -105,7 +106,7 @@ func _ready():
 func _cover_current_screen():
 	var scr := DisplayServer.window_get_current_screen()
 	var usable := DisplayServer.screen_get_usable_rect(scr)
-	var win_h := int(usable.size.y * WINDOW_HEIGHT_FRACTION)
+	var win_h := int(usable.size.y * window_height_fraction)
 	DisplayServer.window_set_min_size(Vector2i(0, 0))
 	DisplayServer.window_set_size(Vector2i(usable.size.x, win_h))
 	DisplayServer.window_set_position(Vector2i(usable.position.x, usable.end.y - win_h))
@@ -124,6 +125,26 @@ func set_always_on_top(enabled: bool) -> void:
 	var cfg := ConfigFile.new()
 	cfg.load(SETTINGS_PATH)  # 不存在则为空配置，忽略返回值
 	cfg.set_value("window", "always_on_top", enabled)
+	cfg.save(SETTINGS_PATH)
+
+
+# 读取上次保存的窗口高度比例（默认沿用当前值 0.99）
+func _load_window_height_fraction() -> float:
+	var cfg := ConfigFile.new()
+	if cfg.load(SETTINGS_PATH) == OK:
+		return float(cfg.get_value("window", "height_fraction", window_height_fraction))
+	return window_height_fraction
+
+
+# 由设置界面的窗口大小下拉框调用：更新比例 + 立即重新覆盖屏幕 + 持久化。
+# 这样切便签模式往返、以及重启游戏后，玩家选的窗口大小都能保持。
+func set_window_height_fraction(frac: float) -> void:
+	window_height_fraction = clampf(frac, 0.1, 1.0)
+	_cover_current_screen()
+	_last_region = Rect2(-1, -1, -1, -1)  # 强制下一帧用新尺寸重算穿透 region
+	var cfg := ConfigFile.new()
+	cfg.load(SETTINGS_PATH)
+	cfg.set_value("window", "height_fraction", window_height_fraction)
 	cfg.save(SETTINGS_PATH)
 
 

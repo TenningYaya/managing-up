@@ -101,6 +101,13 @@ func _init_window_size_dropdown() -> void:
 	$\"ScrollContainer/VBoxContainer/WindowSizeRow/WindowSize\".select(best)
 
 func _on_window_size_item_selected(index: int) -> void:
+	# 交给 main.gd：它会更新窗口高度比例、立即 resize、并持久化，
+	# 这样切便签模式往返 / 重启游戏后都会记住玩家选的大小。
+	var main_node = get_tree().current_scene
+	if main_node and main_node.has_method(\"set_window_height_fraction\"):
+		main_node.set_window_height_fraction(WINDOW_SIZE_FRACTIONS[index])
+		return
+	# 兜底：拿不到 main 时直接 resize（旧逻辑）
 	var mode := DisplayServer.window_get_mode()
 	if mode != DisplayServer.WINDOW_MODE_WINDOWED:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
@@ -108,9 +115,8 @@ func _on_window_size_item_selected(index: int) -> void:
 	var scr := DisplayServer.window_get_current_screen()
 	var usable := DisplayServer.screen_get_usable_rect(scr)
 	var new_h := int(usable.size.y * WINDOW_SIZE_FRACTIONS[index])
-	var new_w := usable.size.x
 	DisplayServer.window_set_min_size(Vector2i(0, 0))
-	DisplayServer.window_set_size(Vector2i(new_w, new_h))
+	DisplayServer.window_set_size(Vector2i(usable.size.x, new_h))
 	DisplayServer.window_set_position(Vector2i(usable.position.x, usable.end.y - new_h))
 
 func _on_visibility_changed() -> void:
