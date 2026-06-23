@@ -89,16 +89,27 @@ func _sync_volume_sliders() -> void:
 	_sfx_slider.set_value_no_signal(db_to_linear(AudioServer.get_bus_volume_db(sfx_bus_index)) * 100.0)
 
 func _init_window_size_dropdown() -> void:
-	var screen_h := DisplayServer.screen_get_size().y
-	var cur_h := DisplayServer.window_get_size().y
+	# 用 main.gd 里权威的 window_height_fraction 来匹配选项，而不是猜当前窗口像素高度：
+	# 下拉框的 _ready 早于 main 的窗口 resize（子节点先 ready），那时读到的尺寸是错的。
+	var frac := _current_window_fraction()
 	var best := 0
 	var best_diff := INF
 	for i in WINDOW_SIZE_FRACTIONS.size():
-		var diff := absf(cur_h - screen_h * WINDOW_SIZE_FRACTIONS[i])
+		var diff := absf(frac - WINDOW_SIZE_FRACTIONS[i])
 		if diff < best_diff:
 			best_diff = diff
 			best = i
 	$\"ScrollContainer/VBoxContainer/WindowSizeRow/WindowSize\".select(best)
+
+func _current_window_fraction() -> float:
+	var main_node = get_tree().current_scene
+	if main_node and main_node.has_method(\"set_window_height_fraction\"):
+		return main_node.window_height_fraction
+	# 兜底：用实际窗口高 / 可用屏幕高 估算
+	var usable := DisplayServer.screen_get_usable_rect(DisplayServer.window_get_current_screen())
+	if usable.size.y > 0:
+		return float(DisplayServer.window_get_size().y) / float(usable.size.y)
+	return 0.99
 
 func _on_window_size_item_selected(index: int) -> void:
 	# 交给 main.gd：它会更新窗口高度比例、立即 resize、并持久化，
@@ -124,6 +135,7 @@ func _on_visibility_changed() -> void:
 		_settings_opened = true
 		_sync_always_on_top_checkbox()
 		_sync_volume_sliders()
+		_init_window_size_dropdown()   # 每次打开都按当前真实比例刷新选中项
 	elif _settings_opened:
 		_persist_audio_volumes()
 
