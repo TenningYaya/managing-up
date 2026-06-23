@@ -34,6 +34,10 @@ corner_radius_bottom_left = 10
 atlas = ExtResource("4_diil0")
 region = Rect2(32, 32, 1184, 1184)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_nlxd5"]
+atlas = ExtResource("6_gtcak")
+region = Rect2(45, 22, 1173, 1167)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_53q3r"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_50qqt"]
@@ -136,9 +140,9 @@ stretch_mode = 5
 
 [node name="upgrades" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades" unique_id=1867715456]
 layout_mode = 0
-offset_left = 12.0
+offset_left = 10.0
 offset_top = 71.0
-offset_right = 75.0
+offset_right = 73.0
 offset_bottom = 88.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
@@ -164,9 +168,9 @@ stretch_mode = 0
 
 [node name="Tutorial" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/tutorial" unique_id=661914488]
 layout_mode = 0
-offset_left = 11.0
+offset_left = 9.0
 offset_top = 72.0
-offset_right = 74.0
+offset_right = 72.0
 offset_bottom = 95.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
@@ -182,9 +186,9 @@ stretch_mode = 0
 
 [node name="GENERAL" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/general" unique_id=1857504635]
 layout_mode = 0
-offset_left = 13.0
+offset_left = 9.0
 offset_top = 72.0
-offset_right = 76.0
+offset_right = 72.0
 offset_bottom = 95.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
@@ -194,16 +198,16 @@ horizontal_alignment = 1
 [node name="settings" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer" unique_id=375597110]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
-texture_normal = ExtResource("6_gtcak")
+texture_normal = SubResource("AtlasTexture_nlxd5")
 ignore_texture_size = true
 stretch_mode = 0
 
 [node name="SETTINGS" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/settings" unique_id=572774759]
 layout_mode = 0
-offset_left = 13.0
-offset_top = 67.0
-offset_right = 76.0
-offset_bottom = 90.0
+offset_left = 9.0
+offset_top = 72.0
+offset_right = 72.0
+offset_bottom = 95.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "SETTINGS"
@@ -218,10 +222,10 @@ stretch_mode = 5
 
 [node name="DECOR" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor" unique_id=300000002]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 68.0
-offset_right = 78.0
-offset_bottom = 93.0
+offset_left = 3.0
+offset_top = 72.0
+offset_right = 79.0
+offset_bottom = 97.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "DECOR"
@@ -244,12 +248,12 @@ texture_normal = ExtResource("9_ckm1g")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="DECOR" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/Personal" unique_id=2117435846]
+[node name="PERSONAL" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/Personal" unique_id=2117435846]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 68.0
+offset_top = 72.0
 offset_right = 78.0
-offset_bottom = 93.0
+offset_bottom = 97.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "	PERSONAL"

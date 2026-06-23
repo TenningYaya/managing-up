@@ -44,9 +44,9 @@ vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=984241471]
 layout_mode = 0
-offset_left = 34.0
+offset_left = 18.0
 offset_top = 93.0
-offset_right = 233.0
+offset_right = 217.0
 offset_bottom = 318.0
 
 [node name="total hit" type="Label" parent="VBoxContainer" unique_id=2116646967]
@@ -68,7 +68,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
-text = "number of employee: "
+text = "employee: "
 
 [node name="R employee" type="Label" parent="VBoxContainer" unique_id=212652451]
 layout_mode = 2

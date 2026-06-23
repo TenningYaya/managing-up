@@ -1,0 +1,9 @@
+[gd_resource type="FontVariation" format=3 uid="uid://dtfymui42v4o"]
+
+[ext_resource type="FontFile" uid="uid://d1i8qawmw55si" path="res://assets/fonts/ZCOOLKuaiLe-Regular.ttf" id="1_2wj55"]
+
+[sub_resource type="SystemFont" id="SystemFont_xyhrd"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("1_2wj55")])
+base_font = SubResource("SystemFont_xyhrd")

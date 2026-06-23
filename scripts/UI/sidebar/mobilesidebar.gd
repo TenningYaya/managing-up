@@ -150,7 +150,7 @@ func _apply_menu_translations() -> void:
 	btn_general.get_node("GENERAL").text = tr("Sidebar_menu_general")
 	btn_settings.get_node("SETTINGS").text = tr("Sidebar_menu_settings")
 	btn_decor.get_node("DECOR").text = tr("Sidebar_menu_decor")
-	btn_personal.get_node("DECOR").text = tr("Sidebar_personal_title")
+	btn_personal.get_node("PERSONAL").text = tr("Sidebar_personal_title")
 
 
 func _input(event: InputEvent) -> void:
