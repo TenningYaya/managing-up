@@ -27,6 +27,7 @@ func delete_save() -> void:
 	Gamemanager.player_level = 1
 	Gamemanager.total_hits = 0
 	Gamemanager.total_time = 0.0
+	Gamemanager.total_speedups = 0
 	Gamemanager.max_desk_level = 1
 	Gamemanager.unlocked_desk_slots = 1
 	
@@ -67,6 +68,7 @@ func save_game() -> void:
 		"dollar": Gamemanager.dollar,
 		"total_hits": Gamemanager.total_hits,
 		"total_time": Gamemanager.total_time,
+		"total_speedups": Gamemanager.total_speedups,
 		"max_desk_level": Gamemanager.max_desk_level,
 		"unlocked_desk_slots": Gamemanager.unlocked_desk_slots,
 		"project_name": Gamemanager.project_name,
@@ -339,6 +341,7 @@ func load_game() -> void:
 		Gamemanager.dollar = int(p_data.get("dollar", 10000))
 		Gamemanager.total_hits = int(p_data.get("total_hits", 0))
 		Gamemanager.total_time = float(p_data.get("total_time", 0.0))
+		Gamemanager.total_speedups = int(p_data.get("total_speedups", 0))
 		Gamemanager.max_desk_level = int(p_data.get("max_desk_level", 1))
 		Gamemanager.unlocked_desk_slots = int(p_data.get("unlocked_desk_slots", 1))
 		Gamemanager.project_name = p_data.get("project_name", "NewProject")

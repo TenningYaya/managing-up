@@ -1,6 +1,7 @@
 extends Control
 
 @onready var hit_label = $"VBoxContainer/total hit"
+@onready var speedup_label = $"VBoxContainer/speedup count"
 @onready var time_label = $"VBoxContainer/total time"
 @onready var total_emp_label = $"VBoxContainer/number of employee"
 @onready var r_emp_label = $"VBoxContainer/R employee"
@@ -23,6 +24,7 @@ func _process(_delta):
 		
 	# 更新总时间和总点击
 	hit_label.text = tr("Sidebar_general_total_hit") + ": " + str(Gamemanager.total_hits)
+	speedup_label.text = tr("Sidebar_general_texted_coworker") + ": " + str(Gamemanager.total_speedups)
 	time_label.text = tr("Sidebar_general_total_time") + ": " + _format_time(Gamemanager.total_time)
 	
 	var total_count = EmployeeManager.my_employees.size()

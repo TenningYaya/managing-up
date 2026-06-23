@@ -90,3 +90,10 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_gwcfk")
 theme_override_font_sizes/font_size = 20
 text = "SSR employee: "
+
+[node name="speedup count" type="Label" parent="VBoxContainer" unique_id=1700700700]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_gwcfk")
+theme_override_font_sizes/font_size = 20
+text = "Texted Coworker: "

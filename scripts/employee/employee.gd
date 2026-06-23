@@ -516,6 +516,7 @@ func _speed_up_work() -> void:
 	if not is_working:
 		return
 		
+	Gamemanager.total_speedups += 1   # 催工次数 +1（已过 is_working 判定，只统计真正生效的加速）
 	var total_duration = current_cycle_duration
 	var speed_up_amount = total_duration * 0.04
 	work_elapsed += speed_up_amount

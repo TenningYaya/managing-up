@@ -43,6 +43,7 @@ var has_selected_avatar: bool = false
 # 定义总览面板需要的变量
 var total_hits: int = 0
 var total_time: float = 0.0
+var total_speedups: int = 0   # 催工次数：点击同事成功加速生产的总次数
 
 var player_level: int = 1:
 	set(value):
