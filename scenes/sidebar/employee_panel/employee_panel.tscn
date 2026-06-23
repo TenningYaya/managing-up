@@ -177,15 +177,15 @@ theme_override_constants/separation = 7
 
 [node name="EfficiencyBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=1543880291 instance=ExtResource("2_sl25x")]
 layout_mode = 2
-ability_name = "Efficiency"
+ability_name = "EMP_ATTR_EFFICIENCY"
 
 [node name="QualityBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=922107843 instance=ExtResource("2_sl25x")]
 layout_mode = 2
-ability_name = "Quality"
+ability_name = "EMP_ATTR_QUALITY"
 
 [node name="ExperienceBar" parent="PanelBg/EmployeePage/Information/Abilities" unique_id=1321981527 instance=ExtResource("2_sl25x")]
 layout_mode = 2
-ability_name = "Experience"
+ability_name = "EMP_ATTR_EXPERIENCE"
 
 [node name="ProgressBar" type="Control" parent="PanelBg/EmployeePage/Information" unique_id=193474603]
 custom_minimum_size = Vector2(225, 15)
@@ -266,7 +266,7 @@ size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.6734581, 0.86878794, 0.46772617, 1)
 theme_override_fonts/font = ExtResource("3_ajc7u")
 theme_override_font_sizes/font_size = 18
-text = "Employee Benefits"
+text = "EMP_BENEFITS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -283,14 +283,14 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 ignore_texture_size = false
-button_text = "Dispatch"
+button_text = "WAREHOUSE_BULK_DISPATCH"
 
 [node name="NormalButton2" parent="PanelBg/EmployeePage/Manage" unique_id=1722932454 instance=ExtResource("3_r7cc6")]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 ignore_texture_size = false
-button_text = "Fire"
+button_text = "WAREHOUSE_BULK_FIRE"
 
 [node name="PopupWindow" parent="PanelBg" unique_id=1050921675 instance=ExtResource("4_e3e08")]
 layout_mode = 1
@@ -338,12 +338,12 @@ offset_bottom = 80.0
 [node name="Label" type="Label" parent="PanelBg/ExplainDispatch/VBoxContainer" unique_id=1732137519]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Dispatch: make idle co-worker active"
+text = "EMP_EXPLAIN_DISPATCH"
 
 [node name="Label2" type="Label" parent="PanelBg/ExplainDispatch/VBoxContainer" unique_id=1723660653]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Recall: make active co-worker idle"
+text = "EMP_EXPLAIN_RECALL"
 
 [node name="ClosePanel" type="Button" parent="." unique_id=1043703153]
 visible = false

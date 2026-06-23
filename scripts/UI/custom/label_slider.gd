@@ -11,7 +11,7 @@ class_name EmployeeAbility
 #@onready var value_label_style = $ProgressBar/AttributeNumStyle
 
 func _ready() -> void:
-	label.text = ability_name
+	label.text = tr(ability_name)  # ability_name 当作翻译 key 用
 	
 	# 设置 ProgressBar 的范围
 	progress_bar.max_value = 10
@@ -20,6 +20,11 @@ func _ready() -> void:
 	# ProgressBar 默认就不支持拖拽，但为了保险起见，
 	# 我们可以让它不响应鼠标事件，防止遮挡底下的点击
 	progress_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+# 语言切换时重刷属性名（ability_name 作为翻译 key）
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		label.text = tr(ability_name)
 
 # 面板主脚本依然调用这个函数来赋值
 func set_value(val: float) -> void:

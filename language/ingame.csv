@@ -19,6 +19,29 @@ WAREHOUSE_SORT_HIRE_OLDEST,入职：最久,Hire: Oldest
 WAREHOUSE_BULK_FIRE_TITLE,确定优化全部 {n} 名员工？,Optimize these {n} employees?
 WAREHOUSE_BULK_FIRE_CONFIRM,开除,Fire
 WAREHOUSE_BULK_FIRE_CANCEL,取消,Cancel
+EMP_ATTR_EFFICIENCY,工作效率,Efficiency
+EMP_ATTR_QUALITY,工作质量,Quality
+EMP_ATTR_EXPERIENCE,工作经验,Experience
+EMP_BENEFITS,员工福利,Employee Benefits
+EMP_FIRE_TITLE,确定开除 {name}？,Fire {name}?
+EMP_EXPLAIN_DISPATCH,派遣：让闲置的同事开始工作,Dispatch: make idle co-worker active
+EMP_EXPLAIN_RECALL,召回：让工作中的同事闲置,Recall: make active co-worker idle
+BUFF_MEETING_NAME,头脑风暴,Brainstorming
+BUFF_MEETING_DESC,当前加成：\n✨ 质量 +{q}\n📈 经验 +{e}\n⏳ 效率 {eff}（代价）,Current buffs:\n✨ Qual +{q}\n📈 Exp +{e}\n⏳ Eff {eff} (cost)
+BUFF_DESK_NAME,工位,Workspace
+BUFF_DESK_DESC_HEADER,工位加成：,Desk bonus:
+BUFF_DESK_EFF,效率 +{v},Eff +{v}
+BUFF_DESK_QUAL,质量 +{v},Qual +{v}
+BUFF_CULTURE_NAME,企业文化,Culture
+BUFF_CULTURE_EFF,全局效率 +{v},Global Eff +{v}
+BUFF_CULTURE_EXP,全局经验 +{v},Global Exp +{v}
+BUFF_CULTURE_QUAL,全局质量 +{v},Global Qual +{v}
+BUFF_SNACK_MILKTEA,奶茶,Milk Tea
+BUFF_SNACK_CAKE,蛋糕,Cake
+BUFF_SNACK_SAUSAGE,烤肠,Sausage
+BUFF_SNACK_MILKTEA_DESC,茶水间福利：效率 +2,Pantry perk: Eff +2
+BUFF_SNACK_CAKE_DESC,茶水间福利：质量 +3,Pantry perk: Qual +3
+BUFF_SNACK_SAUSAGE_DESC,茶水间福利：经验 +3,Pantry perk: Exp +3
 OFFICE_PN_TAB_OFFICE,功能,Office
 OFFICE_PN_TAB_CULTURE,文化,Culture
 OFFICE_PN_FUNC_PANTRY,茶水间,Pantry

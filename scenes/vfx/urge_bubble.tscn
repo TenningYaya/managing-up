@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bwuyo35a1vo05" path="res://assets/UI/ingame/urge_bubble.png" id="1_5bris"]
 [ext_resource type="Script" uid="uid://ccqcyqbfd3g4r" path="res://scripts/UI/custom/urge_bubble.gd" id="1_amasu"]
-[ext_resource type="AudioStream" uid="uid://b60su1sqwmopi" path="res://audio/鞭打员工.mp3" id="3_hv7wv"]
+[ext_resource type="AudioStream" uid="uid://bll7pjhim80tv" path="res://audio/notification.mp3" id="3_hv7wv"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_amasu"]
 texture = ExtResource("1_5bris")
@@ -41,5 +41,4 @@ text = "Hello"
 
 [node name="Urge" type="AudioStreamPlayer" parent="." unique_id=1887328390]
 stream = ExtResource("3_hv7wv")
-volume_db = -20.0
 bus = &"SFX"

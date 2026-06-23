@@ -90,6 +90,9 @@ func _notification(what: int) -> void:
 		efficiency_bar.tooltip_text = tr("TOOLTIP_EMP_EFFICIENCY")
 		quality_bar.tooltip_text = tr("TOOLTIP_EMP_QUALITY")
 		experience_bar.tooltip_text = tr("TOOLTIP_EMP_EXPERIENCE")
+		_refresh_buffs()  # buff 标签是动态生成的，语言变了要重建一遍
+		# 派遣按钮文字是动态的（派遣/召回），延迟覆盖以晚于 normal_button 自己的翻译刷新
+		call_deferred("_update_dispatch_button")
 
 func _input(event: InputEvent) -> void:
 	if is_locked_by_tutorial:
@@ -274,9 +277,9 @@ func _update_dispatch_button() -> void:
 	if current_employee == null: return
 	
 	if _is_employee_on_map():
-		dispatch_btn_label.text = "Recall"
+		dispatch_btn_label.text = tr("WAREHOUSE_BULK_RECALL")
 	else:
-		dispatch_btn_label.text = "Dispatch"
+		dispatch_btn_label.text = tr("WAREHOUSE_BULK_DISPATCH")
 
 func _on_dispatch_pressed() -> void:
 	if current_employee == null: return
@@ -324,9 +327,9 @@ func _on_fire_pressed() -> void:
 		p.move_child(self, p.get_child_count() - 1)
 
 	# 在显示弹窗前，动态设置一下文本（利用你写的 set 属性）
-	popup_window.title_text = "Are you sure to fire " + current_employee.employee_name + " ？"
-	popup_window.confirm_label = "Sure"
-	popup_window.cancel_label = "Wait"
+	popup_window.title_text = tr("EMP_FIRE_TITLE").format({"name": current_employee.employee_name})
+	popup_window.confirm_label = tr("WAREHOUSE_BULK_FIRE_CONFIRM")
+	popup_window.cancel_label = tr("WAREHOUSE_BULK_FIRE_CANCEL")
 	popup_window.show()
 
 func execute_fire_employee() -> void:
@@ -378,14 +381,8 @@ func _refresh_buffs() -> void:
 		var e_val = current_employee.meet_buff_exp
 		var eff_val = current_employee.meet_buff_eff
 		
-		# 极简英文：头脑风暴
-		var meeting_text = "Brainstorming"
-		var details = "Current Buffs:\n"
-		details += "✨ Qual + " + str(q_val) + "\n"
-		details += "📈 Exp + " + str(e_val) + "\n"
-		details += "⏳ Eff " + str(eff_val) + " (Cost)"
-		
-		_add_buff_label(meeting_text, details)
+		var details = tr("BUFF_MEETING_DESC").format({"q": q_val, "e": e_val, "eff": eff_val})
+		_add_buff_label(tr("BUFF_MEETING_NAME"), details)
 		
 	# 2. Desk Buff (工位 Buff)
 	if current_employee.get("current_seat") != null:
@@ -399,21 +396,18 @@ func _refresh_buffs() -> void:
 			qual_buff = seat.get_quality_buff()
 			
 		if eff_buff > 0 or qual_buff > 0:
-			var desc = "Desk Bonus:\n"
-			if eff_buff > 0: desc += "Eff +" + str(eff_buff) + " "
-			if qual_buff > 0: desc += "Qual +" + str(qual_buff)
-			
-			_add_buff_label("Workspace", desc)
+			var desc = tr("BUFF_DESK_DESC_HEADER") + "\n"
+			if eff_buff > 0: desc += tr("BUFF_DESK_EFF").format({"v": eff_buff}) + " "
+			if qual_buff > 0: desc += tr("BUFF_DESK_QUAL").format({"v": qual_buff})
+			_add_buff_label(tr("BUFF_DESK_NAME"), desc)
 			
 	# 3. Culture Buff (企业文化 Buff)
 	if OfficeManager.culture_efficiency > 0:
-		_add_buff_label("Culture", "Global Eff +" + str(OfficeManager.culture_efficiency))
+		_add_buff_label(tr("BUFF_CULTURE_NAME"), tr("BUFF_CULTURE_EFF").format({"v": OfficeManager.culture_efficiency}))
 	if OfficeManager.culture_experience > 0:
-		# 💡 这里顺手帮你把原来写错的“效率”修成了 Exp
-		_add_buff_label("Culture", "Global Exp +" + str(OfficeManager.culture_experience))
+		_add_buff_label(tr("BUFF_CULTURE_NAME"), tr("BUFF_CULTURE_EXP").format({"v": OfficeManager.culture_experience}))
 	if OfficeManager.culture_quality > 0:
-		# 💡 这里顺手帮你修成了 Qual
-		_add_buff_label("Culture", "Global Qual +" + str(OfficeManager.culture_quality))
+		_add_buff_label(tr("BUFF_CULTURE_NAME"), tr("BUFF_CULTURE_QUAL").format({"v": OfficeManager.culture_quality}))
 		
 	# 4. Snack Buff (零食 Buff)
 	if current_employee.get("current_snack_buff") != null:
@@ -421,12 +415,12 @@ func _refresh_buffs() -> void:
 	
 		
 		match snack:
-			1: # 对应你的 Milk Tea
-				_add_buff_label("Milk Tea", "Pantry Perk: Eff +3")
-			2: # 对应你的 Cake
-				_add_buff_label("Cake", "Pantry Perk: Qual +3")
-			3: # 对应你的 Sausage
-				_add_buff_label("Sausage", "Pantry Perk: Exp +3")
+			1: # Milk Tea 奶茶
+				_add_buff_label(tr("BUFF_SNACK_MILKTEA"), tr("BUFF_SNACK_MILKTEA_DESC"))
+			2: # Cake 蛋糕
+				_add_buff_label(tr("BUFF_SNACK_CAKE"), tr("BUFF_SNACK_CAKE_DESC"))
+			3: # Sausage 烤肠
+				_add_buff_label(tr("BUFF_SNACK_SAUSAGE"), tr("BUFF_SNACK_SAUSAGE_DESC"))
 
 func _add_buff_label(buff_name: String, hover_description: String) -> void:
 	var buff_tag = BUFF_TAG_SCENE.instantiate()
