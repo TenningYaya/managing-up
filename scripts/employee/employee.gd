@@ -13,6 +13,7 @@ signal work_speed_up_triggered
 
 #——————————员工信息————————————
 @export var employee_name: String = "Marry"
+var name_index: int = -1   # NameBank 下标；>=0 时显示名按当前语言实时解析（切语言会变）
 @export var rarity: Rarity = Rarity.R
 @export var efficiency: int = 1
 @export var quality: int = 1
@@ -72,6 +73,11 @@ const SLACKING_BUBBLE_SCENE = preload("res://scenes/UI/custom/SlackingBubble.tsc
 
 func _ready() -> void:
 	add_to_group("employees")
+	# 场景预置员工（教程员工等）只写了英文 employee_name、没有 name_index，
+	# 按英文名反查下标，让它们也能随语言显示中文名（老存档里的员工同理）。
+	if name_index < 0 and employee_name != "":
+		name_index = NameBank.index_of(employee_name)
+		refresh_name()
 	if size.x < 10 or size.y < 10:
 		custom_minimum_size = Vector2(80, 80)
 		size = Vector2(80, 80)
@@ -121,6 +127,21 @@ func _generate_attributes() -> void:
 		elif stat_to_increase == 2 and experience < 10:
 			experience += 1
 			remaining_points -= 1
+
+# 显示用名字：有 name_index 就按当前语言实时解析，否则用 employee_name（老存档/自定义名兜底）
+func get_display_name() -> String:
+	if name_index >= 0:
+		return NameBank.get_localized_name(name_index)
+	return employee_name
+
+# 把缓存的 employee_name 同步成当前语言（供直接读 employee_name 的代码/存档用）
+func refresh_name() -> void:
+	if name_index >= 0:
+		employee_name = NameBank.get_localized_name(name_index)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED:
+		refresh_name()
 
 func _input(event: InputEvent) -> void:
 	if Gamemanager.is_employee_interaction_disabled or is_in_meeting:

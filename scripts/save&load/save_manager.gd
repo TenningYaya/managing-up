@@ -101,6 +101,7 @@ func save_game() -> void:
 		if is_instance_valid(emp):
 			var emp_dict = {
 				"employee_name": emp.employee_name,
+				"name_index": emp.name_index,
 				"rarity": emp.rarity,
 				"efficiency": emp.efficiency,
 				"quality": emp.quality,
@@ -153,6 +154,7 @@ func _serialize_resume_pool(pool: Array) -> Array:
 		if is_instance_valid(emp):
 			arr.append({
 				"employee_name": emp.employee_name,
+				"name_index": emp.name_index,
 				"rarity": emp.rarity,
 				"efficiency": emp.efficiency,
 				"quality": emp.quality,
@@ -181,6 +183,8 @@ func _instantiate_employee_from_dict(e_data: Dictionary) -> Employee:
 	# 数据转换
 	var e_rarity = int(e_data.get("rarity", 0))
 	new_emp.employee_name = e_data.get("employee_name", "Marry")
+	new_emp.name_index = int(e_data.get("name_index", -1))
+	new_emp.refresh_name()   # 有 name_index 就按当前语言解析；老存档没有则保留 employee_name
 	new_emp.rarity = e_rarity as Employee.Rarity
 	new_emp.efficiency = int(e_data.get("efficiency", 1))
 	new_emp.quality = int(e_data.get("quality", 1))

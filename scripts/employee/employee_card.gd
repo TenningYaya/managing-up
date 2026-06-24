@@ -31,6 +31,10 @@ func _ready():
 	EmployeeManager.employee_removed.connect(_on_map_changed)
 	EmployeeManager.employee_map_status_changed.connect(_on_map_changed)
 	
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready() and is_instance_valid(my_employee_data):
+		name_label.text = my_employee_data.get_display_name()
+
 func _on_map_changed(_data = null):
 	if not is_inside_tree() or is_queued_for_deletion():
 		return
@@ -44,7 +48,7 @@ func setup_card(employee_data: Employee) -> void:
 	my_employee_data = employee_data
 	
 	# 1. 设置名字
-	name_label.text = employee_data.employee_name
+	name_label.text = employee_data.get_display_name()
 	
 	if employee_data.portrait:
 		AvatarHelper.apply_portrait(avatar_img, employee_data.portrait, employee_data.rarity)

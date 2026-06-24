@@ -131,7 +131,8 @@ func debug_generate_specified(amount: int, rarity: Employee.Rarity):
 func _create_data(rarity: Employee.Rarity) -> Employee:
 	var e = employee_scene.instantiate() as Employee	
 	e.setup_employee(rarity)
-	e.employee_name = NameBank.get_random_name()
+	e.name_index = NameBank.get_random_index()
+	e.refresh_name()
 	
 	var visual_scene = visual_scenes[rarity]
 	var visual_instance = visual_scene.instantiate()

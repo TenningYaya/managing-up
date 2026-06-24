@@ -90,6 +90,8 @@ func _notification(what: int) -> void:
 		efficiency_bar.tooltip_text = tr("TOOLTIP_EMP_EFFICIENCY")
 		quality_bar.tooltip_text = tr("TOOLTIP_EMP_QUALITY")
 		experience_bar.tooltip_text = tr("TOOLTIP_EMP_EXPERIENCE")
+		if current_employee:
+			name_label.set_value_text(current_employee.get_display_name())
 		_refresh_buffs()  # buff 标签是动态生成的，语言变了要重建一遍
 		# 派遣按钮文字是动态的（派遣/召回），延迟覆盖以晚于 normal_button 自己的翻译刷新
 		call_deferred("_update_dispatch_button")
@@ -140,7 +142,7 @@ func open_panel(employee: Employee) -> void:
 	# ==========================================
 	# 🚨 【这里是之前丢失的“三维”刷新代码】
 	# ==========================================
-	name_label.set_value_text(employee.employee_name)
+	name_label.set_value_text(employee.get_display_name())
 	
 	# 刷新稀有度
 	match employee.rarity:
@@ -327,7 +329,7 @@ func _on_fire_pressed() -> void:
 		p.move_child(self, p.get_child_count() - 1)
 
 	# 在显示弹窗前，动态设置一下文本（利用你写的 set 属性）
-	popup_window.title_text = tr("EMP_FIRE_TITLE").format({"name": current_employee.employee_name})
+	popup_window.title_text = tr("EMP_FIRE_TITLE").format({"name": current_employee.get_display_name()})
 	popup_window.confirm_label = tr("WAREHOUSE_BULK_FIRE_CONFIRM")
 	popup_window.cancel_label = tr("WAREHOUSE_BULK_FIRE_CANCEL")
 	popup_window.show()
@@ -462,7 +464,7 @@ func force_bind_and_refresh(employee: Employee) -> void:
 	# 强制将引用传递给每一个子组件，哪怕它们之前是空的
 	if employee:
 		# 1. 刷新基础信息
-		name_label.set_value_text(employee.employee_name)
+		name_label.set_value_text(employee.get_display_name())
 		# 2. 刷新进度条
 		_refresh_progress_bar()
 		# 3. 刷新 Buffs

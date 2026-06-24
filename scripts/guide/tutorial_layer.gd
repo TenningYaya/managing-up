@@ -277,6 +277,24 @@ func _skip_to_first_action_step() -> void:
 	_show_final_label()
 				
 ## 子功能 A：管理黑布挖洞与钢化玻璃物理隔绝
+# 把目标范围换算到“黑幕所在的画布空间”（黑幕是 TutorialLayer 这个 CanvasLayer 下的 Control）。
+# - UI 目标在 CanvasLayer 里：get_global_rect() 已经是画布坐标，直接用（保持原来好用的行为）。
+# - 世界目标（桌子 / drop area）在 Camera2D 下：get_global_rect() 是世界坐标，
+#   用相机的画布变换 get_canvas_transform() 换算到画布空间（注意它不含视口拉伸，正好对上黑幕）。
+func _screen_rect(node: Control) -> Rect2:
+	var r := node.get_global_rect()
+	if _is_in_canvas_layer(node):
+		return r
+	return get_viewport().get_canvas_transform() * r
+
+func _is_in_canvas_layer(node: Node) -> bool:
+	var n: Node = node
+	while n != null:
+		if n is CanvasLayer:
+			return true
+		n = n.get_parent()
+	return false
+
 func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
 	blocker_ui.show() # 只要进到这个函数，无论有没有 target，先保证黑幕是亮的！
 	
@@ -293,7 +311,7 @@ func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
 		return
 		
 	# 4. 拿到最终位置并挖洞
-	var target_rect = target.get_global_rect()
+	var target_rect = _screen_rect(target)
 	blocker_ui._arrange_curtains(target_rect)
 	blocker_ui.hole_rect = target_rect 
 	blocker_ui.is_hole_clickable = false 
@@ -398,7 +416,7 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	await get_tree().create_timer(0.1).timeout
 	
 	# 此时拿到的坐标，绝对是它滑入完成后的【真·人间坐标】！
-	var target_rect = target.get_global_rect()
+	var target_rect = _screen_rect(target)
 	
 	# 3. 呼叫黑布挖洞
 	blocker_ui.show()
@@ -480,7 +498,7 @@ func _handle_wait_event(step: TutorialStep) -> void:
 		var target = get_tree().get_first_node_in_group(step.target_group)
 		if target:
 			current_target = target
-			_arrange_tip(step, target.get_global_rect())
+			_arrange_tip(step, _screen_rect(target))
 	
 	current_signal_name = step.wait_signal
 	current_callable = Callable(self, "_on_step_completed")
@@ -537,7 +555,7 @@ func _apply_wait_event_highlight(step: TutorialStep) -> void:
 	if step.target_group != "":
 		var target = get_tree().get_first_node_in_group(step.target_group)
 		if target:
-			var target_rect = target.get_global_rect()
+			var target_rect = _screen_rect(target)
 			
 			# 🌟 核心判断：读剧本里的开关！
 			if step.show_blocker:
@@ -617,7 +635,7 @@ func _setup_specific_employee_click_step() -> void:
 			panel.open_panel(current_target)
 
 	# 2. 原有的视觉辅助逻辑保持不变
-	var target_rect = current_target.get_global_rect()
+	var target_rect = _screen_rect(current_target as Control)
 	blocker_ui.modulate.a = 0.0 
 	blocker_ui._arrange_curtains(target_rect)
 	blocker_ui.hole_rect = target_rect
@@ -716,8 +734,9 @@ func _on_step_completed() -> void:
 			
 			var target_panel = get_tree().get_first_node_in_group("recruitment_panel")
 			if target_panel:
-				blocker_ui._arrange_curtains(target_panel.get_global_rect())
-				blocker_ui.hole_rect = target_panel.get_global_rect()
+				var pr := _screen_rect(target_panel as Control)
+				blocker_ui._arrange_curtains(pr)
+				blocker_ui.hole_rect = pr
 				blocker_ui.is_hole_clickable = true 
 				
 			return # 强行打断！
@@ -901,8 +920,8 @@ func _process(delta: float) -> void:
 	if not is_instance_valid(current_target) or not current_target.is_visible_in_tree():
 		return
 		
-	# 每一帧都重新抓取按钮在这一蝇秒的真实绝对位置
-	var real_rect = current_target.get_global_rect()
+	# 每一帧都重新抓取按钮在这一帧的真实位置（换算到黑幕所在的画布空间）
+	var real_rect = _screen_rect(current_target as Control)
 	
 	# 如果它终于进到屏幕里了（X坐标小于屏幕宽度，且体积不为0）
 	if real_rect.position.x < get_viewport().get_visible_rect().size.x and real_rect.size.x > 0:

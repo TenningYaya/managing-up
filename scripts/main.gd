@@ -1,4 +1,4 @@
-#main.gd
+# main.gd
 extends Control
 
 # ➕ 鼠标穿透相关

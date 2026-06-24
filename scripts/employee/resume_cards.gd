@@ -12,14 +12,17 @@ extends Control
 @onready var hire_price_label: Label = $HBoxContainer/VBoxContainer/HirePriceLabel
 @onready var avatar_img: TextureRect = $HBoxContainer/AvatarArea/Avatar
 
+var my_employee: Employee  # 记住当前简历对应的员工，语言切换时重刷名字
+
 # 提供给 ResumeViewer 调用的接口
 func setup(employee_data: Employee) -> void:
-		
-	if employee_data == null: 
+
+	if employee_data == null:
 		return
+	my_employee = employee_data
 
 	# 1. 设置名字（先直接赋值，然后调自适应函数）
-	_apply_name_with_auto_scale(employee_data.employee_name)
+	_apply_name_with_auto_scale(employee_data.get_display_name())
 	
 	# 2. 设置稀有度显示
 	match employee_data.rarity:
@@ -53,6 +56,10 @@ func setup(employee_data: Employee) -> void:
 		
 	if employee_data.portrait:
 		AvatarHelper.apply_portrait(avatar_img, employee_data.portrait, employee_data.rarity)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready() and is_instance_valid(my_employee):
+		set_employee_name(my_employee.get_display_name())
 
 func _apply_name_with_auto_scale(new_name: String):
 	name_label.text = new_name
