@@ -113,7 +113,13 @@ func _trigger_hiring_banters(hired_list: Array) -> void:
 			break
 			
 	if has_ssr:
-		#[员工吐槽中心]空降ssr
+		#[员工吐槽中心]空降ssr —— 只让“非 SSR”员工围观吐槽；所有 SSR（含刚招进来的本人）都不吐这句
 		get_tree().create_timer(1.0).timeout.connect(func():
-			BanterManager.trigger_banter("hired_ssr", 3)
+			var non_ssr := []
+			for emp in get_tree().get_nodes_in_group("employees"):
+				if is_instance_valid(emp) and emp.rarity != Employee.Rarity.SSR:
+					non_ssr.append(emp)
+			if non_ssr.is_empty():
+				return  # 场上全是 SSR，没人围观，直接不触发（不能回退到全体，否则 SSR 又会吐）
+			BanterManager.trigger_banter("hired_ssr", 3, non_ssr)
 		)

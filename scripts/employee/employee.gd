@@ -566,8 +566,9 @@ func _spawn_speech_bubble(text_content: String) -> void:
 	add_child(_active_bubble)
 	
 	_active_bubble.scale = Vector2(0.3, 0.3)
-	# 设置层级，保证盖住员工和后面的东西
-	_active_bubble.z_index = 11 
+	# 绝对层级 + 调高：盖住桌子等世界物体（z_index 优先级高于 Y-sort，所以不会再被挡）
+	_active_bubble.z_as_relative = false
+	_active_bubble.z_index = 1000
 	
 	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
 	_active_bubble.position = Vector2(20, -47)
@@ -584,8 +585,9 @@ func _spawn_banter_bubble(text_content: String) -> void:
 	add_child(_active_bubble)
 	
 	_active_bubble.scale = Vector2(0.3, 0.3)
-	# 设置层级，保证盖住员工和后面的东西
-	_active_bubble.z_index = 11 
+	# 绝对层级 + 调高：盖住桌子等世界物体（z_index 优先级高于 Y-sort，所以不会再被挡）
+	_active_bubble.z_as_relative = false
+	_active_bubble.z_index = 1000
 	
 	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
 	_active_bubble.position = Vector2(70, -27)
