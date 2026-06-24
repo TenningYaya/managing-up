@@ -12,7 +12,6 @@ config_version=5
 
 config/name="Managing Up"
 run/main_scene="uid://dsbjb26fr5nob"
-run/disable_stdout=false
 config/features=PackedStringArray("4.6", "Forward Plus")
 run/flush_stdout_on_print=true
 config/icon="res://assets/figures/table_icon.png"
