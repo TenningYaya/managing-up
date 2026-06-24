@@ -92,8 +92,8 @@ theme = SubResource("Theme_b6rgt")
 theme_override_font_sizes/font_size = 20
 
 [node name="Select" parent="VBoxContainer" unique_id=2048579194 instance=ExtResource("3_wfpq7")]
-custom_minimum_size = Vector2(130, 0)
 clip_contents = true
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 button_text = "WAREHOUSE_SELECT"
 
@@ -181,7 +181,7 @@ flat = true
 
 [node name="Warehouse" type="AudioStreamPlayer" parent="." unique_id=1883333775]
 stream = ExtResource("10_flfux")
-volume_db = 3.0
+volume_db = -2.0
 bus = &"SFX"
 
 [connection signal="gui_input" from="TitleBar" to="." method="_on_title_bar_gui_input"]

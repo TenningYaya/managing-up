@@ -853,7 +853,7 @@ func _input(event: InputEvent) -> void:
 			# 确保当前目标还活着
 			if current_target and is_instance_valid(current_target):
 				# 极其严谨的包围盒检测：哪怕透明遮罩放行了，也必须点在肉体上才算！
-				if current_target.get_global_rect().has_point(event.global_position):
+				if current_target.get_global_rect().has_point(current_target.get_global_mouse_position()):
 					
 					yes_click_count += 1
 					
