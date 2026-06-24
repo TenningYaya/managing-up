@@ -14,6 +14,7 @@ signal work_speed_up_triggered
 #——————————员工信息————————————
 @export var employee_name: String = "Marry"
 var name_index: int = -1   # NameBank 下标；>=0 时显示名按当前语言实时解析（切语言会变）
+var hire_time: float = -1.0   # 入职时的玩家总游戏时长（-1=尚未入职）；在职时间 = 当前 total_time - hire_time
 @export var rarity: Rarity = Rarity.R
 @export var efficiency: int = 1
 @export var quality: int = 1
@@ -78,6 +79,10 @@ func _ready() -> void:
 	if name_index < 0 and employee_name != "":
 		name_index = NameBank.index_of(employee_name)
 		refresh_name()
+	# 第一次进入场景（被真正招进来 / 放到地图上）时记录入职时刻；
+	# recall 重新进树时 hire_time 已 ≥0，不会被重置，所以在职时间连续不断。
+	if hire_time < 0.0:
+		hire_time = Gamemanager.total_time
 	if size.x < 10 or size.y < 10:
 		custom_minimum_size = Vector2(80, 80)
 		size = Vector2(80, 80)

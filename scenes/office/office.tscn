@@ -78,6 +78,15 @@ mouse_filter = 2
 texture = ExtResource("3_7m821")
 expand_mode = 1
 
+[node name="around_wall" type="TextureRect" parent="." unique_id=339709340]
+layout_mode = 0
+offset_left = 11.0
+offset_top = -6.0
+offset_right = 284.0
+offset_bottom = 154.0
+mouse_filter = 2
+texture = ExtResource("13_y3s53")
+
 [node name="AvatarSlots" type="GridContainer" parent="." unique_id=1681342943]
 layout_mode = 0
 offset_left = 34.0
@@ -158,7 +167,7 @@ offset_bottom = -100.200005
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2.5, 2.5)
-mouse_filter = 1
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_e1yc2")
 
 [node name="Blingbling" parent="Updated" unique_id=1851591675 instance=ExtResource("12_e1yc2")]
@@ -168,14 +177,7 @@ frame = 10
 frame_progress = 0.99278116
 
 [node name="Control" type="Control" parent="." unique_id=835399244]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="around_wall" type="TextureRect" parent="." unique_id=339709340]
-layout_mode = 0
-offset_left = 11.0
-offset_top = -6.0
-offset_right = 284.0
-offset_bottom = 154.0
-texture = ExtResource("13_y3s53")

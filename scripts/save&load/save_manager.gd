@@ -102,6 +102,7 @@ func save_game() -> void:
 			var emp_dict = {
 				"employee_name": emp.employee_name,
 				"name_index": emp.name_index,
+				"hire_time": emp.hire_time,
 				"rarity": emp.rarity,
 				"efficiency": emp.efficiency,
 				"quality": emp.quality,
@@ -155,6 +156,7 @@ func _serialize_resume_pool(pool: Array) -> Array:
 			arr.append({
 				"employee_name": emp.employee_name,
 				"name_index": emp.name_index,
+				"hire_time": emp.hire_time,
 				"rarity": emp.rarity,
 				"efficiency": emp.efficiency,
 				"quality": emp.quality,
@@ -184,6 +186,7 @@ func _instantiate_employee_from_dict(e_data: Dictionary) -> Employee:
 	var e_rarity = int(e_data.get("rarity", 0))
 	new_emp.employee_name = e_data.get("employee_name", "Marry")
 	new_emp.name_index = int(e_data.get("name_index", -1))
+	new_emp.hire_time = float(e_data.get("hire_time", -1.0))   # 在树前设好，_ready 才不会把它当新入职重置
 	new_emp.refresh_name()   # 有 name_index 就按当前语言解析；老存档没有则保留 employee_name
 	new_emp.rarity = e_rarity as Employee.Rarity
 	new_emp.efficiency = int(e_data.get("efficiency", 1))

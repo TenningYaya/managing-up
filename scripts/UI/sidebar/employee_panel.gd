@@ -90,11 +90,27 @@ func _notification(what: int) -> void:
 		efficiency_bar.tooltip_text = tr("TOOLTIP_EMP_EFFICIENCY")
 		quality_bar.tooltip_text = tr("TOOLTIP_EMP_QUALITY")
 		experience_bar.tooltip_text = tr("TOOLTIP_EMP_EXPERIENCE")
+		attribute_label.tooltip_text = tr("EMP_TENURE")
 		if current_employee:
 			name_label.set_value_text(current_employee.get_display_name())
 		_refresh_buffs()  # buff 标签是动态生成的，语言变了要重建一遍
 		# 派遣按钮文字是动态的（派遣/召回），延迟覆盖以晚于 normal_button 自己的翻译刷新
 		call_deferred("_update_dispatch_button")
+
+# 在职时间 = 当前总游戏时长 − 入职时的游戏时长，仅面板可见时每帧刷新
+func _process(_delta: float) -> void:
+	if visible and is_instance_valid(current_employee):
+		_update_tenure()
+
+func _update_tenure() -> void:
+	if not is_instance_valid(current_employee):
+		return
+	attribute_label.set_value_text(_format_tenure(Gamemanager.total_time - current_employee.hire_time))
+
+# 格式化成 时:分:秒（小时不限位，超过一天就继续累加小时，够紧凑）
+func _format_tenure(seconds: float) -> String:
+	var s: int = int(max(seconds, 0.0))
+	return "%02d:%02d:%02d" % [s / 3600, (s % 3600) / 60, s % 60]
 
 func _input(event: InputEvent) -> void:
 	if is_locked_by_tutorial:
@@ -153,8 +169,9 @@ func open_panel(employee: Employee) -> void:
 		Employee.Rarity.SSR: 
 			rarity_label.set_value_text("SSR")
 	
-	var total_attributes = employee.efficiency + employee.quality + employee.experience
-	attribute_label.set_value_text(str(total_attributes))
+	# 把“属性之和”改成“在职时间”（实时由 _process 刷新）
+	attribute_label.tooltip_text = tr("EMP_TENURE")
+	_update_tenure()
 	
 	# 🌟 刷新属性条（确保你的节点引用名和这里一致）
 	efficiency_bar.set_value(employee.efficiency)

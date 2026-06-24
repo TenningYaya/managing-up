@@ -41,8 +41,8 @@ var is_locked: bool = true:
 func _ready() -> void:
 	add_to_group("offices")
 	
-	#if manage_btn:
-		#manage_btn.pressed.connect(_on_manage_btn_pressed)
+	if manage_btn:
+		manage_btn.pressed.connect(_on_manage_btn_pressed)
 		
 	# 监听全局等级变化
 	if Gamemanager.has_signal("level_changed"):
@@ -125,14 +125,21 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if manage_btn and manage_btn.visible:
 			if manage_btn.get_global_rect().has_point(get_global_mouse_position()):
-				return 
-		
+				_on_manage_btn_pressed()   # 点在管理按钮上 → 直接开 Culture 页签
+				return
+
 		_on_office_clicked()
 		
 func _on_office_clicked() -> void:
 	var panel = get_tree().get_first_node_in_group("office_panel")
 	if panel:
 		panel.open_panel(self, false)
+
+# 企业文化室专属：点管理按钮直接打开 Culture 页签（而不是选办公室那一页）
+func _on_manage_btn_pressed() -> void:
+	var panel = get_tree().get_first_node_in_group("office_panel")
+	if panel:
+		panel.open_panel(self, true)  # true = 直接定位到 Culture 页签
 
 # ==========================================
 # 拖拽与悬停
@@ -250,9 +257,9 @@ func _update_visuals() -> void:
 				_hint_tween.kill()
 			empty_hint.rotation = 0.0
 			
-	## 根据是否有功能决定管理按钮的显示
+	## 管理按钮只在企业文化室出现（此处已过 is_locked 判定，锁定时上面已 return）
 	if manage_btn:
-		manage_btn.hide()
+		manage_btn.visible = (current_type == Gamemanager.OfficeType.CULTURE_CENTER)
 
 func _play_hint_wobble_animation():
 	if not empty_hint: return

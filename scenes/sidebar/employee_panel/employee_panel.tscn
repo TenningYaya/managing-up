@@ -11,8 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://c1rwplf815rnk" path="res://assets/UI/employee/infobar/icon-name.png" id="4_khksj"]
 [ext_resource type="Texture2D" uid="uid://c5m87b0iat414" path="res://assets/UI/employee/infobar/职级 (1).png" id="5_fnfi6"]
 [ext_resource type="Texture2D" uid="uid://dwaqo62o1yx1u" path="res://assets/progress bar/progress bar most rounded over.png" id="5_fq3kw"]
-[ext_resource type="Texture2D" uid="uid://p7h0yvalk70i" path="res://assets/UI/employee/infobar/评分 (1).png" id="6_cr4tb"]
 [ext_resource type="Texture2D" uid="uid://bbt1nylq8pmni" path="res://assets/progress bar/progress bar most rounded progress cinnamon.png" id="6_p7uvh"]
+[ext_resource type="Texture2D" uid="uid://bt1mypufc7f8g" path="res://assets/UI/employee/infobar/time_fill.png" id="7_cr4tb"]
 [ext_resource type="Texture2D" uid="uid://dnrqtwbwt5472" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/PNG SpriteSheet/SpriteSheet.png" id="11_5it8m"]
 [ext_resource type="PackedScene" uid="uid://bkihwdvwxmcnv" path="res://scenes/vfx/working_onfire.tscn" id="12_cr4tb"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="13_fnfi6"]
@@ -161,7 +161,7 @@ layout_mode = 2
 
 [node name="AttributeLabel" parent="PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer" unique_id=799690892 instance=ExtResource("3_agpfo")]
 layout_mode = 2
-icon_texture = ExtResource("6_cr4tb")
+icon_texture = ExtResource("7_cr4tb")
 
 [node name="HSeparator3" type="HSeparator" parent="PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer" unique_id=1453991242]
 modulate = Color(0.2, 0.2, 0.2, 1)

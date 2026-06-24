@@ -37,6 +37,11 @@ func _ready():
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_TRANSPARENT, true)     # 确保窗口可透明
 	get_viewport().transparent_bg = true
 
+	# 运行时窗口/任务栏图标（用项目里的 logo）
+	var _icon_tex: Texture2D = load("res://assets/figures/table_icon.png")
+	if _icon_tex:
+		DisplayServer.set_icon(_icon_tex.get_image())
+
 	await get_tree().process_frame  # 等模式切换生效再查询可用区域
 	print("after second await: size=", DisplayServer.window_get_size())
 	window_height_fraction = _load_window_height_fraction()  # 读取上次保存的窗口大小比例
