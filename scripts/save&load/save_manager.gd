@@ -200,7 +200,9 @@ func _instantiate_employee_from_dict(e_data: Dictionary) -> Employee:
 	new_emp.dna = clean_dna 
 	
 	# 🌟 把外表精准挂载到 VisualAnchor 节点下，对齐包围盒
-	var visual_scene = VISUAL_SCENES.get(e_rarity)
+	# ⚠️ VISUAL_SCENES 只登记了键 0，但所有稀有度其实共用 sr_visual（同 recruitment_manager）。
+	#    SR/SSR(rarity 1/2) 必须回退到键 0，否则读档后非 R 员工没有视觉/头像（座位透明人）。
+	var visual_scene = VISUAL_SCENES.get(e_rarity, VISUAL_SCENES.get(0))
 	if visual_scene:
 		var visual_instance = visual_scene.instantiate()
 		
