@@ -42,12 +42,12 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_88o6m")
 
 [node name="Office" type="Control" unique_id=1395701316]
-custom_minimum_size = Vector2(288, 150)
+custom_minimum_size = Vector2(384, 200)
 layout_mode = 3
 anchors_preset = 0
-offset_top = -9.0
-offset_right = 288.0
-offset_bottom = 150.0
+offset_top = -12.0
+offset_right = 384.0
+offset_bottom = 200.0
 script = ExtResource("1_d5yd0")
 tex_empty = ExtResource("3_7m821")
 tex_pantry = ExtResource("3_4houj")
@@ -62,9 +62,124 @@ tile_set = SubResource("TileSet_16a3e")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=2070433266]
 layout_mode = 0
-offset_left = 17.0
-offset_right = 273.0
-offset_bottom = 139.0
+offset_left = 22.667
+offset_right = 364.0
+offset_bottom = 185.333
 mouse_filter = 2
 texture = ExtResource("3_7m821")
 expand_mode = 1
+<<<<<<< Updated upstream
+=======
+
+[node name="around_wall" type="TextureRect" parent="." unique_id=339709340]
+layout_mode = 0
+offset_left = 14.667
+offset_top = -8.0
+offset_right = 378.667
+offset_bottom = 205.333
+mouse_filter = 2
+texture = ExtResource("13_y3s53")
+
+[node name="AvatarSlots" type="GridContainer" parent="." unique_id=1681342943]
+visible = false
+layout_mode = 0
+offset_left = 19.0
+offset_top = 206.0
+offset_right = 365.0
+offset_bottom = 296.0
+columns = 6
+theme_override_constants/h_separation = 2
+
+[node name="Slot1" type="VBoxContainer" parent="AvatarSlots" unique_id=949021389]
+custom_minimum_size = Vector2(56, 84)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Slot2" type="VBoxContainer" parent="AvatarSlots" unique_id=146305324]
+custom_minimum_size = Vector2(56, 84)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Slot3" type="VBoxContainer" parent="AvatarSlots" unique_id=935378993]
+custom_minimum_size = Vector2(56, 84)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Slot4" type="VBoxContainer" parent="AvatarSlots" unique_id=656589062]
+custom_minimum_size = Vector2(56, 84)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Slot5" type="VBoxContainer" parent="AvatarSlots" unique_id=5985643]
+custom_minimum_size = Vector2(56, 84)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Slot6" type="VBoxContainer" parent="AvatarSlots" unique_id=1718508961]
+custom_minimum_size = Vector2(56, 84)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ManageButton" parent="." unique_id=2048579194 instance=ExtResource("8_2u0tt")]
+visible = false
+layout_mode = 0
+offset_left = 104.0
+offset_top = 114.667
+offset_right = 290.667
+offset_bottom = 161.333
+button_text = "OFFICE_SELECT_CULTURE"
+
+[node name="DismissButton" parent="." unique_id=1204181230 instance=ExtResource("8_2u0tt")]
+visible = false
+layout_mode = 0
+offset_left = 122.0
+offset_top = 80.0
+offset_right = 262.0
+offset_bottom = 117.0
+button_text = "OFFICE_DISMISS_MEETING"
+
+[node name="EmptyOfficeHint" type="TextureRect" parent="." unique_id=1675794164]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -42.667
+offset_top = -41.667
+offset_right = 42.667
+offset_bottom = 41.667
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_41xxe")
+
+[node name="Updated" type="PanelContainer" parent="." unique_id=1734189334]
+visible = false
+clip_children = 1
+z_index = 999
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 17.333
+offset_right = -226.4
+offset_bottom = -133.6
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2.5, 2.5)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_e1yc2")
+
+[node name="Blingbling" parent="Updated" unique_id=1851591675 instance=ExtResource("12_e1yc2")]
+position = Vector2(163.2, -48)
+scale = Vector2(0.35555547, 0.34678572)
+frame = 10
+frame_progress = 0.99278116
+
+[node name="Control" type="Control" parent="." unique_id=835399244]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+>>>>>>> Stashed changes

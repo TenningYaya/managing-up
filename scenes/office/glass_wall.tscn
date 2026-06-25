@@ -1,0 +1,259 @@
+[gd_scene format=3 uid="uid://d2vtifhmv6jpd"]
+
+[ext_resource type="Texture2D" uid="uid://cv504ynte8nqt" path="res://assets/left.png" id="1_shhuv"]
+[ext_resource type="Texture2D" uid="uid://bgeaffow07yud" path="res://assets/background/glass_wall.png" id="2_7qjyd"]
+[ext_resource type="Texture2D" uid="uid://tstl70u886xm" path="res://assets/background/glass_wall2.png" id="3_cigi1"]
+
+[node name="GlassWall" type="Control" unique_id=1956728320]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1267662779]
+visible = false
+clip_children = 1
+layout_mode = 0
+offset_left = -1061.0
+offset_top = -75.0
+offset_right = 2281.0
+offset_bottom = 19.0
+
+[node name="LeftCover4" type="TextureRect" parent="ColorRect" unique_id=1403495778]
+layout_mode = 0
+offset_left = 2510.0
+offset_top = -3.0
+offset_right = 3356.0
+offset_bottom = 432.0
+texture = ExtResource("1_shhuv")
+expand_mode = 1
+
+[node name="LeftCover3" type="TextureRect" parent="ColorRect" unique_id=799396940]
+layout_mode = 0
+offset_left = 1674.0
+offset_top = -3.0
+offset_right = 2520.0
+offset_bottom = 432.0
+texture = ExtResource("1_shhuv")
+expand_mode = 1
+
+[node name="LeftCover2" type="TextureRect" parent="ColorRect" unique_id=1692529036]
+layout_mode = 0
+offset_left = 838.0
+offset_top = -3.0
+offset_right = 1684.0
+offset_bottom = 432.0
+texture = ExtResource("1_shhuv")
+expand_mode = 1
+
+[node name="LeftCover" type="TextureRect" parent="ColorRect" unique_id=373100993]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -3.0
+offset_right = 848.0
+offset_bottom = 432.0
+texture = ExtResource("1_shhuv")
+expand_mode = 1
+
+[node name="PureWall" type="Control" parent="." unique_id=2050832567]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="PureWall" unique_id=41005510]
+texture_filter = 1
+layout_mode = 0
+offset_left = -935.0
+offset_top = 26.0
+offset_right = 78.0
+offset_bottom = 120.0
+texture = ExtResource("2_7qjyd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="PureWall" unique_id=1568036304]
+texture_filter = 1
+layout_mode = 0
+offset_left = -1882.0
+offset_top = 26.0
+offset_right = -869.0
+offset_bottom = 120.0
+texture = ExtResource("2_7qjyd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="PureWall" unique_id=874385878]
+texture_filter = 1
+layout_mode = 0
+offset_left = -2833.0
+offset_top = 26.0
+offset_right = -1820.0
+offset_bottom = 120.0
+texture = ExtResource("2_7qjyd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="PureWall" unique_id=745303259]
+texture_filter = 1
+layout_mode = 0
+offset_left = -3780.0
+offset_top = 26.0
+offset_right = -2767.0
+offset_bottom = 120.0
+texture = ExtResource("2_7qjyd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect5" type="TextureRect" parent="PureWall" unique_id=560207053]
+texture_filter = 1
+layout_mode = 0
+offset_left = 17.0
+offset_top = 26.0
+offset_right = 1030.0
+offset_bottom = 120.0
+texture = ExtResource("2_7qjyd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PureWall2" type="Control" parent="." unique_id=1755522113]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.0
+offset_top = -22.0
+offset_right = 20.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control3" type="Control" parent="PureWall2" unique_id=1826558117]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Control2" type="Control" parent="PureWall2/Control3" unique_id=1311380114]
+anchors_preset = 0
+offset_left = -776.0
+offset_right = -736.0
+offset_bottom = 40.0
+
+[node name="TextureRect2" type="TextureRect" parent="PureWall2/Control3/Control2" unique_id=1595833456]
+texture_filter = 1
+layout_mode = 0
+offset_left = -1323.0
+offset_top = 26.0
+offset_right = -310.0
+offset_bottom = 120.0
+texture = ExtResource("3_cigi1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="PureWall2/Control3/Control2" unique_id=1420197914]
+texture_filter = 1
+layout_mode = 0
+offset_left = -936.0
+offset_top = 26.0
+offset_right = 77.0
+offset_bottom = 120.0
+texture = ExtResource("3_cigi1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="PureWall2/Control3" unique_id=1952895926]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="PureWall2/Control3/Control" unique_id=1558121886]
+texture_filter = 1
+layout_mode = 0
+offset_left = -935.0
+offset_top = 26.0
+offset_right = 78.0
+offset_bottom = 120.0
+texture = ExtResource("3_cigi1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="PureWall2/Control3/Control" unique_id=1772566972]
+texture_filter = 1
+layout_mode = 0
+offset_left = -1323.0
+offset_top = 26.0
+offset_right = -310.0
+offset_bottom = 120.0
+texture = ExtResource("3_cigi1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Control4" type="Control" parent="PureWall2" unique_id=1023389944]
+anchors_preset = 0
+offset_left = -1552.0
+offset_right = -1512.0
+offset_bottom = 40.0
+
+[node name="Control2" type="Control" parent="PureWall2/Control4" unique_id=1949756608]
+anchors_preset = 0
+offset_left = -776.0
+offset_right = -736.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="PureWall2/Control4/Control2" unique_id=1523772779]
+texture_filter = 1
+layout_mode = 0
+offset_left = -935.0
+offset_top = 26.0
+offset_right = 78.0
+offset_bottom = 120.0
+texture = ExtResource("3_cigi1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="PureWall2/Control4/Control2" unique_id=1411444704]
+texture_filter = 1
+layout_mode = 0
+offset_left = -1323.0
+offset_top = 26.0
+offset_right = -310.0
+offset_bottom = 120.0
+texture = ExtResource("3_cigi1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="PureWall2/Control4" unique_id=791022306]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="PureWall2/Control4/Control" unique_id=1306197635]
+texture_filter = 1
+layout_mode = 0
+offset_left = -935.0
+offset_top = 26.0
+offset_right = 78.0
+offset_bottom = 120.0
+texture = ExtResource("3_cigi1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="PureWall2/Control4/Control" unique_id=185466014]
+texture_filter = 1
+layout_mode = 0
+offset_left = -1323.0
+offset_top = 26.0
+offset_right = -310.0
+offset_bottom = 120.0
+texture = ExtResource("3_cigi1")
+expand_mode = 1
+stretch_mode = 5
