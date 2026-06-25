@@ -41,7 +41,7 @@ var dragging := false
 var drag_offset := Vector2()
 
 # 重命名相关（铅笔图标 + 名字字体，与名字标签一致）
-const RENAME_ICON := preload("res://assets/UI/employee/warehouse/rename.png")
+const RENAME_ICON := preload("res://assets/sidebar/other/edit (1).png")
 const NAME_FONT := preload("res://assets/fonts/stacked_pixel_cjk.tres")
 var _name_info_label: Label              # name_label(信息条) 内部那个显示文字的 Label
 var _edit_name_button: TextureButton
@@ -99,6 +99,13 @@ func _ready() -> void:
 func _build_panel_rename_ui() -> void:
 	_name_info_label = name_label.get_node("InfoLabel")
 
+	# name_label 是 HBoxContainer：默认把同排子项拉到与最高子项等高。编辑框（像素字体在 20 号下
+	# 整行高约 29）比名字文字高，会撑高整行，而 InfoIcon 是 expand_mode=IGNORE_SIZE + 纵向填充，
+	# 就被纵向拉长。把图标钉成不随行高拉伸（固定 20，居中），编辑时就不会再变形。
+	var info_icon := name_label.get_node("InfoIcon") as Control
+	if info_icon:
+		info_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+
 	# 铅笔按钮：放在名字标签右侧
 	_edit_name_button = TextureButton.new()
 	_edit_name_button.name = "EditNameButton"
@@ -115,14 +122,29 @@ func _build_panel_rename_ui() -> void:
 	_name_edit.name = "NameEdit"
 	_name_edit.max_length = 12
 	_name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_name_edit.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_name_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_name_edit.add_theme_font_override("font", NAME_FONT)
 	_name_edit.add_theme_font_size_override("font_size", 20)
+	_apply_compact_lineedit_style(_name_edit)   # 收窄上下边距，使其高度≈名字文字，避免撑高整行
 	_name_edit.hide()
 	name_label.add_child(_name_edit)
 	_name_edit.text_submitted.connect(_on_panel_name_submitted)
 	_name_edit.focus_exited.connect(_on_panel_name_focus_exited)
 	_name_edit.gui_input.connect(_on_panel_name_edit_gui_input)
+
+# 收窄 LineEdit 默认主题里偏厚的上下边距，让它的高度贴近名字文字，
+# 避免编辑时把所在的 HBox 整行撑高（否则同排的图标会被纵向拉长）。
+func _apply_compact_lineedit_style(le: LineEdit) -> void:
+	var box := StyleBoxFlat.new()
+	box.bg_color = Color(0, 0, 0, 0.10)
+	box.set_corner_radius_all(3)
+	box.content_margin_left = 4
+	box.content_margin_right = 4
+	box.content_margin_top = 0
+	box.content_margin_bottom = 0
+	le.add_theme_stylebox_override("normal", box)
+	le.add_theme_stylebox_override("focus", box)
 
 func _start_panel_rename() -> void:
 	if not is_instance_valid(current_employee) or _is_editing_name:

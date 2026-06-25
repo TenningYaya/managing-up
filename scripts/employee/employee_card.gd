@@ -20,7 +20,7 @@ signal card_clicked(employee_data: Employee) # 定义信号，把员工数据传
 @onready var not_working = $NotWorking
 
 # 重命名相关资源（铅笔图标 + 卡片字体，保持与名字标签一致的像素字体）
-const RENAME_ICON := preload("res://assets/UI/employee/warehouse/rename.png")
+const RENAME_ICON := preload("res://assets/sidebar/other/edit (1).png")
 const CARD_FONT := preload("res://assets/fonts/stacked_pixel_cjk.tres")
 
 # 重命名用到的节点（在 _ready 里动态创建，避免改 .tscn 结构）
@@ -78,6 +78,16 @@ func _build_rename_ui() -> void:
 	name_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_edit.add_theme_font_override("font", CARD_FONT)
 	name_edit.add_theme_font_size_override("font_size", 14)
+	# 收窄默认主题里偏厚的上下边距，让编辑框高度贴近名字文字，避免编辑时把卡片撑高
+	var box := StyleBoxFlat.new()
+	box.bg_color = Color(0, 0, 0, 0.10)
+	box.set_corner_radius_all(3)
+	box.content_margin_left = 4
+	box.content_margin_right = 4
+	box.content_margin_top = 0
+	box.content_margin_bottom = 0
+	name_edit.add_theme_stylebox_override("normal", box)
+	name_edit.add_theme_stylebox_override("focus", box)
 	name_edit.hide()
 	vbox.add_child(name_edit)
 	vbox.move_child(name_edit, name_row.get_index() + 1)
