@@ -13,8 +13,11 @@ config_version=5
 config/name="Managing Up"
 run/main_scene="uid://dsbjb26fr5nob"
 config/features=PackedStringArray("4.6", "Forward Plus")
-run/flush_stdout_on_print=true
 config/icon="res://assets/figures/table_icon.png"
+
+[accessibility]
+
+general/accessibility_support=2
 
 [autoload]
 
@@ -31,7 +34,7 @@ FloorManager="*uid://cfssx3hpb6hxe"
 
 [debug]
 
-settings/stdout/verbose_stdout=true
+settings/stdout/verbose_stdout=false
 file_logging/enable_file_logging=true
 
 [display]

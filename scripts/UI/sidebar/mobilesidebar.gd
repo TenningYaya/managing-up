@@ -144,6 +144,30 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
 		_apply_menu_translations()
 
+# 中文比英文大几号（解决手机界面中文菜单字太小），按需调这个数
+const ZH_MENU_FONT_BONUS := 4
+var _base_menu_font_sizes := {}   # 各菜单标签的原始（英文）字号，首次覆盖前记下
+
+func _menu_labels() -> Array:
+	return [
+		btn_upgrades.get_node("upgrades"),
+		btn_tutorial.get_node("Tutorial"),
+		btn_general.get_node("GENERAL"),
+		btn_settings.get_node("SETTINGS"),
+		btn_decor.get_node("DECOR"),
+		btn_personal.get_node("PERSONAL"),
+	]
+
+# 只在中文时把这几个菜单文字调大；英文保持原始设计字号
+func _apply_locale_font_sizes() -> void:
+	var is_zh := TranslationServer.get_locale().begins_with("zh")
+	for lbl in _menu_labels():
+		if not _base_menu_font_sizes.has(lbl):
+			_base_menu_font_sizes[lbl] = lbl.get_theme_font_size("font_size")  # 须在覆盖前记下原始字号
+		var base: int = _base_menu_font_sizes[lbl]
+		var sz: int = (base + ZH_MENU_FONT_BONUS) if is_zh else base
+		lbl.add_theme_font_size_override("font_size", sz)
+
 func _apply_menu_translations() -> void:
 	btn_upgrades.get_node("upgrades").text = tr("Sidebar_menu_upgrades")
 	btn_tutorial.get_node("Tutorial").text = tr("Sidebar_menu_tutorial")
@@ -151,6 +175,7 @@ func _apply_menu_translations() -> void:
 	btn_settings.get_node("SETTINGS").text = tr("Sidebar_menu_settings")
 	btn_decor.get_node("DECOR").text = tr("Sidebar_menu_decor")
 	btn_personal.get_node("PERSONAL").text = tr("Sidebar_personal_title")
+	_apply_locale_font_sizes()
 
 
 func _input(event: InputEvent) -> void:
