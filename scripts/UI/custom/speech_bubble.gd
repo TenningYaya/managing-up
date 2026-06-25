@@ -12,9 +12,20 @@ func _ready() -> void:
 	# 初始状态设为不可见和极小
 	scale = Vector2.ZERO
 
+const MAX_TEXT_WIDTH := 900.0   # 文本最大宽度（局部坐标），超过即自动换行；按需调
+
+# 短文本量到多宽就多宽（贴合不留白），长文本封顶并换行
+func _fit_label_width() -> void:
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var font := label.get_theme_font("font")
+	var font_size := label.get_theme_font_size("font_size")
+	var one_line := font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	label.custom_minimum_size = Vector2(minf(one_line + 4.0, MAX_TEXT_WIDTH), 0.0)
+
 func pop_up(content: String) -> void:
 	label.text = content
-	
+	_fit_label_width()
+
 	if _tween:
 		_tween.kill()
 		
