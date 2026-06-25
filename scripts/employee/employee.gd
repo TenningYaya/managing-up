@@ -161,7 +161,8 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
 				# 🌟 关键修复：不要用 event.global_position，要用 get_global_mouse_position()
-				if get_global_rect().has_point(get_global_mouse_position()): 
+				# 并且：点击点若被展开的手机侧栏盖住，就让侧栏的按钮处理，员工不抢（否则会穿透加速）
+				if get_global_rect().has_point(get_global_mouse_position()) and not _is_point_over_blocking_ui(get_global_mouse_position()):
 					is_pressing = true
 					drag_start_mouse_pos = get_global_mouse_position() 
 					drag_start_position = global_position 
@@ -181,7 +182,7 @@ func _input(event: InputEvent) -> void:
 		
 		# 右键打开面板，同理也做全局保护
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			if get_global_rect().has_point(get_global_mouse_position()):
+			if get_global_rect().has_point(get_global_mouse_position()) and not _is_point_over_blocking_ui(get_global_mouse_position()):
 				_on_employee_clicked()
 				get_viewport().set_input_as_handled()
 
@@ -194,6 +195,13 @@ func _input(event: InputEvent) -> void:
 		
 		if dragging:
 			global_position = get_global_mouse_position() - drag_offset
+
+# 点击点是否被某个"会挡住世界点击"的 UI（如展开的手机侧栏）盖住
+func _is_point_over_blocking_ui(global_pos: Vector2) -> bool:
+	for ui in get_tree().get_nodes_in_group("sidebar_panel"):
+		if ui.has_method("blocks_point") and ui.blocks_point(global_pos):
+			return true
+	return false
 
 func _draw() -> void:
 	#if dragging:

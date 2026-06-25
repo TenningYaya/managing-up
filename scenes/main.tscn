@@ -139,10 +139,10 @@ script = ExtResource("4_og1vs")
 
 [node name="LeftCover" type="TextureRect" parent="FullGameMode/Background/Floors" unique_id=557149700]
 layout_mode = 0
-offset_left = -1059.0
-offset_top = -78.0
-offset_right = -213.0
-offset_bottom = 357.0
+offset_left = -1504.0
+offset_top = -77.0
+offset_right = -658.0
+offset_bottom = 358.0
 texture = ExtResource("5_vxglm")
 expand_mode = 1
 
@@ -165,52 +165,49 @@ offset_bottom = -81.0
 
 [node name="RightCover" type="TextureRect" parent="FullGameMode/Background" unique_id=1884332700]
 layout_mode = 0
-offset_left = 1118.0
+offset_left = 1670.0
 offset_top = -86.0
-offset_right = 2116.0
+offset_right = 2668.0
 offset_bottom = 350.0
 texture = ExtResource("4_2wyq8")
 expand_mode = 1
 
 [node name="WholeAlignment" type="HBoxContainer" parent="FullGameMode/Background" unique_id=905224424]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -1600.0
+offset_top = -20.0
+offset_right = 1600.0
+offset_bottom = 310.0
 grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 2
 
 [node name="OfficeArea" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=601108209 groups=["office_area"]]
 layout_mode = 2
 mouse_filter = 2
-
-[node name="OfficeRow1" type="VBoxContainer" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=1474231141]
-layout_mode = 2
-mouse_filter = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="NewRoom1" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow1" unique_id=1395701316 instance=ExtResource("1_0wfyh")]
+[node name="NewRoom1" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=1395701316 instance=ExtResource("1_0wfyh")]
 layout_mode = 2
-unlock_at_level = 3
-
-[node name="NewRoom2" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow1" unique_id=282060098 instance=ExtResource("1_0wfyh")]
-layout_mode = 2
+size_flags_vertical = 4
 unlock_at_level = 4
 
-[node name="OfficeRow2" type="VBoxContainer" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=909741960]
+[node name="NewRoom2" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=282060098 instance=ExtResource("1_0wfyh")]
 layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 10
-alignment = 1
+size_flags_vertical = 4
+unlock_at_level = 3
 
-[node name="NewRoom3" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=1041642994 groups=["office_1", "tutorial_office"] instance=ExtResource("1_0wfyh")]
+[node name="NewRoom3" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=1041642994 instance=ExtResource("1_0wfyh")]
 layout_mode = 2
-
-[node name="NewRoom4" parent="FullGameMode/Background/WholeAlignment/OfficeArea/OfficeRow2" unique_id=2005734672 instance=ExtResource("1_0wfyh")]
-layout_mode = 2
+size_flags_vertical = 4
 unlock_at_level = 2
+
+[node name="NewRoom4" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=2005734672 groups=["office_1", "tutorial_office"] instance=ExtResource("1_0wfyh")]
+layout_mode = 2
+size_flags_vertical = 4
 
 [node name="DeskRow" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=1158104807]
 layout_mode = 2

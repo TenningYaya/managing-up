@@ -78,6 +78,17 @@ texture = ExtResource("2_7qjyd")
 expand_mode = 1
 stretch_mode = 5
 
+[node name="TextureRect5" type="TextureRect" parent="PureWall" unique_id=503954391]
+texture_filter = 1
+layout_mode = 0
+offset_left = -92.0
+offset_top = 26.0
+offset_right = 921.0
+offset_bottom = 120.0
+texture = ExtResource("2_7qjyd")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="TextureRect2" type="TextureRect" parent="PureWall" unique_id=1568036304]
 texture_filter = 1
 layout_mode = 0

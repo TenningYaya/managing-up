@@ -187,8 +187,11 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 
 		# 3. 拿到手机【真正机身】的物理矩形！
-		# 注意：这里千万别拿 CloseBlocker，要拿装手机内容的那个节点，比如 PhoneWrapper！
-		var phone_rect = $PhoneWrapper.get_global_rect()
+		# 🌟 必须用 PhoneBase（机身贴图），不能用 PhoneWrapper：
+		# Screen/按钮/壁纸都比 PhoneWrapper 自身矩形往左上方伸出（左列与顶行 App 图标有一部分在 PhoneWrapper 外），
+		# 用 PhoneWrapper 会把这些伸出去的部分误判成“点在手机外”→ 关机并让点击穿透，导致这些按钮有时点不动。
+		# PhoneBase 完整包住所有 App 图标和 Home 键，判定才准确。
+		var phone_rect = $PhoneWrapper/PhoneBase.get_global_rect()
 
 		# 4. 如果鼠标点的坐标，不在手机机身范围内
 		if not phone_rect.has_point(event.global_position):
@@ -197,6 +200,19 @@ func _input(event: InputEvent) -> void:
 
 			# 注意！千万不要写 get_viewport().set_input_as_handled()！
 			# 这样点击事件就能像幽灵一样穿透下去，精准砸中外面的按钮！
+
+
+# =====================================================
+# 给世界里的可点击对象（如员工）判断：这个屏幕坐标是否被手机挡住。
+# 挡住 = 展开时盖在机身上 / 收起时盖在触发按钮上。
+# 这样员工的 _input(它在 GUI 之前、不认 UI 遮挡) 就不会被手机后面的点击穿透触发。
+# =====================================================
+func blocks_point(global_pos: Vector2) -> bool:
+	if is_open:
+		return $PhoneWrapper/PhoneBase.get_global_rect().has_point(global_pos)
+	if is_instance_valid(trigger_btn) and trigger_btn.visible:
+		return trigger_btn.get_global_rect().has_point(global_pos)
+	return false
 
 
 # =====================================================

@@ -65,10 +65,13 @@ func get_snap_global_position() -> Vector2:
 
 
 func contains_global_point(point: Vector2) -> bool:
-	# 向上检查层级树，如果当前座位或其所在的工位组（DeskSlot）被设为透明，则判定为不可放置
+	# 向上检查层级树：透明 或 所属工位(DeskSlot)未解锁 → 判定为不可放置
 	var current_node = self
 	while current_node and current_node is CanvasItem:
 		if current_node.modulate.a <= 0.01:
+			return false
+		# 🌟 未解锁的桌子不能放员工（锁定时只是变灰、alpha 仍为 1，光看透明度查不出来）
+		if current_node is DeskSlot and current_node.is_locked:
 			return false
 		current_node = current_node.get_parent()
 
