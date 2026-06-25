@@ -10,10 +10,12 @@ signal work_started()
 signal work_stopped()
 signal buff_status_changed
 signal work_speed_up_triggered
+signal display_name_changed   # 玩家改名后发出：各处显示该员工名字的 UI 监听此信号刷新（不能叫 renamed，会和 Node 内置信号冲突）
 
 #——————————员工信息————————————
 @export var employee_name: String = "Marry"
 var name_index: int = -1   # NameBank 下标；>=0 时显示名按当前语言实时解析（切语言会变）
+var is_custom_named: bool = false   # 玩家手动改过名：固定用 employee_name，不再随语言/NameBank 解析（存档保留）
 var hire_time: float = -1.0   # 入职时的玩家总游戏时长（-1=尚未入职）；在职时间 = 当前 total_time - hire_time
 @export var rarity: Rarity = Rarity.R
 @export var efficiency: int = 1
@@ -76,7 +78,8 @@ func _ready() -> void:
 	add_to_group("employees")
 	# 场景预置员工（教程员工等）只写了英文 employee_name、没有 name_index，
 	# 按英文名反查下标，让它们也能随语言显示中文名（老存档里的员工同理）。
-	if name_index < 0 and employee_name != "":
+	# is_custom_named 的员工是玩家手动改的名，绝不反查 NameBank（否则改成名库里有的英文名会被本地化覆盖）
+	if name_index < 0 and employee_name != "" and not is_custom_named:
 		name_index = NameBank.index_of(employee_name)
 		refresh_name()
 	# 第一次进入场景（被真正招进来 / 放到地图上）时记录入职时刻；
@@ -143,6 +146,17 @@ func get_display_name() -> String:
 func refresh_name() -> void:
 	if name_index >= 0:
 		employee_name = NameBank.get_localized_name(name_index)
+
+# 玩家在仓库里手动改名：写回员工数据本身（单一数据源），并广播 renamed 让所有视图刷新。
+# 改名后固定使用 employee_name，不再随语言切换或 NameBank 解析。
+func set_custom_name(new_name: String) -> void:
+	var clean := new_name.strip_edges()
+	if clean == "":
+		return
+	employee_name = clean
+	name_index = -1            # 脱离名库，显示名改由 employee_name 决定
+	is_custom_named = true     # 永久标记，存档保留，防止 _ready/切语言把名字覆盖回去
+	display_name_changed.emit()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED:

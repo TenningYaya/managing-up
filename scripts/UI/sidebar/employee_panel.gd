@@ -228,6 +228,8 @@ func _connect_current_employee() -> void:
 		current_employee.buff_status_changed.connect(_refresh_buffs)
 	if not current_employee.work_speed_up_triggered.is_connected(_play_speedup_vfx):
 		current_employee.work_speed_up_triggered.connect(_play_speedup_vfx)
+	if not current_employee.display_name_changed.is_connected(_on_current_employee_renamed):
+		current_employee.display_name_changed.connect(_on_current_employee_renamed)
 
 func _disconnect_current_employee() -> void:
 	if current_employee == null:
@@ -244,6 +246,8 @@ func _disconnect_current_employee() -> void:
 		current_employee.buff_status_changed.disconnect(_refresh_buffs)
 	if current_employee.work_speed_up_triggered.is_connected(_play_speedup_vfx):
 		current_employee.work_speed_up_triggered.disconnect(_play_speedup_vfx)
+	if current_employee.display_name_changed.is_connected(_on_current_employee_renamed):
+		current_employee.display_name_changed.disconnect(_on_current_employee_renamed)
 		
 func _refresh_progress_bar() -> void:
 	if current_employee == null:
@@ -274,6 +278,11 @@ func _on_current_employee_tree_exiting() -> void:
 	current_employee = null
 	progress_bar.value = 0
 	hide()
+
+# 当前查看的员工被改名时刷新名字标签
+func _on_current_employee_renamed() -> void:
+	if is_instance_valid(current_employee):
+		name_label.set_value_text(current_employee.get_display_name())
 # ==========================================
 # 5. 外派与调入逻辑
 # ==========================================

@@ -135,6 +135,18 @@ func _build_avatar_slot(slot: Control, emp) -> void:
 	name_label.add_theme_font_size_override("font_size", 12)
 	slot.add_child(name_label)
 
+	# 玩家在仓库改名时，同步刷新这个会议头像下的名字标签
+	if emp.has_signal("display_name_changed"):
+		var updater := func():
+			if is_instance_valid(name_label):
+				name_label.text = emp.get_display_name() if emp.has_method("get_display_name") else str(emp.employee_name)
+		emp.display_name_changed.connect(updater)
+		# 标签被重建/销毁时断开连接，避免连接在 emp 上越积越多
+		name_label.tree_exited.connect(func():
+			if is_instance_valid(emp) and emp.display_name_changed.is_connected(updater):
+				emp.display_name_changed.disconnect(updater)
+		)
+
 func _on_avatar_gui_input(event: InputEvent, emp) -> void:
 	# 只认左键双击
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
