@@ -5,10 +5,6 @@ var dragging = false
 var last_mouse_pos = Vector2.ZERO
 
 # 🌟 将你场景的实际内容宽度和最左边界设为常量，方便统一管理
-#const CONTENT_WIDTH := 2210.0 # 场景总宽度 (原 2110 - (-100) 的绝对值)
-#const MIN_X := -100.0         # 相机能到达的最左侧坐标
-#const CONTENT_WIDTH := 3980.0 # 场景总宽度 (原 2110 - (-100) 的绝对值)
-#const MIN_X := 100.0         # 相机能到达的最左侧坐标
 const BOUND_LEFT := -1000.0
 const BOUND_RIGHT := 3060.0
 
