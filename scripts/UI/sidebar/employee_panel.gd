@@ -40,6 +40,15 @@ var _shake_tween: Tween = null
 var dragging := false
 var drag_offset := Vector2()
 
+# 重命名相关（铅笔图标 + 名字字体，与名字标签一致）
+const RENAME_ICON := preload("res://assets/UI/employee/warehouse/rename.png")
+const NAME_FONT := preload("res://assets/fonts/stacked_pixel_cjk.tres")
+var _name_info_label: Label              # name_label(信息条) 内部那个显示文字的 Label
+var _edit_name_button: TextureButton
+var _name_edit: LineEdit
+var _is_editing_name: bool = false
+var _name_before_edit: String = ""
+
 func lock_for_tutorial():
 	is_locked_by_tutorial = true
 	show() # 确保它显示出来
@@ -81,8 +90,89 @@ func _ready() -> void:
 	
 	# 当 PopupWindow 发出 canceled 信号时，执行取消逻辑（可选）
 	popup_window.canceled.connect(cancel_fire_employee)
-	
+
 	set_process_input(true)
+	_build_panel_rename_ui()
+
+# ==================== 名字行内重命名 ====================
+# 只给 name_label 这一个信息条加铅笔按钮和编辑框（RarityLabel/AttributeLabel 共用同一组件，不能动）
+func _build_panel_rename_ui() -> void:
+	_name_info_label = name_label.get_node("InfoLabel")
+
+	# 铅笔按钮：放在名字标签右侧
+	_edit_name_button = TextureButton.new()
+	_edit_name_button.name = "EditNameButton"
+	_edit_name_button.texture_normal = RENAME_ICON
+	_edit_name_button.ignore_texture_size = true
+	_edit_name_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	_edit_name_button.custom_minimum_size = Vector2(18, 18)
+	_edit_name_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	name_label.add_child(_edit_name_button)
+	_edit_name_button.pressed.connect(_start_panel_rename)
+
+	# 行内编辑框：默认隐藏，编辑时顶替名字文字
+	_name_edit = LineEdit.new()
+	_name_edit.name = "NameEdit"
+	_name_edit.max_length = 12
+	_name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_name_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_name_edit.add_theme_font_override("font", NAME_FONT)
+	_name_edit.add_theme_font_size_override("font_size", 20)
+	_name_edit.hide()
+	name_label.add_child(_name_edit)
+	_name_edit.text_submitted.connect(_on_panel_name_submitted)
+	_name_edit.focus_exited.connect(_on_panel_name_focus_exited)
+	_name_edit.gui_input.connect(_on_panel_name_edit_gui_input)
+
+func _start_panel_rename() -> void:
+	if not is_instance_valid(current_employee) or _is_editing_name:
+		return
+	_is_editing_name = true
+	_name_before_edit = current_employee.get_display_name()
+	_name_edit.text = _name_before_edit
+	_name_info_label.hide()
+	_edit_name_button.hide()
+	_name_edit.show()
+	# 等控件显示后再抢焦点并全选，让玩家直接打字覆盖
+	_name_edit.grab_focus.call_deferred()
+	_name_edit.select_all.call_deferred()
+
+func _on_panel_name_submitted(_text: String) -> void:
+	_commit_panel_rename()
+
+func _on_panel_name_focus_exited() -> void:
+	_commit_panel_rename()
+
+func _on_panel_name_edit_gui_input(event: InputEvent) -> void:
+	# Esc 取消：先还原再退出，并吃掉事件防止冒泡
+	if event.is_action_pressed("ui_cancel"):
+		_cancel_panel_rename()
+		accept_event()
+
+func _commit_panel_rename() -> void:
+	if not _is_editing_name:
+		return
+	_is_editing_name = false
+	var new_name := _name_edit.text.strip_edges()
+	# 空名字不接受 → 还原（不写回）；没变化也不写回
+	if new_name != "" and is_instance_valid(current_employee) and new_name != current_employee.get_display_name():
+		current_employee.set_custom_name(new_name)  # 写回数据源，display_name_changed 刷新所有视图
+	_exit_panel_edit_mode()
+
+func _cancel_panel_rename() -> void:
+	if not _is_editing_name:
+		return
+	# 先置标志位，随后 hide() 触发的 focus_exited 会被 _commit_panel_rename 拦掉，绝不提交新文本
+	_is_editing_name = false
+	_name_edit.text = _name_before_edit
+	_exit_panel_edit_mode()
+
+func _exit_panel_edit_mode() -> void:
+	_name_edit.hide()
+	_name_info_label.show()
+	_edit_name_button.show()
+	if is_instance_valid(current_employee):
+		name_label.set_value_text(current_employee.get_display_name())
 
 # 语言切换时重刷三条属性 tooltip（tr 写死的不会自动刷新）
 func _notification(what: int) -> void:
@@ -151,6 +241,10 @@ func open_panel(employee: Employee) -> void:
 	if visible and current_employee == employee:
 		return
 	
+	# 换人前若正在改名，先把当前编辑提交掉（此时 current_employee 还是旧的，提交给对的人）
+	if _is_editing_name:
+		_commit_panel_rename()
+
 	# 如果换了人，或者面板本来是关着的，才执行下面的刷新
 	_disconnect_current_employee() # 换人前先把旧的断了
 	current_employee = employee
@@ -201,6 +295,9 @@ func open_panel(employee: Employee) -> void:
 	popup_window.hide() # 换人时把之前的弹窗藏了
 
 func close_panel() -> void:
+	# 关闭前若正在改名，先提交（点面板外关闭 = 点击别处提交）
+	if _is_editing_name:
+		_commit_panel_rename()
 	_disconnect_current_employee()
 	current_employee = null
 	progress_bar.value = 0
