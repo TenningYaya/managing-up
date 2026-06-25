@@ -97,7 +97,7 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
+theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 10
 
@@ -111,8 +111,7 @@ layout_mode = 2
 [node name="WelcomLabel" type="Label" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo" unique_id=41214428]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.06469653, 0.06469653, 0.06469653, 1)
-theme_override_fonts/font = ExtResource("4_xuayt")
+theme_override_colors/font_color = Color(0, 0.77084273, 0.0070521175, 1)
 theme_override_font_sizes/font_size = 26
 text = "Sidebar_personal_welcome"
 horizontal_alignment = 1
@@ -133,6 +132,7 @@ horizontal_alignment = 1
 [node name="NameEdit" type="LineEdit" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/ProgramName" unique_id=429894193]
 visible = false
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="EditButton" type="TextureButton" parent="MainLayout/ScrollContainer/MarginContainer/ItemsList/PersonalInfo/ProgramName" unique_id=715112172]
 custom_minimum_size = Vector2(20, 20)

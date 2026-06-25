@@ -19,6 +19,10 @@ const QUOTES = {
 	],
 	"new_hire": [
 		"BANTER_NEW_HIRE_01", "BANTER_NEW_HIRE_02", "BANTER_NEW_HIRE_03", "BANTER_NEW_HIRE_04", "BANTER_NEW_HIRE_05"
+	],
+	# [员工吐槽中心]:从等候区被拖动到工位上
+	"seated": [
+		"BANTER_SEATED_1", "BANTER_SEATED_2", "BANTER_SEATED_3", "BANTER_SEATED_4", "BANTER_SEATED_5"
 	]
 }
 

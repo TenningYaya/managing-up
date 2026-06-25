@@ -113,7 +113,7 @@ func _trigger_hiring_banters(hired_list: Array) -> void:
 			break
 			
 	if has_ssr:
-		#[员工吐槽中心]空降ssr —— 只让“非 SSR”员工围观吐槽；所有 SSR（含刚招进来的本人）都不吐这句
+		#[员工吐槽中心]:空降ssr —— 只让“非 SSR”员工围观吐槽；所有 SSR（含刚招进来的本人）都不吐这句
 		get_tree().create_timer(1.0).timeout.connect(func():
 			var non_ssr := []
 			for emp in get_tree().get_nodes_in_group("employees"):

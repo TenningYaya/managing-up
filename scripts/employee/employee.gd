@@ -281,7 +281,11 @@ func _end_drag() -> void:
 	var target_seat := _find_valid_seat()
 
 	if target_seat != null:
+		# [员工吐槽中心]:从等候区被拖动到工位上（drag_start_seat 为空 = 之前不在座位上，即从等候区来的才吐槽）
+		var from_waiting := drag_start_seat == null
 		snap_to_seat(target_seat, true)
+		if from_waiting:
+			play_on_seated_banter()
 	else:
 		_return_to_start()
 
@@ -600,6 +604,14 @@ func play_on_hired_banter() -> void:
 	if not is_inside_tree():
 		return
 	var pool = BanterManager.QUOTES["new_hire"]
+	var random_key = pool[randi() % pool.size()]
+	_spawn_banter_bubble(tr(random_key))
+
+# [员工吐槽中心]:从等候区被拖动到工位上
+func play_on_seated_banter() -> void:
+	if not is_inside_tree():
+		return
+	var pool = BanterManager.QUOTES["seated"]
 	var random_key = pool[randi() % pool.size()]
 	_spawn_banter_bubble(tr(random_key))
 	

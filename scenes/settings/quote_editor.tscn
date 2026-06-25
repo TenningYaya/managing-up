@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://doe15yvabaqje"]
 
 [ext_resource type="Script" uid="uid://dqw6tnbj3u20k" path="res://scripts/UI/panel/quote_editor.gd" id="1_7ps1e"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_33up6"]
 
 [node name="QuoteEditor" type="VBoxContainer" unique_id=1617537307]
 offset_right = 183.0
@@ -11,8 +10,7 @@ script = ExtResource("1_7ps1e")
 [node name="Label" type="Label" parent="." unique_id=1146253798]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.13174233, 0.13174233, 0.13174233, 1)
-theme_override_fonts/font = ExtResource("2_33up6")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "Sidebar_personal_quote_title"
 horizontal_alignment = 1
 vertical_alignment = 1
