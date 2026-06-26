@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c7dm3epgnkpt2" path="res://scripts/UI/sidebar/decor_page.gd" id="1_decor"]
 [ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_decor"]
 [ext_resource type="Texture2D" uid="uid://c0o37s88t8hsx" path="res://assets/background/background-white.png" id="3_5xswk"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_decor"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="3_decor"]
 [ext_resource type="AudioStream" uid="uid://cvg7fmx5clyvq" path="res://audio/desk upgrade.mp3" id="5_5xswk"]
 
 [node name="DecorPage" type="Control" unique_id=200000001]

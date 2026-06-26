@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://22jdqc27gh1v"]
 
 [ext_resource type="Script" uid="uid://c73i2bvfodyr2" path="res://scripts/employee/employee_card.gd" id="1_jy2kl"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_l0ibj"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="2_l0ibj"]
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_fd3x5"]
 [ext_resource type="Texture2D" uid="uid://ye2744q5h3x2" path="res://assets/UI/employee/warehouse/工作中 (1).png" id="4_fd3x5"]
 [ext_resource type="Texture2D" uid="uid://clcnucuwiko20" path="res://assets/UI/employee/warehouse/对勾小.png" id="5_4mhpm"]

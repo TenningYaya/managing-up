@@ -2,7 +2,7 @@
 extends Control
 
 # KPI 不足红字用的字体（LabelSettings 会覆盖主题字体，需在此补回像素 CJK 字体）
-const HIRE_TIP_FONT := preload("res://assets/fonts/stacked_pixel_cjk.tres")
+const HIRE_TIP_FONT := preload("res://assets/fonts/standard.tres")
 
 # ================= UI 节点获取 =================
 @onready var normal_viewer = $VBoxContainer/NormalPanel/MarginContainer/NormalViewer

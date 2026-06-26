@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bsmmsxex6ifmt" path="res://assets/office/HR.png" id="6_p8n5g"]
 [ext_resource type="Texture2D" uid="uid://ci86d46lyn7w5" path="res://assets/office/Culture.png" id="7_yexkw"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="8_2u0tt"]
+[ext_resource type="Texture2D" uid="uid://dx2vxv0fa13fl" path="res://assets/office/Stock.png" id="8_p8n5g"]
 [ext_resource type="Texture2D" uid="uid://45w50bbhsdcy" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/0.png" id="11_41xxe"]
 [ext_resource type="PackedScene" uid="uid://cyeom2d65rx2y" path="res://scenes/vfx/blingbling.tscn" id="12_e1yc2"]
 [ext_resource type="Texture2D" uid="uid://cvaeui5fxlfqo" path="res://assets/background/around_office_1.png" id="13_y3s53"]
@@ -63,6 +64,7 @@ tex_pantry = ExtResource("4_e1yc2")
 tex_meeting = ExtResource("5_y3s53")
 tex_recruitment = ExtResource("6_p8n5g")
 tex_culture = ExtResource("7_yexkw")
+tex_stock = ExtResource("8_p8n5g")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1834985146]
 visible = false

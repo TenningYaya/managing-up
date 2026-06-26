@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c0vbvo7f2w176" path="res://scripts/UI/sidebar/tutorial_page.gd" id="1_7bfc0"]
 [ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_4qc40"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_tehtr"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="2_tehtr"]
 [ext_resource type="Texture2D" uid="uid://52xtuklk50um" path="res://assets/sidebar/tutorial1.png" id="3_0ctye"]
 [ext_resource type="Texture2D" uid="uid://c0o37s88t8hsx" path="res://assets/background/background-white.png" id="3_npf01"]
 
