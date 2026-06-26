@@ -228,7 +228,8 @@ func _apply_region(sprite: Sprite2D, act: Dictionary, color_idx: int, total_colo
 	sprite.region_enabled = true
 	var tex_w = sprite.texture.get_width()
 	var group_w = tex_w / total_colors
-	sprite.region_rect = Rect2(color_idx * group_w, act.y, act.w * act.f, 32)
+	# 顶部少切一格：图集每帧最上方有一行白线，下移 1px 并相应减少高度把它裁掉
+	sprite.region_rect = Rect2(color_idx * group_w, act.y + 1, act.w * act.f, 31)
 	sprite.hframes = act.f
 
 # ==========================================
