@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cef1cc6y8xrd6"]
 
 [ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="1_s4odp"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="1_wtuay"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="1_wtuay"]
 [ext_resource type="Texture2D" uid="uid://c0o37s88t8hsx" path="res://assets/background/background-white.png" id="2_0vnaw"]
 [ext_resource type="Script" uid="uid://cfp0jmuf1mdth" path="res://scripts/system/setting_language.gd" id="3_0r8j3"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="4_nbtn"]

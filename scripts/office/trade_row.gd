@@ -62,7 +62,7 @@ func _current_qty() -> int:
 func _update_info() -> void:
 	var qty := _current_qty()
 	var price := StockManager.get_price(_index) if _index >= 0 else 0
-	info_label.text = "%d %s · %d KPI" % [qty, tr("STOCK_LB_SHARES"), qty * price]
+	info_label.text = "%d %s | %d KPI" % [qty, tr("STOCK_LB_SHARES"), qty * price]
 	var has_any := _max_amount() > 0
 	action_btn.disabled = (not has_any) or qty <= 0
 	all_btn.disabled = not has_any

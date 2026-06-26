@@ -42,7 +42,7 @@ var drag_offset := Vector2()
 
 # 重命名相关（铅笔图标 + 名字字体，与名字标签一致）
 const RENAME_ICON := preload("res://assets/sidebar/other/edit (1).png")
-const NAME_FONT := preload("res://assets/fonts/stacked_pixel_cjk.tres")
+const NAME_FONT := preload("res://assets/fonts/standard.tres")
 var _name_info_label: Label              # name_label(信息条) 内部那个显示文字的 Label
 var _edit_name_button: TextureButton
 var _name_edit: LineEdit

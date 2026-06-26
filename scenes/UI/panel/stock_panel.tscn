@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://cifxhetkp4v0e"]
 
 [ext_resource type="Script" uid="uid://bq13oaet2k8p0" path="res://scripts/UI/panel/stock_panel.gd" id="1_stkpn"]
+[ext_resource type="PackedScene" uid="uid://jcwclhkf7ylb" path="res://scenes/UI/panel/stack_row.tscn" id="2_0nn8a"]
 [ext_resource type="PackedScene" uid="uid://hgs0tinf34mi" path="res://scenes/UI/panel/trade_row.tscn" id="2_pxrrk"]
 
-[node name="Control" type="Control" unique_id=278255823]
+[node name="StockPanel" type="Control" unique_id=278255823]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,6 +16,7 @@ grow_vertical = 2
 script = ExtResource("1_stkpn")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1806391633]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,6 +37,10 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="StackRow" parent="StockContainer/StockList" unique_id=1305392007 instance=ExtResource("2_0nn8a")]
+layout_mode = 2
+kind = 1
+
 [node name="RichTextLabel" type="RichTextLabel" parent="StockContainer" unique_id=871494320]
 layout_mode = 2
 
@@ -43,3 +49,4 @@ layout_mode = 2
 
 [node name="SellRow" parent="StockContainer" unique_id=517235354 instance=ExtResource("2_pxrrk")]
 layout_mode = 2
+mode = 1

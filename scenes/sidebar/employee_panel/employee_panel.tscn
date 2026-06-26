@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dkkojjppp7n5c" path="res://assets/computer/PNG/2.png" id="2_khksj"]
 [ext_resource type="PackedScene" uid="uid://8o18jsagw05c" path="res://scenes/sidebar/employee_panel/employee_ability_slider.tscn" id="2_sl25x"]
 [ext_resource type="PackedScene" uid="uid://dndhwa02h345o" path="res://scenes/sidebar/employee_panel/employee_information_bar.tscn" id="3_agpfo"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_ajc7u"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="3_ajc7u"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="3_r7cc6"]
 [ext_resource type="Texture2D" uid="uid://db3dnhkb3b0xc" path="res://assets/progress bar/progress bar most rounded under.png" id="4_bfpbm"]
 [ext_resource type="PackedScene" uid="uid://5sdsush0erlr" path="res://scenes/UI/custom/popup_window.tscn" id="4_e3e08"]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bv07uarcsipw0"]
 
 [ext_resource type="Script" uid="uid://csqxkhdasdgsm" path="res://scripts/UI/custom/stat_bar.gd" id="1_8505p"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_rp5ne"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="2_rp5ne"]
 
 [node name="StatBar" type="ProgressBar" unique_id=1826970648]
 custom_minimum_size = Vector2(100, 16)

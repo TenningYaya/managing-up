@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cjsr3igbtcrqd" path="res://scripts/employee/resume_cards.gd" id="1_81qgu"]
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_prp3l"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="2_hlt22"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="2_hlt22"]
 [ext_resource type="PackedScene" uid="uid://bv07uarcsipw0" path="res://scenes/UI/custom/stat_bar.tscn" id="4_l71ps"]
 
 [node name="ResumeCard" type="Control" unique_id=102445997]

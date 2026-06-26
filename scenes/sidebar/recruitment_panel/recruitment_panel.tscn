@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bp8mfdq83mc24" path="res://scripts/UI/sidebar/recruitment_panel.gd" id="1_tvhvr"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_uc70r"]
 [ext_resource type="Texture2D" uid="uid://bthelqthib3yt" path="res://assets/UI/Back.png" id="3_q23uo"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="3_rtmed"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="3_rtmed"]
 [ext_resource type="Texture2D" uid="uid://px3cj3eqq75y" path="res://assets/background/e8a8d7e5-a42b-48a7-b636-835168402b12.jpg" id="6_pyp0o"]
 [ext_resource type="PackedScene" uid="uid://bx0a13254p4rr" path="res://scenes/UI/custom/Urge_HR_button.tscn" id="6_x4w7u"]
 [ext_resource type="Texture2D" uid="uid://16a3v6fvnsw0" path="res://assets/background/Gemini_Generated_Image_q23dcvq23dcvq23d.png" id="6_yahbh"]

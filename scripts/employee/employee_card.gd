@@ -21,7 +21,7 @@ signal card_clicked(employee_data: Employee) # 定义信号，把员工数据传
 
 # 重命名相关资源（铅笔图标 + 卡片字体，保持与名字标签一致的像素字体）
 const RENAME_ICON := preload("res://assets/sidebar/other/edit (1).png")
-const CARD_FONT := preload("res://assets/fonts/stacked_pixel_cjk.tres")
+const CARD_FONT := preload("res://assets/fonts/standard.tres")
 
 # 重命名用到的节点（在 _ready 里动态创建，避免改 .tscn 结构）
 var name_row: HBoxContainer
