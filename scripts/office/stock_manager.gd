@@ -49,6 +49,7 @@ class StockData:
 	var price: float                    # 当前价（浮点，内部用；对外 round 成整数）
 	var prev_price: float               # 上一 tick 的价（算涨跌指示用）
 	var holdings: int = 0               # 玩家持仓股数
+	var avg_cost: float = 0.0           # 加权平均成本（KPI/股），用于算浮动盈亏
 	var bought_this_window: int = 0     # 本补货周期已买（计入常规上限）
 	var buyback_bonus: int = 0          # 卖出带来的临时额外可买额度
 	var buyback_expire_tick: int = -1   # 该额度在“第几个行情 tick”失效
@@ -165,6 +166,8 @@ func buy(index: int, qty: int) -> bool:
 	var from_bonus := qty - from_window
 	if from_bonus > 0:
 		s.buyback_bonus = maxi(0, s.buyback_bonus - from_bonus)
+	# 加权平均成本：买入按现价摊入（此刻 s.holdings 仍是买入前的数量）
+	s.avg_cost = (s.holdings * s.avg_cost + qty * price) / float(s.holdings + qty)
 	s.holdings += qty
 	holdings_changed.emit(index)
 	return true
@@ -179,6 +182,10 @@ func sell(index: int, qty: int) -> bool:
 	var price := get_price(index)
 	s.holdings -= qty
 	Gamemanager.add_kpi(price * qty)
+	# 清仓后成本归零（移动平均成本法：卖出不改均价，清空后重新计）
+	if s.holdings <= 0:
+		s.holdings = 0
+		s.avg_cost = 0.0
 	# 卖出 → 给临时回购额度（可叠加），并刷新过期时间（撑过下一分钟，下下分钟恢复）
 	s.buyback_bonus += qty
 	s.buyback_expire_tick = _tick_count + BUYBACK_GRACE_TICKS
@@ -237,6 +244,19 @@ func get_holdings(index: int) -> int:
 func get_holding_value(index: int) -> int:
 	return get_price(index) * get_holdings(index)
 
+# 加权平均成本（KPI/股，浮点，UI 自行格式化小数）
+func get_avg_cost(index: int) -> float:
+	if index < 0 or index >= stocks.size():
+		return 0.0
+	return stocks[index].avg_cost
+
+# 浮动盈亏（KPI，已取整）：(现价 - 均价) × 持仓
+func get_profit(index: int) -> int:
+	if index < 0 or index >= stocks.size():
+		return 0
+	var s: StockData = stocks[index]
+	return int(round((get_price(index) - s.avg_cost) * s.holdings))
+
 # 本周期剩余常规额度（不含回购加成），UI 可用来提示“还能补货多少”
 func get_window_room(index: int) -> int:
 	if index < 0 or index >= stocks.size():
@@ -260,6 +280,7 @@ func to_save_dict() -> Dictionary:
 			"price": s.price,
 			"prev_price": s.prev_price,
 			"holdings": s.holdings,
+			"avg_cost": s.avg_cost,
 			"bought_this_window": s.bought_this_window,
 			"buyback_bonus": s.buyback_bonus,
 			"buyback_expire_tick": s.buyback_expire_tick,
@@ -284,6 +305,7 @@ func load_from_dict(data: Dictionary) -> void:
 		s.price = float(d.get("price", s.center))
 		s.prev_price = float(d.get("prev_price", s.price))
 		s.holdings = int(d.get("holdings", 0))
+		s.avg_cost = float(d.get("avg_cost", 0.0))
 		s.bought_this_window = int(d.get("bought_this_window", 0))
 		s.buyback_bonus = int(d.get("buyback_bonus", 0))
 		s.buyback_expire_tick = int(d.get("buyback_expire_tick", -1))

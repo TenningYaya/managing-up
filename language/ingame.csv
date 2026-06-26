@@ -57,6 +57,21 @@ STOCK_996,996福报科技,996 Blessing Tech
 STOCK_PIE,画饼集团,Pie-in-the-Sky Group
 STOCK_LEEK,韭菜农业,Leek Agriculture
 STOCK_FISH,摸鱼网络,Slacker Network
+STOCK_LB_NAME,公司,Company
+STOCK_LB_PRICE,现价,Price
+STOCK_LB_HELD,持仓,Held
+STOCK_LB_PL,盈亏,P/L
+STOCK_LB_COST,成本,Cost
+STOCK_LB_SHARES,股,sh
+STOCK_HINT_PICK,点击选择一支股票查看详情,Tap a stock to see details
+STOCK_BTN_BUY,购买,Buy
+STOCK_BTN_SELL,卖出,Sell
+STOCK_BTN_BUYALL,全买,Buy All
+STOCK_BTN_SELLALL,全卖,Sell All
+STOCK_CONFIRM_BUYALL,用当前全部 KPI 买入这支股票？,Spend all your KPI on this stock?
+STOCK_CONFIRM_SELLALL,卖出该股票的全部持仓？,Sell your entire position in this stock?
+STOCK_BTN_CONFIRM,确定,Confirm
+STOCK_BTN_CANCEL,取消,Cancel
 OFFICE_DISMISS_MEETING,解散会议,Dismiss
 DeskSlot_locked_click_hint,提升职级以扩大项目组规模,Upgrade your rank to expand the team
 SETTING_SL_CONFIRM_LABEL,确定要保存并退出吗？,Do you want to save and exit?

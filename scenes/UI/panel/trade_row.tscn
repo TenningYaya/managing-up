@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://hgs0tinf34mi"]
+
+[ext_resource type="Script" uid="uid://cojobakbkdgar" path="res://scripts/office/trade_row.gd" id="1_d3y34"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="1_ii0jt"]
+
+[node name="TradeRow" type="HBoxContainer" unique_id=1349733037]
+custom_minimum_size = Vector2(0, 40)
+offset_right = 250.0
+offset_bottom = 50.0
+script = ExtResource("1_d3y34")
+
+[node name="ActionButton" parent="." unique_id=2048579194 instance=ExtResource("1_ii0jt")]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+
+[node name="AmountSlider" type="HSlider" parent="." unique_id=49165474]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InfoLabel" type="Label" parent="." unique_id=1518898374]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="AllButton" parent="." unique_id=1435243182 instance=ExtResource("1_ii0jt")]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
