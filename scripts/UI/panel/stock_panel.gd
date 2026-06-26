@@ -10,10 +10,10 @@ extends Control
 
 const STOCK_ROW := preload("res://scenes/UI/panel/stack_row.tscn")
 
-@onready var stock_list: VBoxContainer = $StockContainer/StockList
-@onready var detail: RichTextLabel = $StockContainer/RichTextLabel
-@onready var buy_row: TradeRow = $StockContainer/BuyRow
-@onready var sell_row: TradeRow = $StockContainer/SellRow
+@onready var stock_list: VBoxContainer = $StockContainer/StockPanel/StockList
+@onready var detail: RichTextLabel = $StockContainer/TradePanel/InfoContainer/InfoList/RichTextLabel
+@onready var buy_row: TradeRow = $StockContainer/TradePanel/InfoContainer/InfoList/BuyRow
+@onready var sell_row: TradeRow = $StockContainer/TradePanel/InfoContainer/InfoList/SellRow
 
 var _rows: Array = []          # StockRow 实例
 var _selected: int = -1
@@ -26,6 +26,7 @@ func _ready() -> void:
 	# 上半:实例化股票行(用你的 stack_row.tscn,字体/样式都归它)
 	for i in range(StockManager.get_stock_count()):
 		var row: StockRow = STOCK_ROW.instantiate()
+		row.size_flags_horizontal = Control.SIZE_FILL   # 撑满 StockList 宽度
 		stock_list.add_child(row)
 		row.setup(i)
 		row.selected.connect(_on_selected)
@@ -74,13 +75,13 @@ func _update_detail() -> void:
 	var held := StockManager.get_holdings(i)
 	var price := StockManager.get_price(i)
 	if held <= 0:
-		detail.text = "[b]%s[/b]   %s %d" % [disp_name, tr("STOCK_LB_PRICE"), price]
+		detail.text = "[b]%s[/b]\n%s %d" % [disp_name, tr("STOCK_LB_PRICE"), price]
 		return
 	var cost := StockManager.get_avg_cost(i)
 	var profit := StockManager.get_profit(i)
 	var pl_hex := "#3fb950" if profit > 0 else ("#f85149" if profit < 0 else "#999999")
 	var pl_sign := "+" if profit > 0 else ""
-	detail.text = "[b]%s[/b]   %s %d %s · %s %.1f · %s %d · %s [color=%s]%s%d[/color]" % [
+	detail.text = "[b]%s[/b]\n%s %d %s · %s %.1f · %s %d · %s [color=%s]%s%d[/color]" % [
 		disp_name,
 		tr("STOCK_LB_HELD"), held, tr("STOCK_LB_SHARES"),
 		tr("STOCK_LB_COST"), cost,

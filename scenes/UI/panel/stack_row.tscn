@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://jcwclhkf7ylb"]
 
 [ext_resource type="Script" uid="uid://dyes1ejyu3sl5" path="res://scripts/office/stack_row.gd" id="1_nhgj8"]
+[ext_resource type="Texture2D" uid="uid://bbi8163s1k6jx" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Buttons/13.png" id="2_3xrpx"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="2_u61vp"]
+[ext_resource type="Texture2D" uid="uid://bjd0rf0j260rv" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/Buttons/12.png" id="3_ypfm6"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nhgj8"]
 
 [node name="StackRow" type="Button" unique_id=1305392007]
-custom_minimum_size = Vector2(330, 30)
+custom_minimum_size = Vector2(350, 35)
 offset_right = 330.0
 offset_bottom = 30.0
 size_flags_horizontal = 0
@@ -15,27 +17,52 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_nhgj8")
 flat = true
 script = ExtResource("1_nhgj8")
 
-[node name="Highlight" type="ColorRect" parent="." unique_id=594244826]
+[node name="NormalBcg" type="NinePatchRect" parent="." unique_id=239799988]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_3xrpx")
+region_rect = Rect2(9, 5, 45, 22)
+patch_margin_left = 8
+patch_margin_top = 7
+patch_margin_right = 8
+patch_margin_bottom = 7
+
+[node name="HilightBcg" type="NinePatchRect" parent="." unique_id=80419321]
 visible = false
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-color = Color(1, 1, 1, 0.5019608)
+texture = ExtResource("3_ypfm6")
+region_rect = Rect2(9, 5, 45, 22)
+patch_margin_left = 8
+patch_margin_top = 7
+patch_margin_right = 8
+patch_margin_bottom = 7
 
-[node name="Columns" type="HBoxContainer" parent="." unique_id=143419992]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=631755251]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="Columns" type="HBoxContainer" parent="MarginContainer" unique_id=143419992]
+layout_mode = 2
 mouse_filter = 2
 
-[node name="Name" type="Label" parent="Columns" unique_id=854088816]
+[node name="Name" type="Label" parent="MarginContainer/Columns" unique_id=854088816]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("2_u61vp")
@@ -44,7 +71,7 @@ vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="Price" type="Label" parent="Columns" unique_id=606514300]
+[node name="Price" type="Label" parent="MarginContainer/Columns" unique_id=606514300]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_u61vp")
@@ -52,7 +79,7 @@ theme_override_font_sizes/font_size = 20
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Held" type="Label" parent="Columns" unique_id=1670601325]
+[node name="Held" type="Label" parent="MarginContainer/Columns" unique_id=1670601325]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_u61vp")
@@ -60,7 +87,7 @@ theme_override_font_sizes/font_size = 20
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="PL" type="Label" parent="Columns" unique_id=1121238244]
+[node name="PL" type="Label" parent="MarginContainer/Columns" unique_id=1121238244]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_u61vp")

@@ -12,21 +12,21 @@
 atlas = ExtResource("2_81qjf")
 region = Rect2(68, 139, 1825, 542)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_yswu2"]
-atlas = ExtResource("3_oea1h")
-region = Rect2(87, 118, 1779, 547)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_oc1ty"]
-atlas = ExtResource("4_yswu2")
-region = Rect2(30, 145, 1890, 518)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_effzh"]
 atlas = ExtResource("5_effzh")
 region = Rect2(53, 108, 1493, 452)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_yswu2"]
+atlas = ExtResource("3_oea1h")
+region = Rect2(87, 118, 1779, 547)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_qualzh"]
 atlas = ExtResource("6_qualzh")
 region = Rect2(66, 93, 1469, 454)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oc1ty"]
+atlas = ExtResource("4_yswu2")
+region = Rect2(30, 145, 1890, 518)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_expzh"]
 atlas = ExtResource("7_expzh")
@@ -46,10 +46,10 @@ grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1049156711]
 layout_mode = 0
-offset_left = -109.0
-offset_top = -125.0
-offset_right = 111.0
-offset_bottom = 123.0
+offset_left = -139.0
+offset_top = -148.0
+offset_right = 146.0
+offset_bottom = 155.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=735603081]
 layout_mode = 2

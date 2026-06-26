@@ -13,6 +13,7 @@ enum Mode { BUY, SELL }
 @onready var all_btn = $AllButton
 
 var _index: int = -1   # 当前选中的股票
+var qty_tag: Label     # 跟着滑条抓手跑的"股数"小标签(代码创建)
 
 func _ready() -> void:
 	slider.min_value = 0
@@ -20,6 +21,8 @@ func _ready() -> void:
 	slider.step = 1
 	slider.value = 0
 	slider.value_changed.connect(func(_v): _update_info())
+	slider.resized.connect(_position_qty_tag)   # 滑条尺寸变了要重新定位
+	_setup_qty_tag()
 	action_btn.pressed.connect(_on_action)
 	all_btn.pressed.connect(_on_all)
 	# 行情/持仓变了,可买可卖量会变,自己刷新
@@ -62,10 +65,37 @@ func _current_qty() -> int:
 func _update_info() -> void:
 	var qty := _current_qty()
 	var price := StockManager.get_price(_index) if _index >= 0 else 0
-	info_label.text = "%d %s | %d KPI" % [qty, tr("STOCK_LB_SHARES"), qty * price]
+	# 股数:小标签,贴在滑条抓手正上方,跟着抓手移动
+	if is_instance_valid(qty_tag):
+		qty_tag.text = "%d" % [qty]
+		_position_qty_tag()
+	# 旁边的 InfoLabel 现在只显示这笔交易的 KPI(股数已移到抓手上)
+	info_label.text = "%d KPI" % (qty * price)
 	var has_any := _max_amount() > 0
 	action_btn.disabled = (not has_any) or qty <= 0
 	all_btn.disabled = not has_any
+
+# 创建跟随滑条抓手的"股数"小标签(挂在滑条下,绝对定位,不挡点击)
+func _setup_qty_tag() -> void:
+	qty_tag = Label.new()
+	qty_tag.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	qty_tag.add_theme_font_size_override("font_size", 14)   # 缩小一点
+	slider.add_child(qty_tag)
+
+# 按当前 value 算出抓手中心 x,把标签摆到抓手正上方
+func _position_qty_tag() -> void:
+	if not is_instance_valid(qty_tag):
+		return
+	var rng := slider.max_value - slider.min_value
+	var ratio := 0.0 if rng <= 0.0 else (slider.value - slider.min_value) / rng
+	# 抓手在轨道两端各占半个自身宽,可移动范围 = 轨道宽 - 一个抓手宽
+	var grab_w := 0.0
+	if slider.has_theme_icon("grabber"):
+		grab_w = float(slider.get_theme_icon("grabber").get_width())
+	var usable := maxf(0.0, slider.size.x - grab_w)
+	var center_x := grab_w * 0.5 + ratio * usable
+	qty_tag.reset_size()   # 让 size 跟文字走,才能正确居中
+	qty_tag.position = Vector2(center_x - qty_tag.size.x * 0.5, -qty_tag.size.y - 2.0)
 
 func _on_action() -> void:
 	var qty := _current_qty()

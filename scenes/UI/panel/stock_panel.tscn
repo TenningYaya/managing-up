@@ -3,6 +3,15 @@
 [ext_resource type="Script" uid="uid://bq13oaet2k8p0" path="res://scripts/UI/panel/stock_panel.gd" id="1_stkpn"]
 [ext_resource type="PackedScene" uid="uid://jcwclhkf7ylb" path="res://scenes/UI/panel/stack_row.tscn" id="2_0nn8a"]
 [ext_resource type="PackedScene" uid="uid://hgs0tinf34mi" path="res://scenes/UI/panel/trade_row.tscn" id="2_pxrrk"]
+[ext_resource type="Texture2D" uid="uid://dnrqtwbwt5472" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/PNG SpriteSheet/SpriteSheet.png" id="3_bivql"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bivql"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r3vfj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c30qd"]
+atlas = ExtResource("3_bivql")
+region = Rect2(1420, 2014, 92, 291)
 
 [node name="StockPanel" type="Control" unique_id=278255823]
 layout_mode = 3
@@ -33,20 +42,52 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="StockList" type="VBoxContainer" parent="StockContainer" unique_id=1254022593]
+[node name="StockPanel" type="VBoxContainer" parent="StockContainer" unique_id=208325779]
 layout_mode = 2
-size_flags_vertical = 3
 
-[node name="StackRow" parent="StockContainer/StockList" unique_id=1305392007 instance=ExtResource("2_0nn8a")]
+[node name="Placeholder" type="PanelContainer" parent="StockContainer/StockPanel" unique_id=1002937449]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_bivql")
+
+[node name="Header" parent="StockContainer/StockPanel" unique_id=1305392007 instance=ExtResource("2_0nn8a")]
+layout_mode = 2
+size_flags_horizontal = 1
+theme_override_constants/h_separation = -4
 kind = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="StockContainer" unique_id=871494320]
+[node name="StockList" type="VBoxContainer" parent="StockContainer/StockPanel" unique_id=1254022593]
 layout_mode = 2
 
-[node name="BuyRow" parent="StockContainer" unique_id=1349733037 instance=ExtResource("2_pxrrk")]
+[node name="TradePanel" type="PanelContainer" parent="StockContainer" unique_id=491227107]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_r3vfj")
+
+[node name="TradePanelBcg" type="NinePatchRect" parent="StockContainer/TradePanel" unique_id=2138881520]
+layout_mode = 2
+texture = SubResource("AtlasTexture_c30qd")
+region_rect = Rect2(0, 0, 92, 291)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 7
+patch_margin_bottom = 4
+
+[node name="InfoContainer" type="MarginContainer" parent="StockContainer/TradePanel" unique_id=720804767]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="InfoList" type="VBoxContainer" parent="StockContainer/TradePanel/InfoContainer" unique_id=750557111]
 layout_mode = 2
 
-[node name="SellRow" parent="StockContainer" unique_id=517235354 instance=ExtResource("2_pxrrk")]
+[node name="RichTextLabel" type="RichTextLabel" parent="StockContainer/TradePanel/InfoContainer/InfoList" unique_id=871494320]
+layout_mode = 2
+
+[node name="BuyRow" parent="StockContainer/TradePanel/InfoContainer/InfoList" unique_id=1349733037 instance=ExtResource("2_pxrrk")]
+layout_mode = 2
+
+[node name="SellRow" parent="StockContainer/TradePanel/InfoContainer/InfoList" unique_id=517235354 instance=ExtResource("2_pxrrk")]
 layout_mode = 2
 mode = 1

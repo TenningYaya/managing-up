@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cojobakbkdgar" path="res://scripts/office/trade_row.gd" id="1_d3y34"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="1_ii0jt"]
-[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="3_103mm"]
 
 [node name="TradeRow" type="HBoxContainer" unique_id=1349733037]
 custom_minimum_size = Vector2(350, 35)
@@ -18,14 +17,13 @@ layout_mode = 2
 [node name="AmountSlider" type="HSlider" parent="." unique_id=49165474]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
+size_flags_vertical = 8
 
 [node name="InfoLabel" type="Label" parent="." unique_id=1518898374]
-custom_minimum_size = Vector2(130, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_103mm")
-theme_override_font_sizes/font_size = 20
-horizontal_alignment = 2
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="AllButton" parent="." unique_id=1435243182 instance=ExtResource("1_ii0jt")]

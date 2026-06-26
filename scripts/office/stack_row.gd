@@ -9,11 +9,12 @@ signal selected(index: int)
 enum Kind { DATA, HEADER }
 @export var kind: Kind = Kind.DATA
 
-@onready var name_label: Label = $Columns/Name
-@onready var price_label: Label = $Columns/Price
-@onready var held_label: Label = $Columns/Held
-@onready var pl_label: Label = $Columns/PL
-@onready var highlight: ColorRect = $Highlight
+@onready var name_label: Label = $MarginContainer/Columns/Name
+@onready var price_label: Label = $MarginContainer/Columns/Price
+@onready var held_label: Label = $MarginContainer/Columns/Held
+@onready var pl_label: Label = $MarginContainer/Columns/PL
+@onready var normal_bcg: NinePatchRect = $HilightBcg    # 非选中背景
+@onready var hilight_bcg: NinePatchRect = $NormalBcg # 选中背景
 
 # 刻板印象:红涨绿跌
 const COL_UP := Color(0.80, 0.12, 0.12)    # 涨 = 红
@@ -23,8 +24,13 @@ const COL_FLAT := Color(0.18, 0.18, 0.18)  # 平 = 深灰(别用浅灰,彩色底
 var index: int = -1
 
 func _ready() -> void:
+	# 背景图必须鼠标穿透,否则会盖在按钮上挡住点击 → 选不中
+	normal_bcg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hilight_bcg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if kind == Kind.HEADER:
 		mouse_filter = Control.MOUSE_FILTER_IGNORE   # 表头不可点、不响应悬停
+		normal_bcg.hide()                            # 表头不要背景框
+		hilight_bcg.hide()
 		_apply_header()
 		return
 	pressed.connect(func(): selected.emit(index))
@@ -40,6 +46,9 @@ func _apply_header() -> void:
 	price_label.text = tr("STOCK_LB_PRICE")
 	held_label.text = tr("STOCK_LB_HELD")
 	pl_label.text = tr("STOCK_LB_PL")
+	# 表头文字底对齐
+	for l in [name_label, price_label, held_label, pl_label]:
+		l.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 
 func setup(i: int) -> void:
 	if kind == Kind.HEADER:
@@ -77,4 +86,5 @@ func _pl_text(held: int) -> String:
 func set_selected(on: bool) -> void:
 	if kind == Kind.HEADER:
 		return
-	highlight.visible = on
+	hilight_bcg.visible = on
+	normal_bcg.visible = not on
