@@ -160,7 +160,7 @@ func _remove_attendee(emp) -> void:
 
 	attendees.erase(emp)
 	if is_instance_valid(emp):
-		emp.exit_meeting() # 退出会议逻辑不变（回工位、清会议 Buff、进度归零）
+		emp.exit_meeting(_get_meeting_exit_source_pos())
 		#[员工吐槽中心]：散会
 		BanterManager.trigger_banter("meeting_end", 1, [emp])
 
@@ -178,11 +178,17 @@ func dismiss_meeting():
 		return
 	#[员工吐槽中心]：会议结束
 	BanterManager.trigger_banter("meeting_end", 3, attendees.duplicate())
+	var exit_source_pos := _get_meeting_exit_source_pos()
 	for emp in attendees:
 		if is_instance_valid(emp):
-			emp.exit_meeting()
+			emp.exit_meeting(exit_source_pos)
 
 	attendees.clear()
 	_update_avatars()
 	if is_instance_valid(dismiss_btn):
 		dismiss_btn.hide()
+
+func _get_meeting_exit_source_pos() -> Vector2:
+	if is_instance_valid(parent_office):
+		return parent_office.get_global_rect().get_center()
+	return Vector2.ZERO

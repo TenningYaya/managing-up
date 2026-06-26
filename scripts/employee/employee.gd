@@ -37,6 +37,21 @@ var is_working: bool = false
 var work_elapsed: float = 0.0
 @export var snap_distance: float = 60.0
 
+@export_group("Roaming")
+@export var roaming_enabled: bool = true
+@export_range(5.0, 120.0, 1.0) var roam_check_interval_min: float = 18.0
+@export_range(5.0, 120.0, 1.0) var roam_check_interval_max: float = 38.0
+@export_range(0.0, 1.0, 0.01) var roam_chance: float = 0.22
+@export_range(20.0, 500.0, 5.0) var roam_move_speed: float = 150.0
+@export_range(0.0, 20.0, 0.5) var roam_idle_min: float = 2.0
+@export_range(0.0, 20.0, 0.5) var roam_idle_max: float = 7.0
+var is_roaming: bool = false
+var _roam_check_time_left: float = 0.0
+var _resume_work_after_roam: bool = false
+var _roam_entry_point_pos: Vector2 = Vector2.ZERO
+var _roam_corridor_y: float = 0.0
+@export_group("")
+
 #——————————生产逻辑————————————
 #当前生产时间计算公式为
 #current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
@@ -92,6 +107,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	z_index = 1
 	randomize()
+	_reset_roam_check_timer()
 	if visual_component and visual_component.has_method("play_action"):
 		#visual_component.setup_visual()
 		if current_seat != null:
@@ -176,7 +192,7 @@ func _input(event: InputEvent) -> void:
 			if event.pressed:
 				# 🌟 关键修复：不要用 event.global_position，要用 get_global_mouse_position()
 				# 并且：点击点若被展开的手机侧栏盖住，就让侧栏的按钮处理，员工不抢（否则会穿透加速）
-				if get_global_rect().has_point(get_global_mouse_position()) and not _is_point_over_blocking_ui(get_global_mouse_position()):
+				if get_global_rect().has_point(get_global_mouse_position()) and not _is_point_over_blocking_ui(get_viewport().get_mouse_position()):
 					is_pressing = true
 					drag_start_mouse_pos = get_global_mouse_position() 
 					drag_start_position = global_position 
@@ -196,7 +212,7 @@ func _input(event: InputEvent) -> void:
 		
 		# 右键打开面板，同理也做全局保护
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			if get_global_rect().has_point(get_global_mouse_position()) and not _is_point_over_blocking_ui(get_global_mouse_position()):
+			if get_global_rect().has_point(get_global_mouse_position()) and not _is_point_over_blocking_ui(get_viewport().get_mouse_position()):
 				_on_employee_clicked()
 				get_viewport().set_input_as_handled()
 
@@ -208,12 +224,14 @@ func _input(event: InputEvent) -> void:
 				_start_drag()
 		
 		if dragging:
-			global_position = get_global_mouse_position() - drag_offset
+			var target_pos := get_global_mouse_position() - drag_offset
+			_play_walk_towards(target_pos)
+			global_position = target_pos
 
 # 点击点是否被某个"会挡住世界点击"的 UI（如展开的手机侧栏）盖住
-func _is_point_over_blocking_ui(global_pos: Vector2) -> bool:
+func _is_point_over_blocking_ui(screen_pos: Vector2) -> bool:
 	for ui in get_tree().get_nodes_in_group("sidebar_panel"):
-		if ui.has_method("blocks_point") and ui.blocks_point(global_pos):
+		if ui.has_method("blocks_point") and ui.blocks_point(screen_pos):
 			return true
 	return false
 
@@ -230,6 +248,9 @@ func _process(delta: float) -> void:
 
 	if is_working:
 		work_elapsed += delta
+		_update_roaming(delta)
+		if not is_working:
+			return
 
 		var progress := get_work_progress_percent()
 		work_progress_changed.emit(progress)
@@ -254,6 +275,10 @@ func _start_drag() -> void:
 	if _move_tween:
 		_move_tween.kill()
 		_move_tween = null
+
+	if is_roaming:
+		is_roaming = false
+		_resume_work_after_roam = false
 	
 	_clear_all_vfx()
 	
@@ -389,6 +414,7 @@ func _start_work() -> void:
 	_start_new_work_cycle()
 
 func _start_new_work_cycle():
+	_reset_roam_check_timer()
 	_try_get_snack_buff()
 	
 	if is_in_meeting:
@@ -418,6 +444,334 @@ func _stop_work(reset_progress: bool = true) -> void:
 		
 	_clear_snack_buff()
 	work_stopped.emit()
+
+func _pause_work_for_roam() -> void:
+	if not is_working:
+		return
+
+	is_working = false
+	_resume_work_after_roam = true
+	_clear_snack_buff()
+	work_progress_changed.emit(get_work_progress_percent())
+	EmployeeManager.employee_map_status_changed.emit()
+
+func _resume_work_from_roam() -> void:
+	if not _resume_work_after_roam:
+		return
+	if current_seat == null:
+		_resume_work_after_roam = false
+		return
+
+	_resume_work_after_roam = false
+	is_working = true
+	_reset_roam_check_timer()
+	work_progress_changed.emit(get_work_progress_percent())
+	EmployeeManager.employee_map_status_changed.emit()
+
+	if visual_component and visual_component.has_method("play_action"):
+		visual_component.play_action("idle")
+
+func _reset_roam_check_timer() -> void:
+	_roam_check_time_left = randf_range(roam_check_interval_min, roam_check_interval_max)
+
+func _update_roaming(delta: float) -> void:
+	if not _can_try_roam():
+		_reset_roam_check_timer()
+		return
+
+	_roam_check_time_left -= delta
+	if _roam_check_time_left > 0.0:
+		return
+
+	_reset_roam_check_timer()
+	if randf() <= roam_chance:
+		_start_roaming()
+
+func _can_try_roam() -> bool:
+	if not roaming_enabled:
+		return false
+	if is_roaming or dragging or is_pressing or is_slacking or is_in_meeting:
+		return false
+	if current_seat == null:
+		return false
+	if not Gamemanager.is_tutorial_completed:
+		return false
+	return get_tree().get_nodes_in_group("employee_walk_points").size() > 0
+
+func _play_walk_towards(target_pos: Vector2) -> void:
+	if visual_component == null:
+		return
+
+	var move_delta := target_pos - global_position
+	if visual_component.has_method("play_walk_direction"):
+		visual_component.play_walk_direction(move_delta)
+	elif visual_component.has_method("play_action"):
+		visual_component.play_action("walk")
+
+func _set_roam_above_desks() -> void:
+	z_index = 90
+
+func _set_roam_under_current_desk() -> void:
+	if current_seat != null:
+		z_index = current_seat.z_index + 1
+	else:
+		z_index = 1
+
+func _play_seated_idle() -> void:
+	if visual_component and visual_component.has_method("play_action"):
+		visual_component.play_action("idle")
+
+func _start_roaming() -> void:
+	if not _can_try_roam():
+		return
+
+	var route := _build_roam_route()
+	if route.is_empty():
+		return
+
+	if _move_tween:
+		_move_tween.kill()
+
+	is_roaming = true
+	_set_roam_above_desks()
+	_pause_work_for_roam()
+
+	_move_tween = create_tween()
+	var cursor_pos := global_position
+	for target_pos in route:
+		var distance := cursor_pos.distance_to(target_pos)
+		var duration := maxf(0.08, distance / maxf(1.0, roam_move_speed))
+		_move_tween.tween_callback(_play_walk_towards.bind(target_pos))
+		_move_tween.tween_property(self, "global_position", target_pos, duration)
+		cursor_pos = target_pos
+
+	var idle_time := randf_range(roam_idle_min, roam_idle_max)
+	if idle_time > 0.0:
+		if visual_component and visual_component.has_method("play_action"):
+			_move_tween.tween_callback(visual_component.play_action.bind("idle"))
+		_move_tween.tween_interval(idle_time)
+
+	var return_pos := current_seat.get_snap_global_position() - size / 2.0
+	var return_route := _build_roam_return_route(route[route.size() - 1], return_pos)
+	var switched_under_for_desk := false
+	for target_pos in return_route:
+		var distance := cursor_pos.distance_to(target_pos)
+		var duration := maxf(0.08, distance / maxf(1.0, roam_move_speed))
+		if not switched_under_for_desk and _should_roam_under_desk_for_segment(cursor_pos, target_pos, return_pos):
+			_move_tween.tween_callback(_set_roam_under_current_desk)
+			switched_under_for_desk = true
+		_move_tween.tween_callback(_play_walk_towards.bind(target_pos))
+		_move_tween.tween_property(self, "global_position", target_pos, duration)
+		cursor_pos = target_pos
+	_move_tween.finished.connect(_finish_roaming)
+
+func _build_roam_route() -> Array[Vector2]:
+	var walk_points: Array[Node2D] = []
+	var destination_points: Array[Node2D] = []
+	var turn_points: Array[Node2D] = []
+	for point in get_tree().get_nodes_in_group("employee_walk_points"):
+		var walk_point := point as Node2D
+		if walk_point == null or not walk_point.is_visible_in_tree():
+			continue
+
+		walk_points.append(walk_point)
+		if _is_roam_turn_point(walk_point):
+			turn_points.append(walk_point)
+		else:
+			destination_points.append(walk_point)
+
+	if walk_points.is_empty():
+		return []
+
+	var entry_candidates := _get_same_side_entry_walk_points(walk_points)
+	var entry_point := _find_nearest_walk_point(entry_candidates, global_position + size / 2.0)
+	if entry_point == null:
+		return []
+
+	_roam_entry_point_pos = _walk_point_target_pos(entry_point)
+	_roam_corridor_y = _get_roam_corridor_y(turn_points, walk_points)
+
+	var destinations: Array[Node2D] = destination_points.duplicate()
+	destinations.erase(entry_point)
+	if destinations.is_empty():
+		destinations = walk_points.duplicate()
+		destinations.erase(entry_point)
+		for turn_point in turn_points:
+			destinations.erase(turn_point)
+
+	if destinations.is_empty():
+		var entry_only_route: Array[Vector2] = []
+		_append_orthogonal_path(entry_only_route, global_position, _roam_entry_point_pos, false)
+		return entry_only_route
+
+	destinations.shuffle()
+	var destination: Node2D = destinations[0]
+	var destination_pos := _walk_point_target_pos(destination)
+
+	var route: Array[Vector2] = []
+	_append_orthogonal_path(route, global_position, _roam_entry_point_pos, false)
+	_append_route_point(route, Vector2(_roam_entry_point_pos.x, _roam_corridor_y))
+	_append_route_point(route, Vector2(destination_pos.x, _roam_corridor_y))
+	_append_route_point(route, destination_pos)
+	return route
+
+func _build_roam_return_route(from_pos: Vector2, return_pos: Vector2) -> Array[Vector2]:
+	var route: Array[Vector2] = []
+	_append_route_point(route, Vector2(from_pos.x, _roam_corridor_y), from_pos)
+	_append_route_point(route, Vector2(_roam_entry_point_pos.x, _roam_corridor_y))
+	_append_route_point(route, _roam_entry_point_pos)
+	_append_orthogonal_path(route, _roam_entry_point_pos, return_pos, false)
+	return route
+
+func _is_roam_turn_point(point: Node2D) -> bool:
+	return String(point.name).begins_with("TurnPoint")
+
+func _is_room_walk_point(point: Node2D) -> bool:
+	return String(point.name).to_lower().begins_with("room")
+
+func _get_visible_walk_points() -> Array[Node2D]:
+	var walk_points: Array[Node2D] = []
+	for point in get_tree().get_nodes_in_group("employee_walk_points"):
+		var walk_point := point as Node2D
+		if walk_point == null or not walk_point.is_visible_in_tree():
+			continue
+		walk_points.append(walk_point)
+	return walk_points
+
+func _get_same_side_entry_walk_points(walk_points: Array[Node2D]) -> Array[Node2D]:
+	var usable_points: Array[Node2D] = []
+	var fallback_points: Array[Node2D] = []
+	for point in walk_points:
+		if not _is_roam_turn_point(point):
+			fallback_points.append(point)
+			if not _is_room_walk_point(point):
+				usable_points.append(point)
+
+	if usable_points.is_empty():
+		usable_points = fallback_points
+
+	if current_seat == null:
+		return usable_points if not usable_points.is_empty() else walk_points
+
+	var seat_parent := current_seat.get_parent()
+	var seat_grid := seat_parent as Control
+	if seat_grid == null:
+		return usable_points if not usable_points.is_empty() else walk_points
+
+	var grid_center_x := seat_grid.get_global_rect().get_center().x
+	var seat_center_x := current_seat.get_global_rect().get_center().x
+	var use_left_side := seat_center_x < grid_center_x
+	var same_side_points: Array[Node2D] = []
+	for point in usable_points:
+		if use_left_side and point.global_position.x <= grid_center_x:
+			same_side_points.append(point)
+		elif not use_left_side and point.global_position.x >= grid_center_x:
+			same_side_points.append(point)
+
+	return same_side_points if not same_side_points.is_empty() else usable_points
+
+func _find_nearest_room_walk_point(from_pos: Vector2) -> Node2D:
+	var room_points: Array[Node2D] = []
+	var fallback_points: Array[Node2D] = []
+	for point in _get_visible_walk_points():
+		if _is_roam_turn_point(point):
+			continue
+		fallback_points.append(point)
+		if _is_room_walk_point(point):
+			room_points.append(point)
+
+	if not room_points.is_empty():
+		return _find_nearest_walk_point(room_points, from_pos)
+	return _find_nearest_walk_point(fallback_points, from_pos)
+
+func _build_meeting_return_route(from_pos: Vector2, return_pos: Vector2) -> Array[Vector2]:
+	var walk_points := _get_visible_walk_points()
+	if walk_points.is_empty():
+		return []
+
+	var turn_points: Array[Node2D] = []
+	for point in walk_points:
+		if _is_roam_turn_point(point):
+			turn_points.append(point)
+
+	var entry_candidates := _get_same_side_entry_walk_points(walk_points)
+	var entry_point := _find_nearest_walk_point(entry_candidates, return_pos + size / 2.0)
+	if entry_point == null:
+		return []
+
+	_roam_entry_point_pos = _walk_point_target_pos(entry_point)
+	_roam_corridor_y = _get_roam_corridor_y(turn_points, walk_points)
+
+	return _build_roam_return_route(from_pos, return_pos)
+
+func _find_nearest_walk_point(points: Array[Node2D], from_pos: Vector2) -> Node2D:
+	var nearest_point: Node2D = null
+	var nearest_distance := INF
+	for point in points:
+		var distance := from_pos.distance_to(point.global_position)
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest_point = point
+	return nearest_point
+
+func _get_roam_corridor_y(turn_points: Array[Node2D], walk_points: Array[Node2D]) -> float:
+	var y := -INF
+	var source_points: Array[Node2D] = turn_points if not turn_points.is_empty() else walk_points
+	for point in source_points:
+		y = maxf(y, _walk_point_target_pos(point).y)
+	return y
+
+func _walk_point_target_pos(point: Node2D) -> Vector2:
+	return point.global_position - size / 2.0
+
+func _append_orthogonal_path(route: Array[Vector2], from_pos: Vector2, to_pos: Vector2, vertical_first: bool) -> void:
+	if is_equal_approx(from_pos.x, to_pos.x) or is_equal_approx(from_pos.y, to_pos.y):
+		_append_route_point(route, to_pos, from_pos)
+		return
+
+	var corner := Vector2(from_pos.x, to_pos.y) if vertical_first else Vector2(to_pos.x, from_pos.y)
+	_append_route_point(route, corner, from_pos)
+	_append_route_point(route, to_pos)
+
+func _append_route_point(route: Array[Vector2], point: Vector2, previous_override = null) -> void:
+	var previous: Vector2 = global_position
+	if not route.is_empty():
+		previous = route[route.size() - 1]
+	elif previous_override is Vector2:
+		previous = previous_override
+
+	if previous.distance_to(point) <= 0.5:
+		return
+	route.append(point)
+
+func _should_roam_under_desk_for_segment(segment_start: Vector2, segment_end: Vector2, return_pos: Vector2) -> bool:
+	if segment_end.distance_to(return_pos) <= 0.5:
+		return true
+
+	return segment_start.distance_to(_roam_entry_point_pos) <= 0.5 and segment_end.distance_to(_roam_entry_point_pos) > 0.5
+
+func _finish_roaming() -> void:
+	is_roaming = false
+	_move_tween = null
+
+	if current_seat != null:
+		global_position = current_seat.get_snap_global_position() - size / 2.0
+		current_seat.set_occupant(self)
+
+	_resume_work_from_roam()
+
+func _finish_meeting_return() -> void:
+	is_roaming = false
+	_move_tween = null
+
+	if current_seat != null:
+		global_position = current_seat.get_snap_global_position() - size / 2.0
+		current_seat.set_occupant(self)
+		_set_roam_under_current_desk()
+		_play_seated_idle()
+
+	is_working = current_seat != null
+	_start_new_work_cycle()
 
 func _calculate_interrupted_reward() -> void:
 	if not is_working:
@@ -762,8 +1116,9 @@ func enter_meeting() -> void:
 	is_working = true
 	_start_new_work_cycle() # 带上新 Buff 重新计算本轮时长
 
-func exit_meeting() -> void:
+func exit_meeting(meeting_source_pos: Variant = null) -> void:
 	is_in_meeting = false
+	is_working = false
 	
 	# 1. 进度再次清零 (需求：解散会议时清零)
 	work_elapsed = 0.0
@@ -780,7 +1135,44 @@ func exit_meeting() -> void:
 		
 	if visual_component:
 		visual_component.show()
-		
+
+	if meeting_source_pos is Vector2 and current_seat != null:
+		var source_pos: Vector2 = meeting_source_pos
+		var exit_point := _find_nearest_room_walk_point(source_pos)
+		if exit_point != null:
+			var start_pos := _walk_point_target_pos(exit_point)
+			var return_pos := current_seat.get_snap_global_position() - size / 2.0
+			var return_route := _build_meeting_return_route(start_pos, return_pos)
+			if not return_route.is_empty():
+				if _move_tween:
+					_move_tween.kill()
+
+				is_roaming = true
+				_set_roam_above_desks()
+				global_position = start_pos
+
+				_move_tween = create_tween()
+				var cursor_pos := global_position
+				var switched_under_for_desk := false
+				for target_pos in return_route:
+					var distance := cursor_pos.distance_to(target_pos)
+					var duration := maxf(0.08, distance / maxf(1.0, roam_move_speed))
+					if not switched_under_for_desk and _should_roam_under_desk_for_segment(cursor_pos, target_pos, return_pos):
+						_move_tween.tween_callback(_set_roam_under_current_desk)
+						switched_under_for_desk = true
+					_move_tween.tween_callback(_play_walk_towards.bind(target_pos))
+					_move_tween.tween_property(self, "global_position", target_pos, duration)
+					cursor_pos = target_pos
+				_move_tween.finished.connect(_finish_meeting_return)
+				return
+
+	if current_seat != null:
+		global_position = current_seat.get_snap_global_position() - size / 2.0
+		current_seat.set_occupant(self)
+		_set_roam_under_current_desk()
+		_play_seated_idle()
+
+	is_working = current_seat != null
 	_start_new_work_cycle() # 恢复正常速度继续搬砖
 
 func _clear_all_vfx() -> void:

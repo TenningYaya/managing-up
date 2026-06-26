@@ -184,28 +184,36 @@ offset_bottom = 343.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="OfficeArea" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment" unique_id=601108209 groups=["office_area"]]
+[node name="OfficeAreaSlot" type="Control" parent="FullGameMode/Background/WholeAlignment" unique_id=1321311241]
+custom_minimum_size = Vector2(1566, 330)
 layout_mode = 2
+mouse_filter = 2
+
+[node name="OfficeArea" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment/OfficeAreaSlot" unique_id=601108209 groups=["office_area"]]
+layout_mode = 0
+offset_top = 26.0
+offset_right = 1566.0
+offset_bottom = 226.0
 mouse_filter = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="NewRoom1" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=1395701316 instance=ExtResource("1_0wfyh")]
+[node name="NewRoom1" parent="FullGameMode/Background/WholeAlignment/OfficeAreaSlot/OfficeArea" unique_id=1395701316 instance=ExtResource("1_0wfyh")]
 layout_mode = 2
 size_flags_vertical = 4
 unlock_at_level = 4
 
-[node name="NewRoom2" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=282060098 instance=ExtResource("1_0wfyh")]
+[node name="NewRoom2" parent="FullGameMode/Background/WholeAlignment/OfficeAreaSlot/OfficeArea" unique_id=282060098 instance=ExtResource("1_0wfyh")]
 layout_mode = 2
 size_flags_vertical = 4
 unlock_at_level = 3
 
-[node name="NewRoom3" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=1041642994 instance=ExtResource("1_0wfyh")]
+[node name="NewRoom3" parent="FullGameMode/Background/WholeAlignment/OfficeAreaSlot/OfficeArea" unique_id=1041642994 instance=ExtResource("1_0wfyh")]
 layout_mode = 2
 size_flags_vertical = 4
 unlock_at_level = 2
 
-[node name="NewRoom4" parent="FullGameMode/Background/WholeAlignment/OfficeArea" unique_id=2005734672 groups=["office_1", "tutorial_office"] instance=ExtResource("1_0wfyh")]
+[node name="NewRoom4" parent="FullGameMode/Background/WholeAlignment/OfficeAreaSlot/OfficeArea" unique_id=2005734672 groups=["office_1", "tutorial_office"] instance=ExtResource("1_0wfyh")]
 layout_mode = 2
 size_flags_vertical = 4
 
@@ -277,6 +285,101 @@ offset_right = 329.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="WalkPoints" type="Node2D" parent="FullGameMode" unique_id=2068486510]
+
+[node name="room1" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1264749060 groups=["employee_walk_points"]]
+position = Vector2(769, 1021)
+
+[node name="room2" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1498589169 groups=["employee_walk_points"]]
+position = Vector2(348, 1026)
+
+[node name="room3" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1957451106 groups=["employee_walk_points"]]
+position = Vector2(-49, 1026)
+
+[node name="room4" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1039887662 groups=["employee_walk_points"]]
+position = Vector2(-431, 1027)
+
+[node name="TurnPoint" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=212925631 groups=["employee_walk_points"]]
+position = Vector2(1612, 1069)
+
+[node name="TurnPoint2" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=121916471 groups=["employee_walk_points"]]
+position = Vector2(917, 1073)
+
+[node name="WaitingArea" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1223561391 groups=["employee_walk_points"]]
+position = Vector2(2301, 928)
+
+[node name="WaitingArea12" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=55500780 groups=["employee_walk_points"]]
+position = Vector2(2030, 1073)
+
+[node name="WaitingArea13" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=307437255 groups=["employee_walk_points"]]
+position = Vector2(2309, 1071)
+
+[node name="WaitingArea14" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=2085897635 groups=["employee_walk_points"]]
+position = Vector2(2578, 1068)
+
+[node name="WaitingArea15" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1582154654 groups=["employee_walk_points"]]
+position = Vector2(2575, 1024)
+
+[node name="WaitingArea16" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1649890222 groups=["employee_walk_points"]]
+position = Vector2(2561, 912)
+
+[node name="WaitingArea17" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=697198355 groups=["employee_walk_points"]]
+position = Vector2(2569, 812)
+
+[node name="WaitingArea18" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=2031285013 groups=["employee_walk_points"]]
+position = Vector2(2303, 1022)
+
+[node name="WaitingArea19" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1991114512 groups=["employee_walk_points"]]
+position = Vector2(1474, 920)
+
+[node name="WaitingArea6" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1509982683 groups=["employee_walk_points"]]
+position = Vector2(2304, 820)
+
+[node name="WaitingArea7" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1408842226 groups=["employee_walk_points"]]
+position = Vector2(2030, 1016)
+
+[node name="WaitingArea8" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=729039799 groups=["employee_walk_points"]]
+position = Vector2(2027, 819)
+
+[node name="WaitingArea20" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=2116005748 groups=["employee_walk_points"]]
+position = Vector2(1784, 1015)
+
+[node name="WaitingArea21" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1642247390 groups=["employee_walk_points"]]
+position = Vector2(1776, 915)
+
+[node name="WaitingArea22" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=760682215 groups=["employee_walk_points"]]
+position = Vector2(1771, 818)
+
+[node name="WaitingArea9" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=84295052 groups=["employee_walk_points"]]
+position = Vector2(2029, 917)
+
+[node name="WaitingArea10" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=788324983 groups=["employee_walk_points"]]
+position = Vector2(1608, 918)
+
+[node name="WaitingArea11" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1289658433 groups=["employee_walk_points"]]
+position = Vector2(1467, 1021)
+
+[node name="WaitingArea2" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1551550194 groups=["employee_walk_points"]]
+position = Vector2(1466, 816)
+
+[node name="WaitingArea3" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1075655141 groups=["employee_walk_points"]]
+position = Vector2(1198, 1021)
+
+[node name="WaitingArea4" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=28222863 groups=["employee_walk_points"]]
+position = Vector2(1196, 813)
+
+[node name="WaitingArea5" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=2064322650 groups=["employee_walk_points"]]
+position = Vector2(1194, 909)
+
+[node name="WaitingArea24" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1076890329 groups=["employee_walk_points"]]
+position = Vector2(945, 1008)
+
+[node name="WaitingArea25" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=313839240 groups=["employee_walk_points"]]
+position = Vector2(945, 913)
+
+[node name="WaitingArea26" type="Marker2D" parent="FullGameMode/WalkPoints" unique_id=1083283591 groups=["employee_walk_points"]]
+position = Vector2(944, 815)
 
 [node name="Camera2D" type="Camera2D" parent="FullGameMode" unique_id=380816209]
 position = Vector2(959.16, 0)

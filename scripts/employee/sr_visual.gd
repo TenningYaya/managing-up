@@ -40,7 +40,11 @@ extends Node2D
 
 const ANIM_CONFIG = {
 	"idle": {"y": 256, "w": 32, "f": 5},
-	"walk": {"y": 0, "w": 32, "f": 8},   # 🌟 你说的新动画：第一行(y=0)，8帧
+	"walk": {"y": 0, "w": 32, "f": 8},
+	"walk_down": {"y": 0, "w": 32, "f": 8},
+	"walk_up": {"y": 32, "w": 32, "f": 8},
+	"walk_right": {"y": 64, "w": 32, "f": 8},
+	"walk_left": {"y": 96, "w": 32, "f": 8},
 	"slack": {"y": 768, "w": 32, "f": 1}
 }
 
@@ -200,10 +204,25 @@ func play_action(action_name: String) -> void:
 		_apply_region(acc_hat, act, hat_idx, hat_total)
 
 	# 3. 呼叫 AnimationPlayer 播放真正的动画
-	if anim_player.has_animation(action_name):
-		anim_player.play(action_name)
+	var anim_name := action_name
+	if action_name.begins_with("walk_"):
+		anim_name = "walk"
+	if anim_player.has_animation(anim_name):
+		anim_player.play(anim_name)
 	else:
-		print("【警告】AnimationPlayer 里没找到名为 '", action_name, "' 的动画轨！")
+		print("【警告】AnimationPlayer 里没找到名为 '", anim_name, "' 的动画轨！")
+
+func play_walk_direction(move_delta: Vector2) -> void:
+	if absf(move_delta.x) > absf(move_delta.y):
+		if move_delta.x >= 0.0:
+			play_action("walk_right")
+		else:
+			play_action("walk_left")
+	else:
+		if move_delta.y >= 0.0:
+			play_action("walk_down")
+		else:
+			play_action("walk_up")
 
 func _apply_region(sprite: Sprite2D, act: Dictionary, color_idx: int, total_colors: int):
 	sprite.region_enabled = true

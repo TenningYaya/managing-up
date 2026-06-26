@@ -209,9 +209,23 @@ func _input(event: InputEvent) -> void:
 # =====================================================
 func blocks_point(global_pos: Vector2) -> bool:
 	if is_open:
-		return $PhoneWrapper/PhoneBase.get_global_rect().has_point(global_pos)
+		return _control_tree_blocks_point(phone_wrapper, global_pos)
 	if is_instance_valid(trigger_btn) and trigger_btn.visible:
 		return trigger_btn.get_global_rect().has_point(global_pos)
+	return false
+
+func _control_tree_blocks_point(control: Control, global_pos: Vector2) -> bool:
+	if control == null or not control.is_visible_in_tree():
+		return false
+
+	if control.get_global_rect().has_point(global_pos):
+		return true
+
+	for child in control.get_children():
+		var child_control := child as Control
+		if child_control != null and _control_tree_blocks_point(child_control, global_pos):
+			return true
+
 	return false
 
 
