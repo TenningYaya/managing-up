@@ -38,8 +38,11 @@ func _spawn_color_rect(rect_name: String) -> ColorRect:
 # 核心功能 2：听从大总管的命令去排布位置
 # ==========================================
 func _arrange_curtains(rect: Rect2) -> void:
+	# 🌟 像素对齐:窗口常是非整数缩放(默认就是 0.99),浮点边缘会让四块布拼缝处
+	#    出现一条亮线/一条暗线。取整让边缘落在整数像素,缝隙消失。
+	rect = Rect2(rect.position.round(), rect.size.round())
 	# 记下现在的洞在哪里
-	hole_rect = rect 
+	hole_rect = rect
 	var screen_size = get_viewport_rect().size
 	
 	curtain_top.global_position = Vector2(0, 0)

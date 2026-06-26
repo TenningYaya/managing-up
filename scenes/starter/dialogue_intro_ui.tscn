@@ -26,26 +26,28 @@ grow_vertical = 2
 color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 
 [node name="TextureRect2" type="ColorRect" parent="Background" unique_id=1889288888]
-layout_mode = 0
-offset_left = 399.0
-offset_right = 1488.0
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -561.0
+offset_right = 528.0
 offset_bottom = 431.0
 color = Color(1, 1, 1, 0.93333334)
 
 [node name="MainMargin" type="MarginContainer" parent="Background" unique_id=1554729028]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -8.0
+offset_left = -488.0
 offset_top = 81.0
-offset_right = -8.0
+offset_right = 472.0
 offset_bottom = 78.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 480
+theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 480
+theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 89
 
 [node name="ChatScroll" type="ScrollContainer" parent="Background/MainMargin" unique_id=589131416]
@@ -80,26 +82,32 @@ grow_vertical = 0
 text = "HINT_CONTINUE"
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=159802731]
-layout_mode = 0
-offset_left = 288.0
-offset_right = 1600.0
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -672.0
+offset_right = 640.0
 offset_bottom = 433.0
 texture = ExtResource("3_4k5w1")
 expand_mode = 2
 stretch_mode = 6
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1920948347]
-layout_mode = 0
-offset_left = 427.0
-offset_right = 1463.0
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -533.0
+offset_right = 503.0
 offset_bottom = 80.0
 color = Color(1.8289685e-06, 0.4949876, 0.25025076, 0.78039217)
 
 [node name="Label" type="Label" parent="." unique_id=1596074237]
-layout_mode = 0
-offset_left = 780.0
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
 offset_top = 14.0
-offset_right = 1075.0
+offset_right = 115.0
 offset_bottom = 69.0
 theme_override_font_sizes/font_size = 40
 text = "John (CEO) "

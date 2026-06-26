@@ -40,6 +40,8 @@ func delete_save() -> void:
 	Gamemanager.project_name = "NewProject"
 	Gamemanager.player_avatar_index = 0
 	Gamemanager.player_avatar_texture = preload("res://assets/tutorial/avatars/player_avatar_1.png")
+	# 🌟 必须复位:否则重开教程会沿用上一局的"已选头像",导致选头像前点员工就冒气泡
+	Gamemanager.has_selected_avatar = false
 	FloorManager.change_all_floors(0, Vector2i(0, 8))  # 换成你的默认地板坐标
 
 	# 🌟 普通招募免费简历计时器也要清零：RecruitmentManager 是 autoload，不随场景重载复位，

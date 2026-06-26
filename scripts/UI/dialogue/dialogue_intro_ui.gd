@@ -53,8 +53,11 @@ func start_dialogue(lines: Array[String], position_enum: int, offset_x: float, o
 		child.queue_free()
 		
 	# 🌟 处理位置微调（基于你填的预设和 Offset）
-	$Background.position = Vector2.ZERO 
-	$Background.position.x += offset_x
+	# 先把背景重新铺满当前视口(随屏幕比例自适应)。否则改了屏幕比例后,expand 让逻辑视口变宽,
+	# 用绝对 position 摆的对话框就会整体偏移(90% 时明显左偏)。重置成 Full Rect 后再叠加 offset。
+	$Background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# x 方向不再叠加 offset:对话框是满宽底栏,铺满视口本身就水平居中;
+	# 再叠加绝对 offset_x 反而会在改屏幕比例(expand 把逻辑视口拉宽)后整体偏移。
 	$Background.position.y += offset_y
 
 	# 开始播放第一句话

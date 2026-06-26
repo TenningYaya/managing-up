@@ -12,7 +12,7 @@ func _ready() -> void:
 	# 初始状态设为不可见和极小
 	scale = Vector2.ZERO
 
-const MAX_TEXT_WIDTH := 900.0   # 文本最大宽度（局部坐标），超过即自动换行；按需调
+const MAX_TEXT_WIDTH := 1200.0   # 文本最大宽度（局部坐标），超过即自动换行；按需调
 
 # 短文本量到多宽就多宽（贴合不留白），长文本封顶并换行
 func _fit_label_width() -> void:

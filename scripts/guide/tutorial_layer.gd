@@ -210,7 +210,7 @@ func _handle_dialogue(step: TutorialStep) -> void:
 				# 4. 创建提示框
 				var temp_tip = Label.new()
 				temp_tip.name = "TutorialBuffTip"
-				temp_tip.text = "Pantry Perk: Eff +3"
+				temp_tip.text = tr("BUFF_SNACK_MILKTEA_DESC")   # 本地化 + 已是 效率+2
 				temp_tip.add_theme_stylebox_override("normal", _create_temp_box())
 				
 				# 🌟 致命修复：必须 add_child！我们直接把它挂在面板上，防止被挡住

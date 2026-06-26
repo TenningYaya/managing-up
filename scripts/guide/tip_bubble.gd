@@ -17,7 +17,8 @@ func _ready() -> void:
 func set_tip(text_content: String) -> void:
 	if label:
 		label.text = text_content
-		
-	# 如果你用了 NinePatchRect 做底图，或者用了 Container 自动排版
-	# 强行让它在这一帧重新计算一下物理宽高，防止字溢出
+
+	# 等一帧让 Label 算好尺寸,再强制底图按内容(含 Label 的最小高)收缩贴合,
+	# 这样英文也有足够竖向空间,不会被切顶/压扁。
 	await get_tree().process_frame
+	reset_size()
