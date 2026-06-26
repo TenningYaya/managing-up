@@ -54,6 +54,8 @@ func refresh_status(target_office: Node = null) -> void:
 		already_exists = OfficeManager.has_recruitment_office
 	elif office_type == Gamemanager.OfficeType.CULTURE_CENTER:
 		already_exists = OfficeManager.has_culture_center
+	elif office_type == Gamemanager.OfficeType.STOCK_OFFICE:
+		already_exists = OfficeManager.has_stock_office
 	
 	# --- 2. 核心选中判定 ---
 	var is_selected = false

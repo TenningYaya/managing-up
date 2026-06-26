@@ -45,11 +45,18 @@ BUFF_SNACK_CAKE_DESC,茶水间福利：质量 +3,Pantry perk: Qual +3
 BUFF_SNACK_SAUSAGE_DESC,茶水间福利：经验 +3,Pantry perk: Exp +3
 OFFICE_PN_TAB_OFFICE,功能,Office
 OFFICE_PN_TAB_CULTURE,文化,Culture
+OFFICE_PN_TAB_STOCK,炒股,Trading
 OFFICE_PN_FUNC_PANTRY,茶水间,Pantry
 OFFICE_PN_FUNC_HEADHUNT,猎头办公室,Headhunt
 OFFICE_PN_FUNC_MEETING,会议室,Meeting
 OFFICE_PN_FUNC_CULTURE,企业文化室,Culture
+OFFICE_PN_FUNC_STOCK,炒股办公室,Trading
 OFFICE_SELECT_CULTURE,选择文化,Culture
+OFFICE_MANAGE_STOCK,炒股,Trade
+STOCK_996,996福报科技,996 Blessing Tech
+STOCK_PIE,画饼集团,Pie-in-the-Sky Group
+STOCK_LEEK,韭菜农业,Leek Agriculture
+STOCK_FISH,摸鱼网络,Slacker Network
 OFFICE_DISMISS_MEETING,解散会议,Dismiss
 DeskSlot_locked_click_hint,提升职级以扩大项目组规模,Upgrade your rank to expand the team
 SETTING_SL_CONFIRM_LABEL,确定要保存并退出吗？,Do you want to save and exit?

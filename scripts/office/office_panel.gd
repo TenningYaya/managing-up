@@ -62,16 +62,21 @@ func _input(event: InputEvent) -> void:
 			if not background.get_global_rect().has_point(mouse_pos):
 				close_panel()
 
-func open_panel(office: Node, open_culture_tab: bool = false) -> void:
+func open_panel(office: Node, open_culture_tab: bool = false, open_stock_tab: bool = false) -> void:
 	current_target_office = office
 	_open_time = Time.get_ticks_msec()
-	
+
 	var is_culture_center = (office.current_type == Gamemanager.OfficeType.CULTURE_CENTER)
-	
-	tab_container.set_tab_hidden(1, !is_culture_center) 
-	
+	var is_stock_office = (office.current_type == Gamemanager.OfficeType.STOCK_OFFICE)
+
+	# 文化页签只在文化室时可见；炒股页签只在炒股办公室时可见
+	tab_container.set_tab_hidden(1, !is_culture_center)
+	tab_container.set_tab_hidden(2, !is_stock_office)
+
 	if open_culture_tab and is_culture_center:
 		tab_container.current_tab = 1
+	elif open_stock_tab and is_stock_office:
+		tab_container.current_tab = 2
 	else:
 		tab_container.current_tab = 0
 

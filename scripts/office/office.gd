@@ -9,12 +9,14 @@ class_name Office
 @export var tex_meeting: Texture2D
 @export var tex_recruitment: Texture2D
 @export var tex_culture: Texture2D
+@export var tex_stock: Texture2D
 
 @export var unlock_at_level: int = 1 # 🌟 在编辑器里设置：M1=1, M2=2...
 
 # 引用下方的子节点用来换图
 @onready var texture_display: TextureRect = $TextureRect
 @onready var manage_btn: TextureButton = $ManageButton
+@onready var stock_btn: TextureButton = $StockButton
 @onready var empty_hint: TextureRect = $EmptyOfficeHint
 @onready var updated: CanvasItem = $Updated
 
@@ -43,7 +45,9 @@ func _ready() -> void:
 	
 	if manage_btn:
 		manage_btn.pressed.connect(_on_manage_btn_pressed)
-		
+	if stock_btn:
+		stock_btn.pressed.connect(_on_stock_btn_pressed)
+
 	# 监听全局等级变化
 	if Gamemanager.has_signal("level_changed"):
 		Gamemanager.level_changed.connect(_on_level_changed)
@@ -112,9 +116,11 @@ func _sync_visual_and_interaction():
 	if is_locked:
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 		if manage_btn: manage_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if stock_btn: stock_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	else:
-		mouse_filter = Control.MOUSE_FILTER_STOP 
+		mouse_filter = Control.MOUSE_FILTER_STOP
 		if manage_btn: manage_btn.mouse_filter = Control.MOUSE_FILTER_STOP
+		if stock_btn: stock_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 		
 # ==========================================
 # 交互与点击
@@ -126,6 +132,11 @@ func _gui_input(event: InputEvent) -> void:
 		if manage_btn and manage_btn.visible:
 			if manage_btn.get_global_rect().has_point(get_global_mouse_position()):
 				_on_manage_btn_pressed()   # 点在管理按钮上 → 直接开 Culture 页签
+				return
+
+		if stock_btn and stock_btn.visible:
+			if stock_btn.get_global_rect().has_point(get_global_mouse_position()):
+				_on_stock_btn_pressed()   # 点在炒股按钮上 → 直接开 Stock 页签
 				return
 
 		_on_office_clicked()
@@ -140,6 +151,12 @@ func _on_manage_btn_pressed() -> void:
 	var panel = get_tree().get_first_node_in_group("office_panel")
 	if panel:
 		panel.open_panel(self, true)  # true = 直接定位到 Culture 页签
+
+# 炒股办公室专属：点炒股按钮直接打开 Stock 页签
+func _on_stock_btn_pressed() -> void:
+	var panel = get_tree().get_first_node_in_group("office_panel")
+	if panel:
+		panel.open_panel(self, false, true)  # 第三参数 true = 直接定位到 Stock 页签
 
 # ==========================================
 # 拖拽与悬停
@@ -176,7 +193,10 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 	elif current_type == Gamemanager.OfficeType.CULTURE_CENTER:
 		OfficeManager.has_culture_center = false
 		Gamemanager.has_culture_center = false
-	
+	elif current_type == Gamemanager.OfficeType.STOCK_OFFICE:
+		OfficeManager.has_stock_office = false
+		Gamemanager.has_stock_office = false
+		
 	if is_instance_valid(logic_node) and logic_node.has_method("cleanup"):
 		logic_node.cleanup()
 	elif is_instance_valid(logic_node):
@@ -186,6 +206,7 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 	# 强行清空引用，彻底斩断残影
 	logic_node = null
 	manage_btn.hide()
+	if stock_btn: stock_btn.hide()
 			
 	# ====================================================
 	# 💥 2. 迎新：如果新建的是唯一办公室，立刻把坑位占死！
@@ -211,7 +232,8 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 		Gamemanager.OfficeType.MEETING_ROOM: logic_node = MeetingRoomLogic.new()
 		Gamemanager.OfficeType.RECRUITMENT: logic_node = RecruitmentOfficeLogic.new()
 		Gamemanager.OfficeType.CULTURE_CENTER: logic_node = CultureCenterLogic.new()
-	
+		Gamemanager.OfficeType.STOCK_OFFICE: logic_node = StockOfficeLogic.new()
+		
 	if logic_node != null:
 		add_child(logic_node)
 		logic_node.setup(self)
@@ -240,6 +262,8 @@ func _update_visuals() -> void:
 		Gamemanager.OfficeType.MEETING_ROOM: target_tex = tex_meeting
 		Gamemanager.OfficeType.RECRUITMENT: target_tex = tex_recruitment
 		Gamemanager.OfficeType.CULTURE_CENTER: target_tex = tex_culture
+		Gamemanager.OfficeType.STOCK_OFFICE: target_tex = tex_stock
+		
 		_: target_tex = tex_empty
 	
 	if texture_display:
@@ -260,6 +284,9 @@ func _update_visuals() -> void:
 	## 管理按钮只在企业文化室出现（此处已过 is_locked 判定，锁定时上面已 return）
 	if manage_btn:
 		manage_btn.visible = (current_type == Gamemanager.OfficeType.CULTURE_CENTER)
+	## 炒股按钮只在炒股办公室出现
+	if stock_btn:
+		stock_btn.visible = (current_type == Gamemanager.OfficeType.STOCK_OFFICE)
 
 func _play_hint_wobble_animation():
 	if not empty_hint: return

@@ -710,7 +710,6 @@ func _update_tip_position(target_rect: Rect2) -> void:
 	current_tip_instance.global_position = final_pos
 	
 func _on_step_completed() -> void:
-	print("【步骤切换时】project_name = ", Gamemanager.project_name)
 	# 1. 每次点击，先停掉闪烁，复原透明度
 	if is_instance_valid(current_tip_instance):
 		current_tip_instance.queue_free()

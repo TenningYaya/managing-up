@@ -12,7 +12,8 @@ enum OfficeType {
 	PANTRY,
 	MEETING_ROOM,
 	RECRUITMENT,
-	CULTURE_CENTER
+	CULTURE_CENTER,
+	STOCK_OFFICE
 }
 
 enum SnackBuff {
@@ -26,7 +27,8 @@ const OFFICE_UNLOCK_LEVELS = {
 	OfficeType.PANTRY: 1,          # M2 解锁
 	OfficeType.RECRUITMENT: 3,     # M3 解锁
 	OfficeType.MEETING_ROOM: 4,    # M4 解锁
-	OfficeType.CULTURE_CENTER: 5   # M5 解锁
+	OfficeType.CULTURE_CENTER: 5,   # M5 解锁
+	OfficeType.STOCK_OFFICE: 1
 }
 
 var has_recruitment_office: bool = false
@@ -35,6 +37,7 @@ var is_tutorial_completed: bool = false
 var is_employee_interaction_disabled: bool = false
 var is_reject_button_disabled: bool = false
 var tutorial_allow_camera_drag: bool = false
+var has_stock_office: bool = false
 
 var project_name: String = "NewProject"
 var player_avatar_index: int = 0

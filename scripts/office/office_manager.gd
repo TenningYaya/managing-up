@@ -4,6 +4,7 @@ extends Node
 # 定义信号：当办公室状态改变时通知全服（主要是通知招聘面板）
 signal recruitment_office_status_changed(is_active: bool)
 signal culture_center_status_changed(is_active: bool)
+signal stock_office_status_changed(is_active: bool)
 
 var culture_efficiency: int = 0
 var culture_quality: int = 0
@@ -33,7 +34,15 @@ var has_culture_center: bool:
 		if Gamemanager.has_culture_center != value:
 			Gamemanager.has_culture_center = value
 			culture_center_status_changed.emit(value)
-			
+		
+var has_stock_office: bool:
+	get:
+		return Gamemanager.has_stock_office
+	set(value):
+		if Gamemanager.has_stock_office != value:
+			Gamemanager.has_stock_office = value
+			stock_office_status_changed.emit(value)
+				
 func can_dispense_snack() -> bool:
 	# 如果没有食堂（total_pantries == 0），那就肯定没法发零食
 	if total_pantries <= 0:

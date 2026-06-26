@@ -94,8 +94,8 @@ offset_left = 19.0
 offset_top = 206.0
 offset_right = 365.0
 offset_bottom = 296.0
-columns = 6
 theme_override_constants/h_separation = 2
+columns = 6
 
 [node name="Slot1" type="VBoxContainer" parent="AvatarSlots" unique_id=949021389]
 custom_minimum_size = Vector2(56, 84)
@@ -135,6 +135,15 @@ offset_top = 114.667
 offset_right = 290.667
 offset_bottom = 161.333
 button_text = "OFFICE_SELECT_CULTURE"
+
+[node name="StockButton" parent="." unique_id=493236439 instance=ExtResource("8_2u0tt")]
+visible = false
+layout_mode = 0
+offset_left = 104.0
+offset_top = 114.667
+offset_right = 290.667
+offset_bottom = 161.333
+button_text = "OFFICE_MANAGE_STOCK"
 
 [node name="DismissButton" parent="." unique_id=1204181230 instance=ExtResource("8_2u0tt")]
 visible = false

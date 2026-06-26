@@ -4,9 +4,11 @@
 [ext_resource type="Script" uid="uid://dukdaecvcphbo" path="res://scripts/office/office_panel.gd" id="1_mixia"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_kpljw"]
 [ext_resource type="Texture2D" uid="uid://cje2nxck7bbu" path="res://assets/computer/PNG/1.png" id="3_mixia"]
-[ext_resource type="Texture2D" uid="uid://w0pkc05aakr3" path="res://assets/UI/ingame/office_icons.jpg" id="3_wtdck"]
+[ext_resource type="Texture2D" uid="uid://w0pkc05aakr3" path="res://assets/UI/office_icon/office_icons.jpg" id="3_wtdck"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/stacked_pixel_cjk.tres" id="4_dvne8"]
 [ext_resource type="PackedScene" uid="uid://b2l7mr7bb5b41" path="res://scenes/UI/panel/culture_panel.tscn" id="7_dvne8"]
+[ext_resource type="Texture2D" uid="uid://gmrmj1j10q43" path="res://assets/UI/office_icon/Stock.jpg" id="7_l2t2v"]
+[ext_resource type="PackedScene" uid="uid://cifxhetkp4v0e" path="res://scenes/UI/panel/stock_panel.tscn" id="9_e55uw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e55uw"]
 atlas = ExtResource("2_kpljw")
@@ -37,6 +39,10 @@ corner_radius_top_right = 5
 atlas = ExtResource("3_wtdck")
 region = Rect2(108.276825, 88.61937, 312.36905, 313.90308)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1hrmf"]
+atlas = ExtResource("7_l2t2v")
+region = Rect2(220, 171, 584, 616)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_dvne8"]
 atlas = ExtResource("3_wtdck")
 region = Rect2(108.3488, 560.368, 313.38208, 315.45807)
@@ -51,13 +57,15 @@ region = Rect2(602.98975, 558.7769, 312.54968, 316.76886)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpljw"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oppgx"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dvne8"]
 
 [node name="OfficePanel" type="Control" unique_id=1437560562]
 z_index = 100
 layout_mode = 3
 anchors_preset = 0
-offset_right = 233.0
+offset_right = 384.0
 offset_bottom = 356.0
 script = ExtResource("1_mixia")
 
@@ -125,8 +133,10 @@ theme_override_styles/tab_selected = SubResource("StyleBoxFlat_0khrq")
 current_tab = 0
 tab_0/title = "OFFICE_PN_TAB_OFFICE"
 tab_1/title = "OFFICE_PN_TAB_CULTURE"
+tab_2/title = "OFFICE_PN_TAB_STOCK"
 
 [node name="Office" type="MarginContainer" parent="TabContainer" unique_id=1786972547]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 metadata/_tab_name = "OFFICE_PN_TAB_OFFICE"
@@ -135,9 +145,9 @@ metadata/_tab_name = "OFFICE_PN_TAB_OFFICE"
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_constants/h_separation = 10
+theme_override_constants/h_separation = 13
 theme_override_constants/v_separation = 35
-columns = 2
+columns = 3
 
 [node name="ChangeOfficeButton" parent="TabContainer/Office/OfficeButton" unique_id=959548433 groups=["pantry_button"] instance=ExtResource("1_kpljw")]
 layout_mode = 2
@@ -146,6 +156,14 @@ button_text = "OFFICE_PN_FUNC_PANTRY"
 normal_icon = SubResource("AtlasTexture_kpljw")
 office_description = "OFFICE_PANTRY_TIP_1"
 office_usage = "OFFICE_PANTRY_TIP_2"
+
+[node name="ChangeOfficeButton5" parent="TabContainer/Office/OfficeButton" unique_id=455359539 instance=ExtResource("1_kpljw")]
+layout_mode = 2
+office_type = 5
+button_text = "OFFICE_PN_FUNC_STOCK"
+normal_icon = SubResource("AtlasTexture_1hrmf")
+office_description = "OFFICE_STOCK_TIP_1"
+office_usage = "OFFICE_STOCK_TIP_2"
 
 [node name="ChangeOfficeButton3" parent="TabContainer/Office/OfficeButton" unique_id=2129935784 instance=ExtResource("1_kpljw")]
 layout_mode = 2
@@ -191,6 +209,15 @@ offset_right = 0.0
 offset_bottom = 0.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="Stock" type="PanelContainer" parent="TabContainer" unique_id=583107643]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_oppgx")
+metadata/_tab_index = 2
+metadata/_tab_name = "OFFICE_PN_TAB_STOCK"
+
+[node name="Control" parent="TabContainer/Stock" unique_id=278255823 instance=ExtResource("9_e55uw")]
+layout_mode = 2
 
 [node name="Panel" type="Panel" parent="." unique_id=1312535902]
 layout_mode = 0

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://w0pkc05aakr3"
-path="res://.godot/imported/office_icons.jpg-6e54bfc73499d12b87e136c82f716f5b.ctex"
+path="res://.godot/imported/office_icons.jpg-88cb3fbeee93fb06ceaacdceaa376ebc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/ingame/office_icons.jpg"
-dest_files=["res://.godot/imported/office_icons.jpg-6e54bfc73499d12b87e136c82f716f5b.ctex"]
+source_file="res://assets/UI/office_icon/office_icons.jpg"
+dest_files=["res://.godot/imported/office_icons.jpg-88cb3fbeee93fb06ceaacdceaa376ebc.ctex"]
 
 [params]
 

@@ -51,6 +51,7 @@ func setup_slot(emp: Employee) -> void:
 		reject_btn.disabled = true # 💥 进场直接变灰禁用！
 
 func _on_hire_pressed() -> void:
+	print("[HIRE-DEBUG] 录用按钮收到点击 → ", current_employee)   # 排查完删掉
 	if current_employee:
 		_play_hire_sound(current_employee.rarity)
 		hire_requested.emit(current_employee) # 把当前员工扔出去

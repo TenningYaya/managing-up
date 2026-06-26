@@ -34,6 +34,8 @@ OFFICE_MEETING_TIP_1,功能介绍：公司的 HR 基地，扩充牛马军团的�
 OFFICE_MEETING_TIP_2,使用方法：建好后去右侧菜单花钱搜罗简历。如果猎头还在路上你就把这间房拆了，招聘进度会立刻中断，但钱会全额退还给你。,"How to use: Once built, head to the right sidebar and spend money to hunt for resumes. If you demolish this room while a headhunter is still on the way, the recruitment process will be immediately cancelled — but you'll get a full refund.",
 OFFICE_CULTURE_TIP_1,功能介绍：掌控公司大格局的战略中心。可颁布不同的企业文化政策，为全场所有打工人提供强力的全局 Buff。,Function: The strategic nerve center for shaping your company's big picture. Enact different corporate culture policies to provide powerful global buffs to every employee on the floor.,
 OFFICE_CULTURE_TIP_2,使用方法：建成后自动激活基础政策。你可以随时点击或悬停在这间办公室上，在三种政策（末位淘汰/项目奖金/绩效考核）中自由切换。,How to use: Automatically activates a default policy once built. Click or hover over this office at any time to freely switch between three policies (Last Place Elimination / Project Bonus / Performance Review).,
+OFFICE_STOCK_TIP_1,功能介绍：用 KPI 以钱生钱的高风险赌场！盘口有四支风格各异的"明星企业"股票随行情起落，低买高卖赚取差价，手气不好也可能血本无归。,"Function: A high-risk casino where you grow KPI with KPI! Four star-company stocks with distinct personalities rise and fall with the market — buy low and sell high to profit, or lose your shirt on a bad day.",
+OFFICE_STOCK_TIP_2,使用方法：建成后点击办公室上的【炒股】按钮打开交易页，用 KPI 自由买卖（无冷却）。驻场期间每隔一会儿自动发放美金分红；一旦拆掉办公室，分红立即停止。,"How to use: Once built, click the [Trade] button on the office to open the trading page and buy or sell freely with KPI (no cooldown). While stationed it pays out a Dollar dividend every so often; demolish the office and the dividends stop immediately.",
 OFFICE_UNLOCK_REQUIREMENT,解锁需要：职级,Unlock Requires: Lv
 ,,,
 "INGAME_TIP_NOT_ENOUGH_HIRE_COUNT","KPI不够了！老板拒绝了扩招申请","Not enough KPI! Boss says no headcount",
