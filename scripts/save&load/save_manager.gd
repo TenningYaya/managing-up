@@ -54,6 +54,8 @@ func delete_save() -> void:
 		
 	SpeedupQuoteSave.reset_to_default()
 	Gamemanager.sticky_note_text = ""
+	# 🌟 炒股系统复位:价格回中枢、持仓清零、补货/计时归零(StockManager 是 autoload,不复位会沿用上一局)
+	StockManager.reset_to_default()
 	# 🌟 清空办公室存档缓存，否则开新档后办公室 _ready 会误用上一局的解锁记录
 	_loaded_office_data.clear()
 		
@@ -145,6 +147,9 @@ func save_game() -> void:
 	save_data["boss_quotes"] = SpeedupQuoteSave.boss_quotes
 
 	save_data["sticky_note_text"] = Gamemanager.sticky_note_text
+
+	# ================= 🌟 炒股系统存档(各股价格/持仓/成本/补货周期/计时) =================
+	save_data["stock"] = StockManager.to_save_dict()
 
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(save_data, "\t"))
@@ -399,5 +404,9 @@ func load_game() -> void:
 
 	if save_data.has("sticky_note_text"):
 		Gamemanager.sticky_note_text = str(save_data["sticky_note_text"])
+
+	# ================= 🌟 炒股系统恢复 =================
+	if save_data.has("stock"):
+		StockManager.load_from_dict(save_data["stock"])
 
 	print("[SaveSystem] 游戏读取成功！")
