@@ -401,8 +401,6 @@ func _on_snap_finished() -> void:
 func _start_work() -> void:
 	if is_working: return # 防止重复触发
 	
-	print(employee_name, " 坐到了工位上，准备开工")
-	
 	# 🌟 这里只负责状态切换和总信号
 	is_working = true
 	work_started.emit() 

@@ -23,6 +23,9 @@ var parent_office: Control
 var slots_container: GridContainer # 房间下方的 AvatarSlots（6 个 Slot）
 var dismiss_btn: TextureButton     # 房间中心、悬停出现的"解散会议"按钮
 
+const AUTO_DISMISS_SECONDS := 3600.0   # 会议自动散会时间(1 小时 = 3600 秒;随游戏倍速变快)
+var _auto_dismiss_timer: Timer = null
+
 func setup(office: Control) -> void:
 	super.setup(office)
 	parent_office = office
@@ -38,9 +41,24 @@ func setup(office: Control) -> void:
 	if not dismiss_btn.pressed.is_connected(dismiss_meeting):
 		dismiss_btn.pressed.connect(dismiss_meeting)
 
+	# 自动散会:开会满 1 小时,即使玩家不点也自动散会
+	_auto_dismiss_timer = Timer.new()
+	_auto_dismiss_timer.one_shot = true
+	_auto_dismiss_timer.wait_time = AUTO_DISMISS_SECONDS
+	_auto_dismiss_timer.timeout.connect(dismiss_meeting)
+	add_child(_auto_dismiss_timer)
+
+	# 监听开除:开会中的员工被开掉时,立刻清掉它的会议头像 + 办公桌开会标志
+	if not EmployeeManager.employee_removed.is_connected(_on_employee_removed):
+		EmployeeManager.employee_removed.connect(_on_employee_removed)
+
 func cleanup() -> void:
 	# 离开会议室（如切换成茶水间）时，先把所有人遣散回工位
 	dismiss_meeting()
+
+	# 撤掉开除监听(本逻辑节点即将销毁)
+	if EmployeeManager.employee_removed.is_connected(_on_employee_removed):
+		EmployeeManager.employee_removed.disconnect(_on_employee_removed)
 
 	# 千万别销毁，只是藏起来，否则下次切回来节点就没了
 	if is_instance_valid(slots_container):
@@ -65,6 +83,9 @@ func drop_employee(data: Variant) -> void:
 	var emp = data
 	attendees.append(emp)
 	emp.enter_meeting() # 隐身、霸占工位、加Buff、进度归零
+	# 第一个人进来 = 会议开始,启动 1 小时自动散会倒计时
+	if attendees.size() == 1 and is_instance_valid(_auto_dismiss_timer):
+		_auto_dismiss_timer.start()
 	_update_avatars()
 	#[员工吐槽中心]：会议开始
 	BanterManager.trigger_banter("meeting_start", randi_range(1, 2), attendees)
@@ -165,14 +186,39 @@ func _remove_attendee(emp) -> void:
 		BanterManager.trigger_banter("meeting_end", 1, [emp])
 
 	_update_avatars()
-	# 没人了就把解散按钮收起来
-	if attendees.is_empty() and is_instance_valid(dismiss_btn):
-		dismiss_btn.hide()
+	# 没人了就把解散按钮收起来,并停掉自动散会计时
+	if attendees.is_empty():
+		if is_instance_valid(_auto_dismiss_timer):
+			_auto_dismiss_timer.stop()
+		if is_instance_valid(dismiss_btn):
+			dismiss_btn.hide()
+
+# ==========================================
+# 🌟 开会中的员工被开除:立刻撤掉它的会议头像 + 办公桌开会标志
+# (employee_removed 在 EmployeeManager 里于 queue_free 之前发出,
+#  所以此刻 emp 与它的 current_seat 仍有效,可安全清理)
+# ==========================================
+func _on_employee_removed(emp) -> void:
+	if not attendees.has(emp):
+		return
+	if is_instance_valid(emp) and emp.get("current_seat") != null \
+	and emp.current_seat.has_method("set_meeting_state"):
+		emp.current_seat.set_meeting_state(false)   # 去掉办公桌上的开会标志
+	attendees.erase(emp)
+	_update_avatars()                                # 把它的头像从会议室移除
+	if attendees.is_empty():
+		if is_instance_valid(_auto_dismiss_timer):
+			_auto_dismiss_timer.stop()
+		if is_instance_valid(dismiss_btn):
+			dismiss_btn.hide()
 
 # ==========================================
 # 整体遣散：点会议室中心的解散按钮，全体回工位
 # ==========================================
 func dismiss_meeting():
+	# 不论怎么散会(玩家点 / 超时 / 清空),都先停掉自动散会计时
+	if is_instance_valid(_auto_dismiss_timer):
+		_auto_dismiss_timer.stop()
 	if attendees.is_empty():
 		if is_instance_valid(dismiss_btn): dismiss_btn.hide()
 		return

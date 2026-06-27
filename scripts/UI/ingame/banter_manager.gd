@@ -43,6 +43,7 @@ func trigger_banter(event_id: String, count: int = 0, specific_pool: Array = [])
 	var pool = specific_pool if specific_pool.size() > 0 else get_tree().get_nodes_in_group("employees")
 	
 	for emp in pool:
+		if not is_instance_valid(emp): continue   # 池里可能有已被释放(开除/退会)的员工,先挡住,否则调方法直接爆红
 		if not emp.is_inside_tree(): continue
 		if emp.is_slacking: continue # 摸鱼的没空吐槽
 		if is_instance_valid(emp.get("_active_bubble")): continue # 头上已经有气泡的，不抢戏
