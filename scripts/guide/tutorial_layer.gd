@@ -270,6 +270,13 @@ func _dispatch_translated_dialogue(step: TutorialStep, signal_name: String, call
 func _skip_to_first_action_step() -> void:
 	dialogue_ui.hide()
 	kpi_ui.hide()
+	# 🌟 长按空格跳过对话时,务必把对话步盖在高亮目标上的"玻璃罩"(STOP 隐形层)和黑幕一起清掉/复位。
+	#    否则它会残留下来,挡死跳到的那一步要点的东西(比如跳过"介绍办公室"后,点办公室点不动)。
+	var glass = get_node_or_null("TutorialGlassShield")
+	if glass:
+		glass.queue_free()
+	blocker_ui.hide()
+	blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for i in range(current_step_index, steps.size()):
 		if steps[i].step_type != TutorialStep.Type.DIALOGUE:
 			play_step(i)
@@ -297,6 +304,10 @@ func _is_in_canvas_layer(node: Node) -> bool:
 
 func _apply_dialogue_highlight_and_shield(step: TutorialStep) -> void:
 	blocker_ui.show() # 只要进到这个函数，无论有没有 target，先保证黑幕是亮的！
+	# 🌟 对话步必须把黑幕设成 STOP 拦截点击。否则它会沿用上一步残留的 mouse_filter(常是 IGNORE),
+	#    导致快速点击穿透黑幕、点到背后的招聘/仓库面板,进而触发跳过拖拽教程的连锁 bug。
+	#    对话本身的"点击翻页"由 DialogueIntroUI 的全局 _input 处理,不受这里影响。
+	blocker_ui.mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	if step.target_group == "":
 		# 如果没填 target，我们就把黑布挖洞功能关掉，让它变成一张纯粹的黑色遮罩
@@ -420,9 +431,12 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	
 	# 3. 呼叫黑布挖洞
 	blocker_ui.show()
-	blocker_ui._arrange_curtains(target_rect) 
-	blocker_ui.hole_rect = target_rect        
+	blocker_ui._arrange_curtains(target_rect)
+	blocker_ui.hole_rect = target_rect
 	blocker_ui.is_hole_clickable = true
+	# 🌟 聚焦点击步:黑幕只作视觉引导,鼠标必须穿透,玩家才能点到被高亮的目标。
+	#    必须显式设 IGNORE,否则会沿用上一对话步残留的 STOP,把要点的招聘/录用按钮也挡死。
+	blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# 🌟【硬核补丁 3】：图层刺穿！
 	# 为了防止按钮被黑布无脑压住，我们利用 CanvasItem 的 z_index 或者是强行把按钮的渲染层级提到黑布前面
@@ -721,7 +735,10 @@ func _on_step_completed() -> void:
 		current_target.modulate.a = 1.0
 	
 	blocker_ui.hide()
-	
+	# 拖屏步可能升起了透明防弹玻璃,翻篇时一并收起
+	if invisible_shield:
+		invisible_shield.hide()
+
 	# 2. 🌟 核心拦截判定：如果是在等"招满三人"的步骤
 	if current_signal_name == "all_preset_employees_hired":
 		var remaining_count = RecruitmentManager.normal_pool.size()
@@ -768,6 +785,15 @@ func _on_step_completed() -> void:
 	var glass = get_node_or_null("TutorialGlassShield")
 	if glass:
 		glass.queue_free()
+
+	# 🌟 翻篇前必须断开本步连上的信号线,否则它会永久残留:
+	#    例如第 5 步把 [招聘键.pressed → _on_step_completed] 连上后从不断开,
+	#    到拖屏步(34_2,提示正指着招聘键)时,玩家在那一带误触一下,这条旧连线就直接把教程蹦到 35。
+	if current_target and is_instance_valid(current_target) and current_signal_name != "" \
+	and current_target.has_signal(current_signal_name) \
+	and current_target.is_connected(current_signal_name, current_callable):
+		current_target.disconnect(current_signal_name, current_callable)
+
 	# 继续下一步！
 	play_step(current_step_index + 1)
 	
@@ -996,8 +1022,13 @@ func _handle_camera_drag_tutorial(step: TutorialStep) -> void:
 	blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE 
 	
 	# 🌟 2. 发放特权与重置数据
-	Gamemanager.tutorial_allow_camera_drag = true 
+	Gamemanager.tutorial_allow_camera_drag = true
 	drag_distance_accumulator = 0.0
+
+	# 🌟 3. 升起透明防弹玻璃:这一步只允许"中键拖动相机"(中键由全局 _input 处理,玻璃挡不住),
+	#    其余 UI 左键点击全部拦下,防止玩家中途点开仓库/招聘等面板而误触跳步。
+	if invisible_shield:
+		invisible_shield.show()
 
 func _handle_name_input(step: TutorialStep) -> void:
 	blocker_ui.show()

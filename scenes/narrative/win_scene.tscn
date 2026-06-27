@@ -22,6 +22,7 @@ win_dialogue_keys = Array[String](["WIN_SCENE_DIALOGUE_1", "WIN_SCENE_DIALOGUE_2
 layout_mode = 1
 
 [node name="FinalConfirm" type="PanelContainer" parent="." unique_id=104223133]
+visible = false
 z_index = 100
 layout_mode = 1
 anchors_preset = 8

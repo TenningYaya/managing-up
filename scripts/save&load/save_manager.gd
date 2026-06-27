@@ -44,10 +44,9 @@ func delete_save() -> void:
 	Gamemanager.has_selected_avatar = false
 	FloorManager.change_all_floors(0, Vector2i(0, 8))  # 换成你的默认地板坐标
 
-	# 🌟 普通招募免费简历计时器也要清零：RecruitmentManager 是 autoload，不随场景重载复位，
-	#    不手动归零的话删档重开会沿用上一局的剩余时间与已出现数量。
-	RecruitmentManager.free_recruit_count = 0
-	RecruitmentManager.free_recruit_time_left = RecruitmentManager.FREE_RECRUIT_INTERVAL_EARLY
+	# 🌟 RecruitmentManager 是 autoload，不随场景重载复位。必须整体复位，否则删档重开会
+	#    沿用上一局的免费简历计时,以及残留的猎头"招募中"状态 → 还没出教程就在倒计时。
+	RecruitmentManager.reset_to_default()
 
 	if EmployeeManager.get("my_employees") != null:
 		EmployeeManager.my_employees.clear()

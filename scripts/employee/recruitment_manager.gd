@@ -224,3 +224,27 @@ func calculate_hire_cost(emp: Employee) -> int:
 func get_unread_count() -> int:
 	# 只要池子里还有简历，就视为有“未处理”的（或者你可以给 Employee 加一个 is_read 属性，如果不需要就直接看池子大小）
 	return normal_pool.size() + headhunt_pool.size()
+
+# 🌟 删档复位:本管理器是 autoload,不随场景重载复位。删档时必须整体清零,
+#    否则上一局残留的"招募中"状态会跨存档继续倒计时(还没出教程就在倒数)。
+func reset_to_default() -> void:
+	# 释放残留简历,防内存泄漏
+	for e in normal_pool:
+		if is_instance_valid(e):
+			e.queue_free()
+	for e in headhunt_pool:
+		if is_instance_valid(e):
+			e.queue_free()
+	normal_pool.clear()
+	headhunt_pool.clear()
+	# 猎头状态复位
+	current_state = State.IDLE
+	headhunt_time_left = 0.0
+	_pending_amount = 0
+	# 普通招募 / 免费简历计时复位
+	free_recruit_count = 0
+	free_recruit_time_left = FREE_RECRUIT_INTERVAL_EARLY
+	_free_timer_paused = false
+	# 教程简历重新生成
+	has_loaded_tutorial_resumes = false
+	is_tutorial_mode = false
