@@ -77,3 +77,7 @@ DeskSlot_locked_click_hint,提升职级以扩大项目组规模,Upgrade your ran
 SETTING_SL_CONFIRM_LABEL,确定要保存并退出吗？,Do you want to save and exit?
 SETTING_SL_CONFIRM_YES,退出,QUIT
 SETTING_SL_CONFIRM_NO,取消,Cancel
+SETTING_SAVE_QUIT_CONFIRM,确定要保存当前进度并退出游戏吗？,Save your progress and quit the game?
+SETTING_DELETE_CONFIRM,确定要删除存档吗？此操作无法撤销！,Delete your save? This cannot be undone!
+SETTING_DELETE_YES,删除,Delete
+SETTING_DELETE_NO,取消,Cancel

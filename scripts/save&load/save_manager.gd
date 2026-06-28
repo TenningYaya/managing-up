@@ -42,6 +42,10 @@ func delete_save() -> void:
 	Gamemanager.player_avatar_texture = preload("res://assets/tutorial/avatars/player_avatar_1.png")
 	# 🌟 必须复位:否则重开教程会沿用上一局的"已选头像",导致选头像前点员工就冒气泡
 	Gamemanager.has_selected_avatar = false
+	# 删档时清掉上一局上传的自定义头像(状态复位 + 删掉落地文件)
+	Gamemanager.player_avatar_is_custom = false
+	if FileAccess.file_exists("user://player_avatar.png"):
+		DirAccess.remove_absolute("user://player_avatar.png")
 	FloorManager.change_all_floors(0, Vector2i(0, 8))  # 换成你的默认地板坐标
 
 	# 🌟 RecruitmentManager 是 autoload，不随场景重载复位。必须整体复位，否则删档重开会
@@ -76,7 +80,8 @@ func save_game() -> void:
 		"unlocked_desk_slots": Gamemanager.unlocked_desk_slots,
 		"project_name": Gamemanager.project_name,
 		"player_avatar_index": Gamemanager.player_avatar_index,
-		"player_avatar_path": Gamemanager.player_avatar_texture.resource_path if Gamemanager.player_avatar_texture else ""
+		"player_avatar_path": Gamemanager.player_avatar_texture.resource_path if Gamemanager.player_avatar_texture else "",
+		"player_avatar_is_custom": Gamemanager.player_avatar_is_custom
 	}
 	
 	var floor_data = FloorManager.get_current_floor_data()
@@ -363,10 +368,22 @@ func load_game() -> void:
 		Gamemanager.unlocked_desk_slots = int(p_data.get("unlocked_desk_slots", 1))
 		Gamemanager.project_name = p_data.get("project_name", "NewProject")
 		Gamemanager.player_avatar_index = int(p_data.get("player_avatar_index", 0))
-		var avatar_path = p_data.get("player_avatar_path", "")
-		if avatar_path != "":
-			Gamemanager.player_avatar_texture = load(avatar_path)
-			Gamemanager.has_selected_avatar = true
+		Gamemanager.player_avatar_is_custom = bool(p_data.get("player_avatar_is_custom", false))
+		if Gamemanager.player_avatar_is_custom:
+			# 自定义头像:从用户目录读固定文件;读不到(换机/文件丢失)就退回默认头像
+			var custom_img := Image.new()
+			if custom_img.load("user://player_avatar.png") == OK:
+				Gamemanager.player_avatar_texture = ImageTexture.create_from_image(custom_img)
+				Gamemanager.has_selected_avatar = true
+			else:
+				Gamemanager.player_avatar_is_custom = false
+				Gamemanager.player_avatar_index = 0
+				Gamemanager.player_avatar_texture = preload("res://assets/tutorial/avatars/player_avatar_1.png")
+		else:
+			var avatar_path = p_data.get("player_avatar_path", "")
+			if avatar_path != "":
+				Gamemanager.player_avatar_texture = load(avatar_path)
+				Gamemanager.has_selected_avatar = true
 	
 	if save_data.has("floor"):
 		var f_data = save_data["floor"]

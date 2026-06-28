@@ -29,7 +29,7 @@ func _on_sfx_slider_value_changed(value: float) -> void:
 func _on_save__quit_pressed() -> void:
 	var dialog_instance = CONFIRM_DIALOG.instantiate()
 	if dialog_instance.has_method(\"set_texts\"):
-		dialog_instance.set_texts(\"保存并退出\", \"确定要保存当前进度并退出游戏吗？\")
+		dialog_instance.set_texts(\"SETTING_SAVE_QUIT_CONFIRM\")
 	dialog_instance.confirmed.connect(_execute_save_and_quit, CONNECT_ONE_SHOT)
 	get_tree().root.add_child(dialog_instance)
 
@@ -44,6 +44,13 @@ func _execute_save_and_quit() -> void:
 	get_tree().quit()
 
 func _on_delete_save_pressed() -> void:
+	var dialog_instance = CONFIRM_DIALOG.instantiate()
+	if dialog_instance.has_method(\"set_texts\"):
+		dialog_instance.set_texts(\"SETTING_DELETE_CONFIRM\", \"SETTING_DELETE_YES\", \"SETTING_DELETE_NO\")
+	dialog_instance.confirmed.connect(_execute_delete_save, CONNECT_ONE_SHOT)
+	get_tree().root.add_child(dialog_instance)
+
+func _execute_delete_save() -> void:
 	if SaveManager.has_method(\"delete_save\"):
 		SaveManager.delete_save()
 	else:

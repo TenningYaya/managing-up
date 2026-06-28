@@ -42,7 +42,9 @@ var has_stock_office: bool = false
 var project_name: String = "NewProject"
 var player_avatar_index: int = 0
 var player_avatar_texture: Texture2D = preload("res://assets/tutorial/avatars/player_avatar_1.png")
-var has_selected_avatar: bool = false 
+var has_selected_avatar: bool = false
+# 🌟 当前头像是不是玩家自己上传的自定义图(true 时图片落地在 user://player_avatar.png,index 记 -1)
+var player_avatar_is_custom: bool = false
 # 定义总览面板需要的变量
 var total_hits: int = 0
 var total_time: float = 0.0

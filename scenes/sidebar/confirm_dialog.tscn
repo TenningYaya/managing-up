@@ -41,11 +41,14 @@ theme_override_constants/separation = 19
 alignment = 1
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer" unique_id=1449918164]
+custom_minimum_size = Vector2(330, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9843137, 0.20784314, 0.2509804, 1)
 theme_override_fonts/font = ExtResource("2_e2drj")
 theme_override_font_sizes/font_size = 25
 text = "SETTING_SL_CONFIRM_LABEL"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1412053543]
 layout_mode = 2

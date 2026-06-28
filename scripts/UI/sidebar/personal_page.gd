@@ -109,12 +109,74 @@ func _build_avatar_options() -> void:
 		btn.pressed.connect(_on_avatar_chosen.bind(i))
 		parent.add_child(btn)
 
+	# 🌟 末尾追加"+"按钮:半透明白底 + 灰色加号(代码绘制,无需素材),常驻不变。
+	#    点它走系统文件框上传自定义头像。
+	var add_btn := Button.new()
+	add_btn.name = "AddCustomAvatar"
+	add_btn.text = "+"
+	add_btn.custom_minimum_size = AVATAR_BTN_SIZE
+	add_btn.focus_mode = Control.FOCUS_NONE
+	add_btn.add_theme_font_size_override("font_size", 30)
+	add_btn.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+	add_btn.add_theme_color_override("font_hover_color", Color(0.4, 0.4, 0.4))
+	add_btn.add_theme_color_override("font_pressed_color", Color(0.35, 0.35, 0.35))
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(1, 1, 1, 0.5)   # 半透明白底
+	sb.set_corner_radius_all(6)
+	add_btn.add_theme_stylebox_override("normal", sb)
+	add_btn.add_theme_stylebox_override("hover", sb)
+	add_btn.add_theme_stylebox_override("pressed", sb)
+	add_btn.add_theme_stylebox_override("focus", sb)
+	add_btn.pressed.connect(_on_add_custom_avatar)
+	parent.add_child(add_btn)
+
 func _on_avatar_chosen(index: int) -> void:
 	if index < 0 or index >= avatar_textures.size():
 		return
 	# 直接写入存档数据并保存（不复用 select_avatar，避免它的 _ready 把头像重置成默认值）
 	Gamemanager.player_avatar_index = index
 	Gamemanager.player_avatar_texture = avatar_textures[index]
+	Gamemanager.player_avatar_is_custom = false   # 选了内置头像 → 清掉自定义状态
+	_refresh_avatar_button()
+	if avatar_options:
+		avatar_options.hide()
+	_save()
+
+# ==================== 自定义头像（玩家上传） ====================
+const CUSTOM_AVATAR_PATH := "user://player_avatar.png"
+const CUSTOM_AVATAR_SIZE := 256
+
+func _on_add_custom_avatar() -> void:
+	if not DisplayServer.has_feature(DisplayServer.FEATURE_NATIVE_DIALOG):
+		printerr("[PersonalPage] 当前平台不支持系统文件对话框，无法上传自定义头像")
+		return
+	var title := "选择头像" if TranslationServer.get_locale().begins_with("zh") else "Choose Avatar"
+	DisplayServer.file_dialog_show(
+		title,
+		OS.get_system_dir(OS.SYSTEM_DIR_PICTURES),   # 默认从“图片”文件夹打开
+		"",
+		false,
+		DisplayServer.FILE_DIALOG_MODE_OPEN_FILE,
+		PackedStringArray(["*.png, *.jpg, *.jpeg, *.webp, *.bmp"]),
+		_on_custom_avatar_picked
+	)
+
+func _on_custom_avatar_picked(status: bool, paths: PackedStringArray, _filter_index: int) -> void:
+	if not status or paths.is_empty():
+		return
+	var img := Image.new()
+	if img.load(paths[0]) != OK:
+		printerr("[PersonalPage] 图片读取失败：", paths[0])
+		return
+	# MVP：不裁剪，非正方形直接压扁成固定方形
+	img.resize(CUSTOM_AVATAR_SIZE, CUSTOM_AVATAR_SIZE, Image.INTERPOLATE_LANCZOS)
+	# 落地到固定文件（覆盖式），供存档持久化
+	img.save_png(CUSTOM_AVATAR_PATH)
+	# 设为当前头像
+	Gamemanager.player_avatar_texture = ImageTexture.create_from_image(img)
+	Gamemanager.player_avatar_is_custom = true
+	Gamemanager.player_avatar_index = -1
+	Gamemanager.has_selected_avatar = true
 	_refresh_avatar_button()
 	if avatar_options:
 		avatar_options.hide()
