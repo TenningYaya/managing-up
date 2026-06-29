@@ -54,6 +54,10 @@ var player_level: int = 1:
 	set(value):
 		player_level = value
 		level_changed.emit(player_level)
+
+# 🌟 读档期间为 true:此时设置 player_level 等值会触发 level_changed,
+#    但办公室/工位不该播"升级特效",用这个标记拦截(见 office.gd / DeskSlot.gd)。
+var is_loading_save: bool = false
 		
 var kpi: int = 2000:
 	set(value):

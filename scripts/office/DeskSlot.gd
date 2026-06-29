@@ -45,7 +45,7 @@ func _on_level_changed(new_level: int) -> void:
 # 🌟 4. 专职判定生死的底层函数
 func _check_level_unlock(current_player_level: int) -> void:
 	if current_player_level >= unlock_at_level:
-		if is_locked and _is_initialized:
+		if is_locked and _is_initialized and not Gamemanager.is_loading_save:
 			_play_upgrade_bounce_fx()
 
 		is_locked = false

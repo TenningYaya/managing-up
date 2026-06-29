@@ -24,6 +24,9 @@ var window_height_fraction := 0.99  # 当前窗口高度占可用屏幕高的比
 # --- 2. Initialization ---
 func _ready():
 
+	# 接管"关闭窗口"事件:不再让系统直接退出,改为先存档再退出(见 _notification)
+	get_tree().auto_accept_quit = false
+
 	SaveManager.load_game()
 
 	# —— 全屏透明覆盖窗口 ——
@@ -152,6 +155,19 @@ func set_window_height_fraction(frac: float) -> void:
 	cfg.set_value("window", "height_fraction", window_height_fraction)
 	cfg.save(SETTINGS_PATH)
 
+
+# 关窗口 / 切到别的程序时自动存档,尽量不丢进度
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_WM_CLOSE_REQUEST:
+			# 玩家点了关闭按钮:先存档再真正退出(auto_accept_quit 已设为 false)
+			if Gamemanager.is_tutorial_completed and SaveManager.has_method("save_game"):
+				SaveManager.save_game()
+			get_tree().quit()
+		NOTIFICATION_APPLICATION_FOCUS_OUT:
+			# 玩家切到别的程序:顺手存一次(autosave 内部有节流,不会狂存)
+			if SaveManager.has_method("autosave"):
+				SaveManager.autosave()
 
 # --- 3. 穿透 region 维护 ---
 # 每帧计算"底部条 + 可见浮窗"的包围盒，只有它变化时才重设 region。

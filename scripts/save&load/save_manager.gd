@@ -2,6 +2,12 @@ extends Node
 
 const SAVE_PATH = "user://savegame.json"
 
+# ===== 自动存档 =====
+const AUTOSAVE_INTERVAL := 60.0       # 每 60 秒自动存一次
+const AUTOSAVE_MIN_GAP_MS := 5000     # 两次自动存档至少隔 5 秒(防止失焦时被狂触发)
+var _autosave_timer: Timer = null
+var _last_autosave_msec: int = 0
+
 # 🌟 缓存读档时解析出的办公室数据，供办公室节点在自己的 _ready 里自愈取用。
 # 解决“load_game 与办公室 _ready 谁先谁后”的时序问题。
 var _loaded_office_data: Dictionary = {}
@@ -14,7 +20,25 @@ const VISUAL_SCENES = {
 
 
 func _ready() -> void:
-	pass
+	# 自动存档定时器:每 AUTOSAVE_INTERVAL 秒触发一次
+	# (只有教程完成后才真正写盘,判断在 autosave() 里)
+	_autosave_timer = Timer.new()
+	_autosave_timer.wait_time = AUTOSAVE_INTERVAL
+	_autosave_timer.one_shot = false
+	_autosave_timer.autostart = true
+	_autosave_timer.timeout.connect(autosave)
+	add_child(_autosave_timer)
+
+# 自动存档:仅教程完成后存 + 节流(防止失焦时被狂触发)。
+# 定时器、切走失焦都调它;关窗口走 save_game() 强制存。
+func autosave() -> void:
+	if not Gamemanager.is_tutorial_completed:
+		return
+	var now := Time.get_ticks_msec()
+	if now - _last_autosave_msec < AUTOSAVE_MIN_GAP_MS:
+		return
+	_last_autosave_msec = now
+	save_game()
 
 # ================= 一键删档 =================
 func delete_save() -> void:
@@ -155,9 +179,18 @@ func save_game() -> void:
 	# ================= 🌟 炒股系统存档(各股价格/持仓/成本/补货周期/计时) =================
 	save_data["stock"] = StockManager.to_save_dict()
 
-	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	# 🌟 原子写入:先写临时文件,成功后再改名覆盖正式存档。
+	#    这样即使正好在写盘那一瞬间崩溃/断电,坏掉的也只是临时文件,真存档不会被写成半截。
+	var tmp_path: String = SAVE_PATH + ".tmp"
+	var file = FileAccess.open(tmp_path, FileAccess.WRITE)
+	if file == null:
+		push_error("[SaveSystem] 无法写入临时存档,本次保存跳过")
+		return
 	file.store_string(JSON.stringify(save_data, "\t"))
 	file.close()
+	var rerr := DirAccess.rename_absolute(tmp_path, SAVE_PATH)
+	if rerr != OK:
+		push_error("[SaveSystem] 存档改名失败,错误码: %d" % rerr)
 	print("[SaveSystem] Is Toturial completed: ", save_data["is_tutorial_completed"])
 
 # 🌟 把一个招聘池（normal_pool / headhunt_pool）里的简历转成可存档的字典数组
@@ -353,6 +386,7 @@ func load_game() -> void:
 	if json.parse(json_str) != OK: return
 		
 	var save_data = json.data
+	Gamemanager.is_loading_save = true   # 读档期间设置等级等值会触发信号,但不该播升级特效
 	if save_data.has("is_tutorial_completed"):
 		Gamemanager.is_tutorial_completed = save_data["is_tutorial_completed"]
 		
@@ -425,4 +459,5 @@ func load_game() -> void:
 	if save_data.has("stock"):
 		StockManager.load_from_dict(save_data["stock"])
 
+	Gamemanager.is_loading_save = false
 	print("[SaveSystem] 游戏读取成功！")

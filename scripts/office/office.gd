@@ -73,8 +73,9 @@ func _ready() -> void:
 # 全局等级变动时，自动判断生死
 func _on_level_changed(new_level: int) -> void:
 	if new_level >= unlock_at_level:
-		# 🌟【核心判断】：如果之前是锁着的，且游戏已经初始化完了，说明这就是纯纯的实时升级瞬间！
-		if is_locked and _is_initialized:
+		# 🌟【核心判断】：之前锁着 + 已初始化 + 不是在读档,才是"真·实时升级瞬间"。
+		# (读档时设置等级也会进这里,但 is_loading_save 会拦掉,避免一进游戏就放特效)
+		if is_locked and _is_initialized and not Gamemanager.is_loading_save:
 			_play_upgrade_bounce_fx() # 爆裂闪烁！
 			
 		self.is_locked = false
