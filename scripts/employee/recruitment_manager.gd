@@ -26,6 +26,7 @@ var _pending_amount = 0
 const FREE_RECRUIT_INTERVAL_EARLY: float = 120.0   # 前 3 个：每 2 分钟
 const FREE_RECRUIT_INTERVAL_MID: float = 600.0     # 第 4~10 个：每 10 分钟
 const FREE_RECRUIT_INTERVAL_LATE: float = 900.0    # 之后：每 15 分钟
+const MAX_NORMAL_POOL: int = 30   # 🌟 普通简历池上限：满 30 份就不再自动刷新(防长期挂机简历无限堆积撑大存档/内存)
 var free_recruit_count: int = 0                     # 已自动出现过的免费普通简历数量
 var free_recruit_time_left: float = FREE_RECRUIT_INTERVAL_EARLY  # 距离下一个免费简历出现的剩余秒数
 var _free_timer_paused: bool = false                # true 时冻结倒计时，等待 hr_button end sequence 结束
@@ -54,10 +55,12 @@ func _process(delta):
 			_on_headhunt_finished()
 
 	# 普通招募：教程完成后才开始计时，时间一到就免费送一份简历到普通招募板（左侧）
+	# 🌟 上限保护：池子满 MAX_NORMAL_POOL 份就暂停刷新(连倒计时也冻住)，等玩家清理到上限以下再继续。
 	if Gamemanager.is_tutorial_completed and not _free_timer_paused:
-		free_recruit_time_left -= delta
-		if free_recruit_time_left <= 0:
-			_spawn_free_recruit()
+		if normal_pool.size() < MAX_NORMAL_POOL:
+			free_recruit_time_left -= delta
+			if free_recruit_time_left <= 0:
+				_spawn_free_recruit()
 
 # --- 核心业务：普通招聘 (自动触发) ---
 func auto_generate_normal():
