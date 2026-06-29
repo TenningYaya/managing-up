@@ -45,7 +45,10 @@ func delete_save() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
 		DirAccess.remove_absolute(SAVE_PATH)
 		print("存档已物理删除")
-	
+	# 顺手清掉原子写入可能残留的临时文件(正常 rename 成功后不会有,以防万一)
+	if FileAccess.file_exists(SAVE_PATH + ".tmp"):
+		DirAccess.remove_absolute(SAVE_PATH + ".tmp")
+
 	Gamemanager.kpi = 2000
 	Gamemanager.dollar = 100
 	Gamemanager.player_level = 1

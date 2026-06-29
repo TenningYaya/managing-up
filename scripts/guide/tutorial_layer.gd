@@ -5,6 +5,9 @@ extends CanvasLayer
 @export var steps: Array[TutorialStep] = []
 @export var TUTORIAL_TIP_SCENE: PackedScene
 
+# 🌟 第13步:点击指定员工时,在员工身上居中显示的 taptap 点击提示动画
+const TAPTAP_SCENE := preload("res://scenes/vfx/taptap.tscn")
+
 @onready var dialogue_ui = $DialogueIntroUI
 @onready var blocker_ui = $Blocker
 @onready var tip_ui: Label = $TipUI # 或者你的 PanelContainer
@@ -655,15 +658,14 @@ func _setup_specific_employee_click_step() -> void:
 	blocker_ui.hole_rect = target_rect
 	blocker_ui.is_hole_clickable = true 
 	
-	var frame = ReferenceRect.new()
-	frame.name = "TutorialWhiteFrame"
-	frame.border_color = Color.WHITE
-	frame.border_width = 4.0
-	frame.editor_only = false
-	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE 
-	frame.global_position = target_rect.position
-	frame.size = target_rect.size
-	add_child(frame)
+	# 🌟 以员工为中心显示 taptap 点击提示动画(替代原来的白框)
+	var taptap = TAPTAP_SCENE.instantiate()
+	taptap.name = "TutorialTapTap"
+	add_child(taptap)
+	taptap.global_position = target_rect.get_center()   # AnimatedSprite2D 默认居中,直接对准员工中心
+	taptap.z_index = 4096                                # 压在最上层
+	if taptap.has_method("play"):
+		taptap.play("TapTap")
 	
 ## 子函数 5：第 7、8 步 - 启动后台盯梢雷达
 func _setup_radar_step() -> void:
@@ -882,23 +884,17 @@ func _input(event: InputEvent) -> void:
 					
 					yes_click_count += 1
 					
-					# 💎 附赠极致爽感：每次点中，让白框闪烁一下给予反馈！
-					var frame = get_node_or_null("TutorialWhiteFrame")
-					if frame:
-						var tween = create_tween()
-						tween.tween_property(frame, "modulate:a", 0.2, 0.05)
-						tween.tween_property(frame, "modulate:a", 1.0, 0.05)
-					
-					# 点满 5 次，直接结案！
+					# 点满 8 次，直接结案！(taptap 动画自己循环播,不需要每次点的反馈)
 					if yes_click_count >= 8:
-						current_signal_name = "" 
-						yes_click_count = 0 
-						
+						current_signal_name = ""
+						yes_click_count = 0
+
 						# 🌟 关键：走之前把场景打扫干净
 						blocker_ui.modulate.a = 1.0 # 把黑布的透明度恢复，防止影响下一关
-						if frame:
-							frame.queue_free()      # 把白框销毁
-							
+						var taptap = get_node_or_null("TutorialTapTap")
+						if taptap:
+							taptap.queue_free()     # 销毁 taptap 提示动画
+
 						_on_step_completed()        # 丝滑翻篇！
 						
 func _process(delta: float) -> void:
