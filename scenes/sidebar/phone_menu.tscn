@@ -2,7 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://cchun4tokcayg" path="res://assets/sidebar/Phone_2.png" id="1_8gi4e"]
 [ext_resource type="Script" uid="uid://dbiup6ouwg2e" path="res://scripts/UI/sidebar/mobilesidebar.gd" id="1_jt2no"]
-[ext_resource type="Texture2D" uid="uid://bvd528nbtp2lh" path="res://assets/sidebar/TriggerIcon.png" id="2_jt2no"]
 [ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_nnubu"]
 [ext_resource type="Texture2D" uid="uid://dlh7llvih2fei" path="res://assets/sidebar/app/upgrades.png" id="3_50qqt"]
 [ext_resource type="Texture2D" uid="uid://cde3nq5rhvsqe" path="res://assets/sidebar/app/tutorial.png" id="4_diil0"]
@@ -17,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://by5vc26d4eg3t" path="res://assets/sidebar/app/decor.png" id="11_decor"]
 [ext_resource type="PackedScene" uid="uid://dkl5acj8m1a3b" path="res://scenes/sidebar/decor_page.tscn" id="12_decor"]
 [ext_resource type="PackedScene" uid="uid://cmsc4bw6aqfh8" path="res://scenes/sidebar/personal_page.tscn" id="15_nnubu"]
+[ext_resource type="PackedScene" uid="uid://cmy2evl2a0xcv" path="res://scenes/sidebar/sidebar_trigger.tscn" id="17_nnubu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reddot"]
 bg_color = Color(0.886275, 0.14902, 0.14902, 1)
@@ -45,13 +45,6 @@ region = Rect2(45, 22, 1173, 1167)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_diil0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yskv6"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nnubu"]
-bg_color = Color(0.9137255, 0.9254902, 0.7921569, 0.45490196)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
 
 [node name="MobileSidebar" type="Control" unique_id=2025363917]
 layout_mode = 3
@@ -334,21 +327,9 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_50qqt")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_diil0")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_yskv6")
 
-[node name="Trigger" type="TextureButton" parent="." unique_id=914615362 groups=["sidebar_trigger"]]
+[node name="Trigger" parent="." unique_id=373942880 instance=ExtResource("17_nnubu")]
 layout_mode = 0
 offset_left = -36.0
-offset_top = -228.0
+offset_top = -221.0
 offset_right = 39.0
-offset_bottom = -153.0
-texture_normal = ExtResource("2_jt2no")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="TextureRect" type="Panel" parent="Trigger" unique_id=511519727]
-show_behind_parent = true
-layout_mode = 0
-offset_top = -8.0
-offset_right = 76.0
-offset_bottom = 74.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_nnubu")
+offset_bottom = -146.0

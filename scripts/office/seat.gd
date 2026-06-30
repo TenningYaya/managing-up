@@ -19,13 +19,67 @@ signal upgrade_level_changed(new_level: int)
 @onready var sausage_buff: CanvasItem = get_node_or_null("SausageBuff") as CanvasItem
 @onready var cake_buff: CanvasItem = get_node_or_null("CakeBuff") as CanvasItem
 
+# 员工摸鱼（roaming 离座）时显示在工位上的“鱼”图标，提示玩家这个座位有人、只是溜了
+@onready var roaming_icon: TextureRect = get_node_or_null("RoamingIcon") as TextureRect
+
+# 鱼图标候选（预加载，导出后也能用；运行时随机抽一条）
+const FISH_TEXTURES := [
+	preload("res://assets/UI/ingame/fishs/item1044.png"),
+	preload("res://assets/UI/ingame/fishs/item1045.png"),
+	preload("res://assets/UI/ingame/fishs/item1046.png"),
+	preload("res://assets/UI/ingame/fishs/item1047.png"),
+	preload("res://assets/UI/ingame/fishs/item1048.png"),
+	preload("res://assets/UI/ingame/fishs/item1049.png"),
+	preload("res://assets/UI/ingame/fishs/item1050.png"),
+	preload("res://assets/UI/ingame/fishs/item1051.png"),
+	preload("res://assets/UI/ingame/fishs/item1052.png"),
+	preload("res://assets/UI/ingame/fishs/item1053.png"),
+	preload("res://assets/UI/ingame/fishs/item1054.png"),
+	preload("res://assets/UI/ingame/fishs/item1055.png"),
+	preload("res://assets/UI/ingame/fishs/item1058.png"),
+	preload("res://assets/UI/ingame/fishs/item1059.png"),
+	preload("res://assets/UI/ingame/fishs/item1060.png"),
+	preload("res://assets/UI/ingame/fishs/item1061.png"),
+	preload("res://assets/UI/ingame/fishs/item1062.png"),
+	preload("res://assets/UI/ingame/fishs/item1063.png"),
+	preload("res://assets/UI/ingame/fishs/item1065.png"),
+	preload("res://assets/UI/ingame/fishs/item1066.png"),
+	preload("res://assets/UI/ingame/fishs/item1067.png"),
+	preload("res://assets/UI/ingame/fishs/item1069.png"),
+	preload("res://assets/UI/ingame/fishs/item1070.png"),
+	preload("res://assets/UI/ingame/fishs/item1071.png"),
+	preload("res://assets/UI/ingame/fishs/item1072.png"),
+	preload("res://assets/UI/ingame/fishs/item1073.png"),
+	preload("res://assets/UI/ingame/fishs/item1074.png"),
+	preload("res://assets/UI/ingame/fishs/item1075.png"),
+	preload("res://assets/UI/ingame/fishs/item1076.png"),
+	preload("res://assets/UI/ingame/fishs/item1077.png"),
+	preload("res://assets/UI/ingame/fishs/item1078.png"),
+	preload("res://assets/UI/ingame/fishs/item1079.png"),
+	preload("res://assets/UI/ingame/fishs/item1080.png"),
+	preload("res://assets/UI/ingame/fishs/item1081.png"),
+	preload("res://assets/UI/ingame/fishs/item1082.png"),
+	preload("res://assets/UI/ingame/fishs/item1084.png"),
+	preload("res://assets/UI/ingame/fishs/item1085.png"),
+	preload("res://assets/UI/ingame/fishs/item1086.png"),
+	preload("res://assets/UI/ingame/fishs/item1091.png"),
+	preload("res://assets/UI/ingame/fishs/item1092.png"),
+	preload("res://assets/UI/ingame/fishs/item1100.png"),
+]
+
 var occupant: Control = null
+
+var _roam_icon_base_y: float = 0.0   # 鱼图标设计初始 y，浮动动画围绕它来回
+var _roam_icon_tween: Tween = null
 
 
 func _ready() -> void:
 	add_to_group("desk_seats")
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_apply_upgrade_visuals()
+	if roaming_icon != null:
+		_roam_icon_base_y = roaming_icon.position.y
+		roaming_icon.visible = false
 
 
 func _draw() -> void:
@@ -59,6 +113,42 @@ func clear_occupant() -> void:
 			if occupant.buff_status_changed.is_connected(_sync_buff_icons):
 				occupant.buff_status_changed.disconnect(_sync_buff_icons)
 	occupant = null
+	# 安全兜底：员工被拖走 / 开除 / 收回时离座，鱼图标必须一起消失
+	hide_roaming_icon()
+
+
+# 员工摸鱼离座：在工位上放一条随机鱼，并让它上下浮动
+func show_roaming_icon() -> void:
+	if roaming_icon == null:
+		return
+	if not FISH_TEXTURES.is_empty():
+		roaming_icon.texture = FISH_TEXTURES[randi() % FISH_TEXTURES.size()]
+	roaming_icon.position.y = _roam_icon_base_y
+	roaming_icon.visible = true
+	_start_roam_icon_float()
+
+
+# 员工回到座位：收起鱼图标，停掉浮动动画
+func hide_roaming_icon() -> void:
+	if _roam_icon_tween:
+		_roam_icon_tween.kill()
+		_roam_icon_tween = null
+	if roaming_icon == null:
+		return
+	roaming_icon.visible = false
+	roaming_icon.position.y = _roam_icon_base_y
+
+
+func _start_roam_icon_float() -> void:
+	if roaming_icon == null:
+		return
+	if _roam_icon_tween:
+		_roam_icon_tween.kill()
+	_roam_icon_tween = create_tween()
+	_roam_icon_tween.set_loops()
+	_roam_icon_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_roam_icon_tween.tween_property(roaming_icon, "position:y", _roam_icon_base_y - 6.0, 0.6)
+	_roam_icon_tween.tween_property(roaming_icon, "position:y", _roam_icon_base_y, 0.6)
 
 func get_snap_global_position() -> Vector2:
 	return snap_point.global_position

@@ -400,7 +400,6 @@ offset_right = 2038.0
 offset_bottom = 643.0
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_top = 653.0

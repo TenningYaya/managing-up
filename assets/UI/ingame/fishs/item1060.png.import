@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl5iuh5h6yu8o"
-path="res://.godot/imported/TriggerIcon2.png-75c990f935e1a0ac4a0aba517fdf9164.ctex"
+uid="uid://dvqosmulrqyn1"
+path="res://.godot/imported/item1060.png-ee70cee3f31c4eb6b3f14010f709efe3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sidebar/TriggerIcon2.png"
-dest_files=["res://.godot/imported/TriggerIcon2.png-75c990f935e1a0ac4a0aba517fdf9164.ctex"]
+source_file="res://assets/UI/ingame/fishs/item1060.png"
+dest_files=["res://.godot/imported/item1060.png-ee70cee3f31c4eb6b3f14010f709efe3.ctex"]
 
 [params]
 

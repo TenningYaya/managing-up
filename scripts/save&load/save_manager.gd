@@ -93,7 +93,6 @@ func delete_save() -> void:
 
 # ================= 存档核心逻辑 =================
 func save_game() -> void:
-	print("【存档】save_game 被调用，project_name = ", Gamemanager.project_name)
 	var save_data = {}
 	save_data["is_tutorial_completed"] = Gamemanager.is_tutorial_completed	
 	save_data["player"] = {
@@ -194,7 +193,6 @@ func save_game() -> void:
 	var rerr := DirAccess.rename_absolute(tmp_path, SAVE_PATH)
 	if rerr != OK:
 		push_error("[SaveSystem] 存档改名失败,错误码: %d" % rerr)
-	print("[SaveSystem] Is Toturial completed: ", save_data["is_tutorial_completed"])
 
 # 🌟 把一个招聘池（normal_pool / headhunt_pool）里的简历转成可存档的字典数组
 func _serialize_resume_pool(pool: Array) -> Array:
@@ -463,4 +461,3 @@ func load_game() -> void:
 		StockManager.load_from_dict(save_data["stock"])
 
 	Gamemanager.is_loading_save = false
-	print("[SaveSystem] 游戏读取成功！")

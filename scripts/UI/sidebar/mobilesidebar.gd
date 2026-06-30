@@ -6,6 +6,8 @@ extends Control
 # =====================================================
 @onready var phone_wrapper: Control = $PhoneWrapper
 @onready var trigger_btn: BaseButton = $Trigger
+# 摇晃动画对象：sidebar_trigger 场景里的手机图标（不再摇整个 Trigger 按钮）
+@onready var phone_icon: Control = $Trigger/Control/PhoneIcon
 #@onready var trigger_btn_bcg = $Trigger/TextureRect
 
 var is_open := false
@@ -135,8 +137,8 @@ func _ready() -> void:
 	# 等几帧确保存档加载完成、desk_slots 组就绪后做首次判定
 	await get_tree().process_frame
 	await get_tree().process_frame
-	# 布局稳定后设置旋转轴为图标中心点
-	trigger_btn.pivot_offset = trigger_btn.size / 2.0
+	# 布局稳定后设置旋转轴为手机图标中心点
+	phone_icon.pivot_offset = phone_icon.size / 2.0
 	_refresh_upgrade_hints()
 
 
@@ -374,7 +376,7 @@ func _on_reminder_timeout() -> void:
 
 
 # =====================================================
-# 9. 倾斜动画（Trigger 触发器左右摇摆 ±15°）
+# 9. 倾斜动画（手机图标 PhoneIcon 左右摇摆 ±15°）
 # =====================================================
 func _start_shake(duration: float) -> void:
 	# 手机打开时 Trigger 是隐藏的，跳过
@@ -384,13 +386,13 @@ func _start_shake(duration: float) -> void:
 
 func _stop_shake() -> void:
 	_shake_time_left = 0.0
-	if is_instance_valid(trigger_btn):
-		trigger_btn.rotation_degrees = 0.0
+	if is_instance_valid(phone_icon):
+		phone_icon.rotation_degrees = 0.0
 
 func _process(delta: float) -> void:
 	if _shake_time_left <= 0.0:
 		return
-	if not is_instance_valid(trigger_btn):
+	if not is_instance_valid(phone_icon):
 		return
 
 	# 手机中途被打开：立即停止
@@ -400,10 +402,10 @@ func _process(delta: float) -> void:
 
 	_shake_time_left -= delta
 	if _shake_time_left <= 0.0:
-		trigger_btn.rotation_degrees = 0.0
+		phone_icon.rotation_degrees = 0.0
 	else:
 		var t := Time.get_ticks_msec() / 1000.0
-		trigger_btn.rotation_degrees = sin(t * TILT_FREQ * TAU) * TILT_ANGLE
+		phone_icon.rotation_degrees = sin(t * TILT_FREQ * TAU) * TILT_ANGLE
 
 
 func _update_clock() -> void:

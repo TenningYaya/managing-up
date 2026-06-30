@@ -48,6 +48,10 @@ var work_elapsed: float = 0.0
 var is_roaming: bool = false
 var _roam_check_time_left: float = 0.0
 var _resume_work_after_roam: bool = false
+# [员工吐槽中心]：员工被抓回工位结束漫游 —— 记录“被抓起的那一刻是否正在摸鱼漫游”，落座后据此触发吐槽
+var _grabbed_while_roaming: bool = false
+# urge 催工气泡完整播放约 3s，之后再补吐槽，避免新气泡把催工气泡顶掉
+const DRAGGED_BACK_BANTER_DELAY := 3.0
 var _roam_entry_point_pos: Vector2 = Vector2.ZERO
 var _roam_corridor_y: float = 0.0
 @export_group("")
@@ -276,6 +280,9 @@ func _start_drag() -> void:
 		_move_tween.kill()
 		_move_tween = null
 
+	# [员工吐槽中心]：员工被抓回工位结束漫游 —— 抓起前先记下是否正在摸鱼（下面会把 is_roaming 清掉）
+	_grabbed_while_roaming = is_roaming
+
 	if is_roaming:
 		is_roaming = false
 		_resume_work_after_roam = false
@@ -335,6 +342,12 @@ func _end_drag() -> void:
 			play_on_seated_banter()
 	else:
 		_return_to_start()
+
+	# [员工吐槽中心]：员工被抓回工位结束漫游 —— 摸鱼溜达途中被玩家抓回工位坐下，先催工再吐槽
+	# （扔进会议室的分支在上面已 return，不会走到这里；从等候区来的 from_waiting 时 _grabbed_while_roaming 必为 false，不会重复冒泡）
+	if _grabbed_while_roaming:
+		_grabbed_while_roaming = false
+		play_on_dragged_back_from_roam()
 
 func snap_to_seat(seat: DeskSeat, animated: bool = true) -> void:
 	if seat == null:
@@ -533,6 +546,10 @@ func _start_roaming() -> void:
 	is_roaming = true
 	_set_roam_above_desks()
 	_pause_work_for_roam()
+
+	# 离座时在工位上放一条摸鱼的鱼，提示玩家这个座位有人、只是溜了
+	if current_seat != null and current_seat.has_method("show_roaming_icon"):
+		current_seat.show_roaming_icon()
 
 	_move_tween = create_tween()
 	var cursor_pos := global_position
@@ -755,6 +772,9 @@ func _finish_roaming() -> void:
 	if current_seat != null:
 		global_position = current_seat.get_snap_global_position() - size / 2.0
 		current_seat.set_occupant(self)
+		# 员工回到工位，收起鱼图标
+		if current_seat.has_method("hide_roaming_icon"):
+			current_seat.hide_roaming_icon()
 
 	_resume_work_from_roam()
 
@@ -988,6 +1008,20 @@ func play_on_seated_banter() -> void:
 	var pool = BanterManager.QUOTES["seated"]
 	var random_key = pool[randi() % pool.size()]
 	_spawn_banter_bubble(tr(random_key))
+
+# [员工吐槽中心]：员工被抓回工位结束漫游 —— 摸鱼溜达被玩家抓回工位坐下：先来一句催工，催工气泡消失后再补一句吐槽
+func play_on_dragged_back_from_roam() -> void:
+	if not is_inside_tree():
+		return
+	# 1. 催工气泡：与在工位上被点击催工时完全一致（老板头像 + 随机催工台词）
+	_spawn_speech_bubble(SpeedupQuoteSave.get_random_quote())
+	# 2. 等 urge 气泡播放完，再发一句“被抓包摸鱼”的随机吐槽，避免新气泡把催工气泡顶掉
+	var pool = BanterManager.QUOTES["drag_back_roam"]
+	var random_key = pool[randi() % pool.size()]
+	get_tree().create_timer(DRAGGED_BACK_BANTER_DELAY).timeout.connect(func():
+		if is_instance_valid(self) and is_inside_tree():
+			_spawn_banter_bubble(tr(random_key))
+	)
 	
 func get_final_efficiency() -> int:
 	var total = efficiency	
