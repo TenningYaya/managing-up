@@ -8,7 +8,15 @@ extends Control
 @onready var trigger_btn: BaseButton = $Trigger
 # 摇晃动画对象：sidebar_trigger 场景里的手机图标（不再摇整个 Trigger 按钮）
 @onready var phone_icon: Control = $Trigger/Control/PhoneIcon
+# 按钮底板（抖动时变暖黄）、右上角红点
+@onready var trigger_bg: Panel = $Trigger/Control/ButtonBg
+@onready var trigger_red_dot: Control = $Trigger/Control/RedDot
 #@onready var trigger_btn_bcg = $Trigger/TextureRect
+
+# 按钮底色：默认浅灰，抖动提示时变明亮暖黄
+const BG_GRAY := Color(0.8, 0.79, 0.75, 1.0)
+const BG_YELLOW := Color(1.0, 0.82, 0.25, 1.0)
+var _bg_style: StyleBoxFlat   # ButtonBg 的 StyleBoxFlat（运行时改 bg_color）
 
 var is_open := false
 
@@ -70,6 +78,14 @@ func _ready() -> void:
 	trigger_btn.show()
 	is_open = false
 	#trigger_btn_bcg.top_level = true
+
+	# 取 ButtonBg 的样式副本，之后运行时改它的底色（脉冲暖黄/恢复浅灰）
+	if is_instance_valid(trigger_bg):
+		var sb := trigger_bg.get_theme_stylebox("panel")
+		if sb is StyleBoxFlat:
+			_bg_style = sb.duplicate()
+			trigger_bg.add_theme_stylebox_override("panel", _bg_style)
+			_bg_style.bg_color = BG_GRAY
 
 	# 初始状态：显示手机桌面
 	show_home_screen()
@@ -359,6 +375,10 @@ func _refresh_upgrade_hints() -> void:
 		dot_decor.visible = desk_up
 
 	var any_up := player_up or desk_up
+
+	# Trigger 上的「有提醒」指示：红点，仅在有可升级内容时显示
+	if is_instance_valid(trigger_red_dot):
+		trigger_red_dot.visible = any_up
 	if any_up and not _was_upgradable:
 		# 从"无"到"有"：抖动 10s 提醒，并开启 15min 周期提醒
 		_start_shake(FIRST_SHAKE_DURATION)
@@ -388,6 +408,12 @@ func _stop_shake() -> void:
 	_shake_time_left = 0.0
 	if is_instance_valid(phone_icon):
 		phone_icon.rotation_degrees = 0.0
+	_set_trigger_bg(BG_GRAY)
+
+# 设置 Trigger 按钮底色（抖动时调暖黄，结束恢复浅灰）
+func _set_trigger_bg(c: Color) -> void:
+	if _bg_style != null:
+		_bg_style.bg_color = c
 
 func _process(delta: float) -> void:
 	if _shake_time_left <= 0.0:
@@ -403,9 +429,12 @@ func _process(delta: float) -> void:
 	_shake_time_left -= delta
 	if _shake_time_left <= 0.0:
 		phone_icon.rotation_degrees = 0.0
+		_set_trigger_bg(BG_GRAY)
 	else:
 		var t := Time.get_ticks_msec() / 1000.0
 		phone_icon.rotation_degrees = sin(t * TILT_FREQ * TAU) * TILT_ANGLE
+		# 抖动期间底色保持明亮暖黄（不频闪）
+		_set_trigger_bg(BG_YELLOW)
 
 
 func _update_clock() -> void:

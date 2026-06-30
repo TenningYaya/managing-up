@@ -1,90 +1,112 @@
 [gd_scene format=3 uid="uid://cmy2evl2a0xcv"]
 
 [ext_resource type="Texture2D" uid="uid://bvd528nbtp2lh" path="res://assets/sidebar/Trigger/TriggerIcon.png" id="1_1wg1q"]
-[ext_resource type="Texture2D" uid="uid://d3ixkpwomsunj" path="res://assets/tutorial/PNG (Transparent)/circle_02.png" id="1_4f4qj"]
-[ext_resource type="Texture2D" uid="uid://bkrwotjx0kfv3" path="res://assets/tutorial/PNG (Transparent)/circle_05.png" id="2_wpvvr"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nnubu"]
-bg_color = Color(0.9137255, 0.9254902, 0.74509805, 0.63529414)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-corner_detail = 5
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shadow"]
+bg_color = Color(0.13, 0.09, 0.06, 0.7)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.8, 0.79, 0.75, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.27, 0.18, 0.12, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reddot"]
+bg_color = Color(0.886275, 0.14902, 0.14902, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.27, 0.18, 0.12, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 6
+anti_aliasing = false
 
 [node name="Trigger" type="TextureButton" unique_id=373942880 groups=["sidebar_trigger"]]
-offset_left = -74.0
-offset_top = -76.0
-offset_right = 1.0
-offset_bottom = -1.0
+offset_left = -104.0
+offset_top = -104.0
 ignore_texture_size = true
 stretch_mode = 0
 
 [node name="Control" type="Control" parent="." unique_id=1657714229]
-anchors_preset = 0
-offset_left = 61.0
-offset_top = 27.0
-offset_right = 101.0
-offset_bottom = 67.0
-mouse_filter = 2
-
-[node name="Polygon2D2" type="Polygon2D" parent="Control" unique_id=552444068]
-visible = false
-modulate = Color(1, 1, 1, 0.56078434)
-position = Vector2(-109.46341, -32.41032)
-scale = Vector2(1.6341463, 1.5835047)
-color = Color(0.9598462, 0.9593279, 0.8150828, 1)
-polygon = PackedVector2Array(-4, 54, 78, 54, 78, 7.3368073, 78, -37)
-
-[node name="Polygon2D" type="Polygon2D" parent="Control" unique_id=2016374183]
-visible = false
-modulate = Color(1, 1, 1, 0.72156864)
-position = Vector2(-81.92683, -21.549444)
-scale = Vector2(1.2682928, 1.4175825)
-color = Color(0.9999998, 0.84471285, 0.18229961, 1)
-polygon = PackedVector2Array(-4, 54, 78, 54, 78, -37)
-
-[node name="RecBcg" type="Panel" parent="Control" unique_id=585005001]
-show_behind_parent = true
-layout_mode = 0
-offset_left = -61.0
-offset_top = -31.0
-offset_right = 15.0
-offset_bottom = 51.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_nnubu")
-
-[node name="TextureRect2" type="TextureRect" parent="Control" unique_id=2069646189]
-visible = false
-layout_mode = 0
-offset_left = -83.0
-offset_top = -52.0
-offset_right = 43.0
-offset_bottom = 74.0
-texture = ExtResource("1_4f4qj")
-expand_mode = 1
-
-[node name="TextureRect3" type="TextureRect" parent="Control" unique_id=379229995]
-visible = false
-layout_mode = 0
-offset_left = -83.0
-offset_top = -52.0
-offset_right = 43.0
-offset_bottom = 74.0
-texture = ExtResource("2_wpvvr")
-expand_mode = 1
-
-[node name="PhoneIcon" type="TextureRect" parent="Control" unique_id=877088690]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.22500001
-anchor_top = 1.0
-anchor_right = 0.22500001
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -62.0
-offset_top = -58.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Shadow" type="Panel" parent="Control" unique_id=600693681]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 5.0
+offset_right = 4.0
 offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_shadow")
+
+[node name="ButtonBg" type="Panel" parent="Control" unique_id=1413260887]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="PhoneIcon" type="TextureRect" parent="Control" unique_id=877088690]
+modulate = Color(0.27, 0.18, 0.12, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -41.0
+offset_right = 44.0
+offset_bottom = 47.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("1_1wg1q")
 expand_mode = 1
+stretch_mode = 5
+
+[node name="RedDot" type="Panel" parent="Control" unique_id=1723114984]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -12.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 12.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_reddot")

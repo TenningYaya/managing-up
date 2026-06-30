@@ -329,7 +329,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_yskv6")
 
 [node name="Trigger" parent="." unique_id=373942880 instance=ExtResource("17_nnubu")]
 layout_mode = 0
-offset_left = -36.0
-offset_top = -221.0
-offset_right = 39.0
-offset_bottom = -146.0
+offset_left = -78.0
+offset_top = -236.0
+offset_right = 26.0
+offset_bottom = -132.0
