@@ -2,6 +2,10 @@ extends Node
 
 const SAVE_PATH = "user://savegame.json"
 
+# 存档结构版本号。每次"改动存档结构、且不能靠 .get() 默认值兼容旧档"时 +1，
+# 并在 load_game() 的迁移区按 save_ver 处理老存档。仅加新字段不必改（读档处默认值已兜底）。
+const SAVE_VERSION := 1
+
 # ===== 自动存档 =====
 const AUTOSAVE_INTERVAL := 60.0       # 每 60 秒自动存一次
 const AUTOSAVE_MIN_GAP_MS := 5000     # 两次自动存档至少隔 5 秒(防止失焦时被狂触发)
@@ -94,7 +98,8 @@ func delete_save() -> void:
 # ================= 存档核心逻辑 =================
 func save_game() -> void:
 	var save_data = {}
-	save_data["is_tutorial_completed"] = Gamemanager.is_tutorial_completed	
+	save_data["save_version"] = SAVE_VERSION   # 写在最前：读档时据此判断是否需要迁移老存档
+	save_data["is_tutorial_completed"] = Gamemanager.is_tutorial_completed
 	save_data["player"] = {
 		"level": Gamemanager.player_level,
 		"kpi": Gamemanager.kpi,
@@ -387,6 +392,18 @@ func load_game() -> void:
 	if json.parse(json_str) != OK: return
 		
 	var save_data = json.data
+
+	# ================= 🌟 存档版本判定 / 迁移区 =================
+	# save_ver == 0 表示"加版本号之前"的老存档（没有 save_version 字段）。
+	var save_ver := int(save_data.get("save_version", 0))
+	if save_ver > SAVE_VERSION:
+		# 存档来自比当前游戏更新的版本（玩家可能装了旧版游戏）。仍尝试读取，缺失字段靠 .get 默认兜底。
+		push_warning("[SaveSystem] 存档版本(%d)高于当前游戏(%d)，部分内容可能无法识别" % [save_ver, SAVE_VERSION])
+	# 未来若改了存档结构、且不能靠默认值兼容，在这里按 save_ver 迁移。示例：
+	# if save_ver < 2:
+	#     # 例：把旧字段重命名/重组成新结构，再继续往下读
+	#     pass
+
 	Gamemanager.is_loading_save = true   # 读档期间设置等级等值会触发信号,但不该播升级特效
 	if save_data.has("is_tutorial_completed"):
 		Gamemanager.is_tutorial_completed = save_data["is_tutorial_completed"]
