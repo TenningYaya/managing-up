@@ -91,6 +91,29 @@ func drop_employee(data: Variant) -> void:
 	BanterManager.trigger_banter("meeting_start", randi_range(1, 2), attendees)
 
 # ==========================================
+# 🌟 读档专用：把一个原本在开会的员工重新登记回会议室
+# 参会名单(attendees)是运行时数据、存档没存；读档时若只对员工 enter_meeting，
+# 它会隐身却不在 attendees 里 → 没头像、无法散会 → 永久"消失"。故此方法补上登记。
+# 与 drop_employee 的区别：不触发"会议开始"吐槽、并容忍员工已处于开会态。
+# ==========================================
+func restore_attendee(emp) -> void:
+	if emp == null or attendees.has(emp):
+		return
+	if attendees.size() >= MAX_CAPACITY:
+		return
+	# 让员工进入开会态（隐身、会议 Buff、进度归零）。读档时 drag_start_seat 为空，
+	# enter_meeting 内的"占座 + 开会标志"分支会被跳过，所以下面手动补开会标志。
+	if not emp.is_in_meeting:
+		emp.enter_meeting()
+	attendees.append(emp)
+	if emp.get("current_seat") != null and emp.current_seat.has_method("set_meeting_state"):
+		emp.current_seat.set_meeting_state(true)
+	_update_avatars()
+	# 会议仍在进行：确保自动散会计时在跑（多人恢复时只第一个真正启动）
+	if is_instance_valid(_auto_dismiss_timer) and _auto_dismiss_timer.is_stopped():
+		_auto_dismiss_timer.start()
+
+# ==========================================
 # 悬停：会议室图像中心出现"解散会议"按钮
 # ==========================================
 func on_mouse_entered():

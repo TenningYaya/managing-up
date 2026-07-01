@@ -318,7 +318,29 @@ func _restore_employees(emp_list: Array) -> void:
 			new_emp.process_mode = Node.PROCESS_MODE_DISABLED
 			
 		if e_data.get("is_in_meeting", false):
-			new_emp.call_deferred("enter_meeting")
+			# 会议参会名单是运行时数据、存档没存。不能只 enter_meeting（那样它会隐身却不在
+			# 会议室 attendees 里 → 无头像、无法散会 → 永久消失）。必须重新登记回会议室。
+			# 延迟执行：确保办公室与员工都已就位后再登记。
+			call_deferred("_restore_meeting_employee", new_emp)
+
+# 把一个原本在开会的员工重新塞回会议室（读档恢复用）
+func _restore_meeting_employee(emp: Employee) -> void:
+	if not is_instance_valid(emp):
+		return
+	var meeting_logic = _find_meeting_room_logic()
+	if meeting_logic != null and meeting_logic.has_method("restore_attendee"):
+		meeting_logic.restore_attendee(emp)
+	else:
+		# 异常：存档说在开会，却找不到会议室。别让它卡在隐身开会态。
+		# 此时 emp 已被 _deferred_snap 放回工位并正常工作，保持可见即可，避免"消失"。
+		push_warning("[SaveManager] 存档含开会员工，但未找到会议室，按普通在座员工恢复")
+
+# 在 offices 组里找到当前是"会议室"且已建好逻辑节点的那个房间的 logic_node
+func _find_meeting_room_logic():
+	for office in get_tree().get_nodes_in_group("offices"):
+		if office.current_type == Gamemanager.OfficeType.MEETING_ROOM and office.logic_node != null:
+			return office.logic_node
+	return null
 
 # ================= 办公室存档恢复 =================
 # 🌟 提供给办公室节点查询自己的存档状态（按节点名）

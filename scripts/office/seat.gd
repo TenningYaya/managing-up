@@ -13,7 +13,7 @@ signal upgrade_level_changed(new_level: int)
 @onready var coffee_cup: CanvasItem = get_node_or_null("CoffeeCup") as CanvasItem
 @onready var advanced_computer: CanvasItem = get_node_or_null("AdvancedComputer") as CanvasItem
 @onready var plant: CanvasItem = get_node_or_null("Plant") as CanvasItem
-@onready var meeting_icon: CanvasItem = get_node_or_null("MeetingIcon") as CanvasItem
+@onready var meeting_icon: Control = get_node_or_null("MeetingIcon") as Control  # 需按自身中心旋转，故用 Control 取 pivot/size
 
 @onready var milktea_buff: CanvasItem = get_node_or_null("MilkteaBuff") as CanvasItem
 @onready var sausage_buff: CanvasItem = get_node_or_null("SausageBuff") as CanvasItem
@@ -71,6 +71,7 @@ var occupant: Control = null
 
 var _roam_icon_base_y: float = 0.0   # 鱼图标设计初始 y，浮动动画围绕它来回
 var _roam_icon_tween: Tween = null
+
 
 
 func _ready() -> void:
@@ -234,6 +235,13 @@ func get_quality_buff() -> int:
 func set_meeting_state(is_meeting: bool) -> void:
 	if meeting_icon != null:
 		meeting_icon.visible = is_meeting
+		if is_meeting:
+			# 开会时藏起电脑（普通/高级都藏），别和会议图标抢镜
+			if computer != null: computer.visible = false
+			if advanced_computer != null: advanced_computer.visible = false
+		else:
+			# 散会：按升级等级重新决定该显示普通还是高级电脑（不能无脑全开）
+			_apply_upgrade_visuals()
 
 func _sync_buff_icons() -> void:
 	# 1. 每次刷新前，闭着眼睛先把桌子扫空
