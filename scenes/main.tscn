@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://cum4hn5xxinhk" path="res://assets/Office Tileset/Office VX Ace/A5 Office Floors & Walls.png" id="2_jbj1t"]
 [ext_resource type="PackedScene" uid="uid://s6hqcjwc8g78" path="res://scenes/office/DeskSlot.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://sclbpjras5bi" path="res://scenes/employee/employee_drop_area.tscn" id="3_jkv2x"]
-[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_muem4"]
 [ext_resource type="Texture2D" uid="uid://yxab4qjkxvbk" path="res://assets/background/959907CBFB75635004DB71D30DBF186B.png" id="3_yc10j"]
 [ext_resource type="Texture2D" uid="uid://b47ers1c5bqr5" path="res://assets/right.png" id="4_2wyq8"]
 [ext_resource type="Script" uid="uid://cfssx3hpb6hxe" path="res://scripts/system/floor_manager.gd" id="4_og1vs"]
@@ -146,16 +145,6 @@ offset_bottom = 358.0
 texture = ExtResource("5_vxglm")
 expand_mode = 1
 
-[node name="TopCover" type="TextureRect" parent="FullGameMode/Background/Floors" unique_id=833062593]
-visible = false
-layout_mode = 0
-offset_left = -1059.0
-offset_top = -19.0
-offset_right = 2954.0
-offset_bottom = 40.0
-texture = ExtResource("3_muem4")
-expand_mode = 1
-
 [node name="GlassWall" parent="FullGameMode/Background/Floors" unique_id=1956728320 instance=ExtResource("6_2wyq8")]
 layout_mode = 0
 offset_left = 2333.0
@@ -163,12 +152,12 @@ offset_top = -81.0
 offset_right = 2333.0
 offset_bottom = -81.0
 
-[node name="RightCover" type="TextureRect" parent="FullGameMode/Background" unique_id=1884332700]
+[node name="RightCover" type="TextureRect" parent="FullGameMode/Background/Floors" unique_id=1884332700]
 layout_mode = 0
-offset_left = 1670.0
-offset_top = -86.0
-offset_right = 2668.0
-offset_bottom = 350.0
+offset_left = 2631.0
+offset_top = -78.0
+offset_right = 3629.0
+offset_bottom = 358.0
 texture = ExtResource("4_2wyq8")
 expand_mode = 1
 
