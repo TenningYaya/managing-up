@@ -92,41 +92,49 @@ texture = ExtResource("13_y3s53")
 [node name="AvatarSlots" type="GridContainer" parent="." unique_id=1681342943]
 visible = false
 layout_mode = 0
-offset_left = 19.0
-offset_top = 206.0
-offset_right = 365.0
-offset_bottom = 296.0
-theme_override_constants/h_separation = 2
-columns = 6
+offset_left = 95.0
+offset_top = 12.0
+offset_right = 291.0
+offset_bottom = 174.0
+mouse_filter = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+columns = 3
 
 [node name="Slot1" type="VBoxContainer" parent="AvatarSlots" unique_id=949021389]
-custom_minimum_size = Vector2(56, 84)
+custom_minimum_size = Vector2(60, 78)
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Slot2" type="VBoxContainer" parent="AvatarSlots" unique_id=146305324]
-custom_minimum_size = Vector2(56, 84)
+custom_minimum_size = Vector2(60, 78)
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Slot3" type="VBoxContainer" parent="AvatarSlots" unique_id=935378993]
-custom_minimum_size = Vector2(56, 84)
+custom_minimum_size = Vector2(60, 78)
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Slot4" type="VBoxContainer" parent="AvatarSlots" unique_id=656589062]
-custom_minimum_size = Vector2(56, 84)
+custom_minimum_size = Vector2(60, 78)
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Slot5" type="VBoxContainer" parent="AvatarSlots" unique_id=5985643]
-custom_minimum_size = Vector2(56, 84)
+custom_minimum_size = Vector2(60, 78)
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Slot6" type="VBoxContainer" parent="AvatarSlots" unique_id=1718508961]
-custom_minimum_size = Vector2(56, 84)
+custom_minimum_size = Vector2(60, 78)
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="ManageButton" parent="." unique_id=2048579194 instance=ExtResource("8_2u0tt")]
@@ -151,9 +159,9 @@ button_text = "OFFICE_MANAGE_STOCK"
 visible = false
 layout_mode = 0
 offset_left = 122.0
-offset_top = 80.0
+offset_top = 204.0
 offset_right = 262.0
-offset_bottom = 117.0
+offset_bottom = 241.0
 button_text = "OFFICE_DISMISS_MEETING"
 
 [node name="EmptyOfficeHint" type="TextureRect" parent="." unique_id=1675794164]
