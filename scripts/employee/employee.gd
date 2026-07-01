@@ -249,6 +249,9 @@ func _draw() -> void:
 func _process(delta: float) -> void:
 	if dragging:
 		queue_redraw()
+		# 保持贴住光标：边缘滚动时鼠标可能不动、只有地图在移动，
+		# 靠每帧重新对齐让员工始终跟着光标（否则会脱手，留在原来的世界坐标上）
+		global_position = get_global_mouse_position() - drag_offset
 
 	if is_working:
 		work_elapsed += delta

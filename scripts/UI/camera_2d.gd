@@ -12,6 +12,15 @@ var last_mouse_pos = Vector2.ZERO
 const BOUND_LEFT := -1000.0
 const BOUND_RIGHT := 3060.0
 
+# —— 拖拽员工时的边缘滚动 ——
+# 拖着员工把鼠标推到屏幕最左/最右边缘并停留一小会，地图就朝那个方向滚动
+@export var edge_scroll_margin: float = 60.0   # 触发滚动的屏幕边缘宽度(像素)
+@export var edge_scroll_dwell: float = 0.3     # 需在边缘停留多久才开始滚动(秒)
+@export var edge_scroll_speed: float = 800.0   # 滚动速度(世界像素/秒)
+
+var _edge_dwell_left: float = 0.0
+var _edge_dwell_right: float = 0.0
+
 func _ready() -> void:
 	# 🌟 监听窗口/视口尺寸变化:比例一变就重新把 droparea 拉回水平居中
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
@@ -78,3 +87,53 @@ func _clamp_camera_position() -> void:
 
 		# 限制相机中心点在这两个安全坐标之间滑动
 		position.x = clamp(position.x, min_cam_x, max_cam_x)
+
+
+# =====================================================
+# 拖拽员工时：鼠标停在屏幕左/右边缘，地图朝该方向滚动
+# =====================================================
+func _process(delta: float) -> void:
+	_update_edge_scroll(delta)
+
+func _update_edge_scroll(delta: float) -> void:
+	# 只有正在拖拽某个员工时才启用
+	var emp := _get_dragging_employee()
+	if emp == null:
+		_edge_dwell_left = 0.0
+		_edge_dwell_right = 0.0
+		return
+
+	# 教程限制：与中键拖拽一致，未完成教程且没拿到通行证时不许滚动
+	if not Gamemanager.is_tutorial_completed and not Gamemanager.tutorial_allow_camera_drag:
+		return
+
+	var vp_width := get_viewport_rect().size.x
+	var mouse_x := get_viewport().get_mouse_position().x
+
+	# 判定鼠标在哪个边缘，并累计停留时间；离开边缘则清零
+	var dir := 0
+	if mouse_x <= edge_scroll_margin:
+		_edge_dwell_left += delta
+		_edge_dwell_right = 0.0
+		if _edge_dwell_left >= edge_scroll_dwell:
+			dir = -1
+	elif mouse_x >= vp_width - edge_scroll_margin:
+		_edge_dwell_right += delta
+		_edge_dwell_left = 0.0
+		if _edge_dwell_right >= edge_scroll_dwell:
+			dir = 1
+	else:
+		_edge_dwell_left = 0.0
+		_edge_dwell_right = 0.0
+
+	if dir != 0:
+		position.x += dir * edge_scroll_speed * delta / zoom.x
+		_clamp_camera_position()
+		# 相机滚动后，被拖的员工靠它自己的 _process 每帧重新贴住光标
+
+# 返回当前正在被拖拽的员工（没有则返回 null）
+func _get_dragging_employee() -> Node:
+	for e in get_tree().get_nodes_in_group("employees"):
+		if e.get("dragging") == true:
+			return e
+	return null
