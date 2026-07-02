@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://bya2jsjtcfe8r"]
 
 [ext_resource type="Script" uid="uid://b5pe6i8ak5ia4" path="res://scripts/guide/kp_ihelper_chat_bubble.gd" id="1_ml5kk"]
-[ext_resource type="Texture2D" uid="uid://dep4ep5tbqea0" path="res://assets/dialogue/kpi_ai.png" id="2_aiu62"]
+[ext_resource type="Texture2D" uid="uid://c2lieifs8jm47" path="res://assets/tutorial/KPI/KPI_helper_avatar.png" id="2_ml5kk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aiu62"]
+atlas = ExtResource("2_ml5kk")
+region = Rect2(413, 0, 715, 838)
 
 [node name="kpi_ChatBubble" type="Control" unique_id=759275261]
 layout_mode = 3
@@ -31,10 +35,20 @@ offset_right = 519.0
 offset_bottom = 100.0
 theme_override_constants/separation = 15
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=1619545776]
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer" unique_id=1776322111]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_aiu62")
+color = Color(0.97, 0.6305, 0.83420014, 1)
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/ColorRect" unique_id=1619545776]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_aiu62")
 expand_mode = 1
 stretch_mode = 5
 

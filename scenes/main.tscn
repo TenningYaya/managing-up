@@ -514,6 +514,5 @@ offset_right = 407.0
 offset_bottom = 621.0
 
 [node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
-visible = false
 
 [connection signal="pressed" from="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

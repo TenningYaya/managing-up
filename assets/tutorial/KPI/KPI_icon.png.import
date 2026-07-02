@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ddvoj4c41qjb5"
-path="res://.godot/imported/KPI_icon.png-5adb7067a9781662d62ac28e89b44803.ctex"
+path="res://.godot/imported/KPI_icon.png-b1945fb16d8a5b51b97e4669355b399e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tutorial/KPI_icon.png"
-dest_files=["res://.godot/imported/KPI_icon.png-5adb7067a9781662d62ac28e89b44803.ctex"]
+source_file="res://assets/tutorial/KPI/KPI_icon.png"
+dest_files=["res://.godot/imported/KPI_icon.png-b1945fb16d8a5b51b97e4669355b399e.ctex"]
 
 [params]
 

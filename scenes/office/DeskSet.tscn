@@ -50,6 +50,7 @@ texture = SubResource("AtlasTexture_72mnh")
 expand_mode = 1
 
 [node name="RoamingIcon" type="TextureRect" parent="." unique_id=300100001]
+visible = false
 z_index = 2
 texture_filter = 1
 layout_mode = 0

@@ -18,7 +18,8 @@ func set_tip(text_content: String) -> void:
 	if label:
 		label.text = text_content
 
-	# 等一帧让 Label 算好尺寸,再强制底图按内容(含 Label 的最小高)收缩贴合,
-	# 这样英文也有足够竖向空间,不会被切顶/压扁。
+	# 等两帧让 Label（尤其中文，文本塑形较慢）算好真实尺寸,再强制底图按内容收缩贴合,
+	# 这样中英文都有足够竖向空间,不会被切顶/切底/压扁。
+	await get_tree().process_frame
 	await get_tree().process_frame
 	reset_size()
