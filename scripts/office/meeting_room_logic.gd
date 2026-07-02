@@ -26,6 +26,11 @@ var dismiss_btn: TextureButton     # 房间中心、悬停出现的"解散会议
 const AUTO_DISMISS_SECONDS := 3600.0   # 会议自动散会时间(1 小时 = 3600 秒;随游戏倍速变快)
 var _auto_dismiss_timer: Timer = null
 
+# 错开散会：点解散/超时后，每个人随机延迟这个区间(秒)再离开，不要全体同时起身
+const DISMISS_STAGGER_MIN := 0.2
+const DISMISS_STAGGER_MAX := 1.0
+var _dismissing: bool = false   # 正在错开遣散中，期间不许再拖人进来/重复触发
+
 func setup(office: Control) -> void:
 	super.setup(office)
 	parent_office = office
@@ -53,8 +58,10 @@ func setup(office: Control) -> void:
 		EmployeeManager.employee_removed.connect(_on_employee_removed)
 
 func cleanup() -> void:
-	# 离开会议室（如切换成茶水间）时，先把所有人遣散回工位
-	dismiss_meeting()
+	# 离开会议室（如切换成茶水间）时，先把所有人遣散回工位。
+	# 这里必须"立刻全体遣散"：cleanup 结尾会 queue_free 本逻辑节点，
+	# 用错开延迟版会因节点被销毁而中断，员工卡在开会态。
+	_dismiss_all_immediately()
 
 	# 撤掉开除监听(本逻辑节点即将销毁)
 	if EmployeeManager.employee_removed.is_connected(_on_employee_removed):
@@ -75,7 +82,7 @@ func can_drop_employee(data: Variant) -> bool:
 	if data is Node and data.has_method("enter_meeting"):
 		# 必须有工位才能进会议室，DropArea 里的新人进不来
 		var has_seat = data.get("current_seat") != null or data.get("drag_start_seat") != null
-		if has_seat and attendees.size() < MAX_CAPACITY and not attendees.has(data):
+		if has_seat and not _dismissing and attendees.size() < MAX_CAPACITY and not attendees.has(data):
 			return true
 	return false
 
@@ -164,8 +171,15 @@ func _build_avatar_slot(slot: Control, emp) -> void:
 
 	# 🌟 双击头像 → 该员工退出会议
 	frame.gui_input.connect(func(ev): _on_avatar_gui_input(ev, emp))
-	frame.mouse_entered.connect(func(): frame.modulate = Color(1.2, 1.2, 1.2))
-	frame.mouse_exited.connect(func(): frame.modulate = Color(1, 1, 1))
+	# 🌟 悬停头像 → 弹出该员工的信息面板；移开 → 关闭
+	frame.mouse_entered.connect(func():
+		frame.modulate = Color(1.2, 1.2, 1.2)
+		_show_employee_panel(emp)
+	)
+	frame.mouse_exited.connect(func():
+		frame.modulate = Color(1, 1, 1)
+		_hide_employee_panel()
+	)
 	slot.add_child(frame)
 
 	# ---------- 名字标签 ----------
@@ -190,6 +204,22 @@ func _build_avatar_slot(slot: Control, emp) -> void:
 			if is_instance_valid(emp) and emp.display_name_changed.is_connected(updater):
 				emp.display_name_changed.disconnect(updater)
 		)
+
+# ==========================================
+# 🌟 悬停会议头像时，弹出/收起对应员工的信息面板
+# 面板是全局单例（employee_panel 组），点击工位上的员工也是用它。
+# ==========================================
+func _show_employee_panel(emp) -> void:
+	if not is_instance_valid(emp):
+		return
+	var panel = get_tree().get_first_node_in_group("employee_panel")
+	if panel and panel.has_method("open_panel"):
+		panel.open_panel(emp)
+
+func _hide_employee_panel() -> void:
+	var panel = get_tree().get_first_node_in_group("employee_panel")
+	if panel and panel.has_method("close_panel"):
+		panel.close_panel()
 
 func _on_avatar_gui_input(event: InputEvent, emp) -> void:
 	# 只认左键双击
@@ -230,13 +260,15 @@ func _on_employee_removed(emp) -> void:
 	attendees.erase(emp)
 	_update_avatars()                                # 把它的头像从会议室移除
 	if attendees.is_empty():
+		_dismissing = false                          # 散会进行中把最后一人开除了，复位状态
 		if is_instance_valid(_auto_dismiss_timer):
 			_auto_dismiss_timer.stop()
 		if is_instance_valid(dismiss_btn):
 			dismiss_btn.hide()
 
 # ==========================================
-# 整体遣散：点会议室中心的解散按钮，全体回工位
+# 整体遣散：点会议室中心的解散按钮 / 自动超时。
+# 不让全体同时起身——每人随机延迟 0.2~1s 各自离开，头像也随之一个个消失。
 # ==========================================
 func dismiss_meeting():
 	# 不论怎么散会(玩家点 / 超时 / 清空),都先停掉自动散会计时
@@ -245,14 +277,51 @@ func dismiss_meeting():
 	if attendees.is_empty():
 		if is_instance_valid(dismiss_btn): dismiss_btn.hide()
 		return
+	if _dismissing:
+		return   # 已在错开遣散中，别重复排队
+	_dismissing = true
+	#[员工吐槽中心]：会议结束
+	BanterManager.trigger_banter("meeting_end", 3, attendees.duplicate())
+	var exit_source_pos := _get_meeting_exit_source_pos()
+	# 会议已结束：解散按钮立刻收起，防止散会过程中再点
+	if is_instance_valid(dismiss_btn):
+		dismiss_btn.hide()
+	# 给每个人各排一个随机延迟的离开计时，错开起身
+	for emp in attendees.duplicate():
+		var delay := randf_range(DISMISS_STAGGER_MIN, DISMISS_STAGGER_MAX)
+		get_tree().create_timer(delay).timeout.connect(
+			_release_attendee_on_dismiss.bind(emp, exit_source_pos)
+		)
+
+# 错开遣散：单个员工延迟到点后离开，并移除他的头像
+func _release_attendee_on_dismiss(emp, exit_source_pos: Vector2) -> void:
+	if attendees.has(emp):
+		attendees.erase(emp)
+		if is_instance_valid(emp):
+			emp.exit_meeting(exit_source_pos)
+		_update_avatars()   # 重建头像 → 该员工的头像随之消失
+	# 全部走光后复位状态
+	if attendees.is_empty():
+		_dismissing = false
+		if is_instance_valid(dismiss_btn):
+			dismiss_btn.hide()
+
+# 立刻全体遣散（切换房间/清理时用，不能异步延迟）
+func _dismiss_all_immediately() -> void:
+	if is_instance_valid(_auto_dismiss_timer):
+		_auto_dismiss_timer.stop()
+	if attendees.is_empty():
+		_dismissing = false
+		if is_instance_valid(dismiss_btn): dismiss_btn.hide()
+		return
 	#[员工吐槽中心]：会议结束
 	BanterManager.trigger_banter("meeting_end", 3, attendees.duplicate())
 	var exit_source_pos := _get_meeting_exit_source_pos()
 	for emp in attendees:
 		if is_instance_valid(emp):
 			emp.exit_meeting(exit_source_pos)
-
 	attendees.clear()
+	_dismissing = false
 	_update_avatars()
 	if is_instance_valid(dismiss_btn):
 		dismiss_btn.hide()
