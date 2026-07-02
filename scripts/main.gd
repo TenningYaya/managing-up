@@ -11,7 +11,6 @@ const DEBUG_PASSTHROUGH := false            # 需要排查时改 true，会打�
 const SETTINGS_PATH := "user://settings.cfg" # 轻量设置持久化（与游戏存档分离，删档也不影响）
 var interactive_panels: Array[Control] = [] # 底部条之外、显示时也要进 region 的浮窗
 var _passthrough_active := false            # 全屏模式 true / 便签模式同样 true（只是 panels 不同）
-var _last_region := Rect2(-1, -1, -1, -1)   # 上次设置的 region，变化时才重设（省开销、避免闪烁）
 var _passthrough_suppress_count := 0        # >0 = 有界面（教程/弹窗…）要求整屏可见；引用计数，支持叠加
 
 # --- 便签模式 ---
@@ -70,7 +69,7 @@ func _ready():
 
 	# ⚠️ window_set_mouse_passthrough 设的是“窗口”级全局状态。场景重载（删档重开教程 / 改语言）
 	#    不会重建窗口，上一个 Main 实例残留在 DisplayServer 里的旧 region 会原样保留；而新 Main 的
-	#    _last_region 又被初始化回哨兵值，导致 _process 在抑制态（教程中 suppress_count>0）下判定
+	#    _last_pts 又被初始化回空，导致 _process 在抑制态（教程中 suppress_count>0）下判定
 	#    “没设过 region 无需清”，于是旧 region 继续裁屏——教程里居中偏上的 KPI宝(画布 y≈538) 正好
 	#    落在旧 region 之外被裁掉、看不见。所以这里强制清一次，让新 Main 从“整窗可见”的干净状态开始。
 	_clear_region()
@@ -149,7 +148,7 @@ func _load_window_height_fraction() -> float:
 func set_window_height_fraction(frac: float) -> void:
 	window_height_fraction = clampf(frac, 0.1, 1.0)
 	_cover_current_screen()
-	_last_region = Rect2(-1, -1, -1, -1)  # 强制下一帧用新尺寸重算穿透 region
+	_last_pts = PackedVector2Array()  # 强制下一帧用新尺寸重算穿透 region
 	var cfg := ConfigFile.new()
 	cfg.load(SETTINGS_PATH)
 	cfg.set_value("window", "height_fraction", window_height_fraction)
@@ -170,20 +169,28 @@ func _notification(what: int) -> void:
 				SaveManager.autosave()
 
 # --- 3. 穿透 region 维护 ---
-# 每帧计算"底部条 + 可见浮窗"的包围盒，只有它变化时才重设 region。
-# 这样开关/拖动面板、改分辨率都会自动跟随，且不会每帧调用原生 API。
+# ⚠️ 关键：window_set_mouse_passthrough 的 region 不仅决定“哪里能点”，还会【裁剪窗口显示】
+#    （region 外直接显示桌面）。所以 region 必须覆盖所有要被看见的 UI。
+# 旧实现把“底部条 + 所有浮窗”合成一个【包围盒】：底部条是满屏宽，合并后从最高浮窗顶一直到底
+#    整条横带都被圈进 region → 浮窗左右的空白也点不透（就是你遇到的横带问题）。
+# 新实现改成【天际线(skyline)多边形】：底部满宽条 + 仅每个浮窗“自己那一竖列”向上探出。
+#    浮窗依旧被完整覆盖（不会被裁掉），但浮窗左右的空白重新可以穿透点击到桌面。
+var _last_pts := PackedVector2Array()   # 上次设置的穿透多边形，变化时才重设（省开销、避免闪烁）
+
 func _process(_dt):
 	if not _passthrough_active:
 		return
-	# 教程/弹窗等场景：临时整屏可见可点，不做 region 裁剪（只在刚进入抑制时清一次）
+	# 教程/弹窗等场景：临时整屏可见可点，不做裁剪（只在刚进入抑制时清一次）
 	if _passthrough_suppress_count > 0:
-		if _last_region != Rect2(-1, -1, -1, -1):
+		if not _last_pts.is_empty():
 			_clear_region()
 		return
-	var region := _compute_region()
-	if region != _last_region:
-		_last_region = region
-		_apply_region(region)
+	var pts := _compute_region_polygon()
+	if pts != _last_pts:
+		_last_pts = pts
+		DisplayServer.window_set_mouse_passthrough(pts)
+		if DEBUG_PASSTHROUGH:
+			print("[PT] region pts = ", pts.size())
 
 
 # 底部条（画布坐标 → 物理窗口像素）。get_screen_transform 已包含缩放与黑边偏移，兼容任意分辨率
@@ -196,35 +203,93 @@ func _band_physical_rect() -> Rect2:
 	return get_viewport().get_screen_transform() * band_canvas
 
 
-# region = 底部条 + 当前可见浮窗 的整体包围盒（物理像素，取整避免亚像素抖动反复重设）
-func _compute_region() -> Rect2:
-	var bb := _band_physical_rect()
-	var has_bb := bb != Rect2()
+# 计算穿透多边形：底部满宽条 + 各可见浮窗的“天际线”。只把浮窗自己那一竖列向上算进来，
+# 而不是取整体包围盒把一整条横带圈死。坐标向外取整，避免亚像素抖动导致每帧重设。
+func _compute_region_polygon() -> PackedVector2Array:
+	var band := _band_physical_rect()
+
+	# 便签模式（无底部条）：区域就用可见浮窗自身矩形（只有一个小便签，不存在横带问题）
+	if band == Rect2():
+		var r := Rect2()
+		var has := false
+		for panel in interactive_panels:
+			if is_instance_valid(panel) and panel.is_visible_in_tree():
+				var pr := get_viewport().get_screen_transform() * panel.get_global_rect()
+				r = pr if not has else r.merge(pr)
+				has = true
+		if not has:
+			return PackedVector2Array()
+		r = Rect2(r.position.floor(), r.size.ceil())
+		return PackedVector2Array([
+			r.position, Vector2(r.end.x, r.position.y), r.end, Vector2(r.position.x, r.end.y)
+		])
+
+	var left := floorf(band.position.x)
+	var right := ceilf(band.end.x)
+	var band_top := floorf(band.position.y)
+	var bottom := ceilf(band.end.y)
+
+	# 收集“探出底部条上方”的浮窗：记录 x 区间与顶部 y（x 夹在底部条宽度内，向外取整）
+	var bumps := []
 	for panel in interactive_panels:
 		if is_instance_valid(panel) and panel.is_visible_in_tree():
-			var r := get_viewport().get_screen_transform() * panel.get_global_rect()
-			bb = r if not has_bb else bb.merge(r)
-			has_bb = true
-	if not has_bb:
-		return Rect2()
-	return Rect2(bb.position.floor(), bb.size.ceil())
+			var pr := get_viewport().get_screen_transform() * panel.get_global_rect()
+			var px1 := clampf(floorf(pr.position.x), left, right)
+			var px2 := clampf(ceilf(pr.end.x), left, right)
+			if px2 - px1 <= 0.5:
+				continue
+			var ptop := floorf(pr.position.y)
+			if ptop < band_top:   # 只有高出底部条的部分才需要额外覆盖
+				bumps.append({"x1": px1, "x2": px2, "top": ptop})
 
+	# 没有浮窗探出 → 区域就是底部满宽条
+	if bumps.is_empty():
+		return PackedVector2Array([
+			Vector2(left, band_top), Vector2(right, band_top),
+			Vector2(right, bottom), Vector2(left, bottom)
+		])
 
-func _apply_region(r: Rect2) -> void:
-	var pts := PackedVector2Array([
-		r.position,
-		Vector2(r.position.x + r.size.x, r.position.y),
-		r.position + r.size,
-		Vector2(r.position.x, r.position.y + r.size.y),
-	])
-	DisplayServer.window_set_mouse_passthrough(pts)
-	if DEBUG_PASSTHROUGH:
-		print("[PT] region set to ", r)
+	# 用浮窗的 x 边界把 [left,right] 切成若干格，每格取其上方最高的浮窗顶（min y）
+	var xs := [left, right]
+	for b in bumps:
+		xs.append(b.x1)
+		xs.append(b.x2)
+	xs.sort()
+	var ux := []
+	for x in xs:
+		if ux.is_empty() or absf(x - ux[ux.size() - 1]) > 0.5:
+			ux.append(x)
+
+	var cells := []
+	for i in range(ux.size() - 1):
+		var xa: float = ux[i]
+		var xb: float = ux[i + 1]
+		var top := band_top
+		for b in bumps:
+			if b.x1 <= xa + 0.5 and b.x2 >= xb - 0.5:
+				top = minf(top, b.top)
+		# 与上一格同高就合并，减少多边形顶点
+		if not cells.is_empty() and absf(cells[cells.size() - 1].top - top) <= 0.5:
+			cells[cells.size() - 1].x2 = xb
+		else:
+			cells.append({"x1": xa, "x2": xb, "top": top})
+
+	# 描出直角多边形：左下 → 左上 → 沿天际线阶梯走到右上 → 右下（底边自动闭合回左下）
+	var pts := PackedVector2Array()
+	pts.append(Vector2(left, bottom))
+	pts.append(Vector2(left, cells[0].top))
+	for i in range(cells.size()):
+		var c = cells[i]
+		pts.append(Vector2(c.x2, c.top))
+		if i < cells.size() - 1:
+			pts.append(Vector2(c.x2, cells[i + 1].top))
+	pts.append(Vector2(right, bottom))
+	return pts
 
 
 # 清除 region（整窗都可点击、不裁剪）
 func _clear_region() -> void:
-	_last_region = Rect2(-1, -1, -1, -1)
+	_last_pts = PackedVector2Array()
 	DisplayServer.window_set_mouse_passthrough(PackedVector2Array())
 
 
@@ -260,7 +325,7 @@ func _move_window_y(up: bool) -> void:
 	pos.y = clampi(pos.y, usable.position.y, usable.end.y - win_h)
 	DisplayServer.window_set_position(pos)
 	print("after set: pos_now=", DisplayServer.window_get_position())
-	_last_region = Rect2(-1, -1, -1, -1)
+	_last_pts = PackedVector2Array()
 	
 # --- 5. 模式切换逻辑 ---
 func _toggle_mode():
@@ -277,7 +342,7 @@ func _enter_sticky_mode():
 	_sticky_note.show()
 	# 穿透 region 只暴露 StickyNote，其余全透
 	interactive_panels = [_sticky_note]
-	_last_region = Rect2(-1, -1, -1, -1)  # 强制下一帧重算
+	_last_pts = PackedVector2Array()  # 强制下一帧重算
 
 
 func _exit_sticky_mode():
@@ -292,4 +357,4 @@ func _exit_sticky_mode():
 		$CanvasLayer/OfficePanel,
 	]
 	_cover_current_screen()
-	_last_region = Rect2(-1, -1, -1, -1)  # 强制下一帧重算
+	_last_pts = PackedVector2Array()  # 强制下一帧重算
