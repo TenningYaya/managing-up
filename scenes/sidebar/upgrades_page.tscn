@@ -37,9 +37,9 @@ modulate = Color(1, 1, 1, 0.5019608)
 custom_minimum_size = Vector2(220, 290)
 layout_mode = 0
 offset_left = 13.0
-offset_top = 8.0
+offset_top = 37.0
 offset_right = 233.0
-offset_bottom = 298.0
+offset_bottom = 328.0
 texture = ExtResource("4_kfgg7")
 expand_mode = 1
 
@@ -284,9 +284,9 @@ autowrap_mode = 2
 [node name="UpgradeButton" type="TextureButton" parent="." unique_id=1385535808 groups=["upgrade_button"]]
 layout_mode = 0
 offset_left = 72.0
-offset_top = 303.0
+offset_top = 296.0
 offset_right = 172.0
-offset_bottom = 333.0
+offset_bottom = 326.0
 script = ExtResource("8_ciro5")
 bg_normal = ExtResource("1_v0of0")
 bg_pressed = ExtResource("2_lh86t")

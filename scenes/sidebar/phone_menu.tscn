@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dfvnhbmpp2k2b"]
 
-[ext_resource type="Texture2D" uid="uid://cchun4tokcayg" path="res://assets/sidebar/Phone_2.png" id="1_8gi4e"]
+[ext_resource type="Texture2D" uid="uid://cchun4tokcayg" path="res://assets/sidebar/phone_wrapper/Phone_2.png" id="1_8gi4e"]
 [ext_resource type="Script" uid="uid://dbiup6ouwg2e" path="res://scripts/UI/sidebar/mobilesidebar.gd" id="1_jt2no"]
 [ext_resource type="Texture2D" uid="uid://cl8hyf8ic7cpg" path="res://assets/sidebar/wallpaper2.jpeg" id="2_nnubu"]
 [ext_resource type="Texture2D" uid="uid://dlh7llvih2fei" path="res://assets/sidebar/app/upgrades.png" id="3_50qqt"]
@@ -17,6 +17,8 @@
 [ext_resource type="PackedScene" uid="uid://dkl5acj8m1a3b" path="res://scenes/sidebar/decor_page.tscn" id="12_decor"]
 [ext_resource type="PackedScene" uid="uid://cmsc4bw6aqfh8" path="res://scenes/sidebar/personal_page.tscn" id="15_nnubu"]
 [ext_resource type="PackedScene" uid="uid://cmy2evl2a0xcv" path="res://scenes/sidebar/sidebar_trigger.tscn" id="17_nnubu"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="17_vl5mx"]
+[ext_resource type="Texture2D" uid="uid://bes6dpqqqyvje" path="res://assets/sidebar/other/home_icon.png" id="18_v1wyx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reddot"]
 bg_color = Color(0.886275, 0.14902, 0.14902, 1)
@@ -45,6 +47,10 @@ region = Rect2(45, 22, 1173, 1167)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_diil0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yskv6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_puc8p"]
+atlas = ExtResource("18_v1wyx")
+region = Rect2(1052, 380, 728, 681)
 
 [node name="MobileSidebar" type="Control" unique_id=2025363917]
 layout_mode = 3
@@ -326,6 +332,53 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_53q3r")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_50qqt")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_diil0")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_yskv6")
+
+[node name="CoverRect" parent="PhoneWrapper" unique_id=2048579194 instance=ExtResource("17_vl5mx")]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+offset_left = -22.0
+offset_top = -66.0
+offset_right = 19.0
+offset_bottom = -42.0
+mouse_filter = 2
+button_text = ""
+
+[node name="ColorRect" type="ColorRect" parent="PhoneWrapper/CoverRect" unique_id=430417021]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.56078434, 0.627451, 0.6666667, 1)
+
+[node name="HomeButton2" parent="PhoneWrapper" unique_id=1077894671 instance=ExtResource("17_vl5mx")]
+modulate = Color(1, 1, 1, 0.7372549)
+custom_minimum_size = Vector2(20, 30)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.5
+offset_top = -33.0
+offset_right = -9.5
+offset_bottom = -3.0
+grow_horizontal = 2
+button_text = ""
+
+[node name="TextureRect" type="TextureRect" parent="PhoneWrapper/HomeButton2" unique_id=1317575458]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = 2.0
+offset_right = -8.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_puc8p")
+expand_mode = 1
 
 [node name="Trigger" parent="." unique_id=373942880 instance=ExtResource("17_nnubu")]
 layout_mode = 0

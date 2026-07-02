@@ -23,12 +23,12 @@ expand_mode = 1
 
 [node name="BG2" type="TextureRect" parent="." unique_id=1917341195]
 modulate = Color(1, 1, 1, 0.5019608)
-custom_minimum_size = Vector2(220, 310)
+custom_minimum_size = Vector2(220, 280)
 layout_mode = 0
 offset_left = 13.0
-offset_top = 8.0
+offset_top = 35.0
 offset_right = 233.0
-offset_bottom = 318.0
+offset_bottom = 323.0
 texture = ExtResource("3_npf01")
 expand_mode = 1
 

@@ -57,6 +57,8 @@ var _reminder_timer: Timer = null
 @onready var btn_personal: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/Personal
 
 @onready var home_button: BaseButton = $PhoneWrapper/HomeButton
+@onready var home_button_2: BaseButton = $PhoneWrapper/HomeButton2
+# 盖在 HomeButton2 上的遮挡层：主页显示它挡住按钮，子页面隐藏它露出按钮
 
 @onready var general_page: Control = $PhoneWrapper/Screen/AppDisplayArea/GeneralPage
 @onready var settings_page: Control = $PhoneWrapper/Screen/AppDisplayArea/SettingsPage
@@ -129,6 +131,7 @@ func _ready() -> void:
 	# 手机底部按钮：返回桌面
 	# =====================================================
 	home_button.pressed.connect(show_home_screen)
+	home_button_2.pressed.connect(show_home_screen)
 
 	# =====================================================
 	# 升级提示：红点 + 震动
@@ -297,6 +300,7 @@ func open_app(page: Control) -> void:
 	home_screen.visible = false
 	app_display_area.visible = true
 	page.visible = true
+	home_button_2.show() 
 
 
 # =====================================================
@@ -306,6 +310,8 @@ func show_home_screen() -> void:
 	hide_all_pages()
 	home_screen.visible = true
 	app_display_area.visible = false
+	home_button_2.hide()
+	  # 主界面：显示遮挡层盖住按钮
 
 
 # =====================================================
