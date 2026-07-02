@@ -27,6 +27,7 @@ const BUFF_TAG_SCENE = preload("res://scenes/sidebar/employee_panel/buff_tag.tsc
 @onready var dispatch_btn: TextureButton = $PanelBg/EmployeePage/Manage/DispatchButton
 @onready var fire_btn: TextureButton = $PanelBg/EmployeePage/Manage/NormalButton2 # 建议之后重命名为 FireButton
 @onready var dispatch_btn_label: Label = $PanelBg/EmployeePage/Manage/DispatchButton/Label
+@onready var go_meeting_btn: TextureButton = $PanelBg/EmployeePage/Manage/GoMeeting
 
 # --- 弹窗部分 ---
 @onready var popup_window = $PanelBg/PopupWindow
@@ -78,10 +79,12 @@ func _ready() -> void:
 	efficiency_bar.tooltip_text = tr("TOOLTIP_EMP_EFFICIENCY")
 	quality_bar.tooltip_text = tr("TOOLTIP_EMP_QUALITY")
 	experience_bar.tooltip_text = tr("TOOLTIP_EMP_EXPERIENCE")
-	
+	go_meeting_btn.tooltip_text = tr("TOOLTIP_GO_MEETING")
+
 	# 绑定底部按钮事件
 	dispatch_btn.pressed.connect(_on_dispatch_pressed)
 	fire_btn.pressed.connect(_on_fire_pressed)
+	go_meeting_btn.pressed.connect(_on_go_meeting_pressed)
 	# ------------------------------------------
 	# 3. 这里是连接 PopupWindow 的地方！
 	# ------------------------------------------
@@ -202,6 +205,7 @@ func _notification(what: int) -> void:
 		efficiency_bar.tooltip_text = tr("TOOLTIP_EMP_EFFICIENCY")
 		quality_bar.tooltip_text = tr("TOOLTIP_EMP_QUALITY")
 		experience_bar.tooltip_text = tr("TOOLTIP_EMP_EXPERIENCE")
+		go_meeting_btn.tooltip_text = tr("TOOLTIP_GO_MEETING")
 		attribute_label.tooltip_text = tr("EMP_TENURE")
 		if current_employee:
 			name_label.set_value_text(current_employee.get_display_name())
@@ -213,6 +217,7 @@ func _notification(what: int) -> void:
 func _process(_delta: float) -> void:
 	if visible and is_instance_valid(current_employee):
 		_update_tenure()
+		_update_go_meeting_button()   # 会议室可能被填满/解散，实时刷新按钮可用状态
 
 func _update_tenure() -> void:
 	if not is_instance_valid(current_employee):
@@ -307,6 +312,7 @@ func open_panel(employee: Employee) -> void:
 	_refresh_progress_bar()
 	_refresh_buffs()
 	_update_dispatch_button()
+	_update_go_meeting_button()
 	_connect_current_employee()
 	
 	# 🌟 第二重保护：只在面板还没出来时才播动画/show
@@ -422,11 +428,32 @@ func _is_employee_on_map() -> bool:
 
 func _update_dispatch_button() -> void:
 	if current_employee == null: return
-	
+
 	if _is_employee_on_map():
 		dispatch_btn_label.text = tr("WAREHOUSE_BULK_RECALL")
 	else:
 		dispatch_btn_label.text = tr("WAREHOUSE_BULK_DISPATCH")
+
+# "去开会"按钮：不可用（没会议室/满员/不在工位/已在会）时禁用并置灰
+func _update_go_meeting_button() -> void:
+	if not is_instance_valid(go_meeting_btn):
+		return
+	var can := is_instance_valid(current_employee) \
+		and current_employee.has_method("can_go_to_meeting") \
+		and current_employee.can_go_to_meeting()
+	go_meeting_btn.disabled = not can
+	# 没有 disabled 贴图，用 modulate 手动置灰
+	go_meeting_btn.modulate = Color(1, 1, 1, 1) if can else Color(0.55, 0.55, 0.55, 0.6)
+
+func _on_go_meeting_pressed() -> void:
+	if current_employee == null or not is_instance_valid(current_employee):
+		return
+	if not current_employee.has_method("go_to_meeting_directly"):
+		return
+	# 一键送会：员工顺移进会议室（无需拖拽）
+	if current_employee.go_to_meeting_directly():
+		# 成功进会后员工已隐身在会议室，关掉面板（与拖进会议室后的表现一致）
+		close_panel()
 
 func _on_dispatch_pressed() -> void:
 	if current_employee == null: return

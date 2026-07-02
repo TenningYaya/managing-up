@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://dnrqtwbwt5472" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/PNG SpriteSheet/SpriteSheet.png" id="11_5it8m"]
 [ext_resource type="PackedScene" uid="uid://bkihwdvwxmcnv" path="res://scenes/vfx/working_onfire.tscn" id="12_cr4tb"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="13_fnfi6"]
+[ext_resource type="Texture2D" uid="uid://bbl63xn2cebmj" path="res://assets/UI/ingame/inmeeting/go_meeting_icon_1.png" id="15_x5620"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cr4tb"]
 atlas = ExtResource("2_khksj")
@@ -276,7 +277,7 @@ layout_mode = 2
 [node name="Manage" type="HBoxContainer" parent="PanelBg/EmployeePage" unique_id=656689347]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 7
+theme_override_constants/separation = 4
 
 [node name="DispatchButton" parent="PanelBg/EmployeePage/Manage" unique_id=2048579194 instance=ExtResource("3_r7cc6")]
 custom_minimum_size = Vector2(0, 30)
@@ -291,6 +292,25 @@ layout_mode = 2
 size_flags_horizontal = 3
 ignore_texture_size = false
 button_text = "WAREHOUSE_BULK_FIRE"
+
+[node name="GoMeeting" parent="PanelBg/EmployeePage/Manage" unique_id=1591027240 instance=ExtResource("3_r7cc6")]
+custom_minimum_size = Vector2(50, 30)
+layout_mode = 2
+button_text = ""
+
+[node name="TextureRect" type="TextureRect" parent="PanelBg/EmployeePage/Manage/GoMeeting" unique_id=1683708547]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -2.0
+offset_right = -4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_x5620")
+expand_mode = 1
 
 [node name="PopupWindow" parent="PanelBg" unique_id=1050921675 instance=ExtResource("4_e3e08")]
 layout_mode = 1

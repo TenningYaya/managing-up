@@ -26,6 +26,11 @@ var dismiss_btn: TextureButton     # 房间中心、悬停出现的"解散会议
 const AUTO_DISMISS_SECONDS := 3600.0   # 会议自动散会时间(1 小时 = 3600 秒;随游戏倍速变快)
 var _auto_dismiss_timer: Timer = null
 
+# 解散按钮在会议室贴图外，鼠标从贴图挪向按钮的途中会先"离开"会议室。
+# 所以离开后不立刻收，而是给一段宽限时间(够把鼠标移到按钮上)，期间碰到按钮就取消收起。
+const DISMISS_BTN_HIDE_GRACE := 0.6
+var _dismiss_hide_timer: Timer = null
+
 # 错开散会：点解散/超时后，每个人随机延迟这个区间(秒)再离开，不要全体同时起身
 const DISMISS_STAGGER_MIN := 0.2
 const DISMISS_STAGGER_MAX := 1.0
@@ -45,6 +50,18 @@ func setup(office: Control) -> void:
 	dismiss_btn.hide()
 	if not dismiss_btn.pressed.is_connected(dismiss_meeting):
 		dismiss_btn.pressed.connect(dismiss_meeting)
+	# 悬停按钮本身时取消收起、移开按钮时启动宽限收起——配合会议室的悬停，解决"够不到"
+	if not dismiss_btn.mouse_entered.is_connected(_on_dismiss_btn_mouse_entered):
+		dismiss_btn.mouse_entered.connect(_on_dismiss_btn_mouse_entered)
+	if not dismiss_btn.mouse_exited.is_connected(_on_dismiss_btn_mouse_exited):
+		dismiss_btn.mouse_exited.connect(_on_dismiss_btn_mouse_exited)
+
+	# 收起解散按钮的宽限计时器（离开会议室/按钮后延迟收起，期间可被取消）
+	_dismiss_hide_timer = Timer.new()
+	_dismiss_hide_timer.one_shot = true
+	_dismiss_hide_timer.wait_time = DISMISS_BTN_HIDE_GRACE
+	_dismiss_hide_timer.timeout.connect(_hide_dismiss_btn_now)
+	add_child(_dismiss_hide_timer)
 
 	# 自动散会:开会满 1 小时,即使玩家不点也自动散会
 	_auto_dismiss_timer = Timer.new()
@@ -125,14 +142,31 @@ func restore_attendee(emp) -> void:
 # ==========================================
 func on_mouse_entered():
 	if attendees.size() > 0 and is_instance_valid(dismiss_btn):
+		_cancel_dismiss_hide()   # 回到会议室，取消正在倒计时的收起
 		dismiss_btn.show()
 
-func on_mouse_exited(mouse_pos: Vector2):
-	if not is_instance_valid(dismiss_btn): return
-	# 鼠标真的离开了房间区域（且没停在按钮上）才隐藏
-	var room_rect = parent_office.get_global_rect()
-	var btn_rect = dismiss_btn.get_global_rect()
-	if not room_rect.has_point(mouse_pos) and not btn_rect.has_point(mouse_pos):
+func on_mouse_exited(_mouse_pos: Vector2):
+	# 不再瞬间收起：启动宽限倒计时，给玩家时间把鼠标移到（贴图外的）解散按钮上。
+	# 若途中碰到按钮，其 mouse_entered 会取消这次收起。
+	_start_dismiss_hide()
+
+# —— 解散按钮自身的悬停：悬上就别收，移开就开始倒计时收起 ——
+func _on_dismiss_btn_mouse_entered() -> void:
+	_cancel_dismiss_hide()
+
+func _on_dismiss_btn_mouse_exited() -> void:
+	_start_dismiss_hide()
+
+func _start_dismiss_hide() -> void:
+	if is_instance_valid(_dismiss_hide_timer):
+		_dismiss_hide_timer.start()   # one_shot，重复 start 会重置倒计时
+
+func _cancel_dismiss_hide() -> void:
+	if is_instance_valid(_dismiss_hide_timer):
+		_dismiss_hide_timer.stop()
+
+func _hide_dismiss_btn_now() -> void:
+	if is_instance_valid(dismiss_btn):
 		dismiss_btn.hide()
 
 # ==========================================

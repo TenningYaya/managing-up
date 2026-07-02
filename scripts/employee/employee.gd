@@ -1119,6 +1119,45 @@ func _exit_tree() -> void:
 # ==========================================
 # 会议室核心逻辑
 # ==========================================
+
+# 找一个"现在就能收下这名员工"的会议室逻辑节点（可能有多间会议室，满员的跳过）。没有则返回 null。
+func _find_available_meeting_logic():
+	# 已经在开会 / 不在工位上（新人、仓库里的人）都不能进会
+	if is_in_meeting or current_seat == null:
+		return null
+	for office in get_tree().get_nodes_in_group("offices"):
+		if office.current_type == Gamemanager.OfficeType.MEETING_ROOM and office.logic_node != null:
+			# 规则与拖拽进会一致：有座位、没满员、没在会、没在遣散
+			if office.logic_node.can_drop_employee(self):
+				return office.logic_node
+	return null
+
+# 当前能不能一键送会（供员工面板决定按钮是否可用/变灰）
+func can_go_to_meeting() -> bool:
+	return _find_available_meeting_logic() != null
+
+# 一键送会：不用拖拽，直接把这名员工送进会议室（供员工面板"去开会"按钮调用）。成功返回 true。
+# 有多间可用会议室时，进第一间收得下的即可。
+func go_to_meeting_directly() -> bool:
+	var target_logic = _find_available_meeting_logic()
+	if target_logic == null:
+		return false
+
+	# 先停掉可能正在进行的漫游/位移，并收起摸鱼鱼图标，避免和进会冲突
+	if is_roaming or _move_tween != null:
+		if _move_tween:
+			_move_tween.kill()
+			_move_tween = null
+		is_roaming = false
+		_resume_work_after_roam = false
+		if current_seat.has_method("hide_roaming_icon"):
+			current_seat.hide_roaming_icon()
+
+	# 模拟拖拽落座：设好 drag_start_seat，enter_meeting 才能占座并点亮开会图标
+	drag_start_seat = current_seat
+	target_logic.drop_employee(self)
+	return true
+
 func enter_meeting() -> void:
 	is_in_meeting = true
 	
