@@ -93,6 +93,13 @@ func delete_save() -> void:
 	StockManager.reset_to_default()
 	# 🌟 清空办公室存档缓存，否则开新档后办公室 _ready 会误用上一局的解锁记录
 	_loaded_office_data.clear()
+
+	# 🌟 复位"唯一办公室已存在"旗标（招聘/文化/炒股）。这三个是 autoload 上的全局状态，
+	#    不随场景重载清零；不复位的话，删档重开（不退游）后办公室面板会以为这些唯一办公室
+	#    还占着，即使场上根本没有对应办公室（如猎头室仍显示被占用）。
+	Gamemanager.has_recruitment_office = false
+	Gamemanager.has_culture_center = false
+	Gamemanager.has_stock_office = false
 		
 	get_tree().reload_current_scene()
 
