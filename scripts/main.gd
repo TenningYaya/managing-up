@@ -79,8 +79,6 @@ func _ready():
 	if has_node("TutorialLayer") and not Gamemanager.is_tutorial_completed:
 		_passthrough_suppress_count += 1
 
-	print("window mode: ", DisplayServer.window_get_mode())
-
 	# 注：工位的解锁显隐由各 DeskSlot 自己监听 level_changed 并按 unlock_at_level 处理
 	# （见 DeskSlot.gd），main 不再按容器位置统一控制——否则会误伤 DeskRow 里的
 	# EmployeeDropArea 等非工位节点，并打乱被它隔开的工位解锁等级。

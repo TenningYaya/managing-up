@@ -72,6 +72,7 @@ var dollar: int = 100:
 var max_desk_level: int = 1
 var unlocked_desk_slots: int = 1 # 解锁的工位排数
 var sticky_note_text: String = ""
+var phone_battery: float = 100.0   # 手机电量 0~100（纯氛围功能，存档保留），由 mobilesidebar 实时同步
 
 
 

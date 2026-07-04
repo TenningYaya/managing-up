@@ -71,6 +71,36 @@ var _reminder_timer: Timer = null
 @onready var dot_decor: Panel = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor/RedDot
 @onready var time_label: Label = $PhoneWrapper/Screen/Time
 
+# =====================================================
+# 手机电量（纯氛围：慢慢掉电，<50% 出现充电器，拖到手机上充电，充满自动停）
+# =====================================================
+@onready var battery_fill: ColorRect = $PhoneWrapper/Screen/BatteryContainer/BatteryFill
+@onready var battery_label: Label = $PhoneWrapper/Screen/BatteryContainer/battery
+@onready var charger: TextureRect = $Charger
+@onready var phone_base: TextureRect = $PhoneWrapper/PhoneBase
+
+const BATTERY_DRAIN_PER_SEC := 100.0 / (30.0 * 60.0)   # 30 分钟掉完一格 → 每秒掉的百分比
+const BATTERY_CHARGE_PER_SEC := 100.0 / (10.0 * 60.0)  # 10 分钟充满 → 每秒充的百分比（比掉电快，像手机）
+const BATTERY_LOW := 50.0        # <50% 出现充电器、填充条变黄
+const BATTERY_CRITICAL := 20.0   # <20% 填充条变红
+
+# 填充条颜色优先级：充电中(绿) > <20(红) > <50(黄) > 否则(白)
+const BAT_COLOR_NORMAL := Color(1, 1, 1, 0.8)
+const BAT_COLOR_LOW := Color(0.95, 0.75, 0.15, 1)
+const BAT_COLOR_CRITICAL := Color(0.9, 0.2, 0.2, 1)
+const BAT_COLOR_CHARGING := Color(0.369, 0.82, 0.5945, 1)
+
+var battery: float = 90.0        # 当前电量 0~100
+var is_charging: bool = false
+var _last_pct: int = -1           # 上次显示的整数百分比（变化才刷新视觉，省开销）
+var _last_charging: bool = false
+var _charger_home_pos: Vector2 = Vector2.ZERO
+var _charger_dragging: bool = false
+var _charger_grab_offset: Vector2 = Vector2.ZERO
+var _charger_auto_animating: bool = false   # 0% 自动插电动画进行中，期间不干预充电器显隐
+const CHARGER_SHOW_DELAY := 0.3             # 充电器出现的延迟：等手机弹出动画停稳后再冒出来（隐藏不延迟）
+var _charger_show_delay_left := CHARGER_SHOW_DELAY
+
 
 func _ready() -> void:
 	# =====================================================
@@ -153,11 +183,26 @@ func _ready() -> void:
 	Gamemanager.kpi_changed.connect(func(_v): _refresh_upgrade_hints())
 	Gamemanager.level_changed.connect(func(_v): _refresh_upgrade_hints())
 
+	# 电量 / 充电器初始化：拖拽由 _input 自己做命中判定，充电器不参与 GUI
+	if is_instance_valid(charger):
+		charger.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_charger_home_pos = charger.position
+		charger.visible = false
+	# 填充条以左边缘为轴缩放（保证从左往右填、右侧透明）
+	if is_instance_valid(battery_fill):
+		battery_fill.pivot_offset = Vector2.ZERO
+
 	# 等几帧确保存档加载完成、desk_slots 组就绪后做首次判定
 	await get_tree().process_frame
 	await get_tree().process_frame
 	# 布局稳定后设置旋转轴为手机图标中心点
 	phone_icon.pivot_offset = phone_icon.size / 2.0
+
+	# 存档此时已加载完（main 的 load_game 在上面这两帧内已跑完），取回电量并刷新显示
+	battery = clampf(Gamemanager.phone_battery, 0.0, 100.0)
+	_update_battery_visual()
+	_update_charger_visibility(0.0)
+
 	_refresh_upgrade_hints()
 
 
@@ -204,8 +249,27 @@ func _input(event: InputEvent) -> void:
 	if not is_open:
 		return
 
+	# 0. 充电器拖拽中：优先处理，跟随鼠标移动 / 松手判定，期间不做关机
+	if _charger_dragging:
+		if event is InputEventMouseMotion:
+			charger.global_position = get_global_mouse_position() - _charger_grab_offset
+			get_viewport().set_input_as_handled()
+		elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+			_charger_dragging = false
+			get_viewport().set_input_as_handled()
+			_try_plug_in_charger()
+		return
+
 	# 2. 捕捉全屏的鼠标左键按下事件
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+
+		# 2a. 先看是不是按在充电器上 → 开始拖拽（绝不关机、也不穿透去砸背后的员工）
+		if is_instance_valid(charger) and charger.visible \
+		and charger.get_global_rect().has_point(get_global_mouse_position()):
+			_charger_dragging = true
+			_charger_grab_offset = get_global_mouse_position() - charger.global_position
+			get_viewport().set_input_as_handled()
+			return
 
 		# 3. 拿到手机【真正机身】的物理矩形！
 		# 🌟 必须用 PhoneBase（机身贴图），不能用 PhoneWrapper：
@@ -229,6 +293,9 @@ func _input(event: InputEvent) -> void:
 # 这样员工的 _input(它在 GUI 之前、不认 UI 遮挡) 就不会被手机后面的点击穿透触发。
 # =====================================================
 func blocks_point(global_pos: Vector2) -> bool:
+	# 充电器可见时也算遮挡：防止拖它/它盖住时点穿到背后的员工
+	if is_instance_valid(charger) and charger.visible and charger.get_global_rect().has_point(global_pos):
+		return true
 	if is_open:
 		return _control_tree_blocks_point(phone_wrapper, global_pos)
 	if is_instance_valid(trigger_btn) and trigger_btn.visible:
@@ -422,6 +489,8 @@ func _set_trigger_bg(c: Color) -> void:
 		_bg_style.bg_color = c
 
 func _process(delta: float) -> void:
+	_process_battery(delta)   # 电量逻辑每帧都要跑（不能被下面的抖动早退挡住）
+
 	if _shake_time_left <= 0.0:
 		return
 	if not is_instance_valid(phone_icon):
@@ -446,3 +515,119 @@ func _process(delta: float) -> void:
 func _update_clock() -> void:
 	var t := Time.get_time_dict_from_system()
 	time_label.text = "%02d:%02d" % [t.hour, t.minute]
+
+
+# =====================================================
+# 10. 手机电量：掉电 / 充电 / 充电器
+# =====================================================
+func _process_battery(delta: float) -> void:
+	if is_charging:
+		battery = minf(battery + BATTERY_CHARGE_PER_SEC * delta, 100.0)
+		if battery >= 100.0:
+			battery = 100.0
+			is_charging = false   # 充满自动停充
+	else:
+		battery = maxf(battery - BATTERY_DRAIN_PER_SEC * delta, 0.0)
+		if battery <= 0.0 and not _charger_auto_animating:
+			_auto_plug_at_zero()   # 0% 兜底自动充电
+
+	Gamemanager.phone_battery = battery   # 实时同步给存档
+	_update_battery_visual()
+	_update_charger_visibility(delta)
+
+
+# 填充条长度按百分比、颜色按状态刷新（整数百分比或充电状态变化才真正改，省开销）
+func _update_battery_visual() -> void:
+	if not is_instance_valid(battery_fill):
+		return
+	var pct := int(battery)
+	if pct == _last_pct and is_charging == _last_charging:
+		return
+	_last_pct = pct
+	_last_charging = is_charging
+
+	# 左对齐横向缩放：有百分之多少就填多少长度，其余透明（默认 pivot=(0,0)，从左边缩）
+	battery_fill.scale.x = clampf(battery / 100.0, 0.0, 1.0)
+
+	var c: Color
+	if is_charging:
+		c = BAT_COLOR_CHARGING
+	elif battery < BATTERY_CRITICAL:
+		c = BAT_COLOR_CRITICAL
+	elif battery < BATTERY_LOW:
+		c = BAT_COLOR_LOW
+	else:
+		c = BAT_COLOR_NORMAL
+	battery_fill.color = c
+
+	if is_instance_valid(battery_label):
+		battery_label.text = "%d%%" % pct
+
+
+# 充电器显隐：手机开着 + 电量 <50% + 没在充电 时出现；拖拽/自动动画期间不干预。
+# 出现要延迟 CHARGER_SHOW_DELAY（等手机弹出动画停稳），隐藏则立即。
+func _update_charger_visibility(delta: float) -> void:
+	if _charger_dragging or _charger_auto_animating:
+		return
+	if not is_instance_valid(charger):
+		return
+	var should := is_open and battery < BATTERY_LOW and not is_charging
+	if should:
+		if charger.visible:
+			return
+		# 满足条件但还没显示：先倒计时，等手机停稳再冒出来
+		_charger_show_delay_left -= delta
+		if _charger_show_delay_left <= 0.0:
+			charger.visible = true
+	else:
+		# 不该显示：立即隐藏，并重置延迟（下次出现重新等 0.3s）
+		charger.visible = false
+		_charger_show_delay_left = CHARGER_SHOW_DELAY
+
+
+# 松开充电器：落在手机机身上就开始充电，否则弹回原位
+func _try_plug_in_charger() -> void:
+	if not is_instance_valid(charger):
+		return
+	var phone_rect = phone_base.get_global_rect()
+	if phone_rect.has_point(get_global_mouse_position()):
+		_start_charging()
+	else:
+		charger.position = _charger_home_pos   # 没拖到手机上 → 回原位
+
+
+# 开始充电：收起充电器、电量转绿、逐渐充满
+func _start_charging() -> void:
+	is_charging = true
+	if is_instance_valid(charger):
+		charger.visible = false
+		charger.position = _charger_home_pos   # 复位，下次再用
+		charger.modulate.a = 1.0
+	_update_battery_visual()   # 立刻变绿
+
+
+# 电量掉到 0% 的兜底（方案 A）：
+#   手机开着 → 充电器自动往右下平移 + 淡出，动画完再开始充电；
+#   手机关着（trigger 态，看不见）→ 直接开始充电。
+func _auto_plug_at_zero() -> void:
+	if is_charging or _charger_auto_animating or _charger_dragging:
+		return
+	if is_open and is_instance_valid(charger):
+		_charger_auto_animating = true
+		charger.visible = true
+		charger.modulate.a = 1.0
+		charger.position = _charger_home_pos
+		var t := create_tween()
+		t.set_parallel(true)
+		t.tween_property(charger, "position", _charger_home_pos + Vector2(120, 120), 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+		t.tween_property(charger, "modulate:a", 0.0, 0.5)
+		t.chain().tween_callback(func():
+			if is_instance_valid(charger):
+				charger.hide()
+				charger.position = _charger_home_pos
+				charger.modulate.a = 1.0
+			_charger_auto_animating = false
+			_start_charging()
+		)
+	else:
+		_start_charging()

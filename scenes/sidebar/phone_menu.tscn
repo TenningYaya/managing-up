@@ -17,8 +17,10 @@
 [ext_resource type="PackedScene" uid="uid://dkl5acj8m1a3b" path="res://scenes/sidebar/decor_page.tscn" id="12_decor"]
 [ext_resource type="PackedScene" uid="uid://cmsc4bw6aqfh8" path="res://scenes/sidebar/personal_page.tscn" id="15_nnubu"]
 [ext_resource type="PackedScene" uid="uid://cmy2evl2a0xcv" path="res://scenes/sidebar/sidebar_trigger.tscn" id="17_nnubu"]
+[ext_resource type="Texture2D" uid="uid://51lrlf88jfa7" path="res://assets/sidebar/battery/battery_border.png" id="17_puc8p"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="17_vl5mx"]
 [ext_resource type="Texture2D" uid="uid://bes6dpqqqyvje" path="res://assets/sidebar/other/home_icon.png" id="18_v1wyx"]
+[ext_resource type="Texture2D" uid="uid://cyqpielvsukks" path="res://assets/sidebar/typeC-1.png" id="20_v1wyx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reddot"]
 bg_color = Color(0.886275, 0.14902, 0.14902, 1)
@@ -39,6 +41,10 @@ region = Rect2(32, 32, 1184, 1184)
 [sub_resource type="AtlasTexture" id="AtlasTexture_nlxd5"]
 atlas = ExtResource("6_gtcak")
 region = Rect2(45, 22, 1173, 1167)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o40gq"]
+atlas = ExtResource("17_puc8p")
+region = Rect2(43, 34, 140, 69)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_53q3r"]
 
@@ -310,15 +316,50 @@ theme_override_fonts/font = ExtResource("10_53q3r")
 theme_override_font_sizes/font_size = 20
 text = "12:00"
 
-[node name="battery" type="Label" parent="PhoneWrapper/Screen" unique_id=1912403495]
-layout_mode = 0
-offset_left = 184.0
-offset_top = 11.0
-offset_right = 235.0
-offset_bottom = 34.0
+[node name="BatteryContainer" type="Control" parent="PhoneWrapper/Screen" unique_id=892660375]
+anchors_preset = 0
+offset_left = 189.0
+offset_top = 12.0
+offset_right = 230.0
+offset_bottom = 31.0
+
+[node name="BatteryFill" type="ColorRect" parent="PhoneWrapper/Screen/BatteryContainer" unique_id=1538784572]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.369, 0.82, 0.5945, 1)
+
+[node name="BatteryBorder" type="TextureRect" parent="PhoneWrapper/Screen/BatteryContainer" unique_id=38790951]
+modulate = Color(1, 1, 1, 0.88235295)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_o40gq")
+expand_mode = 1
+
+[node name="battery" type="Label" parent="PhoneWrapper/Screen/BatteryContainer" unique_id=1912403495]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.5
+offset_top = -8.5
+offset_right = 10.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("10_53q3r")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "89%"
 horizontal_alignment = 2
 
@@ -386,3 +427,12 @@ offset_left = -78.0
 offset_top = -236.0
 offset_right = 26.0
 offset_bottom = -132.0
+
+[node name="Charger" type="TextureRect" parent="." unique_id=819958201]
+layout_mode = 0
+offset_left = -437.0
+offset_top = -179.0
+offset_right = -236.0
+offset_bottom = 135.15369
+texture = ExtResource("20_v1wyx")
+expand_mode = 1

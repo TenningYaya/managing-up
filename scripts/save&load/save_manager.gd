@@ -88,6 +88,7 @@ func delete_save() -> void:
 		
 	SpeedupQuoteSave.reset_to_default()
 	Gamemanager.sticky_note_text = ""
+	Gamemanager.phone_battery = 100.0   # 删档重开：手机满电
 	# 🌟 炒股系统复位:价格回中枢、持仓清零、补货/计时归零(StockManager 是 autoload,不复位会沿用上一局)
 	StockManager.reset_to_default()
 	# 🌟 清空办公室存档缓存，否则开新档后办公室 _ready 会误用上一局的解锁记录
@@ -112,7 +113,8 @@ func save_game() -> void:
 		"project_name": Gamemanager.project_name,
 		"player_avatar_index": Gamemanager.player_avatar_index,
 		"player_avatar_path": Gamemanager.player_avatar_texture.resource_path if Gamemanager.player_avatar_texture else "",
-		"player_avatar_is_custom": Gamemanager.player_avatar_is_custom
+		"player_avatar_is_custom": Gamemanager.player_avatar_is_custom,
+		"phone_battery": Gamemanager.phone_battery
 	}
 	
 	var floor_data = FloorManager.get_current_floor_data()
@@ -443,6 +445,7 @@ func load_game() -> void:
 		Gamemanager.project_name = p_data.get("project_name", "NewProject")
 		Gamemanager.player_avatar_index = int(p_data.get("player_avatar_index", 0))
 		Gamemanager.player_avatar_is_custom = bool(p_data.get("player_avatar_is_custom", false))
+		Gamemanager.phone_battery = float(p_data.get("phone_battery", 100.0))   # 老存档没有此项默认满电
 		if Gamemanager.player_avatar_is_custom:
 			# 自定义头像:从用户目录读固定文件;读不到(换机/文件丢失)就退回默认头像
 			var custom_img := Image.new()
