@@ -101,6 +101,17 @@ var _charger_auto_animating: bool = false   # 0% 自动插电动画进行中，�
 const CHARGER_SHOW_DELAY := 0.3             # 充电器出现的延迟：等手机弹出动画停稳后再冒出来（隐藏不延迟）
 var _charger_show_delay_left := CHARGER_SHOW_DELAY
 
+# =====================================================
+# Trigger 收起时的随机小贴士（隔一会儿从 Trigger 旁弹一条，轮播；教程完成后才出）
+# =====================================================
+const TRIGGER_TIP_SCENE := preload("res://scenes/sidebar/mobile_tip_bubble.tscn")
+const TRIGGER_TIP_INTERVAL := 40.0   # 每隔多久尝试弹一条（秒）
+const TRIGGER_TIP_DURATION := 5.0    # 气泡停留时间（秒）
+const TRIGGER_TIP_GAP := 12.0        # 气泡与 Trigger 之间的水平间距
+const TRIGGER_TIP_KEYS := ["Sidebar_tip_boss_mode", "Sidebar_tip_carpet"]  # 轮播的贴士（本地化 key）
+var _tip_index := 0
+var _active_tip_bubble: Control = null
+
 
 func _ready() -> void:
 	# =====================================================
@@ -179,6 +190,14 @@ func _ready() -> void:
 	clock_timer.autostart = true
 	clock_timer.timeout.connect(_update_clock)
 	add_child(clock_timer)
+
+	# Trigger 收起时的随机贴士：每隔一会儿尝试弹一条
+	var tip_timer := Timer.new()
+	tip_timer.wait_time = TRIGGER_TIP_INTERVAL
+	tip_timer.one_shot = false
+	tip_timer.autostart = true
+	add_child(tip_timer)
+	tip_timer.timeout.connect(_on_trigger_tip_timeout)
 
 	Gamemanager.kpi_changed.connect(func(_v): _refresh_upgrade_hints())
 	Gamemanager.level_changed.connect(func(_v): _refresh_upgrade_hints())
@@ -329,6 +348,8 @@ func open_phone() -> void:
 
 	# 玩家点开手机 = 已注意到提示，停止震动
 	_stop_shake()
+	# 手机打开：收起可能正挂着的小贴士气泡
+	_clear_trigger_tip()
 
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -631,3 +652,76 @@ func _auto_plug_at_zero() -> void:
 		)
 	else:
 		_start_charging()
+
+
+# =====================================================
+# 11. Trigger 收起时的随机小贴士气泡
+# =====================================================
+func _on_trigger_tip_timeout() -> void:
+	if is_open:
+		return
+	if _is_locked_by_tutorial:
+		return
+	if not Gamemanager.is_tutorial_completed:   # 教程期间不打扰
+		return
+	if not is_instance_valid(trigger_btn) or not trigger_btn.visible:
+		return
+	if is_instance_valid(_active_tip_bubble):   # 上一条还在，跳过这轮
+		return
+	if TRIGGER_TIP_KEYS.is_empty():
+		return
+	var key: String = TRIGGER_TIP_KEYS[_tip_index]
+	_tip_index = (_tip_index + 1) % TRIGGER_TIP_KEYS.size()   # 轮播
+	_spawn_trigger_tip(tr(key))
+
+
+func _spawn_trigger_tip(text_content: String) -> void:
+	if not is_instance_valid(trigger_btn):
+		return
+	var bubble := TRIGGER_TIP_SCENE.instantiate() as Control
+	if bubble == null:
+		return
+	add_child(bubble)
+	_active_tip_bubble = bubble
+	var lbl := bubble.get_node_or_null("Label") as Label
+	if lbl:
+		lbl.text = text_content
+	var base_a := bubble.modulate.a   # 记住气泡本身的半透明度，别淡入成全不透明
+	bubble.modulate.a = 0.0
+
+	await get_tree().process_frame   # 等 PanelContainer 按文字算好尺寸
+	if not is_instance_valid(bubble):
+		return
+	if is_open:   # 等待期间手机被打开了：别弹了
+		bubble.queue_free()
+		_active_tip_bubble = null
+		return
+
+	# 摆到 Trigger 左侧、竖直居中
+	var bx := trigger_btn.position.x - bubble.size.x - TRIGGER_TIP_GAP
+	var by := trigger_btn.position.y + trigger_btn.size.y * 0.5 - bubble.size.y * 0.5
+	bubble.position = Vector2(bx, by)
+	bubble.pivot_offset = Vector2(bubble.size.x, bubble.size.y * 0.5)   # 从靠近 Trigger 的一侧弹出
+	bubble.scale = Vector2(0.6, 0.6)
+
+	var t := create_tween()
+	# 弹入：淡入 + 放大（并行）
+	t.tween_property(bubble, "modulate:a", base_a, 0.25)
+	t.parallel().tween_property(bubble, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	# 停留
+	t.tween_interval(TRIGGER_TIP_DURATION)
+	# 弹出：淡出 + 缩小（并行）
+	t.tween_property(bubble, "modulate:a", 0.0, 0.25)
+	t.parallel().tween_property(bubble, "scale", Vector2(0.6, 0.6), 0.25)
+	t.tween_callback(func():
+		if is_instance_valid(bubble):
+			bubble.queue_free()
+		if _active_tip_bubble == bubble:
+			_active_tip_bubble = null
+	)
+
+
+func _clear_trigger_tip() -> void:
+	if is_instance_valid(_active_tip_bubble):
+		_active_tip_bubble.queue_free()
+	_active_tip_bubble = null

@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dhq6mttgibnt4"]
+
+[ext_resource type="Texture2D" uid="uid://u044ssyf8qr7" path="res://assets/dialogue/bubble_mobile_sidebar_1.png" id="1_c4c5k"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k25lq"]
+content_margin_left = 5.0
+content_margin_top = 1.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+texture = ExtResource("1_c4c5k")
+texture_margin_left = 30.0
+texture_margin_top = 24.0
+texture_margin_right = 34.0
+texture_margin_bottom = 23.0
+
+[node name="MobileTipBubble" type="PanelContainer" unique_id=868871886]
+modulate = Color(1, 0.86583334, 0.77, 0.85882354)
+offset_right = 302.0
+offset_bottom = 49.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_k25lq")
+
+[node name="Label" type="Label" parent="." unique_id=1775991097]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.23537052, 0.23537052, 0.23537052, 1)
+theme_override_font_sizes/font_size = 20
+text = "hello"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
