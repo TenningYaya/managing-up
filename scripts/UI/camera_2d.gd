@@ -22,6 +22,7 @@ var _edge_dwell_left: float = 0.0
 var _edge_dwell_right: float = 0.0
 
 func _ready() -> void:
+	add_to_group("main_camera")   # 供存档系统按组找到本相机
 	# 🌟 监听窗口/视口尺寸变化:比例一变就重新把 droparea 拉回水平居中
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	# 开局水平对准 droparea(用 call_deferred 等容器布局完成后再算,否则取到的位置不准)
@@ -33,6 +34,12 @@ func _on_viewport_size_changed() -> void:
 # 🌟 把相机水平对准 droparea → 任何屏幕比例下 droparea 都水平居中。
 #    极端比例(视野比场景还宽,比如 50%)时会被下面的边界夹取拉回,允许不完全居中。
 func _center_x_on_drop_area() -> void:
+	# 读档恢复视角：只要存档里带了相机位置（且玩家还没自己拖过），就恢复到那儿、不居中。
+	# 放在这里能天然对抗启动时的多次"尺寸变化重新居中"——每次都恢复，直到玩家接管。
+	if Gamemanager.has_saved_camera:
+		position = Gamemanager.camera_pos
+		_clamp_camera_position()
+		return
 	var da = get_tree().get_first_node_in_group("employee_droparea")
 	if da and da is Control:
 		position.x = da.get_global_rect().get_center().x + center_x_offset
@@ -50,6 +57,7 @@ func _input(event: InputEvent) -> void:
 
 				dragging = true
 				last_mouse_pos = event.global_position
+				Gamemanager.has_saved_camera = false   # 玩家开始自己拖视角 = 接管，取消"锁定存档视角"
 			else:
 				dragging = false
 
@@ -129,6 +137,7 @@ func _update_edge_scroll(delta: float) -> void:
 	if dir != 0:
 		position.x += dir * edge_scroll_speed * delta / zoom.x
 		_clamp_camera_position()
+		Gamemanager.has_saved_camera = false   # 边缘滚动也算玩家移动了视角，取消存档视角锁定
 		# 相机滚动后，被拖的员工靠它自己的 _process 每帧重新贴住光标
 
 # 返回当前正在被拖拽的员工（没有则返回 null）

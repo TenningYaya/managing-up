@@ -108,7 +108,13 @@ const TRIGGER_TIP_SCENE := preload("res://scenes/sidebar/mobile_tip_bubble.tscn"
 const TRIGGER_TIP_INTERVAL := 40.0   # 每隔多久尝试弹一条（秒）
 const TRIGGER_TIP_DURATION := 5.0    # 气泡停留时间（秒）
 const TRIGGER_TIP_GAP := 12.0        # 气泡与 Trigger 之间的水平间距
-const TRIGGER_TIP_KEYS := ["Sidebar_tip_boss_mode", "Sidebar_tip_carpet"]  # 轮播的贴士（本地化 key）
+const TRIGGER_TIP_KEYS := [   # 轮播的贴士（本地化 key，按顺序循环）
+	"Sidebar_tip_boss_mode",
+	"Sidebar_tip_carpet",
+	"Sidebar_tip_settings",
+	"Sidebar_tip_multi_office",
+	"Sidebar_tip_headhunt",
+]
 var _tip_index := 0
 var _active_tip_bubble: Control = null
 

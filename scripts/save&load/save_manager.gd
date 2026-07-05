@@ -100,6 +100,10 @@ func delete_save() -> void:
 	Gamemanager.has_recruitment_office = false
 	Gamemanager.has_culture_center = false
 	Gamemanager.has_stock_office = false
+
+	# 🌟 删档重开：清掉待恢复的相机视角，让相机回到默认居中
+	Gamemanager.has_saved_camera = false
+	Gamemanager.camera_pos = Vector2.ZERO
 		
 	get_tree().reload_current_scene()
 
@@ -191,6 +195,12 @@ func save_game() -> void:
 	save_data["boss_quotes"] = SpeedupQuoteSave.boss_quotes
 
 	save_data["sticky_note_text"] = Gamemanager.sticky_note_text
+
+	# ================= 🌟 相机(视角)位置：记录下线时屏幕看到哪儿 =================
+	var cam = get_tree().get_first_node_in_group("main_camera")
+	if cam != null:
+		save_data["camera_pos_x"] = cam.position.x
+		save_data["camera_pos_y"] = cam.position.y
 
 	# ================= 🌟 炒股系统存档(各股价格/持仓/成本/补货周期/计时) =================
 	save_data["stock"] = StockManager.to_save_dict()
@@ -504,6 +514,15 @@ func load_game() -> void:
 
 	if save_data.has("sticky_note_text"):
 		Gamemanager.sticky_note_text = str(save_data["sticky_note_text"])
+
+	# ================= 🌟 相机(视角)位置恢复 =================
+	# 只记录 has_saved_camera，真正的落位交给相机的 _center_x_on_drop_area（读档时优先用它）。
+	if save_data.has("camera_pos_x"):
+		Gamemanager.camera_pos = Vector2(
+			float(save_data.get("camera_pos_x", 0.0)),
+			float(save_data.get("camera_pos_y", 0.0))
+		)
+		Gamemanager.has_saved_camera = true
 
 	# ================= 🌟 炒股系统恢复 =================
 	if save_data.has("stock"):

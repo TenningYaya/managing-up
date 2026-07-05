@@ -87,5 +87,8 @@ Sidebar_UPGRADE_MAXED_OUT,已满级,MAXED OUT
 Sidebar_general_texted_coworker,催工次数,Texted Coworker
 Sidebar_personal_welcome,欢迎项目组,WELCOME PROGRAM
 Sidebar_personal_guide,莅临指导！！！,FOR INSPECTION AND GUIDANCE!!!
-Sidebar_tip_boss_mode,Ctrl + Tab 一键开启老板模式,Press Ctrl + Tab to switch to Boss Mode.
-Sidebar_tip_carpet,你知道吗？在「个性化」界面可以给公司换地毯,Did you know? You can change the office carpet in the Personalization tab.
+Sidebar_tip_boss_mode,Ctrl + Tab 可在完整界面与桌面便签「老板模式」间快速切换。,Press Ctrl + Tab to toggle between the full phone view and desktop Boss Mode.
+Sidebar_tip_carpet,在「个性化」App 里可以为公司更换地毯，布置专属办公室。,Open the Personal app to change your office carpet and make the workspace your own.
+Sidebar_tip_settings,在「设置」里可以调整窗口大小，也能开启窗口始终置顶。,In Settings you can adjust the window size and keep the window always on top.
+Sidebar_tip_multi_office,会议室、茶水间这类办公室可以同时拥有多间，不必二选一。,Some office types can have more than one at a time—for example the meeting room and the pantry.
+Sidebar_tip_headhunt,猎头可不是吃干饭的——通过猎头招募，有更高概率捞到稀有的同事。,Headhunters aren't just for show—recruiting through them gives a much higher chance of landing rare colleagues.

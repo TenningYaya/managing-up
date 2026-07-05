@@ -73,6 +73,8 @@ var max_desk_level: int = 1
 var unlocked_desk_slots: int = 1 # 解锁的工位排数
 var sticky_note_text: String = ""
 var phone_battery: float = 100.0   # 手机电量 0~100（纯氛围功能，存档保留），由 mobilesidebar 实时同步
+var camera_pos: Vector2 = Vector2.ZERO   # 下线时相机(视角)位置，读档恢复
+var has_saved_camera: bool = false        # 是否有待恢复的相机位置（读档设 true，玩家一拖动就消费掉）
 
 
 
