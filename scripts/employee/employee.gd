@@ -88,7 +88,9 @@ var _urge_bubbles: Array = []   # 头顶正在堆叠的催工气泡（新的从�
 const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
 const SPEECH_BUBBLE_SCENE = preload("res://scenes/vfx/speech_bubble.tscn")
 const URGE_BUBBLE_SCENE = preload("res://scenes/vfx/urge_bubble.tscn")
-const URGE_STACK_ROW := 44.0   # 催工气泡堆叠时每条上顶的行高（按气泡视觉高度微调）
+const URGE_STACK_ROW := 55.0   # 单行气泡的堆叠间距（基础值）
+const URGE_X_JITTER := 30.0    # 每条气泡刷出时 x 轴随机偏移 ±这个值，左右晃更有感觉
+const URGE_LINE_EXTRA := 27.0  # 台词每多一行，间距在单行基础上再加这么多
 const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
 const DOLLAR_REWARD_SCENE = preload("res://scenes/vfx/dollar_reward.tscn")
 var is_slacking: bool = false
@@ -961,22 +963,26 @@ func _speed_up_work() -> void:
 func _spawn_speech_bubble(text_content: String) -> void:
 	if not Gamemanager.has_selected_avatar:
 		return
-	# 🌟 微信式堆叠：不再打断上一条，而是把现有的每条都往上顶一行，新的从底部冒出。
-	#    点得够快，就能顶出一列"一行白鹭上青天"。
+	# 🌟 微信式堆叠：不打断上一条，新的从底部冒出、把现有的往上顶。点得够快 → "一行白鹭上青天"。
 	_urge_bubbles = _urge_bubbles.filter(func(b): return is_instance_valid(b))
-	for b in _urge_bubbles:
-		if b.has_method("shift_up"):
-			b.shift_up(URGE_STACK_ROW)
 
+	# 先造新气泡、定好文字与尺寸（放最底部，x 随机偏移让整列左右晃）
 	var bubble = URGE_BUBBLE_SCENE.instantiate()
 	add_child(bubble)
 	bubble.scale = Vector2(0.3, 0.3)
-	# 绝对层级 + 调高：盖住桌子等世界物体（z_index 优先级高于 Y-sort，所以不会再被挡）
-	bubble.z_as_relative = false
+	bubble.z_as_relative = false   # 绝对层级，盖住桌子等世界物体
 	bubble.z_index = 1000
-	# 位置：员工头顶稍微偏右一点，从这里向上堆叠
-	bubble.position = Vector2(20, -47)
+	bubble.position = Vector2(-60 + randf_range(-URGE_X_JITTER, URGE_X_JITTER), -17)
 	bubble.pop_up(text_content)
+
+	# 🌟 弹性间距：按这条新台词的行数把现有的往上顶——单行紧凑，每多一行再多顶一点，不会被挡
+	var dy := URGE_STACK_ROW
+	if bubble.has_method("get_line_count"):
+		var lines: int = bubble.get_line_count()
+		dy = URGE_STACK_ROW + float(maxi(lines - 1, 0)) * URGE_LINE_EXTRA
+	for b in _urge_bubbles:
+		if b.has_method("shift_up"):
+			b.shift_up(dy)
 
 	_urge_bubbles.append(bubble)
 	_active_bubble = bubble   # 仍标记"头上有气泡"，供 BanterManager 判断避让

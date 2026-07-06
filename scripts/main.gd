@@ -197,8 +197,23 @@ func _band_physical_rect() -> Rect2:
 	if _is_sticky_mode:
 		return Rect2()
 	var vp := get_viewport().get_visible_rect().size
-	var band_canvas := Rect2(0.0, vp.y - BOTTOM_STRIP_HEIGHT, vp.x, BOTTOM_STRIP_HEIGHT)
+	var band_top := vp.y - BOTTOM_STRIP_HEIGHT
+	# 有正在上升的催工气泡冒到条子上方时，把可见上限抬到最高气泡处（全宽、短暂），
+	# 否则气泡进了"透明区"会被裁掉看不见。气泡消失后自然恢复。
+	var bubble_top := _get_urge_bubbles_top_viewport_y()
+	if bubble_top < band_top:
+		band_top = bubble_top
+	var band_canvas := Rect2(0.0, band_top, vp.x, vp.y - band_top)
 	return get_viewport().get_screen_transform() * band_canvas
+
+
+# "urge_bubbles" 组里所有可见气泡的视觉顶端中最高的那个（视口坐标，越小越高）。没有则 INF。
+func _get_urge_bubbles_top_viewport_y() -> float:
+	var top := INF
+	for b in get_tree().get_nodes_in_group("urge_bubbles"):
+		if b is CanvasItem and b.is_visible_in_tree() and b.has_method("get_top_viewport_y"):
+			top = minf(top, b.get_top_viewport_y())
+	return top
 
 
 # 计算穿透多边形：底部满宽条 + 各可见浮窗的“天际线”。只把浮窗自己那一竖列向上算进来，
