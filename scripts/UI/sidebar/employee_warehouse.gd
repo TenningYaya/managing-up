@@ -21,6 +21,7 @@ var selected_employees: Array[Employee] = []
 
 var dragging = false
 var drag_offset = Vector2()
+var _opened_frame: int = -1   # 面板变可见的那一帧，_input 用它忽略"打开面板的那一下点击"
 
 var sort_options = [
 	{"key": "WAREHOUSE_SORT_STATS_HIGH", "id": 0},
@@ -70,25 +71,34 @@ func _ready() -> void:
 	EmployeeManager.employee_map_status_changed.connect(_on_map_needs_refresh)
 	sort_menu.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	
-func _unhandled_input(event: InputEvent) -> void:
-	# 如果仓库本来就没开，或者现在正弹着确认窗，直接无视点击逻辑
+# 点面板以外的地方自动关闭。用 _input（不是 _unhandled_input）：员工等世界物体会
+# set_input_as_handled 把事件"吃掉"，_unhandled_input 收不到 → 之前点员工不关的 bug 就来自这里。
+# _input 一定收得到、且不受 set_input_as_handled 影响。
+func _input(event: InputEvent) -> void:
 	if not visible or (bulk_fire_popup and bulk_fire_popup.visible):
 		return
-
+	# 排序下拉菜单展开时，点它的选项不算"点外面"
+	if sort_menu and sort_menu.get_popup().visible:
+		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		# 判定点击是否在仓库外面
-		if not get_global_rect().has_point(event.global_position):
-			# 还有一个关键：如果点的是弹窗区域，也不准缩回去
-			if bulk_fire_popup and bulk_fire_popup.get_global_rect().has_point(event.global_position):
-				return
-				
-			hide()
-			# 如果你有侧边栏状态，记得这里也要同步重置（可选）
-			
+		# 忽略"打开面板的那一下"（同一帧），否则刚开就被关掉
+		if Engine.get_process_frames() == _opened_frame:
+			return
+		var mp := get_global_mouse_position()
+		if get_global_rect().has_point(mp):
+			return                          # 点在仓库本体内
+		if is_instance_valid($TitleBar) and $TitleBar.get_global_rect().has_point(mp):
+			return                          # 点在标题栏（拖动/点它不关）
+		if bulk_fire_popup and bulk_fire_popup.get_global_rect().has_point(mp):
+			return                          # 点在批量开除确认窗
+		hide()
+
 func _on_visibility_changed() -> void:
 	# 只在“变为可见”时响一次；hide() 时 visible=false，不播放
-	if visible and warehouse_sfx:
-		warehouse_sfx.play()
+	if visible:
+		_opened_frame = Engine.get_process_frames()
+		if warehouse_sfx:
+			warehouse_sfx.play()
 
 
 # 语言切换时重建排序下拉的选项文字（OptionButton 的 item 文字是 tr 写死的，不会自动刷新）

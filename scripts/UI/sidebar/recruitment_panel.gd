@@ -24,6 +24,7 @@ var last_office_status: bool = false
 var dragging = false
 var drag_offset = Vector2()
 var _tip_tween: Tween = null
+var _opened_frame: int = -1   # 面板变可见的那一帧，_input 用它忽略"打开面板的那一下点击"
 
 func _ready():
 	#RecruitmentManager.normal_pool.clear()
@@ -67,8 +68,26 @@ func _ready():
 
 func _on_visibility_changed() -> void:
 	# 只在“变为可见”时响一次；hide() 时 visible=false，不播放
-	if visible and open_recruit_sfx:
-		open_recruit_sfx.play()
+	if visible:
+		_opened_frame = Engine.get_process_frames()
+		if open_recruit_sfx:
+			open_recruit_sfx.play()
+
+# 点面板以外的地方自动关闭。用 _input：员工等会 set_input_as_handled 吃掉事件，_unhandled_input 收不到；
+# _input 一定收得到、不受影响。（TitleBar 探出面板上沿 19px，所以本体和标题栏两处都要放行。）
+func _input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# 忽略"打开面板的那一下"（同一帧），否则刚开就被关掉
+		if Engine.get_process_frames() == _opened_frame:
+			return
+		var mp := get_global_mouse_position()
+		if get_global_rect().has_point(mp):
+			return                          # 点在面板本体内
+		if is_instance_valid($TitleBar) and $TitleBar.get_global_rect().has_point(mp):
+			return                          # 点在标题栏（拖动/点它不关）
+		hide()
 
 # ================= 倒计时专属 (唯一需要 _process 的地方) =================
 func _process(_delta):

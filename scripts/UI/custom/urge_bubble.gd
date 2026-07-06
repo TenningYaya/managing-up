@@ -9,6 +9,19 @@ class_name UrgeBubble
 
 # 动画相关变量
 var _tween: Tween = null
+# —— 微信式堆叠：新气泡从底部冒出，旧气泡被顶上去 ——
+var _base_y: float = 0.0            # 堆叠基准 y（被后来的气泡顶上去时改变）
+var _base_y_target: float = 0.0
+var _float_offset: float = 0.0      # 自身向上漂浮的位移（0→20）
+var _stack_tween: Tween = null
+var _active_anim := false
+
+func _process(_delta: float) -> void:
+	if not _active_anim:
+		return
+	# 最终 y = 堆叠基准 − 漂浮位移。堆叠(shift_up) 和 漂浮(pop_up) 各自独立 tween 一个变量，
+	# 在这里合成成 position.y，从而"被顶上去"和"自己漂浮淡出"互不打架。
+	position.y = _base_y - _float_offset
 
 func _ready() -> void:
 	
@@ -44,35 +57,38 @@ func pop_up(content: String) -> void:
 		player_avatar.hide()
 
 	
+	# 记录堆叠基准；把"向上漂浮"改成 tween 一个偏移变量（不直接动 position，才能和"被顶上去"叠加）
+	_base_y = position.y
+	_base_y_target = position.y
+	_float_offset = 0.0
+	_active_anim = true
+
 	if _tween:
 		_tween.kill()
-		
 	_tween = create_tween()
 	# 设置为并行模式：上浮和淡入同时发生
 	_tween.set_parallel(true)
-	
-# 🌟 动画 1：向上浮动
-	# Vector2(0, -20): 目标偏移量，X为0表示横向不动，Y为-20表示向上移动20个像素
-	# 0.5: 完成这次上浮动作需要的时长，单位是秒
-	var target_pos = position + Vector2(0, -20) 
-	_tween.tween_property(self, "position", target_pos, 0.5)
-	
+	# 🌟 动画 1：向上漂浮 20px（0.5s）——tween 偏移量，由 _process 合成到 position.y
+	_tween.tween_property(self, "_float_offset", 20.0, 0.5)
 	# 🌟 动画 2：淡入
-	# 1.0: 目标透明度，1.0代表完全不透明（显示）
-	# 0.3: 完成淡入显示的时间，单位是秒
 	_tween.tween_property(self, "modulate:a", 1.0, 1)
-	
-	# 🌟 动画 3：在上方停留一会后渐隐消失
-	# .set_delay(1): 延迟执行时间，单位是秒（即：保持显示状态停留 1 秒）
-	# 0.0: 目标透明度，0.0代表完全透明（消失）
-	# 0.5: 完成这次渐隐过程的时间，单位是秒
+	# 🌟 动画 3：停留 1s 后渐隐
 	_tween.chain().tween_property(self, "modulate:a", 0.0, 1).set_delay(1)
-	
 	# 🌟 结束：自动销毁
 	_tween.chain().tween_callback(queue_free)
-	
+
+# 被后来的气泡顶上去：把堆叠基准平滑上移 dy（独立于漂浮/淡出，其它动画完全不受影响）
+func shift_up(dy: float) -> void:
+	_base_y_target -= dy
+	if _stack_tween:
+		_stack_tween.kill()
+	_stack_tween = create_tween()
+	_stack_tween.tween_property(self, "_base_y", _base_y_target, 0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
 # 提供一个给外部强行打断并销毁的接口
 func kill_bubble() -> void:
 	if _tween:
 		_tween.kill()
+	if _stack_tween:
+		_stack_tween.kill()
 	queue_free()

@@ -27,7 +27,7 @@ script = ExtResource("1_d3y34")
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 
-[node name="AmountSlider" type="HSlider" parent="." unique_id=49165474]
+[node name="AmountSlider" type="HSlider" parent="." unique_id=49165474 groups=["office_1"]]
 texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3

@@ -84,9 +84,11 @@ var portrait: Texture2D      # 核心：生成的静态立绘
 #——————————动画————————————
 var _move_tween: Tween = null
 var _active_bubble = null
+var _urge_bubbles: Array = []   # 头顶正在堆叠的催工气泡（新的从底部冒出、旧的被顶上去）
 const FILE_VFX_SCENE = preload("res://scenes/vfx/folder_vfx.tscn")
 const SPEECH_BUBBLE_SCENE = preload("res://scenes/vfx/speech_bubble.tscn")
 const URGE_BUBBLE_SCENE = preload("res://scenes/vfx/urge_bubble.tscn")
+const URGE_STACK_ROW := 44.0   # 催工气泡堆叠时每条上顶的行高（按气泡视觉高度微调）
 const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
 const DOLLAR_REWARD_SCENE = preload("res://scenes/vfx/dollar_reward.tscn")
 var is_slacking: bool = false
@@ -959,23 +961,25 @@ func _speed_up_work() -> void:
 func _spawn_speech_bubble(text_content: String) -> void:
 	if not Gamemanager.has_selected_avatar:
 		return
-	# 🌟 打断机制：如果头上已经有一个气泡了，直接把它干掉
-	if is_instance_valid(_active_bubble):
-		_active_bubble.kill_bubble()
-		
-	_active_bubble = URGE_BUBBLE_SCENE.instantiate()
-	add_child(_active_bubble)
-	
-	_active_bubble.scale = Vector2(0.3, 0.3)
+	# 🌟 微信式堆叠：不再打断上一条，而是把现有的每条都往上顶一行，新的从底部冒出。
+	#    点得够快，就能顶出一列"一行白鹭上青天"。
+	_urge_bubbles = _urge_bubbles.filter(func(b): return is_instance_valid(b))
+	for b in _urge_bubbles:
+		if b.has_method("shift_up"):
+			b.shift_up(URGE_STACK_ROW)
+
+	var bubble = URGE_BUBBLE_SCENE.instantiate()
+	add_child(bubble)
+	bubble.scale = Vector2(0.3, 0.3)
 	# 绝对层级 + 调高：盖住桌子等世界物体（z_index 优先级高于 Y-sort，所以不会再被挡）
-	_active_bubble.z_as_relative = false
-	_active_bubble.z_index = 1000
-	
-	# 设置位置：员工头顶稍微偏右一点（假设气泡尾巴在左下角）
-	_active_bubble.position = Vector2(20, -47)
-	
-	# 呼叫接口，播放内容
-	_active_bubble.pop_up(text_content)
+	bubble.z_as_relative = false
+	bubble.z_index = 1000
+	# 位置：员工头顶稍微偏右一点，从这里向上堆叠
+	bubble.position = Vector2(20, -47)
+	bubble.pop_up(text_content)
+
+	_urge_bubbles.append(bubble)
+	_active_bubble = bubble   # 仍标记"头上有气泡"，供 BanterManager 判断避让
 
 func _spawn_banter_bubble(text_content: String) -> void:
 	# 🌟 打断机制：如果头上已经有一个气泡了，直接把它干掉
