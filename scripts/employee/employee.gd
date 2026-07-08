@@ -93,6 +93,11 @@ const URGE_X_JITTER := 30.0    # 每条气泡刷出时 x 轴随机偏移 ±这�
 const URGE_LINE_EXTRA := 27.0  # 台词每多一行，间距在单行基础上再加这么多
 const DOLLAR_BURST_VFX_SCENE = preload("res://scenes/vfx/dollar_bust_vfx.tscn")
 const DOLLAR_REWARD_SCENE = preload("res://scenes/vfx/dollar_reward.tscn")
+# 开除"螺旋升天"特效参数
+const FIRE_ASCEND_RISE := 300.0     # 上升距离（像素）
+const FIRE_ASCEND_TIME := 2.2       # 上升+旋转总时长（秒，越大越慢）
+const FIRE_ASCEND_SPINS := 2        # 上升过程绕竖直轴转几圈（越少每圈越慢）
+const FIRE_ASCEND_FADE_DELAY := 2.2 # 过这么久才开始淡出（越大越晚变透明）
 var is_slacking: bool = false
 var active_slacking_bubble = null
 const SLACKING_BUBBLE_SCENE = preload("res://scenes/UI/custom/SlackingBubble.tscn")
@@ -1263,6 +1268,70 @@ func _clear_all_vfx() -> void:
 	for child in get_children():
 		if child is FileVFX: # 这里用到你脚本里定义的 class_name
 			child.queue_free()
+
+
+# 开除时的"螺旋升天"：用员工立绘造一个纸片幽灵，绕竖直轴 360° 旋转（靠水平翻转 scale.x 伪 3D）
+# + 逐渐上升 + 淡出。幽灵挂到场景里独立播放，员工本体照常被销毁，互不影响。
+func spawn_fire_ascend_effect() -> void:
+	# 用员工"真身立绘"(带衣服头发饰品的 visual_component)升天，而不是只有裸身体的 portrait。
+	if visual_component == null or not is_inside_tree() or not is_instance_valid(visual_component):
+		return
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+
+	var vis := visual_component
+	visual_component = null            # 员工交出立绘，销毁时就不会连带处理它
+	var char_global := vis.global_position   # sr_visual 原点≈角色中心，记下它当前屏幕位置
+
+	var ghost := Node2D.new()          # 只负责上升 + 淡出（吐槽气泡挂这层，才不会跟着翻面）
+	ghost.z_index = 900                # 盖在世界物体之上
+	ghost.z_as_relative = false
+	scene.add_child(ghost)
+	ghost.global_position = char_global
+
+	var spin_holder := Node2D.new()    # 只负责绕竖直轴翻转，装着立绘
+	ghost.add_child(spin_holder)
+	vis.reparent(spin_holder)          # 保留全局变换：外观/大小不变，且正好以 spin_holder 原点(角色中心)为轴
+	if vis is CanvasItem:
+		vis.visible = true             # 保险：开会等隐藏态被开除时也能看见升天
+
+	# 甩下最后一句吐槽（挂在 ghost 上：跟着升+淡，但不随立绘翻转）
+	_spawn_fire_banter(ghost)
+
+	var start_y := ghost.global_position.y
+	# 绕竖直轴旋转的回调：spin_holder 水平 scale = cos(相位)，1→0→-1→0→1 = 纸片翻面(伪 3D 转体)。
+	# ⚠️ 必须先赋给变量再传给 tween_method——内联 lambda 当参数会让 GDScript 解析报错。
+	var spin_cb := func(ph: float):
+		if is_instance_valid(spin_holder):
+			spin_holder.scale.x = cos(ph)
+
+	var tw := ghost.create_tween()     # tween 绑在 ghost 上，员工销毁也不影响
+	tw.set_parallel(true)
+	# 上升（先慢后快，像被吸上天）
+	tw.tween_property(ghost, "global_position:y", start_y - FIRE_ASCEND_RISE, FIRE_ASCEND_TIME).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	# 绕竖直轴旋转：相位 0→SPINS·TAU
+	tw.tween_method(spin_cb, 0.0, float(FIRE_ASCEND_SPINS) * TAU, FIRE_ASCEND_TIME)
+	# 淡出：延后开始，只在后段淡（前面一直清晰可见）
+	var fade_time: float = maxf(0.2, FIRE_ASCEND_TIME - FIRE_ASCEND_FADE_DELAY)
+	tw.tween_property(ghost, "modulate:a", 0.0, fade_time).set_delay(FIRE_ASCEND_FADE_DELAY).set_ease(Tween.EASE_IN)
+	# 演完自毁（连同 spin_holder / 立绘 / 吐槽气泡一起销毁）
+	tw.chain().tween_callback(ghost.queue_free)
+
+# [员工吐槽中心]：员工被开除 —— 螺旋升天时甩下的最后一句吐槽。
+# 挂在传进来的升天节点(ghost)上，跟着上升+淡出，但不随立绘做纸片翻转。
+func _spawn_fire_banter(parent: Node) -> void:
+	var pool = BanterManager.QUOTES.get("fired", [])
+	if pool.is_empty():
+		return
+	var key = pool[randi() % pool.size()]
+	var bubble = SPEECH_BUBBLE_SCENE.instantiate()
+	parent.add_child(bubble)
+	bubble.scale = Vector2(0.3, 0.3)
+	bubble.z_as_relative = false
+	bubble.z_index = 1000
+	bubble.position = Vector2(55, -70)   # 相对角色中心：头顶偏右（气泡尾巴指向左下的角色）
+	bubble.pop_up(tr(key))
 
 func force_give_snack_buff(buff_type: SnackBuff):
 	# 1. 强行先清理一下之前的状态，防止占着名额

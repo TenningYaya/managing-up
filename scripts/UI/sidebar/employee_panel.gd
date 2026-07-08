@@ -83,7 +83,8 @@ func _ready() -> void:
 
 	# 绑定底部按钮事件
 	dispatch_btn.pressed.connect(_on_dispatch_pressed)
-	fire_btn.pressed.connect(_on_fire_pressed)
+	# 单个开除：按你的设计不走确认弹窗，直接开除（会顺带播螺旋升天特效）
+	fire_btn.pressed.connect(execute_fire_employee)
 	go_meeting_btn.pressed.connect(_on_go_meeting_pressed)
 	# ------------------------------------------
 	# 3. 这里是连接 PopupWindow 的地方！
@@ -525,6 +526,9 @@ func execute_fire_employee() -> void:
 		# 4. 从 Manager 的主列表中移除
 		EmployeeManager.my_employees.erase(current_employee)
 		
+		# 螺旋升天特效（销毁前用立绘造个幽灵来演）
+		if current_employee.has_method("spawn_fire_ascend_effect"):
+			current_employee.spawn_fire_ascend_effect()
 		# 5. 【最后一步】：彻底销毁员工数据和地图实体
 		current_employee.queue_free()
 		current_employee = null
