@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://im2qyo8akr0" path="res://scenes/office/DeskUpgradePanel.tscn" id="15_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://c8d4rax1ise3l" path="res://scenes/sidebar/employee_panel/employee_warehouse.tscn" id="19_0ld40"]
 [ext_resource type="PackedScene" uid="uid://6py6ljmq7wln" path="res://scenes/sidebar/recruitment_panel/recruitment_panel.tscn" id="20_gqmmt"]
+[ext_resource type="Texture2D" uid="uid://c784q8hakrpkr" path="res://assets/UI/MinimalButton.png" id="24_og1vs"]
 [ext_resource type="PackedScene" uid="uid://0iu36v54fi06" path="res://scenes/starter/tutorial_layer.tscn" id="24_y6deb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dp3eg"]
@@ -512,6 +513,19 @@ offset_left = 13.0
 offset_top = 204.0
 offset_right = 407.0
 offset_bottom = 621.0
+
+[node name="MinimalButton" type="TextureButton" parent="CanvasLayer" unique_id=1756454656]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -100.0
+offset_top = 647.0
+offset_right = -23.0
+offset_bottom = 734.0
+grow_horizontal = 0
+texture_normal = ExtResource("24_og1vs")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
 
