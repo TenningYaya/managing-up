@@ -8,10 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://yxab4qjkxvbk" path="res://assets/background/959907CBFB75635004DB71D30DBF186B.png" id="3_yc10j"]
 [ext_resource type="Texture2D" uid="uid://b47ers1c5bqr5" path="res://assets/right.png" id="4_2wyq8"]
 [ext_resource type="Script" uid="uid://cfssx3hpb6hxe" path="res://scripts/system/floor_manager.gd" id="4_og1vs"]
+[ext_resource type="Texture2D" uid="uid://dd6d6fy13utth" path="res://assets/background/left4.png" id="5_og1vs"]
 [ext_resource type="PackedScene" uid="uid://cjfjfj4l46h23" path="res://scenes/sidebar/employee_panel/employee_panel.tscn" id="5_tbgi4"]
-[ext_resource type="Texture2D" uid="uid://cv504ynte8nqt" path="res://assets/left.png" id="5_vxglm"]
-[ext_resource type="PackedScene" uid="uid://d2vtifhmv6jpd" path="res://scenes/office/glass_wall.tscn" id="6_2wyq8"]
 [ext_resource type="Script" uid="uid://bo4d6sxmvchpt" path="res://scripts/test/test_time_control.gd" id="6_tipki"]
+[ext_resource type="Texture2D" uid="uid://b8g35hq2r204w" path="res://assets/background/glass_wall_3.png" id="7_2wyq8"]
 [ext_resource type="PackedScene" uid="uid://d17k21r7qmpoh" path="res://scenes/UI/ingame/front_warehouse_button.tscn" id="8_dp3eg"]
 [ext_resource type="PackedScene" uid="uid://bgy17dc4wyb1u" path="res://scenes/UI/ingame/front_recruitment_button.tscn" id="9_0ld40"]
 [ext_resource type="PackedScene" uid="uid://duispsomfw47v" path="res://scenes/office/office_panel.tscn" id="9_85g3d"]
@@ -97,6 +97,10 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_dp3eg")
 sources/1 = SubResource("TileSetAtlasSource_jscy8")
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vxglm"]
+atlas = ExtResource("7_2wyq8")
+region = Rect2(6, 1, 2708, 303)
+
 [node name="Main" type="Control" unique_id=480960145]
 layout_mode = 3
 anchors_preset = 15
@@ -139,27 +143,68 @@ script = ExtResource("4_og1vs")
 
 [node name="LeftCover" type="TextureRect" parent="FullGameMode/Background/Floors" unique_id=557149700]
 layout_mode = 0
-offset_left = -1504.0
-offset_top = -77.0
-offset_right = -658.0
-offset_bottom = 358.0
-texture = ExtResource("5_vxglm")
+offset_left = -1524.0
+offset_top = -75.0
+offset_right = -678.0
+offset_bottom = 400.0
+texture = ExtResource("5_og1vs")
 expand_mode = 1
-
-[node name="GlassWall" parent="FullGameMode/Background/Floors" unique_id=1956728320 instance=ExtResource("6_2wyq8")]
-layout_mode = 0
-offset_left = 2333.0
-offset_top = -81.0
-offset_right = 2333.0
-offset_bottom = -81.0
 
 [node name="RightCover" type="TextureRect" parent="FullGameMode/Background/Floors" unique_id=1884332700]
 layout_mode = 0
 offset_left = 2631.0
-offset_top = -78.0
+offset_top = -79.0
 offset_right = 3629.0
 offset_bottom = 358.0
 texture = ExtResource("4_2wyq8")
+expand_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=422862178]
+layout_mode = 0
+offset_left = -780.0
+offset_right = 16.0
+offset_bottom = 105.0
+texture = SubResource("AtlasTexture_vxglm")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=177922556]
+layout_mode = 0
+offset_left = -1567.0
+offset_right = -771.0
+offset_bottom = 105.0
+texture = SubResource("AtlasTexture_vxglm")
+expand_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=660731690]
+layout_mode = 0
+offset_left = -2356.0
+offset_right = -1560.0
+offset_bottom = 105.0
+texture = SubResource("AtlasTexture_vxglm")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=1408688453]
+layout_mode = 0
+offset_left = -3142.0
+offset_right = -2346.0
+offset_bottom = 105.0
+texture = SubResource("AtlasTexture_vxglm")
+expand_mode = 1
+
+[node name="TextureRect5" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=1201363362]
+layout_mode = 0
+offset_left = -3932.0
+offset_right = -3136.0
+offset_bottom = 105.0
+texture = SubResource("AtlasTexture_vxglm")
+expand_mode = 1
+
+[node name="TextureRect6" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=1970160437]
+layout_mode = 0
+offset_left = -4619.0
+offset_right = -3823.0
+offset_bottom = 105.0
+texture = SubResource("AtlasTexture_vxglm")
 expand_mode = 1
 
 [node name="WholeAlignment" type="HBoxContainer" parent="FullGameMode/Background" unique_id=905224424]
