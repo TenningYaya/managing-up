@@ -7,6 +7,7 @@ extends Control
 #      region 内 = 可点击且会绘制；region 外 = 既穿透点击、又显示桌面（窗口被裁剪掉那块）。
 #      因此 region 必须覆盖"所有需要被看见/被点到"的区域 = 底部条 + 当前可见的浮窗。
 const BOTTOM_STRIP_HEIGHT := 435.0          # 底部固定窗口高度（画布坐标，随分辨率缩放）
+const FIRE_ASCEND_TOP_MARGIN := 240.0       # 螺旋升天幽灵：其原点(角色中心)之上要额外圈进来的余量（含头顶吐槽气泡），宁可多留别裁到
 const DEBUG_PASSTHROUGH := false            # 需要排查时改 true，会打印每次 region 更新
 const SETTINGS_PATH := "user://settings.cfg" # 轻量设置持久化（与游戏存档分离，删档也不影响）
 var interactive_panels: Array[Control] = [] # 底部条之外、显示时也要进 region 的浮窗
@@ -202,11 +203,11 @@ func _band_physical_rect() -> Rect2:
 		return Rect2()
 	var vp := get_viewport().get_visible_rect().size
 	var band_top := vp.y - BOTTOM_STRIP_HEIGHT
-	# 有正在上升的催工气泡冒到条子上方时，把可见上限抬到最高气泡处（全宽、短暂），
-	# 否则气泡进了"透明区"会被裁掉看不见。气泡消失后自然恢复。
-	var bubble_top := _get_urge_bubbles_top_viewport_y()
-	if bubble_top < band_top:
-		band_top = bubble_top
+	# 有正在上升的催工气泡 / 被开除员工螺旋升天冒到条子上方时，把可见上限抬到最高处（全宽、短暂），
+	# 否则它们进了"透明区"会被裁掉看不见。动画消失后自然恢复。
+	var content_top := minf(_get_urge_bubbles_top_viewport_y(), _get_fire_ascend_top_viewport_y())
+	if content_top < band_top:
+		band_top = content_top
 	var band_canvas := Rect2(0.0, band_top, vp.x, vp.y - band_top)
 	return get_viewport().get_screen_transform() * band_canvas
 
@@ -217,6 +218,16 @@ func _get_urge_bubbles_top_viewport_y() -> float:
 	for b in get_tree().get_nodes_in_group("urge_bubbles"):
 		if b is CanvasItem and b.is_visible_in_tree() and b.has_method("get_top_viewport_y"):
 			top = minf(top, b.get_top_viewport_y())
+	return top
+
+
+# "fire_ascend" 组里所有正在升天的幽灵的视觉顶端中最高的那个（视口坐标，越小越高）。没有则 INF。
+# 幽灵原点≈角色中心，往上留 FIRE_ASCEND_TOP_MARGIN 把头顶吐槽气泡也圈进来。升天结束幽灵自毁后自然恢复。
+func _get_fire_ascend_top_viewport_y() -> float:
+	var top := INF
+	for g in get_tree().get_nodes_in_group("fire_ascend"):
+		if g is CanvasItem and g.is_visible_in_tree():
+			top = minf(top, g.get_global_transform_with_canvas().origin.y - FIRE_ASCEND_TOP_MARGIN)
 	return top
 
 

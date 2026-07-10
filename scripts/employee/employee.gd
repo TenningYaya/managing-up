@@ -1287,6 +1287,7 @@ func spawn_fire_ascend_effect() -> void:
 	var ghost := Node2D.new()          # 只负责上升 + 淡出（吐槽气泡挂这层，才不会跟着翻面）
 	ghost.z_index = 900                # 盖在世界物体之上
 	ghost.z_as_relative = false
+	ghost.add_to_group("fire_ascend")  # main.gd 据此临时抬高透明窗口可见区，别把升到界面外的部分裁掉
 	scene.add_child(ghost)
 	ghost.global_position = char_global
 

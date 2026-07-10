@@ -61,6 +61,9 @@ const WIN_SCENE = preload("res://scenes/narrative/win_scene.tscn")
 # KPI 不足（按钮不可用）时，按钮变暗（明度降低）表示无法升级。
 const UPGRADE_DISABLED_DIM := Color(0.5, 0.5, 0.5)
 
+# Lv5 金币图标显示得比默认图标小一圈（纯视觉缩放，不改布局槽位）。1.0=原大小，越小越小。
+const LV5_ICON_SCALE := 0.8
+
 func _ready():
 	_default_item1_icon = item1_icon.texture
 	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
@@ -87,6 +90,7 @@ func update_ui():
 		separator1.visible = true
 		separator2.visible = true
 		item1_icon.texture = _default_item1_icon
+		item1_icon.scale = Vector2.ONE   # 从 Lv5 升到满级时，把之前缩小的图标还原
 		item1_title.text = "-"; item1_desc.text = tr("Sidebar_UPGRADE_MAXED_OUT")
 		item2_title.text = "-"; item2_desc.text = tr("Sidebar_UPGRADE_MAXED_OUT")
 		item3_title.text = "-"; item3_desc.text = tr("Sidebar_UPGRADE_MAXED_OUT")
@@ -111,7 +115,14 @@ func update_ui():
 	item3_container.visible = show_extra
 	separator1.visible = show_extra
 	separator2.visible = show_extra
-	item1_icon.texture = lv5_icon if current_level == 5 else _default_item1_icon
+	# Lv5 显示金币图标，并整体缩小一圈（以中心为锚缩放，居中不偏、也不挤动其它元素）
+	if current_level == 5:
+		item1_icon.texture = lv5_icon
+		item1_icon.pivot_offset = item1_icon.size / 2.0
+		item1_icon.scale = Vector2(LV5_ICON_SCALE, LV5_ICON_SCALE)
+	else:
+		item1_icon.texture = _default_item1_icon
+		item1_icon.scale = Vector2.ONE
 	if show_extra:
 		item2_title.text = tr(data["benefits"][1]["title"])
 		item2_desc.text  = tr(data["benefits"][1]["desc"])
