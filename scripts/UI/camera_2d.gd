@@ -9,8 +9,8 @@ var last_mouse_pos = Vector2.ZERO
 @export var center_x_offset: float = -200.0
 
 # 🌟 将你场景的实际内容宽度和最左边界设为常量，方便统一管理
-const BOUND_LEFT := -1000.0
-const BOUND_RIGHT := 3060.0
+const BOUND_LEFT := -1500.0
+const BOUND_RIGHT := 3580.0
 
 # —— 拖拽员工时的边缘滚动 ——
 # 拖着员工把鼠标推到屏幕最左/最右边缘并停留一小会，地图就朝那个方向滚动
