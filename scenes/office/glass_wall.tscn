@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://tstl70u886xm" path="res://assets/background/glass_wall2.png" id="3_cigi1"]
 
 [node name="GlassWall" type="Control" unique_id=1956728320]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 
@@ -54,6 +55,7 @@ texture = ExtResource("1_shhuv")
 expand_mode = 1
 
 [node name="PureWall" type="Control" parent="." unique_id=2050832567]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

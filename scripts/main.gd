@@ -51,6 +51,10 @@ func _ready():
 
 	$FullGameMode.show()
 
+	# 点"便签/老板模式"按钮 = 和 Ctrl+Tab 一样切换进便签模式
+	if has_node("CanvasLayer/MinimalButton"):
+		$CanvasLayer/MinimalButton.pressed.connect(_toggle_mode)
+
 	# 底部条之外、显示时也要保持可点击+可见的浮窗。
 	# 其余 UI 都在底部 435 条内，由底部条统一覆盖。
 	# 注：RecruitmentPanel / EmployeeWarehouse 的拖动已在别处实现，这里只读它们的实时位置。

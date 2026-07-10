@@ -27,6 +27,11 @@ const QUOTES = {
 	# [员工吐槽中心]:员工被抓回工位结束漫游
 	"drag_back_roam": [
 		"BANTER_DRAG_BACK_1", "BANTER_DRAG_BACK_2", "BANTER_DRAG_BACK_3", "BANTER_DRAG_BACK_4", "BANTER_DRAG_BACK_5"
+	],
+	# [员工吐槽中心]:员工被开除（螺旋升天时甩下的最后一句）
+	"fired": [
+		"BANTER_FIRED_1", "BANTER_FIRED_2", "BANTER_FIRED_3", "BANTER_FIRED_4", "BANTER_FIRED_5",
+		"BANTER_FIRED_6", "BANTER_FIRED_7", "BANTER_FIRED_8", "BANTER_FIRED_9", "BANTER_FIRED_10"
 	]
 }
 

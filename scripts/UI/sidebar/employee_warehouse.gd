@@ -326,6 +326,9 @@ func _execute_bulk_fire():
 		EmployeeManager.employee_removed.emit(emp)
 		EmployeeManager.my_employees.erase(emp)
 		
+		# 螺旋升天特效（销毁前造幽灵来演；不在地图上/看不见的会自动跳过）
+		if is_instance_valid(emp) and emp.has_method("spawn_fire_ascend_effect"):
+			emp.spawn_fire_ascend_effect()
 		# 3. 彻底销毁：这一行会同时把地图上的小人、仓库的数据、内存的对象全部物理抹除
 		if is_instance_valid(emp):
 			emp.queue_free()
