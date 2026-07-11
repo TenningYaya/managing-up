@@ -62,21 +62,34 @@ func _input(event: InputEvent) -> void:
 			if not background.get_global_rect().has_point(mouse_pos):
 				close_panel()
 
-func open_panel(office: Node, open_culture_tab: bool = false, open_stock_tab: bool = false) -> void:
+func open_panel(office: Node, open_culture_tab: bool = false, open_stock_tab: bool = false, open_training_tab: bool = false) -> void:
 	current_target_office = office
 	_open_time = Time.get_ticks_msec()
 
 	var is_culture_center = (office.current_type == Gamemanager.OfficeType.CULTURE_CENTER)
 	var is_stock_office = (office.current_type == Gamemanager.OfficeType.STOCK_OFFICE)
+	var is_training = (office.current_type == Gamemanager.OfficeType.TRAINING_ROOM)
 
 	# 文化页签只在文化室时可见；炒股页签只在炒股办公室时可见
 	tab_container.set_tab_hidden(1, !is_culture_center)
 	tab_container.set_tab_hidden(2, !is_stock_office)
+	# 培训页签(index 3)：只在你已经在场景里加了它时才处理，没加也不报错
+	var has_training_tab := tab_container.get_tab_count() > 3
+	if has_training_tab:
+		tab_container.set_tab_hidden(3, !is_training)
+
+	# 把培训面板绑定到当前这间房的逻辑（不唯一，可能有多间）
+	if is_training:
+		var tp = get_tree().get_first_node_in_group("training_panel")
+		if tp and tp.has_method("bind_logic"):
+			tp.bind_logic(office.logic_node)
 
 	if open_culture_tab and is_culture_center:
 		tab_container.current_tab = 1
 	elif open_stock_tab and is_stock_office:
 		tab_container.current_tab = 2
+	elif open_training_tab and is_training and has_training_tab:
+		tab_container.current_tab = 3
 	else:
 		tab_container.current_tab = 0
 

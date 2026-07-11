@@ -13,7 +13,8 @@ enum OfficeType {
 	MEETING_ROOM,
 	RECRUITMENT,
 	CULTURE_CENTER,
-	STOCK_OFFICE
+	STOCK_OFFICE,
+	TRAINING_ROOM
 }
 
 enum SnackBuff {
@@ -28,7 +29,8 @@ const OFFICE_UNLOCK_LEVELS = {
 	OfficeType.RECRUITMENT: 3,     # M3 解锁
 	OfficeType.MEETING_ROOM: 4,    # M4 解锁
 	OfficeType.CULTURE_CENTER: 5,   # M5 解锁
-	OfficeType.STOCK_OFFICE: 1
+	OfficeType.STOCK_OFFICE: 1,
+	OfficeType.TRAINING_ROOM: 4    # 培训室解锁等级（想改就改这里）
 }
 
 var has_recruitment_office: bool = false

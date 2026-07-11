@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://c4ph74a8s1n72"]
+
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="1_ujllk"]
+[ext_resource type="Script" uid="uid://e62sdcopacf0" path="res://scripts/UI/panel/training_panel.gd" id="1_wuxih"]
+
+[node name="TrainingPanel" type="Control" unique_id=160617930]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 464.0
+offset_bottom = 300.0
+script = ExtResource("1_wuxih")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=980888359]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Avatars" type="HBoxContainer" parent="VBoxContainer" unique_id=1546953594]
+layout_mode = 2
+
+[node name="AttributeSelector" type="HBoxContainer" parent="VBoxContainer" unique_id=406505562]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Eff" type="Button" parent="VBoxContainer/AttributeSelector" unique_id=754879638]
+layout_mode = 2
+
+[node name="Qual" type="Button" parent="VBoxContainer/AttributeSelector" unique_id=1820424666]
+layout_mode = 2
+
+[node name="Exp" type="Button" parent="VBoxContainer/AttributeSelector" unique_id=1575314599]
+layout_mode = 2
+
+[node name="TurnSelector" type="HBoxContainer" parent="VBoxContainer" unique_id=1657864195]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Minus" type="Button" parent="VBoxContainer/TurnSelector" unique_id=469213746]
+layout_mode = 2
+
+[node name="RoundCount" type="Label" parent="VBoxContainer/TurnSelector" unique_id=2015880802]
+layout_mode = 2
+
+[node name="Plus" type="Button" parent="VBoxContainer/TurnSelector" unique_id=859097276]
+layout_mode = 2
+
+[node name="Progress" type="ProgressBar" parent="VBoxContainer" unique_id=838573895]
+layout_mode = 2
+
+[node name="StatusSelector" type="HBoxContainer" parent="VBoxContainer" unique_id=632992981]
+layout_mode = 2
+
+[node name="StartButton" parent="VBoxContainer/StatusSelector" unique_id=2048579194 instance=ExtResource("1_ujllk")]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="EndButton" parent="VBoxContainer/StatusSelector" unique_id=407960164 instance=ExtResource("1_ujllk")]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2

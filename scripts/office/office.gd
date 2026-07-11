@@ -10,6 +10,7 @@ class_name Office
 @export var tex_recruitment: Texture2D
 @export var tex_culture: Texture2D
 @export var tex_stock: Texture2D
+@export var tex_training: Texture2D
 
 @export var unlock_at_level: int = 1 # 🌟 在编辑器里设置：M1=1, M2=2...
 
@@ -145,7 +146,24 @@ func _gui_input(event: InputEvent) -> void:
 func _on_office_clicked() -> void:
 	var panel = get_tree().get_first_node_in_group("office_panel")
 	if panel:
-		panel.open_panel(self, false)
+		# 培训室：点一下默认直接打开"培训"页签（其它办公室仍是选办公室那页）
+		if current_type == Gamemanager.OfficeType.TRAINING_ROOM:
+			panel.open_panel(self, false, false, true)
+		else:
+			panel.open_panel(self, false)
+
+# 供 TrainingRoomLogic 调用：培训室没人时摇晃 EmptyOfficeHint、有人时收起
+func set_empty_hint_active(active: bool) -> void:
+	if not empty_hint:
+		return
+	if active:
+		empty_hint.show()
+		_play_hint_wobble_animation()
+	else:
+		empty_hint.hide()
+		if _hint_tween and _hint_tween.is_valid():
+			_hint_tween.kill()
+		empty_hint.rotation = 0.0
 
 # 企业文化室专属：点管理按钮直接打开 Culture 页签（而不是选办公室那一页）
 func _on_manage_btn_pressed() -> void:
@@ -234,6 +252,7 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 		Gamemanager.OfficeType.RECRUITMENT: logic_node = RecruitmentOfficeLogic.new()
 		Gamemanager.OfficeType.CULTURE_CENTER: logic_node = CultureCenterLogic.new()
 		Gamemanager.OfficeType.STOCK_OFFICE: logic_node = StockOfficeLogic.new()
+		Gamemanager.OfficeType.TRAINING_ROOM: logic_node = TrainingRoomLogic.new()
 		
 	if logic_node != null:
 		add_child(logic_node)
@@ -264,7 +283,8 @@ func _update_visuals() -> void:
 		Gamemanager.OfficeType.RECRUITMENT: target_tex = tex_recruitment
 		Gamemanager.OfficeType.CULTURE_CENTER: target_tex = tex_culture
 		Gamemanager.OfficeType.STOCK_OFFICE: target_tex = tex_stock
-		
+		Gamemanager.OfficeType.TRAINING_ROOM: target_tex = tex_training
+
 		_: target_tex = tex_empty
 	
 	if texture_display:
@@ -275,6 +295,8 @@ func _update_visuals() -> void:
 		if current_type == Gamemanager.OfficeType.NONE:
 			empty_hint.show()
 			_play_hint_wobble_animation() # 启动摇摆！
+		elif current_type == Gamemanager.OfficeType.TRAINING_ROOM:
+			pass  # 培训室的空置提示交给 TrainingRoomLogic 按"有没有人在训"来驱动
 		else:
 			empty_hint.hide()
 			# 有功能了，杀掉动画，把角度归零，省内存且干净

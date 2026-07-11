@@ -162,7 +162,8 @@ func save_game() -> void:
 				"experience": emp.experience,
 				"dna": emp.dna, 
 				"is_in_meeting": emp.is_in_meeting,
-				"is_on_map": false, 
+				"is_training": emp.is_training,
+				"is_on_map": false,
 				"seat_path": "",
 				"pos_x": 0.0,
 				"pos_y": 0.0
@@ -342,6 +343,10 @@ func _restore_employees(emp_list: Array) -> void:
 			# 延迟执行：确保办公室与员工都已就位后再登记。
 			call_deferred("_restore_meeting_employee", new_emp)
 
+		if e_data.get("is_training", false):
+			# 同理：培训名单也是运行时数据，需重新登记回培训室（不存离线进度，回到"未开始"态）。
+			call_deferred("_restore_training_employee", new_emp)
+
 # 把一个原本在开会的员工重新塞回会议室（读档恢复用）
 func _restore_meeting_employee(emp: Employee) -> void:
 	if not is_instance_valid(emp):
@@ -358,6 +363,22 @@ func _restore_meeting_employee(emp: Employee) -> void:
 func _find_meeting_room_logic():
 	for office in get_tree().get_nodes_in_group("offices"):
 		if office.current_type == Gamemanager.OfficeType.MEETING_ROOM and office.logic_node != null:
+			return office.logic_node
+	return null
+
+# 把一个原本在培训的员工重新塞回培训室（读档恢复用）
+func _restore_training_employee(emp: Employee) -> void:
+	if not is_instance_valid(emp):
+		return
+	var training_logic = _find_training_room_logic()
+	if training_logic != null and training_logic.has_method("restore_occupant"):
+		training_logic.restore_occupant(emp)
+	else:
+		push_warning("[SaveManager] 存档含培训员工，但未找到培训室，按普通在座员工恢复")
+
+func _find_training_room_logic():
+	for office in get_tree().get_nodes_in_group("offices"):
+		if office.current_type == Gamemanager.OfficeType.TRAINING_ROOM and office.logic_node != null:
 			return office.logic_node
 	return null
 

@@ -72,6 +72,7 @@ var current_desk_eff_buff: int = 0
 var current_desk_qual_buff: int = 0
 var current_snack_buff: SnackBuff = SnackBuff.NONE
 var is_in_meeting: bool = false
+var is_training: bool = false   # 在培训室培训中（占工位、藏真身、不产 KPI）
 var meet_buff_eff: int = 0
 var meet_buff_qual: int = 0
 var meet_buff_exp: int = 0
@@ -192,7 +193,7 @@ func _notification(what: int) -> void:
 		refresh_name()
 
 func _input(event: InputEvent) -> void:
-	if Gamemanager.is_employee_interaction_disabled or is_in_meeting:
+	if Gamemanager.is_employee_interaction_disabled or is_in_meeting or is_training:
 		# 如果玩家正在拖拽中，突然被拉了闸，强行帮他松手，防止员工粘在鼠标上
 		if is_pressing or dragging:
 			is_pressing = false
@@ -513,7 +514,7 @@ func _update_roaming(delta: float) -> void:
 func _can_try_roam() -> bool:
 	if not roaming_enabled:
 		return false
-	if is_roaming or dragging or is_pressing or is_slacking or is_in_meeting:
+	if is_roaming or dragging or is_pressing or is_slacking or is_in_meeting or is_training:
 		return false
 	if current_seat == null:
 		return false
@@ -1173,9 +1174,49 @@ func go_to_meeting_directly() -> bool:
 	target_logic.drop_employee(self)
 	return true
 
+# ==========================================
+# 🌟 培训室：进入/退出培训（照会议室，但培训期间【不产 KPI】= 机会成本）
+# ==========================================
+func enter_training() -> void:
+	is_training = true
+	is_working = false            # 培训期间不干活、不产 KPI（机会成本）
+	work_elapsed = 0.0
+	work_progress_changed.emit(0.0)
+	# 霸占原工位（拖拽时 _start_drag 清空了 current_seat，这里抢回来）
+	if drag_start_seat != null:
+		current_seat = drag_start_seat
+		current_seat.set_occupant(self)
+		global_position = current_seat.get_snap_global_position() - size / 2.0
+	# 无论是拖入(drag_start_seat)还是读档恢复(current_seat 已存在)，都标记工位为"离席"
+	if current_seat != null and current_seat.has_method("set_meeting_state"):
+		current_seat.set_meeting_state(true)
+	# 藏真身（人去"培训"了，工位上不显示）
+	if visual_component:
+		visual_component.hide()
+
+func exit_training() -> void:
+	is_training = false
+	# 恢复工位表现与真身，回到干活状态
+	if current_seat != null and current_seat.has_method("set_meeting_state"):
+		current_seat.set_meeting_state(false)
+	if visual_component:
+		visual_component.show()
+	is_working = true
+	_start_new_work_cycle()
+
+# 培训成功：把指定属性 +1（封顶 10）。which ∈ {"eff","qual","exp"}
+func raise_attribute(which: String) -> void:
+	match which:
+		"eff":
+			efficiency = mini(efficiency + 1, 10)
+		"qual":
+			quality = mini(quality + 1, 10)
+		"exp":
+			experience = mini(experience + 1, 10)
+
 func enter_meeting() -> void:
 	is_in_meeting = true
-	
+
 	# 1. 进度从零开始 (需求：被拖入时清零)
 	work_elapsed = 0.0
 	work_progress_changed.emit(0.0)

@@ -8,7 +8,9 @@
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="4_dvne8"]
 [ext_resource type="PackedScene" uid="uid://b2l7mr7bb5b41" path="res://scenes/UI/panel/culture_panel.tscn" id="7_dvne8"]
 [ext_resource type="Texture2D" uid="uid://gmrmj1j10q43" path="res://assets/UI/office_icon/Stock.jpg" id="7_l2t2v"]
+[ext_resource type="Texture2D" uid="uid://cfs5jogly44ho" path="res://assets/UI/office_icon/Training.png" id="8_1hrmf"]
 [ext_resource type="PackedScene" uid="uid://cifxhetkp4v0e" path="res://scenes/UI/panel/stock_panel.tscn" id="9_e55uw"]
+[ext_resource type="PackedScene" uid="uid://c4ph74a8s1n72" path="res://scenes/UI/panel/training_panel.tscn" id="10_oppgx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e55uw"]
 atlas = ExtResource("2_kpljw")
@@ -45,7 +47,7 @@ region = Rect2(220, 171, 584, 616)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dvne8"]
 atlas = ExtResource("3_wtdck")
-region = Rect2(108.3488, 560.368, 313.38208, 315.45807)
+region = Rect2(112, 559, 306, 314)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mixia"]
 atlas = ExtResource("3_wtdck")
@@ -55,9 +57,15 @@ region = Rect2(603.6087, 89.110435, 312.2473, 314.42557)
 atlas = ExtResource("3_wtdck")
 region = Rect2(602.98975, 558.7769, 312.54968, 316.76886)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_0khrq"]
+atlas = ExtResource("8_1hrmf")
+region = Rect2(445, 341, 1158, 1228)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpljw"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oppgx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1hrmf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dvne8"]
 
@@ -130,7 +138,7 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/panel = SubResource("StyleBoxFlat_oppgx")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_1hrmf")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_0khrq")
-current_tab = 2
+current_tab = 3
 tab_0/title = "OFFICE_PN_TAB_OFFICE"
 tab_1/title = "OFFICE_PN_TAB_CULTURE"
 tab_2/title = "OFFICE_PN_TAB_STOCK"
@@ -189,6 +197,14 @@ normal_icon = SubResource("AtlasTexture_l2t2v")
 office_description = "OFFICE_CULTURE_TIP_1"
 office_usage = "OFFICE_CULTURE_TIP_2"
 
+[node name="ChangeOfficeButton6" parent="TabContainer/Office/OfficeButton" unique_id=1752987444 instance=ExtResource("1_kpljw")]
+layout_mode = 2
+office_type = 6
+button_text = "OFFICE_PN_FUNC_HEADHUNT"
+normal_icon = SubResource("AtlasTexture_0khrq")
+office_description = "OFFICE_TRAINING_TIP_1"
+office_usage = "OFFICE_TRAINING_TIP_2"
+
 [node name="Culture" type="Panel" parent="TabContainer" unique_id=1455203945]
 visible = false
 layout_mode = 2
@@ -211,12 +227,21 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="Stock" type="PanelContainer" parent="TabContainer" unique_id=583107643]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_oppgx")
 metadata/_tab_index = 2
 metadata/_tab_name = "OFFICE_PN_TAB_STOCK"
 
 [node name="Control" parent="TabContainer/Stock" unique_id=278255823 instance=ExtResource("9_e55uw")]
+layout_mode = 2
+
+[node name="Training" type="PanelContainer" parent="TabContainer" unique_id=254818744]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_1hrmf")
+metadata/_tab_index = 3
+
+[node name="Training" parent="TabContainer/Training" unique_id=160617930 instance=ExtResource("10_oppgx")]
 layout_mode = 2
 
 [node name="Panel" type="Panel" parent="." unique_id=1312535902]
