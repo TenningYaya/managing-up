@@ -237,12 +237,14 @@ func _compute_region_polygon() -> PackedVector2Array:
 	var band := _band_physical_rect()
 
 	# 便签模式（无底部条）：区域就用可见浮窗自身矩形（只有一个小便签，不存在横带问题）
+	# ⚠️ 便签可被 scale 放大，get_global_rect 不含缩放，这里用全局变换算真实可视矩形
 	if band == Rect2():
 		var r := Rect2()
 		var has := false
 		for panel in interactive_panels:
 			if is_instance_valid(panel) and panel.is_visible_in_tree():
-				var pr := get_viewport().get_screen_transform() * panel.get_global_rect()
+				var visual_rect: Rect2 = panel.get_global_transform() * Rect2(Vector2.ZERO, panel.size)
+				var pr := get_viewport().get_screen_transform() * visual_rect
 				r = pr if not has else r.merge(pr)
 				has = true
 		if not has:
@@ -338,6 +340,9 @@ func _input(event):
 		_toggle_mode()
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_UP or event.keycode == KEY_DOWN:
+			# 便签模式：上下键留给便签的 TextEdit 移动光标，不动窗口位置
+			if _is_sticky_mode:
+				return
 			_move_window_y(event.keycode == KEY_UP)
 			get_viewport().set_input_as_handled()
 
