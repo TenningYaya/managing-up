@@ -1,5 +1,14 @@
 id,zh,en
 Sidebar_TRAINING_EMPTY,把员工拖进来开始培训,Drag an employee in to start training
+Sidebar_TRAINING_EFF,效率,Efficiency
+Sidebar_TRAINING_QUAL,品质,Quality
+Sidebar_TRAINING_EXP,经验,Experience
+Sidebar_TRAINING_START,开始,Start
+Sidebar_TRAINING_END,结束,End
+Sidebar_TRAINING_ATTR_TIP,选择本轮要培训的属性,Pick which attribute to train
+Sidebar_TRAINING_ROUNDS_TIP,加减选择培训轮数,Set the number of training rounds
+Sidebar_TRAINING_START_TIP,锁定名单并开始培训,Lock the roster and start training
+Sidebar_TRAINING_END_TIP,结束培训（当前未完成的一轮不结算）,End training (the current unfinished round is forfeited)
 Sidebar_menu_upgrades,升级,UPGRADES
 Sidebar_menu_tutorial,教程,TUTORIAL
 Sidebar_menu_general,总览,GENERAL

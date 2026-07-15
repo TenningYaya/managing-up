@@ -326,22 +326,25 @@ func _end_drag() -> void:
 	# ==========================================
 	var offices = get_tree().get_nodes_in_group("offices")
 	for office in offices:
-		# 判断这个办公室当前是不是会议室，并且加载了逻辑
-		if office.current_type == Gamemanager.OfficeType.MEETING_ROOM and office.logic_node != null:
-			# 判断鼠标松开时，是不是在会议室的框框里
+		# 会议室 / 培训室都接受把员工拖进来（同一套 can_drop_employee / drop_employee 接口）
+		var accepts_drop: bool = office.current_type == Gamemanager.OfficeType.MEETING_ROOM \
+			or office.current_type == Gamemanager.OfficeType.TRAINING_ROOM
+		if accepts_drop and office.logic_node != null:
+			# 判断鼠标松开时，是不是在这个房间的框框里
 			if office.get_global_rect().has_point(get_global_mouse_position()):
 				if office.logic_node.can_drop_employee(self):
 					office.logic_node.drop_employee(self)
-					return # 成功进入会议室，直接结束判定！
+					return # 成功进入房间，直接结束判定！
 				else:
-					var angry_texts = [
-						"No seat, no meeting!",
-						"没位置开什么会，先领活！",
-						"没名分的会议我不参加..."
-					]
-					_spawn_speech_bubble(angry_texts[randi() % angry_texts.size()])
-					
-					_return_to_start() # 骂完之后，乖乖弹回去
+					# 会议室：来一句"没位置开会"的吐槽；培训室：安静弹回工位
+					if office.current_type == Gamemanager.OfficeType.MEETING_ROOM:
+						var angry_texts = [
+							"No seat, no meeting!",
+							"没位置开什么会，先领活！",
+							"没名分的会议我不参加..."
+						]
+						_spawn_speech_bubble(angry_texts[randi() % angry_texts.size()])
+					_return_to_start() # 弹回去
 					return
 
 	# 如果没扔进会议室，正常走找工位的逻辑

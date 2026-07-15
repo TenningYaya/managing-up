@@ -37,6 +37,29 @@ func _ready() -> void:
 	_plus.pressed.connect(_on_plus)
 	_start_btn.pressed.connect(_on_start)
 	_end_btn.pressed.connect(_on_end)
+	# 开始/结束用 NormalButton 的 button_text（它自带 tr() 且会随语言自动刷新）
+	_start_btn.button_text = "Sidebar_TRAINING_START"
+	_end_btn.button_text = "Sidebar_TRAINING_END"
+	_apply_labels()
+
+# 语言切换时刷新普通按钮的文字与提示（tr 写死的不会自动重译；Start/End 由 NormalButton 自己刷）
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_apply_labels()
+
+func _apply_labels() -> void:
+	_eff.text = tr("Sidebar_TRAINING_EFF")
+	_qual.text = tr("Sidebar_TRAINING_QUAL")
+	_exp.text = tr("Sidebar_TRAINING_EXP")
+	_minus.text = "-"
+	_plus.text = "+"
+	_eff.tooltip_text = tr("Sidebar_TRAINING_ATTR_TIP")
+	_qual.tooltip_text = tr("Sidebar_TRAINING_ATTR_TIP")
+	_exp.tooltip_text = tr("Sidebar_TRAINING_ATTR_TIP")
+	_minus.tooltip_text = tr("Sidebar_TRAINING_ROUNDS_TIP")
+	_plus.tooltip_text = tr("Sidebar_TRAINING_ROUNDS_TIP")
+	_start_btn.tooltip_text = tr("Sidebar_TRAINING_START_TIP")
+	_end_btn.tooltip_text = tr("Sidebar_TRAINING_END_TIP")
 
 func _process(_dt: float) -> void:
 	# 进度条实时刷新（只在可见 + 已绑定时）

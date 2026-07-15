@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="1_ujllk"]
 [ext_resource type="Script" uid="uid://e62sdcopacf0" path="res://scripts/UI/panel/training_panel.gd" id="1_wuxih"]
+[ext_resource type="PackedScene" uid="uid://j84ug4frpeje" path="res://scenes/UI/custom/normal_button_2.tscn" id="2_mwf3k"]
 
 [node name="TrainingPanel" type="Control" unique_id=160617930]
 layout_mode = 3
@@ -35,13 +36,13 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Minus" type="Button" parent="VBoxContainer/TurnSelector" unique_id=469213746]
+[node name="Minus" parent="VBoxContainer/TurnSelector" unique_id=2048579194 instance=ExtResource("2_mwf3k")]
 layout_mode = 2
 
 [node name="RoundCount" type="Label" parent="VBoxContainer/TurnSelector" unique_id=2015880802]
 layout_mode = 2
 
-[node name="Plus" type="Button" parent="VBoxContainer/TurnSelector" unique_id=859097276]
+[node name="Plus" parent="VBoxContainer/TurnSelector" unique_id=1633593369 instance=ExtResource("2_mwf3k")]
 layout_mode = 2
 
 [node name="Progress" type="ProgressBar" parent="VBoxContainer" unique_id=838573895]
@@ -50,7 +51,7 @@ layout_mode = 2
 [node name="StatusSelector" type="HBoxContainer" parent="VBoxContainer" unique_id=632992981]
 layout_mode = 2
 
-[node name="StartButton" parent="VBoxContainer/StatusSelector" unique_id=2048579194 instance=ExtResource("1_ujllk")]
+[node name="StartButton" parent="VBoxContainer/StatusSelector" unique_id=901656421 instance=ExtResource("1_ujllk")]
 custom_minimum_size = Vector2(60, 40)
 layout_mode = 2
 size_flags_horizontal = 4

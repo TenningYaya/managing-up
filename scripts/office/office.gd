@@ -44,6 +44,11 @@ var is_locked: bool = true:
 func _ready() -> void:
 	add_to_group("offices")
 	
+	# EmptyOfficeHint 只是装饰性提示，绝不能拦鼠标——否则培训室空置时它盖在办公室中央，
+	# 会把"拖员工进来"的落点吃掉（拖拽命中的是提示图而不是它背后的办公室）。
+	if empty_hint:
+		empty_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 	if manage_btn:
 		manage_btn.pressed.connect(_on_manage_btn_pressed)
 	if stock_btn:
