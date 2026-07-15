@@ -118,6 +118,17 @@ const TRIGGER_TIP_KEYS := [   # 轮播的贴士（本地化 key，按顺序循�
 var _tip_index := 0
 var _active_tip_bubble: Control = null
 
+# =====================================================
+# Event 系统（随机一段时间后，Trigger 手机图标下方冒出一个事件 icon，点开是"公司群"对话）
+# =====================================================
+const EVENT_CHAT_SCENE := preload("res://scenes/events/event_chat_ui.tscn")
+const EVENT_MIN_INTERVAL := 60.0     # 距下一次事件的最短等待（秒）
+const EVENT_MAX_INTERVAL := 180.0    # 最长等待（秒）
+@onready var event_icon: BaseButton = $EventIcon
+var _event_timer: Timer = null
+var _event_pending := false   # 事件 icon 已冒出、等玩家点
+var _event_active := false    # 事件对话弹窗正开着
+
 
 func _ready() -> void:
 	# =====================================================
@@ -204,6 +215,16 @@ func _ready() -> void:
 	tip_timer.autostart = true
 	add_child(tip_timer)
 	tip_timer.timeout.connect(_on_trigger_tip_timeout)
+
+	# Event 系统：初始化事件 icon + 排下一次事件
+	if is_instance_valid(event_icon):
+		event_icon.hide()
+		event_icon.pressed.connect(_on_event_icon_pressed)
+	_event_timer = Timer.new()
+	_event_timer.one_shot = true
+	add_child(_event_timer)
+	_event_timer.timeout.connect(_on_event_timer_timeout)
+	_schedule_next_event()
 
 	Gamemanager.kpi_changed.connect(func(_v): _refresh_upgrade_hints())
 	Gamemanager.level_changed.connect(func(_v): _refresh_upgrade_hints())
@@ -356,6 +377,9 @@ func open_phone() -> void:
 	_stop_shake()
 	# 手机打开：收起可能正挂着的小贴士气泡
 	_clear_trigger_tip()
+	# 手机图标（Trigger）此刻要隐藏，紧贴其下的事件 icon 也一起收起
+	if is_instance_valid(event_icon):
+		event_icon.hide()
 
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -383,6 +407,9 @@ func close_phone() -> void:
 	tween.finished.connect(func():
 		if not is_open:
 			trigger_btn.show()
+			# 手机收回后，若有待处理事件，重新在 Trigger 下方亮出事件 icon
+			if _event_pending:
+				_show_event_icon()
 	)
 
 
@@ -731,3 +758,64 @@ func _clear_trigger_tip() -> void:
 	if is_instance_valid(_active_tip_bubble):
 		_active_tip_bubble.queue_free()
 	_active_tip_bubble = null
+
+
+# =====================================================
+# 12. Event 系统：定时冒事件 icon → 点开"公司群"对话
+# =====================================================
+# 排一次随机延迟后触发事件
+func _schedule_next_event() -> void:
+	if _event_timer == null:
+		return
+	_event_timer.start(randf_range(EVENT_MIN_INTERVAL, EVENT_MAX_INTERVAL))
+
+# 计时到：满足条件就冒出事件 icon；否则等下轮再排
+func _on_event_timer_timeout() -> void:
+	# 已经有事件挂着 / 对话开着 / 教程没走完：这轮先跳过，稍后再试
+	if _event_pending or _event_active or _is_locked_by_tutorial or not Gamemanager.is_tutorial_completed:
+		_schedule_next_event()
+		return
+	_event_pending = true
+	# 手机开着时 Trigger 和事件 icon 都藏着；等收回手机时再由 close_phone 亮出
+	if not is_open:
+		_show_event_icon()
+
+# 事件 icon 弹入动画（缩放 + 淡入）
+func _show_event_icon() -> void:
+	if not is_instance_valid(event_icon):
+		return
+	event_icon.show()
+	event_icon.pivot_offset = event_icon.size / 2.0
+	event_icon.scale = Vector2(0.4, 0.4)
+	event_icon.modulate.a = 0.0
+	var t := create_tween()
+	t.set_parallel(true)
+	t.tween_property(event_icon, "modulate:a", 1.0, 0.25)
+	t.tween_property(event_icon, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+# 玩家点事件 icon：打开"公司群"对话弹窗
+func _on_event_icon_pressed() -> void:
+	if not _event_pending or _event_active:
+		return
+	_event_pending = false
+	_event_active = true
+	if is_instance_valid(event_icon):
+		event_icon.hide()
+
+	var ui := EVENT_CHAT_SCENE.instantiate()
+	# 挂到 MobileSidebar 所在的 CanvasLayer，作为全屏覆盖层（在其它面板之上）
+	var host := get_parent()
+	if host == null:
+		host = self
+	host.add_child(ui)
+	ui.event_finished.connect(_on_event_chat_finished)
+	ui.open_random_event(_get_event_project_name())
+
+func _on_event_chat_finished() -> void:
+	_event_active = false
+	# 事件结束：icon 消失（保持隐藏），过一段时间后可再次随机触发
+	_schedule_next_event()
+
+# 取项目名（与 personal_page 一致：空则用默认名）
+func _get_event_project_name() -> String:
+	return Gamemanager.project_name if Gamemanager.project_name != "" else tr("DEFAULT_PROJECT_NAME")

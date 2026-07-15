@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="17_vl5mx"]
 [ext_resource type="Texture2D" uid="uid://bes6dpqqqyvje" path="res://assets/sidebar/other/home_icon.png" id="18_v1wyx"]
 [ext_resource type="Texture2D" uid="uid://cyqpielvsukks" path="res://assets/sidebar/typeC-1.png" id="20_v1wyx"]
+[ext_resource type="Texture2D" uid="uid://0av1ee65xd0r" path="res://assets/events/event Occur Icon.png" id="21_event"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reddot"]
 bg_color = Color(0.886275, 0.14902, 0.14902, 1)
@@ -436,3 +437,13 @@ offset_right = -236.0
 offset_bottom = 135.15369
 texture = ExtResource("20_v1wyx")
 expand_mode = 1
+
+[node name="EventIcon" type="TextureButton" parent="." unique_id=300000020]
+visible = false
+offset_left = -49.0
+offset_top = -124.0
+offset_right = 23.0
+offset_bottom = -52.0
+texture_normal = ExtResource("21_event")
+ignore_texture_size = true
+stretch_mode = 5
