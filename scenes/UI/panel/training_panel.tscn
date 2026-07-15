@@ -1,10 +1,33 @@
 [gd_scene format=3 uid="uid://c4ph74a8s1n72"]
 
-[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="1_ujllk"]
 [ext_resource type="Script" uid="uid://e62sdcopacf0" path="res://scripts/UI/panel/training_panel.gd" id="1_wuxih"]
+[ext_resource type="Texture2D" uid="uid://c57h2xh0cxbti" path="res://assets/Office Tileset/Office Tileset All 48x48 no shadow.png" id="2_bpiec"]
+[ext_resource type="PackedScene" uid="uid://dj2mrvvu1ce2e" path="res://scenes/UI/custom/select_training_button.tscn" id="2_i4y1r"]
 [ext_resource type="PackedScene" uid="uid://j84ug4frpeje" path="res://scenes/UI/custom/normal_button_2.tscn" id="2_mwf3k"]
+[ext_resource type="Texture2D" uid="uid://l5sre7gv08ym" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/Sprites/Content/UI Buttons/6.png" id="3_alnvr"]
+[ext_resource type="Texture2D" uid="uid://bnkxk5bc67o83" path="res://assets/office/training/modified-eff-training-2.png" id="3_bpiec"]
 [ext_resource type="Texture2D" uid="uid://df00xq3h830je" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/1.png" id="3_mnbk7"]
+[ext_resource type="Texture2D" uid="uid://dism50tdlepmc" path="res://assets/office/training/qual-training.png" id="4_ot46i"]
 [ext_resource type="Texture2D" uid="uid://c0k4ppeg1q6bm" path="res://assets/sidebar/Humble Gift - Smart UI/Humble Gift - Smart UI v1.0/Sprites/2 - Buttons/7.png" id="4_w4a46"]
+[ext_resource type="Texture2D" uid="uid://chmfp7g524ksh" path="res://assets/office/training/exp-training.png" id="5_p5peo"]
+[ext_resource type="Script" uid="uid://jf4qwejw5lpg" path="res://scripts/UI/custom/round_gauge.gd" id="9_p5peo"]
+[ext_resource type="FontVariation" uid="uid://bp7rjqhx7ef2h" path="res://assets/fonts/doto_pixel_variation.tres" id="10_alnvr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ot46i"]
+atlas = ExtResource("2_bpiec")
+region = Rect2(6, 774, 36, 48)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0gbcy"]
+texture = ExtResource("3_alnvr")
+texture_margin_left = 2.0
+texture_margin_top = 2.0
+texture_margin_right = 2.0
+texture_margin_bottom = 2.0
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 25.0
+region_rect = Rect2(7, 6, 19, 19)
+modulate_color = Color(1, 1, 1, 0.61960787)
 
 [node name="TrainingPanel" type="Control" unique_id=160617930]
 layout_mode = 3
@@ -12,38 +35,74 @@ anchors_preset = 0
 offset_right = 464.0
 offset_bottom = 300.0
 script = ExtResource("1_wuxih")
+stool_texture = SubResource("AtlasTexture_ot46i")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=980888359]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -135.0
+offset_top = -121.5
+offset_right = 135.0
+offset_bottom = 121.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
 
-[node name="Avatars" type="HBoxContainer" parent="VBoxContainer" unique_id=1546953594]
+[node name="AvatarsContainer" type="MarginContainer" parent="VBoxContainer" unique_id=267210099]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="Avatars" type="HBoxContainer" parent="VBoxContainer/AvatarsContainer" unique_id=1546953594]
 layout_mode = 2
 
-[node name="AttributeSelector" type="HBoxContainer" parent="VBoxContainer" unique_id=406505562]
+[node name="ConfigBox" type="PanelContainer" parent="VBoxContainer" unique_id=931633854]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_0gbcy")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ConfigBox" unique_id=822686141]
+layout_mode = 2
+
+[node name="AttributeContainer" type="MarginContainer" parent="VBoxContainer/ConfigBox/VBoxContainer" unique_id=2122306633]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 40
+
+[node name="AttributeSelector" type="HBoxContainer" parent="VBoxContainer/ConfigBox/VBoxContainer/AttributeContainer" unique_id=406505562]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/separation = 30
 
-[node name="Eff" type="Button" parent="VBoxContainer/AttributeSelector" unique_id=754879638]
+[node name="Eff" parent="VBoxContainer/ConfigBox/VBoxContainer/AttributeContainer/AttributeSelector" unique_id=1077055578 instance=ExtResource("2_i4y1r")]
 layout_mode = 2
+icon_texture = ExtResource("3_bpiec")
 
-[node name="Qual" type="Button" parent="VBoxContainer/AttributeSelector" unique_id=1820424666]
+[node name="Qual" parent="VBoxContainer/ConfigBox/VBoxContainer/AttributeContainer/AttributeSelector" unique_id=448625684 instance=ExtResource("2_i4y1r")]
 layout_mode = 2
+attribute = 1
+icon_texture = ExtResource("4_ot46i")
 
-[node name="Exp" type="Button" parent="VBoxContainer/AttributeSelector" unique_id=1575314599]
+[node name="Exp" parent="VBoxContainer/ConfigBox/VBoxContainer/AttributeContainer/AttributeSelector" unique_id=1624001963 instance=ExtResource("2_i4y1r")]
 layout_mode = 2
+attribute = 2
+icon_texture = ExtResource("5_p5peo")
 
-[node name="TurnSelector" type="HBoxContainer" parent="VBoxContainer" unique_id=1657864195]
+[node name="TurnSelector" type="HBoxContainer" parent="VBoxContainer/ConfigBox/VBoxContainer" unique_id=1657864195]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/separation = 30
 
-[node name="Minus" parent="VBoxContainer/TurnSelector" unique_id=2048579194 instance=ExtResource("2_mwf3k")]
+[node name="Minus" parent="VBoxContainer/ConfigBox/VBoxContainer/TurnSelector" unique_id=2048579194 instance=ExtResource("2_mwf3k")]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+size_flags_vertical = 4
 button_text = "1"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TurnSelector/Minus" unique_id=1518104307]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ConfigBox/VBoxContainer/TurnSelector/Minus" unique_id=1518104307]
 modulate = Color(0.3172787, 0.31727865, 0.31727865, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -59,15 +118,45 @@ rotation = 1.5707964
 pivot_offset = Vector2(10, 20)
 texture = ExtResource("4_w4a46")
 
-[node name="RoundCount" type="Label" parent="VBoxContainer/TurnSelector" unique_id=2015880802]
+[node name="RoundGauge" type="Control" parent="VBoxContainer/ConfigBox/VBoxContainer/TurnSelector" unique_id=1133717897]
+custom_minimum_size = Vector2(72, 72)
 layout_mode = 2
+script = ExtResource("9_p5peo")
+ring_radius = 50.0
+ring_width = 5.0
+color_bg = Color(0.84, 0.49560001, 0.6104, 1)
+color_fill = Color(0.22745098, 0.92941177, 0.18039216, 1)
 
-[node name="Plus" parent="VBoxContainer/TurnSelector" unique_id=1633593369 instance=ExtResource("2_mwf3k")]
+[node name="Label" type="Label" parent="VBoxContainer/ConfigBox/VBoxContainer/TurnSelector/RoundGauge" unique_id=2015880802]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("10_alnvr")
+theme_override_font_sizes/font_size = 36
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressLabel" type="Label" parent="VBoxContainer/ConfigBox/VBoxContainer/TurnSelector/RoundGauge" unique_id=1796299041]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 50.0
+offset_right = 58.0
+offset_bottom = 73.0
+text = "10%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Plus" parent="VBoxContainer/ConfigBox/VBoxContainer/TurnSelector" unique_id=1633593369 instance=ExtResource("2_mwf3k")]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+size_flags_vertical = 4
 button_text = "1"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TurnSelector/Plus" unique_id=198387018]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ConfigBox/VBoxContainer/TurnSelector/Plus" unique_id=198387018]
 modulate = Color(0.32024416, 0.32024416, 0.32024413, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -82,17 +171,19 @@ rotation = 0.7853982
 pivot_offset = Vector2(20, 20)
 texture = ExtResource("3_mnbk7")
 
-[node name="Progress" type="ProgressBar" parent="VBoxContainer" unique_id=838573895]
+[node name="StatusContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1745516455]
+layout_mode = 2
+theme_override_constants/margin_top = 30
+
+[node name="StatusSelector" type="HBoxContainer" parent="VBoxContainer/StatusContainer" unique_id=632992981]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="StartButton" parent="VBoxContainer/StatusContainer/StatusSelector" unique_id=606391467 instance=ExtResource("2_mwf3k")]
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 
-[node name="StatusSelector" type="HBoxContainer" parent="VBoxContainer" unique_id=632992981]
-layout_mode = 2
-
-[node name="StartButton" parent="VBoxContainer/StatusSelector" unique_id=901656421 instance=ExtResource("1_ujllk")]
-custom_minimum_size = Vector2(60, 40)
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="EndButton" parent="VBoxContainer/StatusSelector" unique_id=407960164 instance=ExtResource("1_ujllk")]
-custom_minimum_size = Vector2(60, 40)
+[node name="EndButton" parent="VBoxContainer/StatusContainer/StatusSelector" unique_id=80854549 instance=ExtResource("2_mwf3k")]
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2

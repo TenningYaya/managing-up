@@ -7,7 +7,7 @@ extends OfficeLogic
 class_name TrainingRoomLogic
 
 # —— 可调参数 ——
-const MAX_CAPACITY := 2          # 一次最多培训几人
+const MAX_CAPACITY := 5          # 一次最多培训几人
 const ROUND_SECONDS := 10.0      # 一轮时长（测试用 10 秒；正式改 600 = 10 分钟）
 const ATTR_MAX := 10             # 属性上限
 
@@ -60,6 +60,8 @@ func drop_employee(data: Variant) -> void:
 	var emp = data
 	occupants.append(emp)
 	emp.enter_training()
+	# [员工吐槽中心]：被拖去培训（专属吐槽，区别于开会）
+	BanterManager.trigger_banter("training_start", 1, [emp])
 	_refresh_empty_hint()
 	_notify_panel()
 
@@ -157,8 +159,8 @@ func restore_occupant(emp) -> void:
 	if not emp.is_training:
 		emp.enter_training()
 	occupants.append(emp)
-	if emp.get("current_seat") != null and emp.current_seat.has_method("set_meeting_state"):
-		emp.current_seat.set_meeting_state(true)
+	if emp.get("current_seat") != null and emp.current_seat.has_method("set_training_state"):
+		emp.current_seat.set_training_state(true)
 	_refresh_empty_hint()
 	_notify_panel()
 
@@ -169,8 +171,8 @@ func _on_employee_removed(emp) -> void:
 	if not occupants.has(emp):
 		return
 	if is_instance_valid(emp) and emp.get("current_seat") != null \
-	and emp.current_seat.has_method("set_meeting_state"):
-		emp.current_seat.set_meeting_state(false)
+	and emp.current_seat.has_method("set_training_state"):
+		emp.current_seat.set_training_state(false)
 	occupants.erase(emp)
 	if occupants.is_empty():
 		is_running = false

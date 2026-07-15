@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://dj2mrvvu1ce2e"]
+
+[ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="1_a8j1l"]
+[ext_resource type="Script" uid="uid://bcvvbd2mh2s8u" path="res://scripts/UI/custom/select_training_button.gd" id="1_p8ooo"]
+[ext_resource type="Texture2D" uid="uid://bnkxk5bc67o83" path="res://assets/office/training/modified-eff-training-2.png" id="2_p8ooo"]
+[ext_resource type="FontVariation" uid="uid://bp7rjqhx7ef2h" path="res://assets/fonts/doto_pixel_variation.tres" id="3_tn1f6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp4xq"]
+atlas = ExtResource("1_a8j1l")
+region = Rect2(149, 1143, 37, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_quuuc"]
+atlas = ExtResource("1_a8j1l")
+region = Rect2(146, 1208, 45, 32)
+
+[node name="SelectTrainingButton" type="TextureButton" unique_id=1077055578]
+custom_minimum_size = Vector2(70, 57)
+offset_right = 70.0
+offset_bottom = 57.0
+script = ExtResource("1_p8ooo")
+
+[node name="UnselectedBcg" type="TextureRect" parent="." unique_id=838229650]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_hp4xq")
+
+[node name="SelectedBcg" type="TextureRect" parent="." unique_id=1764456835]
+visible = false
+modulate = Color(0.82947975, 0.8294798, 0.8294797, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_quuuc")
+
+[node name="UnselectedIcon" type="TextureRect" parent="." unique_id=72421117]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -10.0
+offset_right = 13.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_p8ooo")
+
+[node name="SelectedIcon" type="TextureRect" parent="." unique_id=174834960]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.0
+offset_top = -6.0
+offset_right = 22.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_p8ooo")
+
+[node name="Label" type="Label" parent="." unique_id=1187285172]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_tn1f6")
+text = "Eff"
+horizontal_alignment = 1
+vertical_alignment = 1

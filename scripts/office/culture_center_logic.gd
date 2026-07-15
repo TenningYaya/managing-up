@@ -85,8 +85,7 @@ func on_mouse_exited(mouse_pos: Vector2) -> void:
 		manage_btn.hide()
 
 func _on_manage_btn_pressed() -> void:
-	print("【测试】点击了制定文化按钮！")
-	
+
 	# 🌟 修正 2：用回你 office 里原来正确的写法，通过组去找面板
 	var panel = get_tree().get_first_node_in_group("office_panel")
 	if panel:

@@ -69,6 +69,10 @@ const FISH_TEXTURES := [
 
 var occupant: Control = null
 
+# 培训时工位上显示的图标（逻辑跟开会一样，只是换张图）；复用 MeetingIcon 节点、运行时换贴图
+const TRAINING_ICON := preload("res://assets/UI/ingame/intraining/go_training_icon.png")
+var _meeting_icon_default_tex: Texture2D   # 记住 MeetingIcon 原本(开会)的贴图，开会/散会时还原
+
 var _roam_icon_base_y: float = 0.0   # 鱼图标设计初始 y，浮动动画围绕它来回
 var _roam_icon_tween: Tween = null
 
@@ -78,6 +82,8 @@ func _ready() -> void:
 	add_to_group("desk_seats")
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_apply_upgrade_visuals()
+	if meeting_icon is TextureRect:
+		_meeting_icon_default_tex = (meeting_icon as TextureRect).texture
 	if roaming_icon != null:
 		_roam_icon_base_y = roaming_icon.position.y
 		roaming_icon.visible = false
@@ -237,15 +243,26 @@ func get_quality_buff() -> int:
 	return 0
 
 func set_meeting_state(is_meeting: bool) -> void:
-	if meeting_icon != null:
-		meeting_icon.visible = is_meeting
-		if is_meeting:
-			# 开会时藏起电脑（普通/高级都藏），别和会议图标抢镜
-			if computer != null: computer.visible = false
-			if advanced_computer != null: advanced_computer.visible = false
-		else:
-			# 散会：按升级等级重新决定该显示普通还是高级电脑（不能无脑全开）
-			_apply_upgrade_visuals()
+	_set_desk_icon(is_meeting, _meeting_icon_default_tex)
+
+# 培训用：逻辑跟开会完全一样，只是把工位上的图标换成培训图标
+func set_training_state(is_training: bool) -> void:
+	_set_desk_icon(is_training, TRAINING_ICON)
+
+# 开会/培训共用：显示时把 MeetingIcon 换成对应贴图并藏电脑；隐藏时按升级还原电脑
+func _set_desk_icon(active: bool, tex: Texture2D) -> void:
+	if meeting_icon == null:
+		return
+	if active and tex != null and meeting_icon is TextureRect:
+		(meeting_icon as TextureRect).texture = tex
+	meeting_icon.visible = active
+	if active:
+		# 藏起电脑（普通/高级都藏），别和图标抢镜
+		if computer != null: computer.visible = false
+		if advanced_computer != null: advanced_computer.visible = false
+	else:
+		# 结束：按升级等级重新决定该显示普通还是高级电脑
+		_apply_upgrade_visuals()
 
 func _sync_buff_icons() -> void:
 	# 1. 每次刷新前，闭着眼睛先把桌子扫空

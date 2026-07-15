@@ -15,24 +15,29 @@ const HEAD_ZOOM := 2.0
 const HEAD_FOCUS_R := 16.0    # R 卡（脸偏下）
 const HEAD_FOCUS_HIGH := 18.0 # SR / SSR
 
+## 空位占位图（小凳子）：Avatars 里没人的格子摆这个；来人后那格换成头像、凳子消失
+@export var stool_texture: Texture2D
+
 var linked_logic = null   # 当前绑定的 TrainingRoomLogic
 
-@onready var _avatars: HBoxContainer = $VBoxContainer/Avatars
-@onready var _eff: Button = $VBoxContainer/AttributeSelector/Eff
-@onready var _qual: Button = $VBoxContainer/AttributeSelector/Qual
-@onready var _exp: Button = $VBoxContainer/AttributeSelector/Exp
-@onready var _minus: TextureButton = $VBoxContainer/TurnSelector/Minus
-@onready var _round_count: Label = $VBoxContainer/TurnSelector/RoundCount
-@onready var _plus: TextureButton = $VBoxContainer/TurnSelector/Plus
-@onready var _progress: ProgressBar = $VBoxContainer/Progress
-@onready var _start_btn = $VBoxContainer/StatusSelector/StartButton
-@onready var _end_btn = $VBoxContainer/StatusSelector/EndButton
+@onready var _avatars: HBoxContainer = $VBoxContainer/AvatarsContainer/Avatars
+# 三个属性按钮现在是 SelectTrainingButton（不再是普通 Button），用无类型引用两者都兼容
+@onready var _eff = $VBoxContainer/ConfigBox/VBoxContainer/AttributeContainer/AttributeSelector/Eff
+@onready var _qual = $VBoxContainer/ConfigBox/VBoxContainer/AttributeContainer/AttributeSelector/Qual
+@onready var _exp = $VBoxContainer/ConfigBox/VBoxContainer/AttributeContainer/AttributeSelector/Exp
+@onready var _minus: TextureButton = $VBoxContainer/ConfigBox/VBoxContainer/TurnSelector/Minus
+@onready var _plus: TextureButton = $VBoxContainer/ConfigBox/VBoxContainer/TurnSelector/Plus
+# 中间的圆环+数字表盘（取代原来的进度条）；用 or_null，你还没在场景里加它时也不报错
+@onready var _gauge = get_node_or_null("VBoxContainer/ConfigBox/VBoxContainer/TurnSelector/RoundGauge")
+@onready var _start_btn = $VBoxContainer/StatusContainer/StatusSelector/StartButton
+@onready var _end_btn = $VBoxContainer/StatusContainer/StatusSelector/EndButton
 
 func _ready() -> void:
 	add_to_group("training_panel")
-	_eff.pressed.connect(_on_eff)
-	_qual.pressed.connect(_on_qual)
-	_exp.pressed.connect(_on_exp)
+	# 三个属性按钮是 SelectTrainingButton：点谁就把培训目标设成谁
+	for b in [_eff, _qual, _exp]:
+		if b and b.has_signal("attribute_chosen"):
+			b.attribute_chosen.connect(_on_attr_chosen)
 	_minus.pressed.connect(_on_minus)
 	_plus.pressed.connect(_on_plus)
 	_start_btn.pressed.connect(_on_start)
@@ -50,9 +55,7 @@ func _notification(what: int) -> void:
 		_apply_labels()
 
 func _apply_labels() -> void:
-	_eff.text = tr("Sidebar_TRAINING_EFF")
-	_qual.text = tr("Sidebar_TRAINING_QUAL")
-	_exp.text = tr("Sidebar_TRAINING_EXP")
+	# 三个属性按钮（SelectTrainingButton）自己管标签，这里不再设它们的文字
 	_minus.tooltip_text = "-"
 	_plus.tooltip_text = "+"
 	_eff.tooltip_text = tr("Sidebar_TRAINING_ATTR_TIP")
@@ -64,9 +67,9 @@ func _apply_labels() -> void:
 	_end_btn.tooltip_text = tr("Sidebar_TRAINING_END_TIP")
 
 func _process(_dt: float) -> void:
-	# 进度条实时刷新（只在可见 + 已绑定时）
-	if visible and linked_logic != null:
-		_progress.value = linked_logic.get_progress() * 100.0
+	# 圆环进度实时刷新（只在可见 + 已绑定时）
+	if visible and linked_logic != null and _gauge:
+		_gauge.set_progress(linked_logic.get_progress())
 
 # office_panel 打开培训页签时调用，把当前房间的逻辑绑过来
 func bind_logic(logic) -> void:
@@ -77,11 +80,24 @@ func bind_logic(logic) -> void:
 func refresh_from_logic(logic) -> void:
 	if logic != linked_logic or linked_logic == null:
 		return
-	_round_count.text = str(linked_logic.rounds_total)
 	# 开始后锁住加减/属性/开始，允许结束；未开始反之
 	var running: bool = linked_logic.is_running
 	for b in [_minus, _plus, _eff, _qual, _exp, _start_btn]:
 		b.disabled = running
+	# 加减按钮开始后变灰（视觉上也灰掉），选择阶段恢复
+	var dim: Color = Color(0.55, 0.55, 0.55) if running else Color.WHITE
+	_minus.modulate = dim
+	_plus.modulate = dim
+	# 中间数字：选择阶段 = 要练的总轮数；进行中 = 剩余轮数（每完成一轮 -1，倒数）
+	if _gauge:
+		var shown: int = linked_logic.rounds_total
+		if running:
+			shown = maxi(linked_logic.rounds_total - linked_logic.rounds_done, 1)
+		_gauge.set_number(shown)
+		_gauge.set_active(running)     # 进度百分比只在训练时显示
+		if not running:
+			_gauge.set_progress(0.0)   # 回到选择态：清空绿环
+	_sync_attr_selection()   # 按当前所选属性，刷新三个按钮的文件夹开合
 	_rebuild_avatars()
 
 # ==========================================
@@ -92,21 +108,23 @@ func _rebuild_avatars() -> void:
 		c.queue_free()
 	if linked_logic == null:
 		return
-	var key: String = linked_logic._attr_key(linked_logic.chosen_attr)
-	for emp in linked_logic.occupants:
-		if is_instance_valid(emp):
-			_build_avatar_entry(emp, key)
+	# 固定摆出 MAX_CAPACITY 个格子：有人的放头像，空的放小凳子占位
+	var cap: int = TrainingRoomLogic.MAX_CAPACITY
+	for i in range(cap):
+		if i < linked_logic.occupants.size() and is_instance_valid(linked_logic.occupants[i]):
+			_build_avatar_entry(linked_logic.occupants[i])
+		else:
+			_build_empty_slot()
 
-func _build_avatar_entry(emp, key: String) -> void:
-	var col := VBoxContainer.new()
-	col.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-
-	# ---- 头像框（裁到头部+面部，双击可在开始前移除该员工）----
+func _build_avatar_entry(emp) -> void:
+	# 头像框（裁到头部+面部）。单击→打开员工面板；双击(开始前)→移出培训室。
+	# 名字/属性省去以省空间；名字改放到 tooltip，悬停可见。
 	var frame := Control.new()
 	frame.clip_contents = true
 	frame.custom_minimum_size = AVATAR_FRAME_SIZE
 	frame.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	frame.mouse_filter = Control.MOUSE_FILTER_STOP
+	frame.tooltip_text = emp.get_display_name() if emp.has_method("get_display_name") else str(emp.employee_name)
 
 	var holder := Control.new()
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -119,41 +137,86 @@ func _build_avatar_entry(emp, key: String) -> void:
 	AvatarHelper.apply_portrait(holder, emp.portrait, emp.rarity)
 
 	frame.gui_input.connect(func(ev): _on_avatar_input(ev, emp))
-	col.add_child(frame)
 
-	# ---- 名字 + 所选属性当前值（培训涨点时会随每轮刷新）----
-	var lbl := Label.new()
-	var nm = emp.get_display_name() if emp.has_method("get_display_name") else str(emp.employee_name)
-	var val := 0
-	match key:
-		"eff": val = emp.efficiency
-		"qual": val = emp.quality
-		"exp": val = emp.experience
-	lbl.text = "%s\n%s %d/10" % [nm, key, val]
-	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl.add_theme_font_size_override("font_size", 12)
-	lbl.custom_minimum_size = Vector2(AVATAR_FRAME_SIZE.x, 0)
-	col.add_child(lbl)
+	# 悬停时右上角出现半透明黑底"×"踢人按钮——仅未开始时给（培训中不给）。
+	# 踢出 = remove_occupant：回工位、不结算（它自己也拦了 is_running）。
+	if not linked_logic.is_running:
+		var kick := Button.new()
+		kick.text = "X"
+		kick.custom_minimum_size = Vector2(18, 18)
+		kick.size = Vector2(18, 18)
+		kick.position = Vector2(AVATAR_FRAME_SIZE.x - 20.0, 2.0)   # 头像框内右上角
+		kick.focus_mode = Control.FOCUS_NONE
+		kick.visible = false
+		kick.tooltip_text = tr("Sidebar_TRAINING_KICK_TIP")
+		var sb := StyleBoxFlat.new()
+		sb.bg_color = Color(0, 0, 0, 0.45)   # 黑，半透明（想更淡就把 a 调小）
+		sb.set_corner_radius_all(9)          # = 半径的一半 → 圆形
+		kick.add_theme_stylebox_override("normal", sb)
+		kick.add_theme_stylebox_override("hover", sb)
+		kick.add_theme_stylebox_override("pressed", sb)
+		kick.add_theme_color_override("font_color", Color.WHITE)
+		kick.add_theme_font_size_override("font_size", 12)
+		frame.add_child(kick)
+		kick.pressed.connect(func():
+			if linked_logic:
+				linked_logic.remove_occupant(emp)
+		)
+		# 悬停显隐：移到"×"上也算还在头像范围内，不隐藏；真正离开整块头像才隐藏
+		var show_kick := func(): kick.visible = true
+		var maybe_hide := func():
+			if not frame.get_global_rect().has_point(frame.get_global_mouse_position()):
+				kick.visible = false
+		frame.mouse_entered.connect(show_kick)
+		frame.mouse_exited.connect(maybe_hide)
+		kick.mouse_entered.connect(show_kick)
+		kick.mouse_exited.connect(maybe_hide)
 
-	_avatars.add_child(col)
+	_avatars.add_child(frame)
 
-# 双击头像 → 开始前把该员工移出培训室（开始后 remove_occupant 自己会拦掉）
+# 空位：摆一个小凳子占位（纯 texture，不可交互）
+func _build_empty_slot() -> void:
+	var stool := TextureRect.new()
+	stool.texture = stool_texture
+	stool.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stool.custom_minimum_size = AVATAR_FRAME_SIZE
+	stool.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	stool.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	stool.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_avatars.add_child(stool)
+
+# 单击头像 → 打开员工面板（踢人改用悬停出现的"×"按钮，见 _build_avatar_entry）
 func _on_avatar_input(ev: InputEvent, emp) -> void:
-	if ev is InputEventMouseButton and ev.double_click and ev.button_index == MOUSE_BUTTON_LEFT:
-		if linked_logic:
-			linked_logic.remove_occupant(emp)
+	if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
+		_show_employee_panel(emp)
+
+# 打开全局员工信息面板（和点工位上的员工、会议室头像用的是同一个）
+func _show_employee_panel(emp) -> void:
+	if not is_instance_valid(emp):
+		return
+	var panel = get_tree().get_first_node_in_group("employee_panel")
+	if panel and panel.has_method("open_panel"):
+		panel.open_panel(emp)
 
 # ==========================================
 # 按钮回调
 # ==========================================
-func _on_eff() -> void:
-	if linked_logic: linked_logic.set_attr(TrainingRoomLogic.TrainAttr.EFF)
+# 点某个属性按钮 → 设为培训目标（SelectTrainingButton.Attr 与 TrainAttr 顺序一致，可直接传）
+func _on_attr_chosen(attr: int) -> void:
+	if linked_logic:
+		linked_logic.set_attr(attr)   # set_attr 会回调 refresh → _sync_attr_selection 刷新选中态
 
-func _on_qual() -> void:
-	if linked_logic: linked_logic.set_attr(TrainingRoomLogic.TrainAttr.QUAL)
+# 按 logic 当前选的属性，点亮对应按钮（打开文件夹），其余合上
+func _sync_attr_selection() -> void:
+	if linked_logic == null:
+		return
+	_set_sel(_eff, TrainingRoomLogic.TrainAttr.EFF)
+	_set_sel(_qual, TrainingRoomLogic.TrainAttr.QUAL)
+	_set_sel(_exp, TrainingRoomLogic.TrainAttr.EXP)
 
-func _on_exp() -> void:
-	if linked_logic: linked_logic.set_attr(TrainingRoomLogic.TrainAttr.EXP)
+func _set_sel(btn, a: int) -> void:
+	if btn and btn.has_method("set_selected"):
+		btn.set_selected(linked_logic.chosen_attr == a)
 
 func _on_minus() -> void:
 	if linked_logic: linked_logic.sub_round()

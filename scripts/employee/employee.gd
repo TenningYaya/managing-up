@@ -1190,9 +1190,9 @@ func enter_training() -> void:
 		current_seat = drag_start_seat
 		current_seat.set_occupant(self)
 		global_position = current_seat.get_snap_global_position() - size / 2.0
-	# 无论是拖入(drag_start_seat)还是读档恢复(current_seat 已存在)，都标记工位为"离席"
-	if current_seat != null and current_seat.has_method("set_meeting_state"):
-		current_seat.set_meeting_state(true)
+	# 无论是拖入(drag_start_seat)还是读档恢复(current_seat 已存在)，都在工位标"培训中"
+	if current_seat != null and current_seat.has_method("set_training_state"):
+		current_seat.set_training_state(true)
 	# 藏真身（人去"培训"了，工位上不显示）
 	if visual_component:
 		visual_component.hide()
@@ -1200,8 +1200,8 @@ func enter_training() -> void:
 func exit_training() -> void:
 	is_training = false
 	# 恢复工位表现与真身，回到干活状态
-	if current_seat != null and current_seat.has_method("set_meeting_state"):
-		current_seat.set_meeting_state(false)
+	if current_seat != null and current_seat.has_method("set_training_state"):
+		current_seat.set_training_state(false)
 	if visual_component:
 		visual_component.show()
 	is_working = true
