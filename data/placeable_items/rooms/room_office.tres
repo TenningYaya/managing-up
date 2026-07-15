@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PlaceableItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_item_data.gd" id="1_piddata"]
+[ext_resource type="PackedScene" uid="uid://cwnvgk0s3ybnf" path="res://scenes/office/office.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_piddata")
+item_id = &"room_office"
+display_name = "办公室"
+description = "标准功能房间,放置后可在房间面板里选择功能(茶水间/会议室/招聘/文化/炒股/培训)。"
+category = 0
+scene = ExtResource("2_scene")
+tags = Array[StringName]([&"room", &"legacy"])
+auto_calculate_footprint = false
+footprint_override = Vector2i(6, 4)
+placement_offset = Vector2(4.667, -8)
+must_be_inside_room = false
+can_be_placed_in_open_floor = true
+can_rotate = false
+blocks_navigation = true
+requires_reachable_entrance = true
+allow_multiple_instances = true
+price = 2000
+sell_price = 1000
+unlock_level = 1

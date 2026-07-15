@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dfloor2deco01"]
+
+[ext_resource type="Script" path="res://scripts/floors/decoratable_floor.gd" id="1_dfscript"]
+[ext_resource type="Script" path="res://scripts/floors/placement/decoration_controller.gd" id="2_dcctrl"]
+
+[node name="DecoratableFloor" type="Node2D"]
+script = ExtResource("1_dfscript")
+
+[node name="FloorTileMap" type="TileMapLayer" parent="."]
+
+[node name="WallTileMap" type="TileMapLayer" parent="."]
+
+[node name="FixedStructureLayer" type="Node2D" parent="."]
+
+[node name="RoomLayer" type="Node2D" parent="."]
+
+[node name="FurnitureLayer" type="Node2D" parent="."]
+
+[node name="ZoneLayer" type="Node2D" parent="."]
+
+[node name="CharacterLayer" type="Node2D" parent="."]
+
+[node name="EffectLayer" type="Node2D" parent="."]
+
+[node name="PlacementPreviewLayer" type="Node2D" parent="."]
+
+[node name="DecorationController" type="Node" parent="."]
+script = ExtResource("2_dcctrl")

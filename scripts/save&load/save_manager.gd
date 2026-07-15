@@ -137,14 +137,20 @@ func save_game() -> void:
 	
 	var offices_data = {}
 	for office in get_tree().get_nodes_in_group("offices"):
+		# 🌟 第二层装修系统生成的副本带 floor_id 元数据,本段只存第一层原有实例;
+		#    楼层实例由 building 段(BuildingManager)独立保存
+		if int(office.get_meta("floor_id", 1)) != 1:
+			continue
 		offices_data[office.name] = {
 			"is_locked": office.is_locked,
 			"current_type": office.current_type
 		}
 	save_data["offices"] = offices_data
-	
+
 	var desk_slots_data = {}
 	for slot in get_tree().get_nodes_in_group("desk_slots"):
+		if int(slot.get_meta("floor_id", 1)) != 1:   # 同上:只存第一层
+			continue
 		desk_slots_data[slot.name] = slot.slot_level
 	save_data["desk_slots"] = desk_slots_data
 	
@@ -205,6 +211,11 @@ func save_game() -> void:
 
 	# ================= 🌟 炒股系统存档(各股价格/持仓/成本/补货周期/计时) =================
 	save_data["stock"] = StockManager.to_save_dict()
+
+	# ================= 🌟 楼层系统存档(第二层装修扩展,独立段;老档没有该字段也正常) =================
+	var building_mgr = get_tree().get_first_node_in_group("building_manager")
+	if building_mgr != null and building_mgr.has_method("to_save_dict"):
+		save_data["building"] = building_mgr.to_save_dict()
 
 	# 🌟 原子写入:先写临时文件,成功后再改名覆盖正式存档。
 	#    这样即使正好在写盘那一瞬间崩溃/断电,坏掉的也只是临时文件,真存档不会被写成半截。
@@ -548,5 +559,10 @@ func load_game() -> void:
 	# ================= 🌟 炒股系统恢复 =================
 	if save_data.has("stock"):
 		StockManager.load_from_dict(save_data["stock"])
+
+	# ================= 🌟 楼层系统恢复(第二层装修扩展;老档无此字段则保持默认 1F) =================
+	var building_mgr = get_tree().get_first_node_in_group("building_manager")
+	if building_mgr != null and building_mgr.has_method("load_from_dict"):
+		building_mgr.load_from_dict(save_data.get("building", {}))
 
 	Gamemanager.is_loading_save = false

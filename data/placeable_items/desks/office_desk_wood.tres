@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="PlaceableItemData" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_item_data.gd" id="1_item"]
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_orientation_data.gd" id="2_orientation"]
+[ext_resource type="Texture2D" path="res://assets/Office Tileset/Office Tileset All 32x32.png" id="3_atlas"]
+[ext_resource type="PackedScene" path="res://scenes/floors/placement/office_tileset_prop.tscn" id="4_scene"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon"]
+atlas = ExtResource("3_atlas")
+region = Rect2(39, 0, 82, 45)
+
+[sub_resource type="Resource" id="Orientation_1_horizontal"]
+script = ExtResource("2_orientation")
+orientation_id = &"horizontal"
+direction = 5
+texture = ExtResource("3_atlas")
+atlas_region = Rect2i(39, 0, 82, 45)
+visual_size = Vector2(82, 45)
+footprint = Vector2i(3, 2)
+occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1)])
+interaction_points = Array[Vector2]([])
+is_default = true
+
+[resource]
+script = ExtResource("1_item")
+item_id = &"office_desk_wood"
+display_name = "木质办公桌"
+description = "第一批人工批准测试办公桌。视觉裁剪来自 cand_0001，地面占地单独设置。"
+category = 1
+scene = ExtResource("4_scene")
+icon = SubResource("AtlasTexture_icon")
+tags = Array[StringName]([&"office_tileset", &"generated_from_manifest", &"first_batch"])
+orientations = [SubResource("Orientation_1_horizontal")]
+default_orientation_id = &"horizontal"
+allow_mouse_wheel_rotation = true
+use_directional_sprites = true
+allow_transform_rotation = false
+style_group = &"office_desk"
+color_variant = &"wood"
+render_style = 0
+auto_calculate_footprint = false
+placement_offset = Vector2(14, 19)
+can_be_placed_in_open_floor = true
+can_rotate = false
+blocks_navigation = true
+price = 520
+sell_price = 260
+unlock_level = 1

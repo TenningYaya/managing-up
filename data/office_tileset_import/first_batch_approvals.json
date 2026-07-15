@@ -1,0 +1,133 @@
+{
+  "source_manifest": "res://data/office_tileset_import/office_tileset_manifest.json",
+  "note": "First visible test batch approved from the generated candidate/contact sheet. These are intentionally limited to five logical objects.",
+  "items": [
+    {
+      "item_id": "office_chair_red",
+      "display_name": "红色办公椅",
+      "category": "chair",
+      "style_group": "office_chair",
+      "color_variant": "red",
+      "default_orientation_id": "south",
+      "price": 120,
+      "sell_price": 60,
+      "description": "第一批人工批准测试物品。四个方向来自检测候选与人工拆分区域。",
+      "orientations": [
+        {
+          "orientation_id": "south",
+          "source_candidate_id": "cand_0027",
+          "region": [3, 515, 26, 34],
+          "footprint": [1, 1]
+        },
+        {
+          "orientation_id": "north",
+          "source_candidate_id": "cand_0032",
+          "region": [35, 519, 26, 30],
+          "footprint": [1, 1]
+        },
+        {
+          "orientation_id": "west",
+          "source_candidate_id": "cand_0029_manual_split",
+          "region": [99, 515, 26, 34],
+          "footprint": [1, 1]
+        },
+        {
+          "orientation_id": "east",
+          "source_candidate_id": "cand_0029_manual_split",
+          "region": [131, 515, 26, 34],
+          "footprint": [1, 1]
+        }
+      ]
+    },
+    {
+      "item_id": "office_desk_wood",
+      "display_name": "木质办公桌",
+      "category": "desk",
+      "style_group": "office_desk",
+      "color_variant": "wood",
+      "default_orientation_id": "horizontal",
+      "price": 520,
+      "sell_price": 260,
+      "placement_offset": [14, 19],
+      "description": "第一批人工批准测试办公桌。视觉裁剪来自 cand_0001，地面占地单独设置。",
+      "orientations": [
+        {
+          "orientation_id": "horizontal",
+          "source_candidate_id": "cand_0001",
+          "region": [39, 0, 82, 45],
+          "footprint": [3, 2]
+        }
+      ]
+    },
+    {
+      "item_id": "office_potted_plant_brown",
+      "display_name": "盆栽",
+      "category": "plant",
+      "style_group": "office_potted_plant",
+      "color_variant": "brown",
+      "default_orientation_id": "none",
+      "price": 160,
+      "sell_price": 80,
+      "description": "第一批人工批准测试盆栽。视觉高度不直接作为地面占地。",
+      "orientations": [
+        {
+          "orientation_id": "none",
+          "source_candidate_id": "cand_0089",
+          "region": [69, 909, 22, 34],
+          "footprint": [1, 1]
+        }
+      ]
+    },
+    {
+      "item_id": "water_dispenser",
+      "display_name": "饮水机",
+      "category": "utility",
+      "style_group": "water_dispenser",
+      "default_orientation_id": "left",
+      "price": 360,
+      "sell_price": 180,
+      "placement_offset": [18, 4],
+      "description": "第一批人工批准测试饮水机。左右方向互动点随方向变化。",
+      "orientations": [
+        {
+          "orientation_id": "left",
+          "source_candidate_id": "cand_0036",
+          "region": [267, 533, 46, 60],
+          "footprint": [2, 2],
+          "interaction_points": [[0, 48]]
+        },
+        {
+          "orientation_id": "right",
+          "source_candidate_id": "cand_0037",
+          "region": [327, 533, 46, 60],
+          "footprint": [2, 2],
+          "interaction_points": [[46, 48]]
+        }
+      ]
+    },
+    {
+      "item_id": "office_long_bench",
+      "display_name": "长椅",
+      "category": "chair",
+      "style_group": "office_long_bench",
+      "default_orientation_id": "horizontal",
+      "price": 220,
+      "sell_price": 110,
+      "description": "第一批人工批准测试长椅。横向区域为人工校正，纵向来自 cand_0038。",
+      "orientations": [
+        {
+          "orientation_id": "horizontal",
+          "source_candidate_id": "manual_region_from_contact_sheet",
+          "region": [128, 598, 64, 32],
+          "footprint": [2, 1]
+        },
+        {
+          "orientation_id": "vertical",
+          "source_candidate_id": "cand_0038",
+          "region": [35, 575, 26, 66],
+          "footprint": [1, 2]
+        }
+      ]
+    }
+  ]
+}

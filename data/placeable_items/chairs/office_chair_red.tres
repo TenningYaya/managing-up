@@ -1,0 +1,83 @@
+[gd_resource type="Resource" script_class="PlaceableItemData" load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_item_data.gd" id="1_item"]
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_orientation_data.gd" id="2_orientation"]
+[ext_resource type="Texture2D" path="res://assets/Office Tileset/Office Tileset All 32x32.png" id="3_atlas"]
+[ext_resource type="PackedScene" path="res://scenes/floors/placement/office_tileset_prop.tscn" id="4_scene"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon"]
+atlas = ExtResource("3_atlas")
+region = Rect2(3, 515, 26, 34)
+
+[sub_resource type="Resource" id="Orientation_1_south"]
+script = ExtResource("2_orientation")
+orientation_id = &"south"
+direction = 3
+texture = ExtResource("3_atlas")
+atlas_region = Rect2i(3, 515, 26, 34)
+visual_size = Vector2(26, 34)
+footprint = Vector2i(1, 1)
+occupied_cells = Array[Vector2i]([Vector2i(0, 0)])
+interaction_points = Array[Vector2]([])
+is_default = true
+
+[sub_resource type="Resource" id="Orientation_2_north"]
+script = ExtResource("2_orientation")
+orientation_id = &"north"
+direction = 1
+texture = ExtResource("3_atlas")
+atlas_region = Rect2i(35, 519, 26, 30)
+visual_size = Vector2(26, 30)
+footprint = Vector2i(1, 1)
+occupied_cells = Array[Vector2i]([Vector2i(0, 0)])
+interaction_points = Array[Vector2]([])
+is_default = false
+
+[sub_resource type="Resource" id="Orientation_3_west"]
+script = ExtResource("2_orientation")
+orientation_id = &"west"
+direction = 4
+texture = ExtResource("3_atlas")
+atlas_region = Rect2i(99, 515, 26, 34)
+visual_size = Vector2(26, 34)
+footprint = Vector2i(1, 1)
+occupied_cells = Array[Vector2i]([Vector2i(0, 0)])
+interaction_points = Array[Vector2]([])
+is_default = false
+
+[sub_resource type="Resource" id="Orientation_4_east"]
+script = ExtResource("2_orientation")
+orientation_id = &"east"
+direction = 2
+texture = ExtResource("3_atlas")
+atlas_region = Rect2i(131, 515, 26, 34)
+visual_size = Vector2(26, 34)
+footprint = Vector2i(1, 1)
+occupied_cells = Array[Vector2i]([Vector2i(0, 0)])
+interaction_points = Array[Vector2]([])
+is_default = false
+
+[resource]
+script = ExtResource("1_item")
+item_id = &"office_chair_red"
+display_name = "红色办公椅"
+description = "第一批人工批准测试物品。四个方向来自检测候选与人工拆分区域。"
+category = 3
+scene = ExtResource("4_scene")
+icon = SubResource("AtlasTexture_icon")
+tags = Array[StringName]([&"office_tileset", &"generated_from_manifest", &"first_batch"])
+orientations = [SubResource("Orientation_1_south"), SubResource("Orientation_2_north"), SubResource("Orientation_3_west"), SubResource("Orientation_4_east")]
+default_orientation_id = &"south"
+allow_mouse_wheel_rotation = true
+use_directional_sprites = true
+allow_transform_rotation = false
+style_group = &"office_chair"
+color_variant = &"red"
+render_style = 0
+auto_calculate_footprint = false
+can_be_placed_in_open_floor = true
+can_rotate = false
+blocks_navigation = true
+price = 120
+sell_price = 60
+unlock_level = 1

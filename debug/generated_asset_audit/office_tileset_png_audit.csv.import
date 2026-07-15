@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://ccvj0op5npscr"
+
+[deps]
+
+files=["res://debug/generated_asset_audit/office_tileset_png_audit.size.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.has.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.version.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.base.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.shadow.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.is.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.is.translation"]
+
+source_file="res://debug/generated_asset_audit/office_tileset_png_audit.csv"
+dest_files=["res://debug/generated_asset_audit/office_tileset_png_audit.size.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.has.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.version.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.base.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.shadow.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.is.translation", "res://debug/generated_asset_audit/office_tileset_png_audit.is.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

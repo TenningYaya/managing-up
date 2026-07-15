@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="PlaceableItemData" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_item_data.gd" id="1_item"]
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_orientation_data.gd" id="2_orientation"]
+[ext_resource type="Texture2D" path="res://assets/Office Tileset/Office Tileset All 32x32.png" id="3_atlas"]
+[ext_resource type="PackedScene" path="res://scenes/floors/placement/office_tileset_prop.tscn" id="4_scene"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon"]
+atlas = ExtResource("3_atlas")
+region = Rect2(69, 909, 22, 34)
+
+[sub_resource type="Resource" id="Orientation_1_none"]
+script = ExtResource("2_orientation")
+orientation_id = &"none"
+direction = 0
+texture = ExtResource("3_atlas")
+atlas_region = Rect2i(69, 909, 22, 34)
+visual_size = Vector2(22, 34)
+footprint = Vector2i(1, 1)
+occupied_cells = Array[Vector2i]([Vector2i(0, 0)])
+interaction_points = Array[Vector2]([])
+is_default = true
+
+[resource]
+script = ExtResource("1_item")
+item_id = &"office_potted_plant_brown"
+display_name = "盆栽"
+description = "第一批人工批准测试盆栽。视觉高度不直接作为地面占地。"
+category = 3
+scene = ExtResource("4_scene")
+icon = SubResource("AtlasTexture_icon")
+tags = Array[StringName]([&"office_tileset", &"generated_from_manifest", &"first_batch"])
+orientations = [SubResource("Orientation_1_none")]
+default_orientation_id = &"none"
+allow_mouse_wheel_rotation = true
+use_directional_sprites = true
+allow_transform_rotation = false
+style_group = &"office_potted_plant"
+color_variant = &"brown"
+render_style = 0
+auto_calculate_footprint = false
+can_be_placed_in_open_floor = true
+can_rotate = false
+blocks_navigation = true
+price = 160
+sell_price = 80
+unlock_level = 1

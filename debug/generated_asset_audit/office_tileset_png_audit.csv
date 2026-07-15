@@ -1,0 +1,22 @@
+path,size,has_alpha,version,base_tile_size,shadow_style,is_complete_atlas,is_single_object_png
+assets\Office Tileset\Office Designs\Office Level 1.png,"(320, 288)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office Designs\Office Level 2.png,"(384, 416)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office Designs\Office Level 3.5.png,"(512, 608)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office Designs\Office Level 3.png,"(512, 448)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office Designs\Office Level 4.png,"(640, 800)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office Palette\Office Palette Large.png,"(1600, 300)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office Palette\Office Palette Medium.png,"(160, 30)",True,unknown,"(32, 32)",shadow,False,False
+assets\Office Tileset\Office Palette\Office Palette Small.png,"(16, 3)",True,unknown,"(32, 32)",shadow,False,False
+assets\Office Tileset\Office Tileset All 16x16 no shadow.png,"(256, 512)",True,16x16,"(16, 16)",shadowless,True,False
+assets\Office Tileset\Office Tileset All 16x16.png,"(256, 512)",True,16x16,"(16, 16)",shadow,True,False
+assets\Office Tileset\Office Tileset All 32x32 no shadow.png,"(512, 1024)",True,32x32,"(32, 32)",shadowless,True,False
+assets\Office Tileset\Office Tileset All 32x32.png,"(512, 1024)",True,32x32,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office Tileset All 48x48 no shadow.png,"(768, 1536)",True,48x48,"(48, 48)",shadowless,True,False
+assets\Office Tileset\Office Tileset All 48x48.png,"(768, 1536)",True,48x48,"(48, 48)",shadow,True,False
+assets\Office Tileset\Office VX Ace\A2 Office Floors.png,"(512, 384)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office VX Ace\A4 Office Walls.png,"(512, 480)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office VX Ace\A5 Office Floors & Walls.png,"(256, 512)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office VX Ace\B-C-D-E Office 1 No Shadows.png,"(512, 512)",True,unknown,"(32, 32)",shadowless,True,False
+assets\Office Tileset\Office VX Ace\B-C-D-E Office 1.png,"(512, 512)",True,unknown,"(32, 32)",shadow,True,False
+assets\Office Tileset\Office VX Ace\B-C-D-E Office 2 No Shadows.png,"(512, 512)",True,unknown,"(32, 32)",shadowless,True,False
+assets\Office Tileset\Office VX Ace\B-C-D-E Office 2.png,"(512, 512)",True,unknown,"(32, 32)",shadow,True,False

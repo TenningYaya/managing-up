@@ -156,6 +156,10 @@ func get_snap_global_position() -> Vector2:
 
 
 func contains_global_point(point: Vector2) -> bool:
+	# 🌟 隐藏的座位不接员工:楼层系统里非当前楼层整树隐藏,但坐标可能与当前层重叠,
+	#    不加这条会把员工吸附到看不见的别层工位上
+	if not is_visible_in_tree():
+		return false
 	# 向上检查层级树：透明 或 所属工位(DeskSlot)未解锁 → 判定为不可放置
 	var current_node = self
 	while current_node and current_node is CanvasItem:

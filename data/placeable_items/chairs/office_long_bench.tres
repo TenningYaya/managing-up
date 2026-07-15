@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="PlaceableItemData" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_item_data.gd" id="1_item"]
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_orientation_data.gd" id="2_orientation"]
+[ext_resource type="Texture2D" path="res://assets/Office Tileset/Office Tileset All 32x32.png" id="3_atlas"]
+[ext_resource type="PackedScene" path="res://scenes/floors/placement/office_tileset_prop.tscn" id="4_scene"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon"]
+atlas = ExtResource("3_atlas")
+region = Rect2(128, 598, 64, 32)
+
+[sub_resource type="Resource" id="Orientation_1_horizontal"]
+script = ExtResource("2_orientation")
+orientation_id = &"horizontal"
+direction = 5
+texture = ExtResource("3_atlas")
+atlas_region = Rect2i(128, 598, 64, 32)
+visual_size = Vector2(64, 32)
+footprint = Vector2i(2, 1)
+occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0)])
+interaction_points = Array[Vector2]([])
+is_default = true
+
+[sub_resource type="Resource" id="Orientation_2_vertical"]
+script = ExtResource("2_orientation")
+orientation_id = &"vertical"
+direction = 6
+texture = ExtResource("3_atlas")
+atlas_region = Rect2i(35, 575, 26, 66)
+visual_size = Vector2(26, 66)
+footprint = Vector2i(1, 2)
+occupied_cells = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1)])
+interaction_points = Array[Vector2]([])
+is_default = false
+
+[resource]
+script = ExtResource("1_item")
+item_id = &"office_long_bench"
+display_name = "长椅"
+description = "第一批人工批准测试长椅。横向区域为人工校正，纵向来自 cand_0038。"
+category = 3
+scene = ExtResource("4_scene")
+icon = SubResource("AtlasTexture_icon")
+tags = Array[StringName]([&"office_tileset", &"generated_from_manifest", &"first_batch"])
+orientations = [SubResource("Orientation_1_horizontal"), SubResource("Orientation_2_vertical")]
+default_orientation_id = &"horizontal"
+allow_mouse_wheel_rotation = true
+use_directional_sprites = true
+allow_transform_rotation = false
+style_group = &"office_long_bench"
+color_variant = &""
+render_style = 0
+auto_calculate_footprint = false
+can_be_placed_in_open_floor = true
+can_rotate = false
+blocks_navigation = true
+price = 220
+sell_price = 110
+unlock_level = 1

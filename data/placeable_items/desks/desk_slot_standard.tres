@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="PlaceableItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/floors/placement/placeable_item_data.gd" id="1_piddata"]
+[ext_resource type="PackedScene" uid="uid://s6hqcjwc8g78" path="res://scenes/office/DeskSlot.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_piddata")
+item_id = &"desk_slot_standard"
+display_name = "工位组"
+description = "标准六座工位组,沿用现有工作/绑定员工逻辑。放下后可分配员工产出 KPI。"
+category = 1
+scene = ExtResource("2_scene")
+tags = Array[StringName]([&"desk", &"legacy"])
+auto_calculate_footprint = true
+footprint_override = Vector2i(0, 0)
+must_be_inside_room = false
+can_be_placed_in_open_floor = true
+can_rotate = false
+blocks_navigation = true
+requires_reachable_entrance = false
+allow_multiple_instances = true
+price = 1500
+sell_price = 750
+unlock_level = 1
