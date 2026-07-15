@@ -21,9 +21,9 @@ var linked_logic = null   # 当前绑定的 TrainingRoomLogic
 @onready var _eff: Button = $VBoxContainer/AttributeSelector/Eff
 @onready var _qual: Button = $VBoxContainer/AttributeSelector/Qual
 @onready var _exp: Button = $VBoxContainer/AttributeSelector/Exp
-@onready var _minus: Button = $VBoxContainer/TurnSelector/Minus
+@onready var _minus: TextureButton = $VBoxContainer/TurnSelector/Minus
 @onready var _round_count: Label = $VBoxContainer/TurnSelector/RoundCount
-@onready var _plus: Button = $VBoxContainer/TurnSelector/Plus
+@onready var _plus: TextureButton = $VBoxContainer/TurnSelector/Plus
 @onready var _progress: ProgressBar = $VBoxContainer/Progress
 @onready var _start_btn = $VBoxContainer/StatusSelector/StartButton
 @onready var _end_btn = $VBoxContainer/StatusSelector/EndButton
@@ -37,6 +37,8 @@ func _ready() -> void:
 	_plus.pressed.connect(_on_plus)
 	_start_btn.pressed.connect(_on_start)
 	_end_btn.pressed.connect(_on_end)
+	_plus.button_text = ""
+	_minus.button_text = ""
 	# 开始/结束用 NormalButton 的 button_text（它自带 tr() 且会随语言自动刷新）
 	_start_btn.button_text = "Sidebar_TRAINING_START"
 	_end_btn.button_text = "Sidebar_TRAINING_END"
@@ -51,8 +53,8 @@ func _apply_labels() -> void:
 	_eff.text = tr("Sidebar_TRAINING_EFF")
 	_qual.text = tr("Sidebar_TRAINING_QUAL")
 	_exp.text = tr("Sidebar_TRAINING_EXP")
-	_minus.text = "-"
-	_plus.text = "+"
+	_minus.tooltip_text = "-"
+	_plus.tooltip_text = "+"
 	_eff.tooltip_text = tr("Sidebar_TRAINING_ATTR_TIP")
 	_qual.tooltip_text = tr("Sidebar_TRAINING_ATTR_TIP")
 	_exp.tooltip_text = tr("Sidebar_TRAINING_ATTR_TIP")

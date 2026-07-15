@@ -25,10 +25,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-region_rect = Rect2(0, 0, 50, 18)
-patch_margin_left = 9
-patch_margin_top = 6
-patch_margin_right = 10
+texture = ExtResource("2_p85pt")
+region_rect = Rect2(9, 5, 45, 22)
+patch_margin_left = 8
+patch_margin_top = 7
+patch_margin_right = 8
 patch_margin_bottom = 7
 
 [node name="Label" type="Label" parent="." unique_id=238762939]
@@ -44,6 +45,7 @@ offset_right = 77.0
 offset_bottom = 7.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.20899746, 0.23903456, 0.059314206, 1)
 theme_override_fonts/font = ExtResource("4_hh64r")
 theme_override_font_sizes/font_size = 20
 text = "InputButtonName"
