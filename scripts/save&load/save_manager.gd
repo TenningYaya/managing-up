@@ -166,7 +166,10 @@ func save_game() -> void:
 				"efficiency": emp.efficiency,
 				"quality": emp.quality,
 				"experience": emp.experience,
-				"dna": emp.dna, 
+				"trained_eff": emp.trained_eff,
+				"trained_qual": emp.trained_qual,
+				"trained_exp": emp.trained_exp,
+				"dna": emp.dna,
 				"is_in_meeting": emp.is_in_meeting,
 				"is_training": emp.is_training,
 				"is_on_map": false,
@@ -243,6 +246,9 @@ func _serialize_resume_pool(pool: Array) -> Array:
 				"efficiency": emp.efficiency,
 				"quality": emp.quality,
 				"experience": emp.experience,
+				"trained_eff": emp.trained_eff,
+				"trained_qual": emp.trained_qual,
+				"trained_exp": emp.trained_exp,
 				"dna": emp.dna,
 				"is_headhunt": emp.is_headhunt,
 			})
@@ -275,6 +281,10 @@ func _instantiate_employee_from_dict(e_data: Dictionary) -> Employee:
 	new_emp.efficiency = int(e_data.get("efficiency", 1))
 	new_emp.quality = int(e_data.get("quality", 1))
 	new_emp.experience = int(e_data.get("experience", 1))
+	# 培训练出的点数（老存档没有此项 → 默认 0，属性条不分色）
+	new_emp.trained_eff = int(e_data.get("trained_eff", 0))
+	new_emp.trained_qual = int(e_data.get("trained_qual", 0))
+	new_emp.trained_exp = int(e_data.get("trained_exp", 0))
 	
 	var raw_dna = e_data.get("dna", {})
 	var clean_dna = {}

@@ -1,20 +1,16 @@
 extends Control
 
-# 放大档：面积 = 正常的 1.5 倍 → 每边 √1.5
-const ENLARGED_SCALE := 1.2247449
+# 点放大按钮 = 请求回到完整游戏模式（由 main.gd 监听并切换）
+signal restore_full_game
+
 const TITLE_BAR_HEIGHT := 35.0
 # 按下 icon 后移动超过这个距离算拖拽，否则算点击（展开）
 const ICON_DRAG_THRESHOLD := 4.0
-
-# 放大/还原按钮的两态图标（Windows 窗口按钮惯例：正常显示"最大化"，放大后显示"向下还原"）
-const TEX_MAXIMIZE := preload("res://assets/sidebar/Maximize.png")
-const TEX_RESTORE := preload("res://assets/sidebar/Restore Down.png")
 
 var _dragging := false
 var _drag_offset := Vector2()
 var _base_size := Vector2()   # 正常态尺寸，进树时从场景里记录
 var _collapsed := false       # 已折叠成 icon（隐藏/关闭按钮触发）
-var _enlarged := false        # 处于放大档
 var _icon_home_pos := Vector2()   # icon 在便签上的场景位（右上角），折叠/展开时用来对齐
 var _icon_press_pos := Vector2()  # 折叠态按下时的鼠标位置，用于区分点击和拖拽
 var _icon_dragged := false        # 本次按下已经拖动过 → 松开时不触发展开
@@ -35,7 +31,7 @@ func _ready() -> void:
 	# 隐藏、关闭：都折叠成 icon；点 icon 恢复
 	$TitleButtons/HideButton.pressed.connect(_collapse)
 	$TitleButtons/CloseButton.pressed.connect(_collapse)
-	resize_button.pressed.connect(_toggle_enlarge)
+	resize_button.pressed.connect(func(): restore_full_game.emit())
 	collapsed_icon.pressed.connect(_expand)
 
 func _on_text_changed() -> void:
@@ -64,21 +60,12 @@ func _expand() -> void:
 	_collapsed = false
 	collapsed_icon.hide()
 	size = _base_size
-	scale = Vector2.ONE * (ENLARGED_SCALE if _enlarged else 1.0)
+	scale = Vector2.ONE
 	# 便签展开后让 icon 槽位对准 icon 当前位置（icon 被拖过就地展开，没拖过等于原位还原）
 	position -= _icon_home_pos * scale
 	collapsed_icon.position = _icon_home_pos
 	for n in [color_rect, title_label, text_edit, title_buttons]:
 		n.show()
-	_clamp_to_screen()
-
-func _toggle_enlarge() -> void:
-	# 以右下角为锚点缩放：先记住右下角，换档后把位置补回去（往左上长/缩）
-	var bottom_right := position + size * scale
-	_enlarged = not _enlarged
-	scale = Vector2.ONE * (ENLARGED_SCALE if _enlarged else 1.0)
-	resize_button.texture_normal = TEX_RESTORE if _enlarged else TEX_MAXIMIZE
-	position = bottom_right - size * scale
 	_clamp_to_screen()
 
 # 缩放/折叠后把可视矩形拉回屏幕内，避免放大时右下角出界够不着

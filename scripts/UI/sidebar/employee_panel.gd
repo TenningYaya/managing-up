@@ -295,11 +295,11 @@ func open_panel(employee: Employee) -> void:
 	attribute_label.tooltip_text = tr("EMP_TENURE")
 	_update_tenure()
 	
-	# 🌟 刷新属性条（确保你的节点引用名和这里一致）
-	efficiency_bar.set_value(employee.efficiency)
-	quality_bar.set_value(employee.quality)
-	experience_bar.set_value(employee.experience)
-	
+	# 🌟 刷新属性条：培训练出来的点数在条上用亮一档的颜色显示（只有本面板做分色）
+	efficiency_bar.set_trained_value(employee.efficiency, employee.trained_eff)
+	quality_bar.set_trained_value(employee.quality, employee.trained_qual)
+	experience_bar.set_trained_value(employee.experience, employee.trained_exp)
+
 	# 顺便设置颜色（如果你需要的话）
 	efficiency_bar.set_bar_color(Color.from_string("#4fb2ff", Color.BLUE))
 	quality_bar.set_bar_color(Color.from_string("#eeb422", Color.YELLOW))

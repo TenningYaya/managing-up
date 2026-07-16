@@ -10,6 +10,9 @@ class_name TrainingRoomLogic
 const MAX_CAPACITY := 5          # 一次最多培训几人
 const ROUND_SECONDS := 10.0      # 一轮时长（测试用 10 秒；正式改 600 = 10 分钟）
 const ATTR_MAX := 10             # 属性上限
+# 每轮成功"名字 +1"飘字用的字体（与培训面板一致的像素字体）
+const POPUP_FONT := preload("res://assets/fonts/doto_pixel_variation.tres")
+const POPUP_HOLD := 2.0          # 飞字到位后多停留几秒再淡出
 
 enum TrainAttr { EFF, QUAL, EXP }
 
@@ -18,6 +21,7 @@ var is_running: bool = false     # 是否已开始（开始后不能再拖人/�
 var chosen_attr: TrainAttr = TrainAttr.EFF
 var rounds_total: int = 1        # 玩家用加减选的总轮数
 var rounds_done: int = 0
+var _round_popup_points: Array = []   # 本轮已生成飘字的落点（相对办公室中心的偏移），用于防重叠
 var round_elapsed: float = 0.0
 
 func setup(office: Control) -> void:
@@ -119,22 +123,30 @@ func end_training() -> void:
 # 每轮结算
 # ==========================================
 func _complete_one_round() -> void:
+	# 本轮练的是 chosen_attr；成功的人在办公室上方冒一条对应颜色的"名字 +1"
+	var col := _attr_color(chosen_attr)
+	_round_popup_points.clear()   # 新一轮：清掉上轮落点记录
+	var success_i := 0
 	for emp in occupants:
-		if is_instance_valid(emp):
-			_roll_for(emp)
+		if is_instance_valid(emp) and _roll_for(emp):
+			_spawn_round_popup("%s +1" % _name_of(emp), col, success_i)
+			success_i += 1
 	rounds_done += 1
 	if rounds_done >= rounds_total:
 		end_training()   # 跑满，自动结束（人放回工位）
 	else:
 		_notify_panel()
 
-func _roll_for(emp) -> void:
+# 掷骰：成功则 +1 并返回 true；失败/已满返回 false
+func _roll_for(emp) -> bool:
 	var val: int = _attr_value(emp, chosen_attr)
 	if val >= ATTR_MAX:
-		return   # 已满，掷了也没用
+		return false   # 已满，掷了也没用
 	var chance: float = float(100 - val * 10)   # (100 - 属性值*10)%
 	if randf() * 100.0 < chance:
 		emp.raise_attribute(_attr_key(chosen_attr))
+		return true
+	return false
 
 func _attr_value(emp, attr: TrainAttr) -> int:
 	match attr:
@@ -149,6 +161,78 @@ func _attr_key(attr: TrainAttr) -> String:
 		TrainAttr.QUAL: return "qual"
 		TrainAttr.EXP: return "exp"
 	return "eff"
+
+# 属性 → 飘字颜色（效率蓝 / 品质金 / 经验绿；想改就改这里）
+func _attr_color(attr: TrainAttr) -> Color:
+	match attr:
+		TrainAttr.EFF: return Color("4aa3ff")
+		TrainAttr.QUAL: return Color("ffcf4a")
+		TrainAttr.EXP: return Color("5cd06b")
+	return Color.WHITE
+
+func _name_of(emp) -> String:
+	if emp.has_method("get_display_name"):
+		return emp.get_display_name()
+	return str(emp.employee_name)
+
+# 与本轮已生成词条的落点比较：同时 |Δx|<50 且 |Δy|<20 → 会叠住
+func _landing_conflicts(p: Vector2) -> bool:
+	for q in _round_popup_points:
+		if absf(p.x - q.x) < 50.0 and absf(p.y - q.y) < 20.0:
+			return true
+	return false
+
+# 每轮成功飘字：从办公室中心以抛物线往外"蹦"，左右交错、字号渐大、末尾淡出（爆竹感）
+func _spawn_round_popup(text: String, color: Color, index: int) -> void:
+	var scene := get_tree().current_scene
+	if scene == null or not is_instance_valid(my_office):
+		return
+	var lbl := Label.new()
+	lbl.text = text
+	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lbl.z_index = 950
+	lbl.z_as_relative = false
+	lbl.add_theme_font_override("font", POPUP_FONT)
+	lbl.add_theme_font_size_override("font_size", 20)
+	lbl.add_theme_color_override("font_color", color)
+	lbl.add_theme_constant_override("outline_size", 5)   # 黑描边，压在办公室上也看得清
+	lbl.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.75))
+	scene.add_child(lbl)
+	lbl.reset_size()
+	lbl.pivot_offset = lbl.size * 0.5                    # 绕自身中心缩放
+	var center := my_office.get_global_rect().get_center()
+	var start := center - lbl.size * 0.5                 # 文字中心对准办公室中点
+	lbl.global_position = start
+	lbl.scale = Vector2(0.6, 0.6)
+
+	# 左右交错 + 随机幅度的抛物线；落点与本轮其他词条错开（不许同时 |Δx|<50 且 |Δy|<20）
+	var dir := 1.0 if index % 2 == 0 else -1.0
+	var horiz := 0.0
+	var rise := 0.0
+	for _try in range(16):   # 随机重掷，直到落点不和已有词条叠住
+		horiz = dir * randf_range(45.0, 95.0)            # 水平往外
+		rise = randf_range(-80.0, 80.0)                  # 整体上移（范围大 = 落点高度参差）
+		if not _landing_conflicts(Vector2(horiz, -rise)):
+			break
+	var lift := 0
+	while _landing_conflicts(Vector2(horiz, -rise)) and lift < 12:
+		rise += 22.0   # 实在挤不开就一层层往上抬（保底，防极端运气）
+		lift += 1
+	_round_popup_points.append(Vector2(horiz, -rise))
+	var peak := randf_range(55.0, 90.0)                  # 抛物线拱高
+	var dur := randf_range(0.9, 1.15)
+	var arc_cb := func(t: float):
+		if is_instance_valid(lbl):
+			var x := start.x + horiz * t
+			var y := start.y - peak * 4.0 * t * (1.0 - t) - rise * t
+			lbl.global_position = Vector2(x, y)
+
+	var tw := lbl.create_tween()
+	tw.set_parallel(true)
+	tw.tween_method(arc_cb, 0.0, 1.0, dur).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(lbl, "scale", Vector2(1.4, 1.4), dur).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(lbl, "modulate:a", 0.0, 0.45).set_delay(dur + POPUP_HOLD)   # 到位后停留 POPUP_HOLD 秒再淡出
+	tw.chain().tween_callback(lbl.queue_free)
 
 # ==========================================
 # 读档恢复（不存离线进度：把人放回房间的"未开始"状态，玩家重新点开始）

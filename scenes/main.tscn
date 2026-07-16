@@ -431,14 +431,12 @@ script = ExtResource("13_a8y0u")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2052431275]
 
 [node name="EmployeePanel" parent="CanvasLayer" unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
-visible = false
 offset_left = 1717.0
 offset_top = 235.0
 offset_right = 2038.0
 offset_bottom = 643.0
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_top = 653.0

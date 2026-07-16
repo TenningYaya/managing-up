@@ -21,6 +21,10 @@ var hire_time: float = -1.0   # 入职时的玩家总游戏时长（-1=尚未入
 @export var efficiency: int = 1
 @export var quality: int = 1
 @export var experience: int = 1
+# 培训练出来的点数（含在上面总值里）。只用于员工面板属性条分色显示，存档保留
+var trained_eff: int = 0
+var trained_qual: int = 0
+var trained_exp: int = 0
 # 🌟 新增：用来存储个人长相和装饰索引的基因库
 var dna: Dictionary = {}
 var is_headhunt: bool = false
@@ -1035,15 +1039,10 @@ func play_on_seated_banter() -> void:
 func play_on_dragged_back_from_roam() -> void:
 	if not is_inside_tree():
 		return
-	# 1. 催工气泡：与在工位上被点击催工时完全一致（老板头像 + 随机催工台词）
-	_spawn_speech_bubble(SpeedupQuoteSave.get_random_quote())
-	# 2. 等 urge 气泡播放完，再发一句“被抓包摸鱼”的随机吐槽，避免新气泡把催工气泡顶掉
+	# 不再冒老板催工气泡，落座直接来一句"被抓包摸鱼"的随机吐槽
 	var pool = BanterManager.QUOTES["drag_back_roam"]
 	var random_key = pool[randi() % pool.size()]
-	get_tree().create_timer(DRAGGED_BACK_BANTER_DELAY).timeout.connect(func():
-		if is_instance_valid(self) and is_inside_tree():
-			_spawn_banter_bubble(tr(random_key))
-	)
+	_spawn_banter_bubble(tr(random_key))
 	
 func get_final_efficiency() -> int:
 	var total = efficiency	
@@ -1204,18 +1203,28 @@ func exit_training() -> void:
 		current_seat.set_training_state(false)
 	if visual_component:
 		visual_component.show()
+		# 回工位一律面朝前坐好（否则会保留被拖走时的行走朝向，比如漫游中被抓走的人）
+		if visual_component.has_method("play_action"):
+			visual_component.play_action("idle")
 	is_working = true
 	_start_new_work_cycle()
 
 # 培训成功：把指定属性 +1（封顶 10）。which ∈ {"eff","qual","exp"}
 func raise_attribute(which: String) -> void:
+	# 只有真涨了才计入 trained_*（封顶时不计），trained 点数用于员工面板属性条分色
 	match which:
 		"eff":
-			efficiency = mini(efficiency + 1, 10)
+			if efficiency < 10:
+				efficiency += 1
+				trained_eff += 1
 		"qual":
-			quality = mini(quality + 1, 10)
+			if quality < 10:
+				quality += 1
+				trained_qual += 1
 		"exp":
-			experience = mini(experience + 1, 10)
+			if experience < 10:
+				experience += 1
+				trained_exp += 1
 
 func enter_meeting() -> void:
 	is_in_meeting = true

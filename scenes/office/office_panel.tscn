@@ -200,7 +200,7 @@ office_usage = "OFFICE_CULTURE_TIP_2"
 [node name="ChangeOfficeButton6" parent="TabContainer/Office/OfficeButton" unique_id=1752987444 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 6
-button_text = "OFFICE_PN_FUNC_HEADHUNT"
+button_text = "OFFICE_PN_FUNC_TRAINING"
 normal_icon = SubResource("AtlasTexture_0khrq")
 office_description = "OFFICE_TRAINING_TIP_1"
 office_usage = "OFFICE_TRAINING_TIP_2"

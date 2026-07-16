@@ -95,6 +95,12 @@ func _ready():
 
 	_sticky_note = load("res://scenes/UI/sticky_note.tscn").instantiate()
 	_sticky_canvas.add_child(_sticky_note)
+	# 便签上的放大按钮 = 回到完整游戏模式（不再是便签自身缩放）
+	if _sticky_note.has_signal("restore_full_game"):
+		_sticky_note.restore_full_game.connect(func():
+			if _is_sticky_mode:
+				_toggle_mode()
+		)
 
 	# 初始位置：屏幕右下角
 	await get_tree().process_frame
