@@ -6,7 +6,8 @@ Sidebar_TRAINING_EXP,经验,Experience
 Sidebar_TRAIN_ABBR_EFF,效率,EFF
 Sidebar_TRAIN_ABBR_QUAL,品质,QUAL
 Sidebar_TRAIN_ABBR_EXP,经验,EXP
-Sidebar_TRAINING_KICK_TIP,踢出培训（回工位、不结算）,Remove from training (back to desk, no reward)
+Sidebar_TRAINING_KICK_TIP,踢出培训（回工位、不结算）,"Remove from training (back to desk, no reward)"
+Sidebar_TRAINING_SETTLE_OK,共同进步！,Growing together!
 Sidebar_TRAINING_START,开始,Start
 Sidebar_TRAINING_END,结束,End
 Sidebar_TRAINING_ATTR_TIP,选择本轮要培训的属性,Pick which attribute to train

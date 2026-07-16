@@ -11,6 +11,14 @@ class_name TrainingPanel
 
 # 头像裁剪参数（照会议室，露出头部+面部填满方框）
 const AVATAR_FRAME_SIZE := Vector2(56, 56)
+const MINI_BAR_HEIGHT := 5.0
+const AVATAR_SLOT_EXTRA_Y := 9.0   # 头像格子比立绘区域多出的下缘空间：给进度条住，别压着头像太挤
+# 迷你条本色，与员工面板属性条一致（效率蓝/品质金/经验绿）
+const ATTR_BAR_COLORS := {
+	"eff": Color("4fb2ff"),
+	"qual": Color("eeb422"),
+	"exp": Color("76c442"),
+}
 const HEAD_ZOOM := 2.0
 const HEAD_FOCUS_R := 16.0    # R 卡（脸偏下）
 const HEAD_FOCUS_HIGH := 18.0 # SR / SSR
@@ -121,10 +129,19 @@ func _build_avatar_entry(emp) -> void:
 	# 名字/属性省去以省空间；名字改放到 tooltip，悬停可见。
 	var frame := Control.new()
 	frame.clip_contents = true
-	frame.custom_minimum_size = AVATAR_FRAME_SIZE
+	# 格子在 y 轴多留一段放进度条；立绘的定位数学仍按 AVATAR_FRAME_SIZE 顶端对齐，比例布局不变
+	frame.custom_minimum_size = Vector2(AVATAR_FRAME_SIZE.x, AVATAR_FRAME_SIZE.y + AVATAR_SLOT_EXTRA_Y)
 	frame.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	frame.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	frame.mouse_filter = Control.MOUSE_FILTER_STOP
 	frame.tooltip_text = emp.get_display_name() if emp.has_method("get_display_name") else str(emp.employee_name)
+
+	# 立绘裁剪壳：立绘只显示上方 56px，格子下缘多出的空间保持干净背景（不透出胸口）
+	var portrait_clip := Control.new()
+	portrait_clip.clip_contents = true
+	portrait_clip.size = AVATAR_FRAME_SIZE
+	portrait_clip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.add_child(portrait_clip)
 
 	var holder := Control.new()
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -133,7 +150,7 @@ func _build_avatar_entry(emp) -> void:
 	holder.pivot_offset = Vector2(AVATAR_FRAME_SIZE.x * 0.5, focus_y)
 	holder.position = Vector2(0.0, AVATAR_FRAME_SIZE.y * 0.5 - focus_y)
 	holder.scale = Vector2(HEAD_ZOOM, HEAD_ZOOM)
-	frame.add_child(holder)
+	portrait_clip.add_child(holder)
 	AvatarHelper.apply_portrait(holder, emp.portrait, emp.rarity)
 
 	frame.gui_input.connect(func(ev): _on_avatar_input(ev, emp))
@@ -172,7 +189,31 @@ func _build_avatar_entry(emp) -> void:
 		kick.mouse_entered.connect(show_kick)
 		kick.mouse_exited.connect(maybe_hide)
 
+	# 迷你属性条叠在格子下缘多出的那段空间里（不进容器布局 → 不占排版，也不压头像）
+	var bar := _make_mini_bar(emp)
+	bar.position = Vector2(2.0, AVATAR_FRAME_SIZE.y + AVATAR_SLOT_EXTRA_Y - MINI_BAR_HEIGHT + 0)
+	bar.size = Vector2(AVATAR_FRAME_SIZE.x - 4.0, MINI_BAR_HEIGHT)
+	frame.add_child(bar)
 	_avatars.add_child(frame)
+
+func _make_mini_bar(emp) -> TrainingMiniBar:
+	var key: String = linked_logic._attr_key(linked_logic.chosen_attr)
+	var total := 0
+	var trained := 0
+	match key:
+		"eff":
+			total = emp.efficiency
+			trained = emp.trained_eff
+		"qual":
+			total = emp.quality
+			trained = emp.trained_qual
+		"exp":
+			total = emp.experience
+			trained = emp.trained_exp
+	var bar := TrainingMiniBar.new()
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.setup(ATTR_BAR_COLORS.get(key, Color.WHITE), total, trained, linked_logic.get_session_gain(emp))
+	return bar
 
 # 空位：摆一个小凳子占位（纯 texture，不可交互）
 func _build_empty_slot() -> void:
@@ -181,6 +222,7 @@ func _build_empty_slot() -> void:
 	stool.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stool.custom_minimum_size = AVATAR_FRAME_SIZE
 	stool.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	stool.size_flags_vertical = Control.SIZE_SHRINK_BEGIN   # 行变高后仍顶端对齐，和头像齐平
 	stool.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stool.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_avatars.add_child(stool)

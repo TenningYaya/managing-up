@@ -171,7 +171,9 @@ func save_game() -> void:
 				"trained_exp": emp.trained_exp,
 				"dna": emp.dna,
 				"is_in_meeting": emp.is_in_meeting,
+				"meeting_office": _find_meeting_office_path(emp),
 				"is_training": emp.is_training,
+				"training_office": _find_training_office_path(emp),
 				"is_on_map": false,
 				"seat_path": "",
 				"pos_x": 0.0,
@@ -362,46 +364,92 @@ func _restore_employees(emp_list: Array) -> void:
 			# 会议参会名单是运行时数据、存档没存。不能只 enter_meeting（那样它会隐身却不在
 			# 会议室 attendees 里 → 无头像、无法散会 → 永久消失）。必须重新登记回会议室。
 			# 延迟执行：确保办公室与员工都已就位后再登记。
-			call_deferred("_restore_meeting_employee", new_emp)
+			# 会议室不唯一（同层/跨层都可能多间）：带上存档记录的那间房，塞错房间人就"消失"了。
+			call_deferred("_restore_meeting_employee", new_emp, str(e_data.get("meeting_office", "")), false)
 
 		if e_data.get("is_training", false):
 			# 同理：培训名单也是运行时数据，需重新登记回培训室（不存离线进度，回到"未开始"态）。
-			call_deferred("_restore_training_employee", new_emp)
+			# 培训室不唯一：带上存档记录的那间房，塞错房间人就"消失"了。
+			call_deferred("_restore_training_employee", new_emp, str(e_data.get("training_office", "")), false)
 
-# 把一个原本在开会的员工重新塞回会议室（读档恢复用）
-func _restore_meeting_employee(emp: Employee) -> void:
+# 把一个原本在开会的员工重新塞回会议室（读档恢复用）。
+# office_path = 存档记录的那间会议室（会议室不唯一，必须回到原房间，否则玩家打开的房间里没人）。
+# 找不到时晚一拍重试一次（二楼装修房间是异步创建的，读档那一刻可能还没生出来）。
+func _restore_meeting_employee(emp: Employee, office_path: String = "", retried: bool = false) -> void:
 	if not is_instance_valid(emp):
 		return
-	var meeting_logic = _find_meeting_room_logic()
+	var meeting_logic = _find_meeting_room_logic(office_path)
 	if meeting_logic != null and meeting_logic.has_method("restore_attendee"):
 		meeting_logic.restore_attendee(emp)
-	else:
-		# 异常：存档说在开会，却找不到会议室。别让它卡在隐身开会态。
-		# 此时 emp 已被 _deferred_snap 放回工位并正常工作，保持可见即可，避免"消失"。
-		push_warning("[SaveManager] 存档含开会员工，但未找到会议室，按普通在座员工恢复")
+		return
+	if not retried:
+		get_tree().create_timer(1.0).timeout.connect(_restore_meeting_employee.bind(emp, office_path, true))
+		return
+	# 异常：存档说在开会，却找不到会议室。别让它卡在隐身开会态。
+	# 此时 emp 已被 _deferred_snap 放回工位并正常工作，保持可见即可，避免"消失"。
+	push_warning("[SaveManager] 存档含开会员工，但未找到会议室，按普通在座员工恢复")
 
-# 在 offices 组里找到当前是"会议室"且已建好逻辑节点的那个房间的 logic_node
-func _find_meeting_room_logic():
+# 找会议室逻辑：优先存档记录的那间（按节点路径，同层/跨层都唯一）；找不到再退回"第一间会议室"
+func _find_meeting_room_logic(preferred_path: String = ""):
+	if preferred_path != "":
+		var o = get_node_or_null(preferred_path)
+		if o != null and o.get("logic_node") != null \
+		and int(o.get("current_type")) == Gamemanager.OfficeType.MEETING_ROOM:
+			return o.logic_node
 	for office in get_tree().get_nodes_in_group("offices"):
 		if office.current_type == Gamemanager.OfficeType.MEETING_ROOM and office.logic_node != null:
 			return office.logic_node
 	return null
 
-# 把一个原本在培训的员工重新塞回培训室（读档恢复用）
-func _restore_training_employee(emp: Employee) -> void:
+# 存档辅助：这个员工正在哪间会议室里开会（返回房间节点路径；不在开会则空串）
+func _find_meeting_office_path(emp) -> String:
+	if not emp.is_in_meeting:
+		return ""
+	for office in get_tree().get_nodes_in_group("offices"):
+		if office.current_type == Gamemanager.OfficeType.MEETING_ROOM and office.logic_node != null:
+			var att = office.logic_node.get("attendees")
+			if att is Array and att.has(emp):
+				return str(office.get_path())
+	return ""
+
+# 把一个原本在培训的员工重新塞回培训室（读档恢复用）。
+# office_path = 存档记录的那间培训室（培训室不唯一，必须回到原房间，否则玩家打开的房间里没人）。
+# 找不到时晚一拍重试一次（二楼装修房间是异步创建的，读档那一刻可能还没生出来）。
+func _restore_training_employee(emp: Employee, office_path: String = "", retried: bool = false) -> void:
 	if not is_instance_valid(emp):
 		return
-	var training_logic = _find_training_room_logic()
+	var training_logic = _find_training_room_logic(office_path)
 	if training_logic != null and training_logic.has_method("restore_occupant"):
 		training_logic.restore_occupant(emp)
-	else:
-		push_warning("[SaveManager] 存档含培训员工，但未找到培训室，按普通在座员工恢复")
+		return
+	if not retried:
+		get_tree().create_timer(1.0).timeout.connect(_restore_training_employee.bind(emp, office_path, true))
+		return
+	# 彻底找不到培训室：按普通在座员工恢复。此时从未 enter_training，员工可见、正常干活，不会"消失"。
+	push_warning("[SaveManager] 存档含培训员工，但未找到培训室，按普通在座员工恢复")
 
-func _find_training_room_logic():
+# 找培训室逻辑：优先存档记录的那间（按节点路径，跨楼层也唯一）；找不到再退回"第一间培训室"
+func _find_training_room_logic(preferred_path: String = ""):
+	if preferred_path != "":
+		var o = get_node_or_null(preferred_path)
+		if o != null and o.get("logic_node") != null \
+		and int(o.get("current_type")) == Gamemanager.OfficeType.TRAINING_ROOM:
+			return o.logic_node
 	for office in get_tree().get_nodes_in_group("offices"):
 		if office.current_type == Gamemanager.OfficeType.TRAINING_ROOM and office.logic_node != null:
 			return office.logic_node
 	return null
+
+# 存档辅助：这个员工正在哪间培训室里练（返回房间节点路径；不在培训则空串）
+func _find_training_office_path(emp) -> String:
+	if not emp.is_training:
+		return ""
+	for office in get_tree().get_nodes_in_group("offices"):
+		if office.current_type == Gamemanager.OfficeType.TRAINING_ROOM and office.logic_node != null:
+			var occ = office.logic_node.get("occupants")
+			if occ is Array and occ.has(emp):
+				return str(office.get_path())
+	return ""
 
 # ================= 办公室存档恢复 =================
 # 🌟 提供给办公室节点查询自己的存档状态（按节点名）

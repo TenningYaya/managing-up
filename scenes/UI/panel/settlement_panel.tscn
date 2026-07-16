@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://cm81yth1yimrg"]
+
+[ext_resource type="Script" uid="uid://b3720m3n0722o" path="res://scripts/UI/panel/settlement_panel.gd" id="1_koaix"]
+[ext_resource type="Texture2D" uid="uid://cje2nxck7bbu" path="res://assets/computer/PNG/1.png" id="1_ylm3t"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="4_om2ic"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfcan"]
+atlas = ExtResource("1_ylm3t")
+region = Rect2(1692, 467, 134, 143)
+
+[node name="SettlementPanel" type="Control" unique_id=260824387]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 384.0
+offset_bottom = 300.0
+script = ExtResource("1_koaix")
+
+[node name="bcg" type="NinePatchRect" parent="." unique_id=1958341229]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_jfcan")
+region_rect = Rect2(0, 0, 134, 143)
+patch_margin_left = 10
+patch_margin_top = 21
+patch_margin_right = 39
+patch_margin_bottom = 22
+
+[node name="ColorRect" type="ColorRect" parent="bcg" unique_id=235326121]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -280.0
+offset_right = -3.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.44, 1, 1, 0.58431375)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1611908139]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 28.0
+offset_right = 372.0
+offset_bottom = 112.0
+
+[node name="NormalButton" parent="." unique_id=2048579194 instance=ExtResource("4_om2ic")]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 0
+offset_left = 92.0
+offset_top = 248.0
+offset_right = 292.0
+offset_bottom = 278.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ClosePanel" type="Button" parent="." unique_id=269014623]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_bottom = 28.0
+grow_horizontal = 0
+flat = true

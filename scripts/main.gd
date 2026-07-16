@@ -65,6 +65,10 @@ func _ready():
 		$CanvasLayer/EmployeePanel,      # 不可移动（平时隐藏，选中员工时才出现）
 		$CanvasLayer/OfficePanel,
 	]
+	# 培训结算弹窗（居中，平时隐藏）。用 or_null：场景里还没摆它时也不报错
+	var _settle := get_node_or_null("CanvasLayer/SettlementPanel")
+	if _settle is Control:
+		interactive_panels.append(_settle)
 	# ⚠️ TutorialLayer 是 CanvasLayer（不是 Control，没有 get_global_rect），不能放进上面的数组。
 	#    而且教程运行时几乎铺满全屏（黑幕挖洞 + 对话/提示到处出现），用包围盒也圈不住。
 	#    所以教程改用"整屏不穿透"策略（见 suppress_passthrough），由 tutorial_layer.gd 结束时释放。
@@ -395,5 +399,8 @@ func _exit_sticky_mode():
 		$CanvasLayer/EmployeePanel,
 		$CanvasLayer/OfficePanel,
 	]
+	var _settle := get_node_or_null("CanvasLayer/SettlementPanel")
+	if _settle is Control:
+		interactive_panels.append(_settle)
 	_cover_current_screen()
 	_last_pts = PackedVector2Array()  # 强制下一帧重算

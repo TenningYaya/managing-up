@@ -21,6 +21,7 @@ var is_running: bool = false     # 是否已开始（开始后不能再拖人/�
 var chosen_attr: TrainAttr = TrainAttr.EFF
 var rounds_total: int = 1        # 玩家用加减选的总轮数
 var rounds_done: int = 0
+var session_gains: Dictionary = {}    # 本次培训（点开始起）每人涨了几点：emp -> int。面板白色闪烁段 & 结算用
 var _round_popup_points: Array = []   # 本轮已生成飘字的落点（相对办公室中心的偏移），用于防重叠
 var round_elapsed: float = 0.0
 
@@ -106,11 +107,13 @@ func start_training() -> void:
 	is_running = true
 	rounds_done = 0
 	round_elapsed = 0.0
+	session_gains.clear()   # 新一期培训：清空上期收获记录
 	_notify_panel()
 
 # 结束：玩家点"结束培训"或跑满自动结束。
 # 中途结束 → 当前未完成的一轮不结算（已完成的轮 +1 已经生效，不退）。
 func end_training() -> void:
+	var was_running := is_running
 	is_running = false
 	round_elapsed = 0.0
 	rounds_done = 0
@@ -118,6 +121,21 @@ func end_training() -> void:
 	_release_all()
 	_refresh_empty_hint()
 	_notify_panel()
+	if was_running:
+		_show_settlement()   # 有收获才会真弹
+
+# 培训结束的结算弹窗：把本期 session_gains 交给结算面板（零收获不弹）
+func _show_settlement() -> void:
+	var results: Array = []
+	var key := _attr_key(chosen_attr)
+	for emp in session_gains:
+		if is_instance_valid(emp) and int(session_gains[emp]) > 0:
+			results.append({"emp": emp, "key": key, "gain": int(session_gains[emp])})
+	if results.is_empty():
+		return
+	var sp = get_tree().get_first_node_in_group("training_settlement_panel")
+	if sp and sp.has_method("show_results"):
+		sp.show_results(results)
 
 # ==========================================
 # 每轮结算
@@ -145,8 +163,13 @@ func _roll_for(emp) -> bool:
 	var chance: float = float(100 - val * 10)   # (100 - 属性值*10)%
 	if randf() * 100.0 < chance:
 		emp.raise_attribute(_attr_key(chosen_attr))
+		session_gains[emp] = int(session_gains.get(emp, 0)) + 1
 		return true
 	return false
+
+# 本次培训（点开始起）该员工涨了几点
+func get_session_gain(emp) -> int:
+	return int(session_gains.get(emp, 0))
 
 func _attr_value(emp, attr: TrainAttr) -> int:
 	match attr:

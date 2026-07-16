@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://c15oclf0vhsoh"]
+
+[ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="1_g12ri"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="2_d4cg5"]
+[ext_resource type="Texture2D" uid="uid://chmfp7g524ksh" path="res://assets/office/training/exp-training.png" id="3_02thq"]
+[ext_resource type="Script" uid="uid://dd6jmpro0ndfm" path="res://scripts/UI/custom/training_mini_bar.gd" id="4_d4cg5"]
+
+[node name="TrainingSettlementBar" type="Control" unique_id=1146829375]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 360.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=163123341]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.5019608)
+
+[node name="VBoxContainer" type="HBoxContainer" parent="." unique_id=667854218]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Avatar" type="TextureRect" parent="VBoxContainer" unique_id=1725656151]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+texture = ExtResource("1_g12ri")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="VBoxContainer" unique_id=1870324043]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1749846, 0.17498463, 0.1749846, 1)
+theme_override_fonts/font = ExtResource("2_d4cg5")
+theme_override_font_sizes/font_size = 26
+text = "Name"
+
+[node name="AttributeIcon" type="TextureRect" parent="VBoxContainer" unique_id=867832179]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+texture = ExtResource("3_02thq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ResultLabel" type="Label" parent="VBoxContainer" unique_id=104644656]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1764706, 0.1764706, 0.1764706, 1)
+theme_override_fonts/font = ExtResource("2_d4cg5")
+theme_override_font_sizes/font_size = 26
+text = "EFF+2"
+
+[node name="MiniBar" type="Control" parent="VBoxContainer" unique_id=2124710553]
+custom_minimum_size = Vector2(30, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+script = ExtResource("4_d4cg5")
+smooth_style = true
+corner_radius = null
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer" unique_id=614979994]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+color = Color(1, 1, 1, 0)
