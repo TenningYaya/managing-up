@@ -578,6 +578,7 @@ stretch_mode = 0
 [node name="FloorSwitchUI" parent="CanvasLayer" unique_id=1763780726 instance=ExtResource("27_flswui")]
 
 [node name="SettlementPanel" parent="CanvasLayer" unique_id=260824387 instance=ExtResource("26_yq6so")]
+visible = false
 offset_left = 781.0
 offset_top = 770.0
 offset_right = 1165.0
