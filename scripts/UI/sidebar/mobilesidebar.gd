@@ -117,6 +117,7 @@ const TRIGGER_TIP_KEYS := [   # 轮播的贴士（本地化 key，按顺序循�
 ]
 var _tip_index := 0
 var _active_tip_bubble: Control = null
+var _tip_tween: Tween = null   # 当前提示气泡的生命周期动画，点叉关闭时要 kill 掉
 
 # =====================================================
 # Event 系统（随机一段时间后，Trigger 手机图标下方冒出一个事件 icon，点开是"公司群"对话）
@@ -691,6 +692,8 @@ func _auto_plug_at_zero() -> void:
 # 11. Trigger 收起时的随机小贴士气泡
 # =====================================================
 func _on_trigger_tip_timeout() -> void:
+	if not _tips_enabled():   # 设置里「小贴士」关掉了 → 这轮不弹（下次到点会再读，改回开就恢复）
+		return
 	if is_open:
 		return
 	if _is_locked_by_tutorial:
@@ -708,6 +711,14 @@ func _on_trigger_tip_timeout() -> void:
 	_spawn_trigger_tip(tr(key))
 
 
+# 读设置里的「小贴士」开关（settings.cfg → gameplay/tip_bubbles，默认开）
+func _tips_enabled() -> bool:
+	var cfg := ConfigFile.new()
+	if cfg.load("user://settings.cfg") == OK:
+		return bool(cfg.get_value("gameplay", "tip_bubbles", true))
+	return true
+
+
 func _spawn_trigger_tip(text_content: String) -> void:
 	if not is_instance_valid(trigger_btn):
 		return
@@ -719,6 +730,7 @@ func _spawn_trigger_tip(text_content: String) -> void:
 	var lbl := bubble.get_node_or_null("Label") as Label
 	if lbl:
 		lbl.text = text_content
+		_add_tip_close_button(lbl)   # 右上角加个"×"，玩家可随时手动关掉这条提示
 	var base_a := bubble.modulate.a   # 记住气泡本身的半透明度，别淡入成全不透明
 	bubble.modulate.a = 0.0
 
@@ -737,16 +749,16 @@ func _spawn_trigger_tip(text_content: String) -> void:
 	bubble.pivot_offset = Vector2(bubble.size.x, bubble.size.y * 0.5)   # 从靠近 Trigger 的一侧弹出
 	bubble.scale = Vector2(0.6, 0.6)
 
-	var t := create_tween()
+	_tip_tween = create_tween()
 	# 弹入：淡入 + 放大（并行）
-	t.tween_property(bubble, "modulate:a", base_a, 0.25)
-	t.parallel().tween_property(bubble, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_tip_tween.tween_property(bubble, "modulate:a", base_a, 0.25)
+	_tip_tween.parallel().tween_property(bubble, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	# 停留
-	t.tween_interval(TRIGGER_TIP_DURATION)
+	_tip_tween.tween_interval(TRIGGER_TIP_DURATION)
 	# 弹出：淡出 + 缩小（并行）
-	t.tween_property(bubble, "modulate:a", 0.0, 0.25)
-	t.parallel().tween_property(bubble, "scale", Vector2(0.6, 0.6), 0.25)
-	t.tween_callback(func():
+	_tip_tween.tween_property(bubble, "modulate:a", 0.0, 0.25)
+	_tip_tween.parallel().tween_property(bubble, "scale", Vector2(0.6, 0.6), 0.25)
+	_tip_tween.tween_callback(func():
 		if is_instance_valid(bubble):
 			bubble.queue_free()
 		if _active_tip_bubble == bubble:
@@ -754,7 +766,50 @@ func _spawn_trigger_tip(text_content: String) -> void:
 	)
 
 
+# 在提示气泡（Label 上，避开 PanelContainer 的拉伸）右上角加一个"×"关闭钮：白色半透明圆底
+func _add_tip_close_button(lbl: Label) -> void:
+	# ↓↓↓ 想让叉号更大就改这三个数（其它全按它们自动算） ↓↓↓
+	var btn_size := 24.0    # 按钮直径（越大越大）
+	var font_size := 16     # "×" 字号
+	var top_lift := 0     # 往气泡上方探出多少（0 = 完全在气泡内）
+	# ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+	var btn := Button.new()
+	btn.text = "×"
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.mouse_filter = Control.MOUSE_FILTER_STOP
+	btn.custom_minimum_size = Vector2(btn_size, btn_size)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(1, 1, 1, 0.5)          # 白色半透明（想更淡/更实改 a）
+	sb.set_corner_radius_all(int(btn_size / 2.0))   # = 直径一半 → 正圆
+	btn.add_theme_stylebox_override("normal", sb)
+	btn.add_theme_stylebox_override("hover", sb)
+	btn.add_theme_stylebox_override("pressed", sb)
+	btn.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
+	btn.add_theme_font_size_override("font_size", font_size)
+	# 贴气泡右上角（锚到 Label 右上，尺寸/位置都跟着 btn_size 走）
+	btn.anchor_left = 1.0
+	btn.anchor_right = 1.0
+	btn.offset_left = -btn_size
+	btn.offset_top = -top_lift
+	btn.offset_right = 0.0
+	btn.offset_bottom = btn_size - top_lift
+	lbl.add_child(btn)
+	btn.pressed.connect(_close_active_tip)
+
+
+# 点"×"：立刻关掉当前提示（下一次刷新时间到了照常再弹）
+func _close_active_tip() -> void:
+	if _tip_tween and _tip_tween.is_valid():
+		_tip_tween.kill()
+	_tip_tween = null
+	_clear_trigger_tip()
+
+
 func _clear_trigger_tip() -> void:
+	if _tip_tween and _tip_tween.is_valid():
+		_tip_tween.kill()
+	_tip_tween = null
 	if is_instance_valid(_active_tip_bubble):
 		_active_tip_bubble.queue_free()
 	_active_tip_bubble = null

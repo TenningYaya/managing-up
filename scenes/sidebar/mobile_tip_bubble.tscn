@@ -14,7 +14,7 @@ texture_margin_right = 34.0
 texture_margin_bottom = 23.0
 
 [node name="MobileTipBubble" type="PanelContainer" unique_id=868871886]
-modulate = Color(1, 0.86583334, 0.77, 0.85882354)
+self_modulate = Color(1, 0.8666667, 0.76862746, 0.85882354)
 offset_right = 302.0
 offset_bottom = 49.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_k25lq")

@@ -62,6 +62,10 @@ func _ready() -> void:
 	if vp_h > 0:
 		_base_aspect = float(vp_w) / float(vp_h)
 	_sync_always_on_top_checkbox()
+	_sync_tip_bubbles_checkbox()
+	var _tb: CheckBox = $\"ScrollContainer/VBoxContainer/Tip Bubbles/CheckBox\"
+	if not _tb.toggled.is_connected(_on_tip_bubbles_toggled):
+		_tb.toggled.connect(_on_tip_bubbles_toggled)
 	_init_volume_sliders()
 	_init_window_size_dropdown()
 	_apply_translations()
@@ -74,6 +78,14 @@ func _apply_translations() -> void:
 	$\"ScrollContainer/VBoxContainer/Save/Save & Quit/Label\".text = tr(\"Sidebar_settings_save_quit\")
 	$\"ScrollContainer/VBoxContainer/Save/Delete Save/Label\".text = tr(\"Sidebar_settings_delete_save\")
 	$\"ScrollContainer/VBoxContainer/WindowSizeRow/Label\".text = tr(\"Sidebar_settings_window_size\")
+	$\"ScrollContainer/VBoxContainer/Tip Bubbles/Label\".text = tr(\"Sidebar_settings_tip_bubbles\")
+	# tooltip：悬停行内 Label 或 CheckBox 都能看到
+	var tb_tip := tr(\"Sidebar_settings_tip_bubbles_tip\")
+	$\"ScrollContainer/VBoxContainer/Tip Bubbles/Label\".tooltip_text = tb_tip
+	$\"ScrollContainer/VBoxContainer/Tip Bubbles/CheckBox\".tooltip_text = tb_tip
+	var aot_tip := tr(\"Sidebar_settings_always_on_top_tip\")
+	$\"ScrollContainer/VBoxContainer/Always on Top/Label\".tooltip_text = aot_tip
+	$\"ScrollContainer/VBoxContainer/Always on Top/CheckBox\".tooltip_text = aot_tip
 # 语言切换时 TranslationServer 会给所有节点发 NOTIFICATION_TRANSLATION_CHANGED。
 # 用 tr() 在 _ready 里写死的文本不会自动刷新，收到通知后重跑一遍翻译即可。
 func _notification(what: int) -> void:
@@ -141,6 +153,7 @@ func _on_visibility_changed() -> void:
 	if visible:
 		_settings_opened = true
 		_sync_always_on_top_checkbox()
+		_sync_tip_bubbles_checkbox()
 		_sync_volume_sliders()
 		_init_window_size_dropdown()   # 每次打开都按当前真实比例刷新选中项
 	elif _settings_opened:
@@ -160,6 +173,22 @@ func _on_always_on_top_toggled(toggled_on: bool) -> void:
 		main_node.set_always_on_top(toggled_on)
 	else:
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, toggled_on)
+
+# ======== 小贴士开关（settings.cfg → gameplay/tip_bubbles，默认开）========
+func _load_tip_bubbles() -> bool:
+	var cfg := ConfigFile.new()
+	if cfg.load(\"user://settings.cfg\") == OK:
+		return bool(cfg.get_value(\"gameplay\", \"tip_bubbles\", true))
+	return true
+
+func _sync_tip_bubbles_checkbox() -> void:
+	$\"ScrollContainer/VBoxContainer/Tip Bubbles/CheckBox\".set_pressed_no_signal(_load_tip_bubbles())
+
+func _on_tip_bubbles_toggled(toggled_on: bool) -> void:
+	var cfg := ConfigFile.new()
+	cfg.load(\"user://settings.cfg\")
+	cfg.set_value(\"gameplay\", \"tip_bubbles\", toggled_on)
+	cfg.save(\"user://settings.cfg\")
 "
 
 [node name="SettingsPage" type="Control" unique_id=517570582]
@@ -267,9 +296,29 @@ text = "Always on Top  "
 vertical_alignment = 1
 
 [node name="CheckBox" type="CheckBox" parent="ScrollContainer/VBoxContainer/Always on Top" unique_id=1503150479]
-layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 8
+layout_direction = 3
+icon_alignment = 2
+
+[node name="Tip Bubbles" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=544937553]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Tip Bubbles" unique_id=267805488]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_wtuay")
+theme_override_font_sizes/font_size = 20
+text = "Always on Top  "
+vertical_alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="ScrollContainer/VBoxContainer/Tip Bubbles" unique_id=1725860114]
+layout_mode = 2
+size_flags_horizontal = 8
+layout_direction = 3
 icon_alignment = 2
 
 [node name="WindowSizeRow" type="HBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=1750000001]

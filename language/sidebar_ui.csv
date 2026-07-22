@@ -30,6 +30,9 @@ Sidebar_settings_title,设置,SETTINGS
 Sidebar_settings_BGM_volume,音乐音量,Music Volume
 Sidebar_settings_SFX_volume,音效音量,Sound Effects Volume
 Sidebar_settings_always_on_top,始终置顶,Always on Top
+Sidebar_settings_always_on_top_tip,让游戏窗口始终显示在其它窗口之上，不被别的程序挡住。,Keep the game window above all other windows.
+Sidebar_settings_tip_bubbles,小贴士,Tip Bubbles
+Sidebar_settings_tip_bubbles_tip,关闭后，侧边栏不再时不时弹出小提示。,Stop the sidebar from periodically popping up hint bubbles.
 Sidebar_settings_delete_save,删除存档,Delete Save
 Sidebar_settings_save_quit,退出,Save and Quit
 Sidebar_tutorial_title,教程,TUTORIAL
