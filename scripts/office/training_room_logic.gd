@@ -8,7 +8,7 @@ class_name TrainingRoomLogic
 
 # —— 可调参数 ——
 const MAX_CAPACITY := 5          # 一次最多培训几人
-const ROUND_SECONDS := 600.0     # 一轮时长（正式值 10 分钟；调试想快改回 10.0）
+const ROUND_SECONDS := 6.0     # 一轮时长（正式值 10 分钟；调试想快改回 10.0）
 const ATTR_MAX := 10             # 属性上限
 # 每轮成功"名字 +1"飘字用的字体（与培训面板一致的像素字体）
 const POPUP_FONT := preload("res://assets/fonts/doto_pixel_variation.tres")

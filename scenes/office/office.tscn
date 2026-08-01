@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b232jdibcveax" path="res://assets/office/Empty.png" id="3_41xxe"]
 [ext_resource type="Texture2D" uid="uid://bqg6qp0r0ofj6" path="res://assets/office/pantry.png" id="4_e1yc2"]
 [ext_resource type="Texture2D" uid="uid://bpcyagx6cfxxm" path="res://assets/office/meeting.png" id="5_y3s53"]
-[ext_resource type="Texture2D" uid="uid://bsmmsxex6ifmt" path="res://assets/office/HR.png" id="6_p8n5g"]
+[ext_resource type="Texture2D" uid="uid://dc1y4vbtpsu3" path="res://assets/office/HR_3.png" id="6_yexkw"]
 [ext_resource type="Texture2D" uid="uid://ci86d46lyn7w5" path="res://assets/office/Culture.png" id="7_yexkw"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="8_2u0tt"]
 [ext_resource type="Texture2D" uid="uid://dx2vxv0fa13fl" path="res://assets/office/Stock.png" id="8_p8n5g"]
@@ -63,7 +63,7 @@ tex_locked = ExtResource("2_b6q11")
 tex_empty = ExtResource("3_41xxe")
 tex_pantry = ExtResource("4_e1yc2")
 tex_meeting = ExtResource("5_y3s53")
-tex_recruitment = ExtResource("6_p8n5g")
+tex_recruitment = ExtResource("6_yexkw")
 tex_culture = ExtResource("7_yexkw")
 tex_stock = ExtResource("8_p8n5g")
 tex_training = ExtResource("9_yexkw")
