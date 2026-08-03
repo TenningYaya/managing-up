@@ -5,12 +5,12 @@
 [ext_resource type="Texture2D" uid="uid://cjcvuuajxmq2j" path="res://assets/office/locked.png" id="2_b6q11"]
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="3_7m821"]
 [ext_resource type="Texture2D" uid="uid://b232jdibcveax" path="res://assets/office/Empty.png" id="3_41xxe"]
-[ext_resource type="Texture2D" uid="uid://bqg6qp0r0ofj6" path="res://assets/office/pantry.png" id="4_e1yc2"]
-[ext_resource type="Texture2D" uid="uid://bpcyagx6cfxxm" path="res://assets/office/meeting.png" id="5_y3s53"]
+[ext_resource type="Texture2D" uid="uid://b38bqdrn0u5f" path="res://assets/office/Pantry_1.png" id="4_yexkw"]
+[ext_resource type="Texture2D" uid="uid://chcrmtrdd0jtq" path="res://assets/office/Meeting_2.png" id="5_yexkw"]
 [ext_resource type="Texture2D" uid="uid://dc1y4vbtpsu3" path="res://assets/office/HR_3.png" id="6_yexkw"]
-[ext_resource type="Texture2D" uid="uid://ci86d46lyn7w5" path="res://assets/office/Culture.png" id="7_yexkw"]
+[ext_resource type="Texture2D" uid="uid://bxa0tg8y8yjgk" path="res://assets/office/Culture_1.png" id="7_qei30"]
 [ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="8_2u0tt"]
-[ext_resource type="Texture2D" uid="uid://dx2vxv0fa13fl" path="res://assets/office/Stock.png" id="8_p8n5g"]
+[ext_resource type="Texture2D" uid="uid://d17amenxcu3og" path="res://assets/office/Stock_1.png" id="8_yexkw"]
 [ext_resource type="Texture2D" uid="uid://ddpivhjkarech" path="res://assets/office/Training.jpg" id="9_yexkw"]
 [ext_resource type="Texture2D" uid="uid://45w50bbhsdcy" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/0.png" id="11_41xxe"]
 [ext_resource type="PackedScene" uid="uid://cyeom2d65rx2y" path="res://scenes/vfx/blingbling.tscn" id="12_e1yc2"]
@@ -61,11 +61,11 @@ offset_bottom = 200.0
 script = ExtResource("1_d5yd0")
 tex_locked = ExtResource("2_b6q11")
 tex_empty = ExtResource("3_41xxe")
-tex_pantry = ExtResource("4_e1yc2")
-tex_meeting = ExtResource("5_y3s53")
+tex_pantry = ExtResource("4_yexkw")
+tex_meeting = ExtResource("5_yexkw")
 tex_recruitment = ExtResource("6_yexkw")
-tex_culture = ExtResource("7_yexkw")
-tex_stock = ExtResource("8_p8n5g")
+tex_culture = ExtResource("7_qei30")
+tex_stock = ExtResource("8_yexkw")
 tex_training = ExtResource("9_yexkw")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1834985146]
