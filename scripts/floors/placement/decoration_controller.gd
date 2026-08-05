@@ -182,7 +182,7 @@ func _confirm_place() -> void:
 	if owned > 0:
 		floor_node.inventory[key] = owned - 1
 	elif _current_data.price > 0:
-		if not Gamemanager.spend_kpi(_current_data.price):
+		if not Gamemanager.spend_kpi(_current_data.price, Ledger.Cat.BUILD_DECOR):
 			_float_hint("KPI 不足(需要 %d KPI)" % _current_data.price)
 			return
 	floor_node.place_item(_current_data, cell, _current_rot, _current_variant, "", {}, _current_orientation_id)
@@ -246,7 +246,7 @@ func _store_current() -> void:
 func _sell_current() -> void:
 	if mode != Mode.MOVING or not is_instance_valid(_moving_item):
 		return
-	Gamemanager.add_kpi(_moving_item.data.sell_price)
+	Gamemanager.add_kpi(_moving_item.data.sell_price, Ledger.Cat.DECOR_SELL)
 	_hint("已出售 +%d KPI" % _moving_item.data.sell_price)
 	floor_node.remove_item(_moving_item.instance_id, false)
 	_moving_item = null

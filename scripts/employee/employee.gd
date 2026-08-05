@@ -17,6 +17,7 @@ signal display_name_changed   # 玩家改名后发出：各处显示该员工名
 var name_index: int = -1   # NameBank 下标；>=0 时显示名按当前语言实时解析（切语言会变）
 var is_custom_named: bool = false   # 玩家手动改过名：固定用 employee_name，不再随语言/NameBank 解析（存档保留）
 var hire_time: float = -1.0   # 入职时的玩家总游戏时长（-1=尚未入职）；在职时间 = 当前 total_time - hire_time
+var uid: int = 0   # 会计系统用的永久唯一 id（0=未分配，进树时领取一个；存档保留，读档沿用）
 @export var rarity: Rarity = Rarity.R
 @export var efficiency: int = 1
 @export var quality: int = 1
@@ -123,6 +124,9 @@ func _ready() -> void:
 	# recall 重新进树时 hire_time 已 ≥0，不会被重置，所以在职时间连续不断。
 	if hire_time < 0.0:
 		hire_time = Gamemanager.total_time
+	# 领取永久 uid：新员工 / 老存档(无 uid)分配一个；读档恢复的员工已带 uid，保持不变
+	if uid == 0:
+		uid = Gamemanager.get_next_uid()
 	if size.x < 10 or size.y < 10:
 		custom_minimum_size = Vector2(80, 80)
 		size = Vector2(80, 80)
@@ -832,7 +836,7 @@ func _calculate_interrupted_reward() -> void:
 	if partial_reward > 0:
 		var gm = _get_game_manager()
 		if gm and gm.has_method("add_kpi"):
-			gm.add_kpi(partial_reward)
+			gm.add_kpi(partial_reward, Ledger.Cat.WORK_OUTPUT, self)   # 打断补偿并入“员工产出”，不单列
 			print(employee_name, " 工作被打断，结算补偿 KPI: ", partial_reward)
 
 
@@ -880,14 +884,14 @@ func _finish_and_generate_file():
 	
 	var gm = _get_game_manager()
 	if gm and gm.has_method("add_kpi"):
-		gm.add_kpi(final_kpi)
+		gm.add_kpi(final_kpi, Ledger.Cat.WORK_OUTPUT, self)
 		
 	# ======= 3. 概率获得美金 =======
 	var dollar_chance = (10.0 + 5.0 * get_final_experience()) / 100.0
 	var did_get_dollar = false
 	if randf() <= dollar_chance:
 		if gm and gm.has_method("add_dollar"):
-			gm.add_dollar(dollar_reward)
+			gm.add_dollar(dollar_reward, Ledger.Cat.WORK_BONUS, self)
 			did_get_dollar = true
 
 	# 🌟 触发头顶冒出动画
@@ -920,7 +924,7 @@ func _on_slacking_resolved(by_click: bool) -> void:
 		visual_component.play_action("idle")
 	if by_click:
 		var reward_amount = randi_range(2, 4)
-		Gamemanager.add_dollar(reward_amount)
+		Gamemanager.add_dollar(reward_amount, Ledger.Cat.SLACK_REWARD)
 		var spawn_pos: Vector2 = global_position
 		if is_instance_valid(active_slacking_bubble):
 			spawn_pos = active_slacking_bubble.global_position

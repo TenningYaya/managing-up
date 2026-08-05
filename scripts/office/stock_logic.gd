@@ -68,7 +68,7 @@ func on_mouse_exited(mouse_pos: Vector2) -> void:
 # —— 驻场分红 ——
 func _on_dividend() -> void:
 	var amount := randi_range(DIVIDEND_MIN, DIVIDEND_MAX)
-	Gamemanager.add_dollar(amount)
+	Gamemanager.add_dollar(amount, Ledger.Cat.STOCK_DIVIDEND)
 	_spawn_dividend_vfx()
 
 func _spawn_dividend_vfx() -> void:

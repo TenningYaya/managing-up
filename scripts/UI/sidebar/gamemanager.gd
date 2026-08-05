@@ -100,26 +100,40 @@ func hire_employee(data):
 	request_employee_drop.emit(data)
 
 # ================= KPI & Dollar 管理 =================
+# 所有收支都带一个来源标签(source)，成功时汇入 Ledger 记账。source 默认 OTHER，
+# 老调用点不写也不报错。emp：员工类收入传员工节点；meta：卖股时传净利润。
 func has_enough_kpi(amount: int) -> bool:
 	return kpi >= amount
 
-func add_kpi(amount: int) -> void:
+func add_kpi(amount: int, source: int = -1, emp = null, meta: int = 0) -> void:
 	kpi += amount
+	Ledger.record(Ledger.Cur.KPI, source, amount, emp, meta)
 
-func spend_kpi(amount: int) -> bool:
+func spend_kpi(amount: int, source: int = -1) -> bool:
 	if kpi >= amount:
 		kpi -= amount
+		Ledger.record(Ledger.Cur.KPI, source, -amount)
 		return true
 	return false
 
 func has_enough_dollar(amount: int) -> bool:
 	return dollar >= amount
 
-func add_dollar(amount: int) -> void:
+func add_dollar(amount: int, source: int = -1, emp = null, meta: int = 0) -> void:
 	dollar += amount
+	Ledger.record(Ledger.Cur.DOLLAR, source, amount, emp, meta)
 
-func spend_dollar(amount: int) -> bool:
+func spend_dollar(amount: int, source: int = -1) -> bool:
 	if dollar >= amount:
 		dollar -= amount
+		Ledger.record(Ledger.Cur.DOLLAR, source, -amount)
 		return true
 	return false
+
+# —— 员工永久 uid：给会计系统按员工聚合当天收益用（存档保留）——
+var next_employee_uid: int = 1
+
+func get_next_uid() -> int:
+	var u := next_employee_uid
+	next_employee_uid += 1
+	return u

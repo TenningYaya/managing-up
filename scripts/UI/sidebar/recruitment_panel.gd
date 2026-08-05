@@ -123,8 +123,8 @@ func _hire_from_pool(emp: Employee, pool: Array, viewer: ResumeViewer):
 	var cost = RecruitmentManager.calculate_hire_cost(emp)
 	
 	# 2. 检查并扣钱
-	if Gamemanager.spend_kpi(cost):
-		
+	if Gamemanager.spend_kpi(cost, Ledger.Cat.HIRE_KPI):
+
 		# 只发这一个信号，剩下的交给 DropArea 处理。
 		Gamemanager.request_employee_drop.emit(emp)
 		
@@ -206,7 +206,7 @@ func _on_office_status_updated(_is_active: bool):
 
 func _execute_headhunt(amount: int):
 	var cost = 100 * amount
-	if Gamemanager.spend_dollar(cost):
+	if Gamemanager.spend_dollar(cost, Ledger.Cat.HEADHUNT):
 		var duration = 30.0 if amount == 1 else 270.0
 		RecruitmentManager.start_headhunt(amount, duration)
 		_update_headhunt_ui() # 点击后立刻刷一下 UI 显示倒计时

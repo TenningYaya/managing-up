@@ -158,7 +158,7 @@ func buy(index: int, qty: int) -> bool:
 	if price <= 0 or qty > get_buyable(index):
 		return false
 	var cost := price * qty
-	if not Gamemanager.spend_kpi(cost):
+	if not Gamemanager.spend_kpi(cost, Ledger.Cat.STOCK_BUY):
 		return false
 	# 先消耗常规补货额度，超出部分由“卖出回购额度”兜底（这样能买到 1000+n）
 	var from_window := mini(qty, maxi(0, BASE_WINDOW_CAP - s.bought_this_window))
@@ -180,8 +180,10 @@ func sell(index: int, qty: int) -> bool:
 	if qty > s.holdings:
 		return false
 	var price := get_price(index)
+	# 卖股净利润 =（现价 − 持仓均价）× 股数，趁 avg_cost 清零前算好，传给记账显示
+	var net_profit := int(round((price - s.avg_cost) * qty))
 	s.holdings -= qty
-	Gamemanager.add_kpi(price * qty)
+	Gamemanager.add_kpi(price * qty, Ledger.Cat.STOCK_SELL, null, net_profit)
 	# 清仓后成本归零（移动平均成本法：卖出不改均价，清空后重新计）
 	if s.holdings <= 0:
 		s.holdings = 0

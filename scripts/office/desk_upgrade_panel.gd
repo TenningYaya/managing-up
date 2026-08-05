@@ -59,7 +59,7 @@ func get_upgrade_cost(level: int) -> int:
 func _on_upgrade_pressed():
 	if target_slot and target_slot.slot_level < 4:
 		# 真正扣除 KPI 
-		if Gamemanager.spend_kpi(current_cost):
+		if Gamemanager.spend_kpi(current_cost, Ledger.Cat.DESK_UPGRADE):
 			target_slot.upgrade_all()
 			# 升级完刷新一下面板状态
 			open(target_slot)

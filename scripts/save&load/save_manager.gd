@@ -61,7 +61,10 @@ func delete_save() -> void:
 	Gamemanager.total_speedups = 0
 	Gamemanager.max_desk_level = 1
 	Gamemanager.unlocked_desk_slots = 1
-	
+	# 会计系统 & 员工 uid 游标复位（删档重开必须清账，否则沿用上一局的记录）
+	Gamemanager.next_employee_uid = 1
+	Ledger.reset()
+
 	# 🌟 关键：把教程标志位也归 0，否则重载场景后 tutorial_layer._ready()
 	#    会因为 is_tutorial_completed 仍为 true 而 queue_free 自己，导致教程不重播。
 	Gamemanager.is_tutorial_completed = false
@@ -125,8 +128,10 @@ func save_game() -> void:
 		"player_avatar_index": Gamemanager.player_avatar_index,
 		"player_avatar_path": Gamemanager.player_avatar_texture.resource_path if Gamemanager.player_avatar_texture else "",
 		"player_avatar_is_custom": Gamemanager.player_avatar_is_custom,
-		"phone_battery": Gamemanager.phone_battery
+		"phone_battery": Gamemanager.phone_battery,
+		"next_employee_uid": Gamemanager.next_employee_uid
 	}
+	save_data["ledger"] = Ledger.to_dict()
 	
 	var floor_data = FloorManager.get_current_floor_data()
 	save_data["floor"] = {
@@ -158,6 +163,7 @@ func save_game() -> void:
 	for emp in EmployeeManager.my_employees:
 		if is_instance_valid(emp):
 			var emp_dict = {
+				"uid": emp.uid,
 				"employee_name": emp.employee_name,
 				"name_index": emp.name_index,
 				"is_custom_named": emp.is_custom_named,
@@ -278,6 +284,7 @@ func _instantiate_employee_from_dict(e_data: Dictionary) -> Employee:
 	new_emp.name_index = int(e_data.get("name_index", -1))
 	new_emp.is_custom_named = bool(e_data.get("is_custom_named", false))   # 老存档没有此项默认 false
 	new_emp.hire_time = float(e_data.get("hire_time", -1.0))   # 在树前设好，_ready 才不会把它当新入职重置
+	new_emp.uid = int(e_data.get("uid", 0))   # 老存档无 uid → 0，进树时 _ready 会自动补分配
 	new_emp.refresh_name()   # 有 name_index 就按当前语言解析；老存档没有则保留 employee_name
 	new_emp.rarity = e_rarity as Employee.Rarity
 	new_emp.efficiency = int(e_data.get("efficiency", 1))
@@ -553,6 +560,7 @@ func load_game() -> void:
 		Gamemanager.player_avatar_index = int(p_data.get("player_avatar_index", 0))
 		Gamemanager.player_avatar_is_custom = bool(p_data.get("player_avatar_is_custom", false))
 		Gamemanager.phone_battery = float(p_data.get("phone_battery", 100.0))   # 老存档没有此项默认满电
+		Gamemanager.next_employee_uid = int(p_data.get("next_employee_uid", 1))   # 员工 uid 分配游标
 		if Gamemanager.player_avatar_is_custom:
 			# 自定义头像:从用户目录读固定文件;读不到(换机/文件丢失)就退回默认头像
 			var custom_img := Image.new()
@@ -569,6 +577,12 @@ func load_game() -> void:
 				Gamemanager.player_avatar_texture = load(avatar_path)
 				Gamemanager.has_selected_avatar = true
 	
+	# 会计记账数据（老存档没有 ledger 段 → 保持空账，不影响读档）
+	if save_data.has("ledger"):
+		Ledger.from_dict(save_data["ledger"])
+	else:
+		Ledger.reset()
+
 	if save_data.has("floor"):
 		var f_data = save_data["floor"]
 		var coords = Vector2i(int(f_data.get("atlas_coords_x", 0)), int(f_data.get("atlas_coords_y", 8)))

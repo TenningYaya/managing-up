@@ -178,7 +178,7 @@ func _on_upgrade_button_pressed():
 
 	var cost = UPGRADE_DATA[Gamemanager.player_level]["cost"]
 
-	if Gamemanager.spend_kpi(cost):
+	if Gamemanager.spend_kpi(cost, Ledger.Cat.RANK_UPGRADE):
 		Gamemanager.player_level += 1
 		Gamemanager.unlocked_desk_slots = Gamemanager.player_level
 		Gamemanager.max_desk_level = min(Gamemanager.player_level, 4)

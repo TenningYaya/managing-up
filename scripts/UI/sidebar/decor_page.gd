@@ -183,7 +183,7 @@ func _on_upgrade_pressed(idx: int) -> void:
 	if lvl >= 4 or lvl >= Gamemanager.max_desk_level: return
 
 	var cost := _get_cost(lvl)
-	if not Gamemanager.spend_kpi(cost): return
+	if not Gamemanager.spend_kpi(cost, Ledger.Cat.BUILD_DECOR): return
 
 	# 镜头此时已停在该桌子上（因为鼠标正悬停在按钮上），升级动作可被玩家直接看到
 	slot.upgrade_all()
