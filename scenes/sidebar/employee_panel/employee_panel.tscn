@@ -146,6 +146,7 @@ alignment = 1
 
 [node name="NameLabel" parent="PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer" unique_id=922239808 instance=ExtResource("3_agpfo")]
 layout_mode = 2
+auto_shrink_name = true
 icon_texture = ExtResource("4_khksj")
 
 [node name="HSeparator" type="HSeparator" parent="PanelBg/EmployeePage/NameCard/MarginContainer/InfoContainer" unique_id=1200139911]
@@ -365,15 +366,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "EMP_EXPLAIN_RECALL"
 
-[node name="ClosePanel" type="Button" parent="." unique_id=1043703153]
-visible = false
-layout_mode = 0
-offset_left = 273.0
-offset_top = -1.0
-offset_right = 316.0
-offset_bottom = 26.0
-flat = true
-
 [node name="TitleBar" type="Panel" parent="." unique_id=1839338334]
 layout_mode = 1
 anchors_preset = 10
@@ -383,4 +375,13 @@ offset_bottom = 35.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_cr4tb")
 
+[node name="ClosePanel" type="Button" parent="." unique_id=1043703153]
+layout_mode = 0
+offset_left = 273.0
+offset_top = -1.0
+offset_right = 316.0
+offset_bottom = 26.0
+flat = true
+
 [connection signal="gui_input" from="TitleBar" to="." method="_on_title_bar_gui_input"]
+[connection signal="pressed" from="ClosePanel" to="." method="close_panel"]

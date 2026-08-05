@@ -103,22 +103,22 @@ func _ready() -> void:
 func _build_panel_rename_ui() -> void:
 	_name_info_label = name_label.get_node("InfoLabel")
 
-	# name_label 是 HBoxContainer：默认把同排子项拉到与最高子项等高。编辑框（像素字体在 20 号下
-	# 整行高约 29）比名字文字高，会撑高整行，而 InfoIcon 是 expand_mode=IGNORE_SIZE + 纵向填充，
-	# 就被纵向拉长。把图标钉成不随行高拉伸（固定 20，居中），编辑时就不会再变形。
+	# 铅笔按钮顶替名字最前面那个图标(InfoIcon)：把原图标藏掉，HBox 会自动回收它的空间，
+	# 名字左侧省一个图标、右侧也不再单独占一个按钮 → 一共腾出两格宽度，名字能更长、不必过度缩字。
 	var info_icon := name_label.get_node("InfoIcon") as Control
 	if info_icon:
-		info_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		info_icon.hide()
 
-	# 铅笔按钮：放在名字标签右侧
+	# 改名铅笔按钮：做成和原图标一样大小(20)，并移到整行最前面（原 InfoIcon 的位置）
 	_edit_name_button = TextureButton.new()
 	_edit_name_button.name = "EditNameButton"
 	_edit_name_button.texture_normal = RENAME_ICON
 	_edit_name_button.ignore_texture_size = true
 	_edit_name_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-	_edit_name_button.custom_minimum_size = Vector2(18, 18)
+	_edit_name_button.custom_minimum_size = Vector2(20, 20)
 	_edit_name_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	name_label.add_child(_edit_name_button)
+	name_label.move_child(_edit_name_button, 0)   # 移到第 0 位：顶替原来名字图标的位置
 	_edit_name_button.pressed.connect(_start_panel_rename)
 
 	# 行内编辑框：默认隐藏，编辑时顶替名字文字

@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bw0la0v3fp07e"]
+
+[ext_resource type="Texture2D" uid="uid://cje2nxck7bbu" path="res://assets/computer/PNG/1.png" id="1_k1ndo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1ndo"]
+atlas = ExtResource("1_k1ndo")
+region = Rect2(763, 49, 613, 542)
+
+[node name="LedgerPanel" type="Control" unique_id=2113782766]
+custom_minimum_size = Vector2(550, 400)
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -300.0
+offset_right = 150.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1971777611]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_k1ndo")

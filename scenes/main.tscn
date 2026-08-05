@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://dfloor2deco01" path="res://scenes/floors/decoratable_floor.tscn" id="26_decofl"]
 [ext_resource type="PackedScene" uid="uid://cm81yth1yimrg" path="res://scenes/UI/panel/settlement_panel.tscn" id="26_yq6so"]
 [ext_resource type="PackedScene" uid="uid://dfloorswui01" path="res://scenes/UI/floor_switch_ui.tscn" id="27_flswui"]
+[ext_resource type="PackedScene" uid="uid://bw0la0v3fp07e" path="res://scenes/UI/panel/ledger_panel.tscn" id="27_fv21b"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dp3eg"]
 texture = ExtResource("2_jbj1t")
@@ -434,7 +435,7 @@ script = ExtResource("13_a8y0u")
 [node name="EmployeePanel" parent="CanvasLayer" unique_id=1329495967 groups=["employee_panel"] instance=ExtResource("5_tbgi4")]
 offset_left = 1717.0
 offset_top = 235.0
-offset_right = 2038.0
+offset_right = 2033.0
 offset_bottom = 643.0
 
 [node name="Add All Test Button Here" type="Control" parent="CanvasLayer" unique_id=1584317131]
@@ -576,6 +577,7 @@ ignore_texture_size = true
 stretch_mode = 0
 
 [node name="FloorSwitchUI" parent="CanvasLayer" unique_id=1763780726 instance=ExtResource("27_flswui")]
+visible = false
 
 [node name="SettlementPanel" parent="CanvasLayer" unique_id=260824387 instance=ExtResource("26_yq6so")]
 visible = false
@@ -583,6 +585,14 @@ offset_left = 781.0
 offset_top = 770.0
 offset_right = 1165.0
 offset_bottom = 1070.0
+
+[node name="LedgerButton" type="Button" parent="CanvasLayer" unique_id=332844516]
+offset_top = 651.0
+offset_right = 97.0
+offset_bottom = 746.0
+text = "Ledger"
+
+[node name="LedgerPanel" parent="CanvasLayer" unique_id=2113782766 instance=ExtResource("27_fv21b")]
 
 [node name="BuildingManager" type="Node" parent="." unique_id=680144762]
 script = ExtResource("25_bldmgr")

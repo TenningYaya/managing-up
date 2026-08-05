@@ -61,13 +61,17 @@ var _roam_corridor_y: float = 0.0
 @export_group("")
 
 #——————————生产逻辑————————————
-#当前生产时间计算公式为
-#current_cycle_duration = maxf(2.0, base_file_production_time - (final_eff * base_reduction_time * random_factor))
-#对应GDD：
-#同事的最终文件生产时间 =（基础文件生产时间-（同事工作效率+同事工作效率补正）*减幅基数*（80-120随机数）%）
+#生产时间公式（渐近曲线：效率越高时间越短，但只会无限趋近下限、永不归零）：
+#current_cycle_duration = maxf(min_cycle_duration,
+#    base_file_production_time / (1.0 + final_eff * efficiency_curve_factor) * random_factor)
+#  · final_eff     = get_final_efficiency()（基础效率 + 工位/文化/零食/会议等所有补正）
+#  · random_factor = randf_range(0.9, 1.1)，乘在“最终时长”上，波动幅度稳定，不随效率放大
+#⚠️ 旧的线性减法（300 - final_eff*30*rand）在 final_eff≈10 时会把时长打到 0、撞 1 秒地板，
+#   叠 buff 后必然出现“一秒产出一次”的失控，已弃用。
 var base_kpi_value: int = 30
-var base_file_production_time: float = 300.0 # 基础文件生产时间
-var base_reduction_time: int = 30 # 减幅基数
+var base_file_production_time: float = 180.0   # 效率为 0 时的理论基准时长（渐近曲线的分子）
+var efficiency_curve_factor: float = 0.3       # 效率曲线陡峭度 k：越大越陡、高效率越快，但永不归零
+var min_cycle_duration: float = 4.0            # 生产时间下限：纯安全网，正常养成几乎撞不到，只防极端叠加
 var current_cycle_duration: float = 10.0
 @export_range(0.0, 1.0, 0.05) var interrupted_reward_ratio: float = 0.5
 
@@ -460,11 +464,11 @@ func _start_new_work_cycle():
 	
 	# 2. 抓取最新的属性（调用我们刚才写的聚合器）
 	var final_eff = get_final_efficiency()
-	var random_factor = randf_range(0.8, 1.2)
-	
-	var raw_duration = base_file_production_time - (final_eff * base_reduction_time * random_factor)
-	# 顺手把保底的最短时间也从 2.0 减半到 1.0秒，防止后期高级员工撞墙卡死
-	current_cycle_duration = maxf(1.0, raw_duration * 0.5)
+	var random_factor = randf_range(0.9, 1.1)   # 乘在最终时长上，波动幅度稳定（不再随效率放大）
+
+	# 渐近曲线：效率越高时间越短，但只会无限趋近下限、永不归零，杜绝“撞地板→一秒产出”
+	var base_duration = base_file_production_time / (1.0 + final_eff * efficiency_curve_factor)
+	current_cycle_duration = maxf(min_cycle_duration, base_duration * random_factor)
 	
 func _stop_work(reset_progress: bool = true) -> void:
 	is_working = false
@@ -886,8 +890,7 @@ func _finish_and_generate_file():
 			gm.add_dollar(dollar_reward)
 			did_get_dollar = true
 
-	# 🌟 新增：触发头顶冒出动画
-	_spawn_file_vfx(file_grade)
+	# 🌟 触发头顶冒出动画
 	var file_vfx_node = _spawn_file_vfx(file_grade)
 	if did_get_dollar and is_instance_valid(file_vfx_node):
 		_spawn_dollar_vfx(file_vfx_node)
