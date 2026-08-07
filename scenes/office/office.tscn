@@ -182,6 +182,15 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("11_41xxe")
 
+[node name="TrainingButton" parent="." unique_id=2042173446 instance=ExtResource("8_2u0tt")]
+visible = false
+layout_mode = 0
+offset_left = 104.0
+offset_top = 114.667
+offset_right = 290.667
+offset_bottom = 161.333
+button_text = "OFFICE_MANAGE_STOCK"
+
 [node name="Updated" type="PanelContainer" parent="." unique_id=1734189334]
 visible = false
 clip_children = 1

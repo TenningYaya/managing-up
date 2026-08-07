@@ -137,3 +137,5 @@ LEDGER_SLACK_REWARD,摸鱼挽回损失,Loss Recovered
 LEDGER_STOCK_DIVIDEND,股票分红,Dividends
 LEDGER_HEADHUNT,猎头招聘,Headhunting
 LEDGER_OTHER,其他,Other
+LEDGER_MODE_TOTAL,总计,Total
+LEDGER_MODE_LIVE,实时,Live

@@ -18,6 +18,7 @@ class_name Office
 @onready var texture_display: TextureRect = $TextureRect
 @onready var manage_btn: TextureButton = $ManageButton
 @onready var stock_btn: TextureButton = $StockButton
+@onready var training_btn: TextureButton = $TrainingButton
 @onready var empty_hint: TextureRect = $EmptyOfficeHint
 @onready var updated: CanvasItem = $Updated
 
@@ -53,6 +54,9 @@ func _ready() -> void:
 		manage_btn.pressed.connect(_on_manage_btn_pressed)
 	if stock_btn:
 		stock_btn.pressed.connect(_on_stock_btn_pressed)
+	if training_btn:
+		training_btn.pressed.connect(_on_training_btn_pressed)
+		training_btn.button_text = "OFFICE_TRAINING"   # 按钮文字：培训 / Training（本地化 key）
 
 	# 监听全局等级变化
 	if Gamemanager.has_signal("level_changed"):
@@ -124,10 +128,12 @@ func _sync_visual_and_interaction():
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 		if manage_btn: manage_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		if stock_btn: stock_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if training_btn: training_btn.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	else:
 		mouse_filter = Control.MOUSE_FILTER_STOP
 		if manage_btn: manage_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 		if stock_btn: stock_btn.mouse_filter = Control.MOUSE_FILTER_STOP
+		if training_btn: training_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 		
 # ==========================================
 # 交互与点击
@@ -146,16 +152,18 @@ func _gui_input(event: InputEvent) -> void:
 				_on_stock_btn_pressed()   # 点在炒股按钮上 → 直接开 Stock 页签
 				return
 
+		if training_btn and training_btn.visible:
+			if training_btn.get_global_rect().has_point(get_global_mouse_position()):
+				_on_training_btn_pressed()   # 点在培训按钮上 → 直接开培训页签
+				return
+
 		_on_office_clicked()
 		
 func _on_office_clicked() -> void:
 	var panel = get_tree().get_first_node_in_group("office_panel")
 	if panel:
-		# 培训室：点一下默认直接打开"培训"页签（其它办公室仍是选办公室那页）
-		if current_type == Gamemanager.OfficeType.TRAINING_ROOM:
-			panel.open_panel(self, false, false, true)
-		else:
-			panel.open_panel(self, false)
+		# 点主区域一律打开“选择办公室”页签；要进培训页请点悬停出来的“培训”按钮
+		panel.open_panel(self, false)
 
 # 供 TrainingRoomLogic 调用：培训室没人时摇晃 EmptyOfficeHint、有人时收起
 func set_empty_hint_active(active: bool) -> void:
@@ -181,6 +189,12 @@ func _on_stock_btn_pressed() -> void:
 	var panel = get_tree().get_first_node_in_group("office_panel")
 	if panel:
 		panel.open_panel(self, false, true)  # 第三参数 true = 直接定位到 Stock 页签
+
+# 培训室专属：点培训按钮直接打开 Training 页签
+func _on_training_btn_pressed() -> void:
+	var panel = get_tree().get_first_node_in_group("office_panel")
+	if panel:
+		panel.open_panel(self, false, false, true)  # 第四参数 true = 直接定位到培训页签
 
 # ==========================================
 # 拖拽与悬停
@@ -231,6 +245,7 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 	logic_node = null
 	manage_btn.hide()
 	if stock_btn: stock_btn.hide()
+	if training_btn: training_btn.hide()
 			
 	# ====================================================
 	# 💥 2. 迎新：如果新建的是唯一办公室，立刻把坑位占死！

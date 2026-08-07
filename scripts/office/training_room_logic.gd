@@ -24,16 +24,37 @@ var rounds_done: int = 0
 var session_gains: Dictionary = {}    # 本次培训（点开始起）每人涨了几点：emp -> int。面板白色闪烁段 & 结算用
 var _round_popup_points: Array = []   # 本轮已生成飘字的落点（相对办公室中心的偏移），用于防重叠
 var round_elapsed: float = 0.0
+var training_btn: TextureButton = null   # 办公室上悬停显隐的“培训”按钮（点击开页由 office.gd 管）
 
 func setup(office: Control) -> void:
 	super.setup(office)
+	# 抓办公室上的“培训”按钮，初始藏起来（悬停才显示）
+	if office != null:
+		training_btn = office.training_btn
+	if is_instance_valid(training_btn):
+		training_btn.hide()
 	# 在训员工被开除时清位
 	if not EmployeeManager.employee_removed.is_connected(_on_employee_removed):
 		EmployeeManager.employee_removed.connect(_on_employee_removed)
 	_refresh_empty_hint()
 
+# —— 悬停显隐“培训”按钮（仿炒股室/文化室）——
+func on_mouse_entered() -> void:
+	if is_instance_valid(training_btn):
+		training_btn.show()
+
+func on_mouse_exited(mouse_pos: Vector2) -> void:
+	if not is_instance_valid(training_btn) or not is_instance_valid(my_office):
+		return
+	# 鼠标既不在按钮上、也不在办公室上，才收起
+	if not training_btn.get_global_rect().has_point(mouse_pos) \
+	and not my_office.get_global_rect().has_point(mouse_pos):
+		training_btn.hide()
+
 func cleanup() -> void:
 	_release_all()   # 切换房间/清理：立刻把所有人放回工位
+	if is_instance_valid(training_btn):
+		training_btn.hide()
 	if EmployeeManager.employee_removed.is_connected(_on_employee_removed):
 		EmployeeManager.employee_removed.disconnect(_on_employee_removed)
 	if is_instance_valid(my_office) and my_office.has_method("set_empty_hint_active"):

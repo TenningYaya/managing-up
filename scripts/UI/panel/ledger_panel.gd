@@ -68,6 +68,7 @@ var _tab_cfg := []          # [{idx, cur, list_ob, gain_ob, vbox, mode}]
 var _ledger_button: Button = null
 var _dirty := false
 var _refresh_timer := 0.0
+@onready var _daily: Control = $DailyCurrent   # 员工进账窗口（固定后会被 reparent，所以存引用而非路径）
 
 
 func _ready() -> void:
@@ -173,6 +174,8 @@ func _input(event: InputEvent) -> void:
 			return   # 点在面板内 → 保持打开
 		if _ledger_button and _ledger_button.get_global_rect().has_point(mp):
 			return   # 点在按钮上 → 交给按钮 toggle，别在这里重复关
+		if is_instance_valid(_daily) and _daily.visible and _daily.get_global_rect().has_point(mp):
+			return   # 点在员工进账窗口内（可能超出主面板范围）→ 不关 Ledger
 		close()      # 点其它任何地方 → 自动关闭
 
 
@@ -243,7 +246,7 @@ func _build_feed(cfg: Dictionary) -> Array:
 		cat_filter = int(md)
 	var out := []
 	for e in Ledger.get_feed(int(cfg["cur"]), cat_filter):
-		var expandable: bool = Ledger.cat_is_expandable(int(e["cat"])) and Ledger.can_expand_day(int(e["day"]))
+		var expandable: bool = Ledger.cat_is_expandable(int(e["cat"]))   # 员工类来源都可点开员工进账窗口
 		out.append({
 			"cat": int(e["cat"]), "amount": int(e["amount"]),
 			"day": int(e["day"]), "current": bool(e["current"]),
@@ -330,15 +333,13 @@ func _make_row(r: Dictionary) -> Control:
 	return row
 
 
-# ==================== 超链接互动接口（预留）====================
-# 点击“员工产出”这类可展开来源时触发。meta 形如 "day|cat"。
-# 具体展开表现待定，这里先把接口和数据取好，方便你后续填。
+# ==================== 超链接互动 ====================
+# 点击“员工产出”这类可展开来源 → 打开员工进账窗口，按该来源的货币统计。meta 形如 "day|cat"。
 func _on_meta_clicked(meta: Variant) -> void:
 	var parts := str(meta).split("|")
 	if parts.size() != 2:
 		return
-	var day := int(parts[0])
 	var cat := int(parts[1])
-	var employees := Ledger.get_day_employees(day)
-	# TODO: 在此实现员工级明细的展开表现（弹层 / 内嵌子列表等）。
-	print("[Ledger] 展开 day=%d cat=%d，当天员工明细：%s" % [day, cat, str(employees)])
+	var cur := int(Ledger.CAT_META.get(cat, {}).get("cur", Ledger.Cur.KPI))
+	if is_instance_valid(_daily) and _daily.has_method("open_for"):
+		_daily.open_for(cur)

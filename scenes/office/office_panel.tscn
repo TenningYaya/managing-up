@@ -4,13 +4,16 @@
 [ext_resource type="Script" uid="uid://dukdaecvcphbo" path="res://scripts/office/office_panel.gd" id="1_mixia"]
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_kpljw"]
 [ext_resource type="Texture2D" uid="uid://cje2nxck7bbu" path="res://assets/computer/PNG/1.png" id="3_mixia"]
-[ext_resource type="Texture2D" uid="uid://w0pkc05aakr3" path="res://assets/UI/office_icon/office_icons.jpg" id="3_wtdck"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="4_dvne8"]
+[ext_resource type="Texture2D" uid="uid://cwcaprye6s1rr" path="res://assets/office/office_icon/pantry.png" id="6_4k283"]
 [ext_resource type="PackedScene" uid="uid://b2l7mr7bb5b41" path="res://scenes/UI/panel/culture_panel.tscn" id="7_dvne8"]
-[ext_resource type="Texture2D" uid="uid://gmrmj1j10q43" path="res://assets/UI/office_icon/Stock.jpg" id="7_l2t2v"]
-[ext_resource type="Texture2D" uid="uid://cfs5jogly44ho" path="res://assets/UI/office_icon/Training.png" id="8_1hrmf"]
+[ext_resource type="Texture2D" uid="uid://qhr6g2a12x4e" path="res://assets/office/office_icon/trading.png" id="7_j1pli"]
+[ext_resource type="Texture2D" uid="uid://bfg1kq50djd3q" path="res://assets/office/office_icon/HR.png" id="8_llm6m"]
 [ext_resource type="PackedScene" uid="uid://cifxhetkp4v0e" path="res://scenes/UI/panel/stock_panel.tscn" id="9_e55uw"]
+[ext_resource type="Texture2D" uid="uid://cbof031x4b3ge" path="res://assets/office/office_icon/meeting.png" id="9_puim3"]
+[ext_resource type="Texture2D" uid="uid://coj3q6qfcjtc3" path="res://assets/office/office_icon/culture.png" id="10_kr45q"]
 [ext_resource type="PackedScene" uid="uid://c4ph74a8s1n72" path="res://scenes/UI/panel/training_panel.tscn" id="10_oppgx"]
+[ext_resource type="Texture2D" uid="uid://b51j1hseuc8r1" path="res://assets/office/office_icon/training_1.png" id="11_setjr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e55uw"]
 atlas = ExtResource("2_kpljw")
@@ -36,30 +39,6 @@ content_margin_right = 10.0
 bg_color = Color(0.897224, 0.4568857, 0.3017082, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kpljw"]
-atlas = ExtResource("3_wtdck")
-region = Rect2(108.276825, 88.61937, 312.36905, 313.90308)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1hrmf"]
-atlas = ExtResource("7_l2t2v")
-region = Rect2(220, 171, 584, 616)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dvne8"]
-atlas = ExtResource("3_wtdck")
-region = Rect2(112, 559, 306, 314)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mixia"]
-atlas = ExtResource("3_wtdck")
-region = Rect2(603.6087, 89.110435, 312.2473, 314.42557)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l2t2v"]
-atlas = ExtResource("3_wtdck")
-region = Rect2(602.98975, 558.7769, 312.54968, 316.76886)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0khrq"]
-atlas = ExtResource("8_1hrmf")
-region = Rect2(445, 341, 1158, 1228)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpljw"]
 
@@ -161,7 +140,7 @@ columns = 3
 layout_mode = 2
 office_type = 1
 button_text = "OFFICE_PN_FUNC_PANTRY"
-normal_icon = SubResource("AtlasTexture_kpljw")
+normal_icon = ExtResource("6_4k283")
 office_description = "OFFICE_PANTRY_TIP_1"
 office_usage = "OFFICE_PANTRY_TIP_2"
 
@@ -169,7 +148,7 @@ office_usage = "OFFICE_PANTRY_TIP_2"
 layout_mode = 2
 office_type = 5
 button_text = "OFFICE_PN_FUNC_STOCK"
-normal_icon = SubResource("AtlasTexture_1hrmf")
+normal_icon = ExtResource("7_j1pli")
 office_description = "OFFICE_STOCK_TIP_1"
 office_usage = "OFFICE_STOCK_TIP_2"
 
@@ -177,7 +156,7 @@ office_usage = "OFFICE_STOCK_TIP_2"
 layout_mode = 2
 office_type = 3
 button_text = "OFFICE_PN_FUNC_HEADHUNT"
-normal_icon = SubResource("AtlasTexture_dvne8")
+normal_icon = ExtResource("8_llm6m")
 office_description = "OFFICE_HEADHUNT_TIP_1"
 office_usage = "OFFICE_HEADHUNT_TIP_2"
 
@@ -185,7 +164,7 @@ office_usage = "OFFICE_HEADHUNT_TIP_2"
 layout_mode = 2
 office_type = 2
 button_text = "OFFICE_PN_FUNC_MEETING"
-normal_icon = SubResource("AtlasTexture_mixia")
+normal_icon = ExtResource("9_puim3")
 office_description = "OFFICE_MEETING_TIP_1"
 office_usage = "OFFICE_MEETING_TIP_2"
 
@@ -193,7 +172,7 @@ office_usage = "OFFICE_MEETING_TIP_2"
 layout_mode = 2
 office_type = 4
 button_text = "OFFICE_PN_FUNC_CULTURE"
-normal_icon = SubResource("AtlasTexture_l2t2v")
+normal_icon = ExtResource("10_kr45q")
 office_description = "OFFICE_CULTURE_TIP_1"
 office_usage = "OFFICE_CULTURE_TIP_2"
 
@@ -201,7 +180,7 @@ office_usage = "OFFICE_CULTURE_TIP_2"
 layout_mode = 2
 office_type = 6
 button_text = "OFFICE_PN_FUNC_TRAINING"
-normal_icon = SubResource("AtlasTexture_0khrq")
+normal_icon = ExtResource("11_setjr")
 office_description = "OFFICE_TRAINING_TIP_1"
 office_usage = "OFFICE_TRAINING_TIP_2"
 

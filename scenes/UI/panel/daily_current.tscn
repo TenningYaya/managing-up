@@ -1,0 +1,75 @@
+[gd_scene load_steps=4 format=3 uid="uid://8shbejidmqtt"]
+
+[ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="1_1ri5g"]
+[ext_resource type="PackedScene" uid="uid://cxn7ayiavigbl" path="res://scenes/UI/custom/normal_button.tscn" id="2_aii3d"]
+[ext_resource type="Script" path="res://scripts/UI/panel/daily_current.gd" id="3_dc001"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aii3d"]
+atlas = ExtResource("1_1ri5g")
+region = Rect2(1680, 464, 160, 160)
+
+[node name="DailyCurrent" type="Control" unique_id=932272871]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("3_dc001")
+
+[node name="Background" type="NinePatchRect" parent="." unique_id=2095673465]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_aii3d")
+region_rect = Rect2(13, 4, 132, 143)
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 64
+patch_margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1637415545]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 21.0
+offset_right = -15.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Selections" type="HBoxContainer" parent="VBoxContainer" unique_id=740088668]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="SelectionButton" parent="VBoxContainer/Selections" unique_id=1334694742 instance=ExtResource("2_aii3d")]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+
+[node name="PinButon" parent="VBoxContainer/Selections" unique_id=1906795765 instance=ExtResource("2_aii3d")]
+custom_minimum_size = Vector2(50, 40)
+layout_mode = 2
+
+[node name="PinTexture" type="TextureRect" parent="VBoxContainer/Selections/PinButon" unique_id=207697100]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CurrentLogContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=277628823]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CurrentLog" type="VBoxContainer" parent="VBoxContainer/CurrentLogContainer" unique_id=1853644374]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="." unique_id=2065081207]
+layout_mode = 0
+offset_left = 357.0
+offset_top = -4.0
+offset_right = 405.0
+offset_bottom = 22.0
+flat = true

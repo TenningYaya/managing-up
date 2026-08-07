@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cje2nxck7bbu" path="res://assets/computer/PNG/1.png" id="1_k1ndo"]
 [ext_resource type="Script" uid="uid://2eojvj743mmi" path="res://scripts/UI/panel/ledger_panel.gd" id="2_ldgr"]
+[ext_resource type="PackedScene" uid="uid://8shbejidmqtt" path="res://scenes/UI/panel/daily_current.tscn" id="3_fbaxp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k1ndo"]
 atlas = ExtResource("1_k1ndo")
@@ -86,3 +87,17 @@ layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Assets/VBoxContainer" unique_id=793923773]
 layout_mode = 2
+
+[node name="DailyCurrent" parent="." unique_id=932272871 instance=ExtResource("3_fbaxp")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -162.0
+offset_right = 200.0
+offset_bottom = 138.0
+grow_horizontal = 2
+grow_vertical = 2

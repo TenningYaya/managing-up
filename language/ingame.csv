@@ -82,3 +82,4 @@ SETTING_SAVE_QUIT_CONFIRM,确定要保存当前进度并退出游戏吗？,Save 
 SETTING_DELETE_CONFIRM,确定要删除存档吗？此操作无法撤销！,Delete your save? This cannot be undone!
 SETTING_DELETE_YES,删除,Delete
 SETTING_DELETE_NO,取消,Cancel
+OFFICE_TRAINING,培训,Training
