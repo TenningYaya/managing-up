@@ -4,6 +4,78 @@ event_1_msg_2,天呐，我们是不是也有可能被裁？,Oh no... could we be
 event_1_opt_a,都别慌，专心干活，效率给我提上去！,Everyone stay calm and focus—let's pick up the pace!
 event_1_opt_b,唉，人心惶惶的，活都没心思干了。,"Ugh, everyone's on edge, no one can focus on work."
 event_2_msg_1,这周的方案又被客户打回来了。,The client bounced our proposal again this week.
-event_2_msg_2,老板脸都黑了，这可怎么办。,The boss looks furious. What do we do now?
+event_2_msg_2,老板脸都黑了，这可怎么办。,The boss looks furious. What now?
 event_2_opt_a,慢工出细活，先把质量提上去。,Slow down and get the quality right first.
 event_2_opt_b,先冲数量，把进度赶回来。,Push the volume and catch up on schedule.
+event_3_msg_1,组长说这周末又要加班赶进度。,Team lead says we're working this weekend again.
+event_3_msg_2,唉，周末又没了……,There goes another weekend…
+event_3_opt_a,加班餐管够，辛苦大家冲一波！,Meals on me—let's power through, everyone!
+event_3_opt_b,身体要紧，周末好好休息。,Health first—take the weekend to rest.
+event_4_msg_1,HR 说下周组织团建去爬山。,HR's planning a team hike next week.
+event_4_msg_2,团建算加班吗……,Does team building count as overtime…?
+event_4_opt_a,放松一下，团建当天不干活！,Let's unwind—no work on team-building day!
+event_4_opt_b,团建改成聚餐吧，吃顿好的。,Let's make it a group dinner instead—good food for all.
+event_5_msg_1,听说明年可能会涨薪？,Heard we might get a raise next year?
+event_5_msg_2,别信，年年都这么说。,"Don't believe it, they say that every year."
+event_5_opt_a,好好干，年底我一定帮你们争取。,Work hard—I'll fight for your raises at year-end.
+event_5_opt_b,涨薪不好说，但奖金我尽量。,"Raises are uncertain, but I'll push for bonuses."
+event_6_msg_1,办公室空调又坏了，热死了。,"The office AC broke again, it's boiling."
+event_6_msg_2,这大夏天的没法干活啊。,No way to work in this heat.
+event_6_opt_a,我去催维修，先发冰镇饮料降降温。,I'll rush the repair—cold drinks on me for now.
+event_6_opt_b,太热就别硬撑，休息为主。,Don't push it in this heat—rest up.
+event_7_msg_1,楼下新开了奶茶店，好想喝。,"New bubble tea shop downstairs, I'm craving it."
+event_7_msg_2,老板请客不过分吧？,Treating us wouldn't be too much to ask, right?
+event_7_opt_a,今天下午茶我请，都点起来！,Afternoon tea's on me—order away!
+event_7_opt_b,喝奶茶可以，但方案今天得交。,"Tea's fine, but the proposal ships today."
+event_8_msg_1,刚有人上班刷剧被看到了。,Someone got caught streaming shows on the clock.
+event_8_msg_2,完了，要挨批了。,We're in for a lecture now.
+event_8_opt_a,偶尔放松可以，但别太过分。,"A little break is fine, just don't overdo it."
+event_8_opt_b,上班就得专注，都收收心。,Focus during work hours—heads back in the game.
+event_9_msg_1,老板又开始讲愿景了。,The boss is off on another vision speech.
+event_9_msg_2,又是「我们是一家人」……,'We're all a family' again…
+event_9_opt_a,跟着公司好好干，未来可期！,Stick with the company—the future's bright!
+event_9_opt_b,画饼听听就好，活照干。,"Take the pep talk lightly, just keep working."
+event_10_msg_1,隔壁工位今天提离职了。,The person next to me just quit today.
+event_10_msg_2,他的活是不是要分给我们……,Are we splitting his workload now…?
+event_10_opt_a,他的工作我来重新分配，别担心。,I'll redistribute his work—don't worry.
+event_10_opt_b,人手补上前先扛一阵。,Let's tough it out until we backfill.
+event_11_msg_1,今天新来了个实习生。,A new intern joined today.
+event_11_msg_2,又要带新人了，头大。,"Gotta train a newbie again, ugh."
+event_11_opt_a,带新人也是锻炼，耐心点。,Mentoring builds you up too—be patient.
+event_11_opt_b,让新人先自己熟悉，别耽误进度。,Let the newbie ramp up solo—don't lose momentum.
+event_12_msg_1,这季度 KPI 又涨了 20%。,This quarter's KPI went up another 20%.
+event_12_msg_2,这根本完不成啊……,There's no way to hit that…
+event_12_opt_a,目标高点是好事，冲一冲！,A higher bar is a good thing—go for it!
+event_12_opt_b,KPI 我去帮你们谈谈，别太焦虑。,I'll negotiate the KPI—don't stress too much.
+event_13_msg_1,客户发邮件表扬我们做得好！,The client emailed to praise our work!
+event_13_msg_2,总算被认可了一次。,"Finally, some recognition."
+event_13_opt_a,干得漂亮，继续保持！,Great job—keep it up!
+event_13_opt_b,这次奖金我给大家申请。,I'll put in for bonuses this time.
+event_14_msg_1,公司 wifi 又卡了，文件传不动。,"Office wifi's lagging again, can't upload anything."
+event_14_msg_2,这活没法干了。,Can't get any work done like this.
+event_14_opt_a,我去让 IT 马上处理。,I'll get IT on it right away.
+event_14_opt_b,先用手机热点顶着吧。,Just tether off your phones for now.
+event_15_msg_1,明天起每天八点半晨会。,Daily 8:30 stand-ups start tomorrow.
+event_15_msg_2,又要早起了，救命。,"Early mornings again, help."
+event_15_opt_a,晨会同步进度，效率更高。,Stand-ups sync us up and boost efficiency.
+event_15_opt_b,晨会改成线上吧，别太折腾。,Let's move stand-ups online—less hassle.
+event_16_msg_1,茶水间新装了台咖啡机！,New coffee machine in the pantry!
+event_16_msg_2,终于有续命神器了。,"Finally, some life support."
+event_16_opt_a,咖啡管够，今天多干一点！,Unlimited coffee—let's do a bit more today!
+event_16_opt_b,喝咖啡提神，注意别熬夜。,Coffee's for a boost—just don't pull all-nighters.
+event_17_msg_1,这次事故上面要找人背锅。,Management wants a scapegoat for the incident.
+event_17_msg_2,该不会是我们组吧……,Please don't let it be our team…
+event_17_opt_a,责任我来担，你们安心干活。,I'll take responsibility—you just focus on work.
+event_17_opt_b,谁的问题谁负责，说清楚。,Whoever's at fault owns it—let's be clear.
+event_18_msg_1,我们的项目今天成功上线了！,Our project went live today!
+event_18_msg_2,熬了这么多天总算值了。,All those late nights finally paid off.
+event_18_opt_a,庆功宴走起，大家辛苦了！,Time to celebrate—great work, everyone!
+event_18_opt_b,趁热打铁，下个项目继续冲！,Strike while it's hot—on to the next one!
+event_19_msg_1,听说今年年终奖要打折。,Heard the year-end bonus is getting cut.
+event_19_msg_2,忙一整年就这？,A whole year of grind for this?
+event_19_opt_a,我去帮大家争取，别灰心。,I'll fight for it—don't lose heart.
+event_19_opt_b,今年行情不好，大家理解一下。,Tough market this year—please bear with it.
+event_20_msg_1,公司要试行弹性上下班。,Company's trialing flexible hours.
+event_20_msg_2,终于不用挤早高峰了！,No more rush-hour crush!
+event_20_opt_a,弹性归弹性，活别落下。,Flexible hours are fine—just don't fall behind.
+event_20_opt_b,时间自由，状态好了活更细致。,Freedom helps—better focus means finer work.
