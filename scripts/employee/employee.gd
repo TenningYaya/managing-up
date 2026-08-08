@@ -1063,7 +1063,9 @@ func get_final_efficiency() -> int:
 		total += 2
 	# 来源 4：会议室补正
 	total += meet_buff_eff
-	
+	# 来源 5：事件 buff（全体临时加成，3 分钟）
+	total += OfficeManager.event_buff_efficiency
+
 	# 🌟 极度重要：确保效率被扣后，最低不能小于 1，否则会导致除数为 0 或反向工作！
 	return maxi(1, total)
 
@@ -1080,6 +1082,8 @@ func get_final_quality() -> int:
 		total += 3
 	# 来源 4：会议室补正
 	total += meet_buff_qual
+	# 来源 5：事件 buff（全体临时加成，3 分钟）
+	total += OfficeManager.event_buff_quality
 	return total
 	
 func get_final_experience() -> int:
@@ -1091,6 +1095,8 @@ func get_final_experience() -> int:
 		total += 3
 	# 来源 3：会议室补正
 	total += meet_buff_exp
+	# 来源 4：事件 buff（全体临时加成，3 分钟）
+	total += OfficeManager.event_buff_experience
 	return total
 
 

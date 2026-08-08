@@ -15,31 +15,8 @@ const MSG_INTERVAL := 0.8      # 员工每条消息之间的间隔（秒）
 const FADE_TIME := 0.42        # 气泡淡入时长（与 intro 对话一致）
 const END_DELAY := 0.9         # 玩家选完之后停留多久再关闭
 
-# =====================================================================
-# 事件内容表（★只搭结构，台词请自己填★）
-# ---------------------------------------------------------------------
-# 每个事件 = {
-#     "messages": [ {"text": "员工说的话"}, ... ],   # 员工依次冒出来的话（可多条）
-#     "options":  [ "玩家选项一", "玩家选项二" ],      # 玩家可选的两句话（点假输入框后出现）
-# }
-# 想加新事件，往下面数组里再塞一个字典即可；open_random_event 会随机抽一个。
-# =====================================================================
-const EVENTS := [
-	{
-		"messages": [
-			{"text": "（员工台词 1，在这里填）"},
-			{"text": "（员工台词 2，在这里填）"},
-		],
-		"options": [
-			"（玩家选项 A，在这里填）",
-			"（玩家选项 B，在这里填）",
-		],
-	},
-	# {
-	#     "messages": [ {"text": "..."} ],
-	#     "options":  [ "...", "..." ],
-	# },
-]
+# 事件内容与 buff 都在 scripts/events/event_definitions.gd 的 EVENTS 里配置，
+# 文本（中英文）在 language/events.csv 里填。这里只负责把它们显示出来 + 应用 buff。
 
 @onready var dimmer: ColorRect = $Dimmer
 @onready var title_label: Label = $Window/VBox/Header/TitleLabel
@@ -58,6 +35,12 @@ var _answered := false     # 玩家已经选过：不再响应
 var _closed := false       # 已经关闭：正在播放的协程要及时中止
 
 func _ready() -> void:
+	# 挂到 CanvasLayer 下时根节点不一定会自动铺满视口，强制铺满，
+	# 这样底部对齐的遮罩/窗口才会落在可见的游戏窗口区域，而不是飘到透明桌面上
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	size = get_viewport_rect().size
+	position = Vector2.ZERO
+
 	# 隐藏滚动条，保留滚动功能
 	chat_scroll.get_v_scroll_bar().modulate.a = 0.0
 	chat_scroll.get_h_scroll_bar().modulate.a = 0.0
@@ -77,10 +60,11 @@ func _ready() -> void:
 
 # 从事件表里随机抽一个事件并打开
 func open_random_event(project_name: String) -> void:
-	if EVENTS.is_empty():
+	var events: Array = EventDefinitions.EVENTS
+	if events.is_empty():
 		_close()
 		return
-	var event_data: Dictionary = EVENTS[randi() % EVENTS.size()]
+	var event_data: Dictionary = events[randi() % events.size()]
 	open_event(event_data, project_name)
 
 func open_event(event_data: Dictionary, project_name: String) -> void:
@@ -88,8 +72,8 @@ func open_event(event_data: Dictionary, project_name: String) -> void:
 	title_label.text = project_name + tr("Event_group_chat_suffix")
 
 	_options = event_data.get("options", [])
-	option_btn_1.text = str(_options[0]) if _options.size() > 0 else ""
-	option_btn_2.text = str(_options[1]) if _options.size() > 1 else ""
+	option_btn_1.text = _option_text(0)
+	option_btn_2.text = _option_text(1)
 	option_btn_2.visible = _options.size() > 1
 
 	# 清空旧气泡
@@ -101,17 +85,22 @@ func open_event(event_data: Dictionary, project_name: String) -> void:
 
 	_play_employee_messages(event_data.get("messages", []))
 
+# 取第 index 个选项要显示的文字（用 events.csv 的 key 翻译）
+func _option_text(index: int) -> String:
+	if index >= _options.size():
+		return ""
+	return tr(str(_options[index].get("text", "")))
+
 # ---------------------------------------------------------------------
 # 员工消息依次冒泡
 # ---------------------------------------------------------------------
 func _play_employee_messages(messages: Array) -> void:
 	_busy = true
 	_set_input_enabled(false)
-	for msg in messages:
+	for key in messages:
 		if _closed:
 			return
-		var text: String = str(msg.get("text", ""))
-		await _add_employee_message(text)
+		await _add_employee_message(tr(str(key)))   # key 是 events.csv 里的文本 key
 		if _closed:
 			return
 		await get_tree().create_timer(MSG_INTERVAL).timeout
@@ -176,9 +165,44 @@ func _on_option_chosen(index: int) -> void:
 	options_container.visible = false
 	_set_input_enabled(false)
 
-	await _add_player_message(str(_options[index]))
+	var opt: Dictionary = _options[index]
+	# 1. 玩家选的话进入对话
+	await _add_player_message(_option_text(index))
+
+	# 2. 应用这个选项对应的 buff（全体员工，持续 3 分钟）
+	var stat := str(opt.get("stat", ""))
+	var amount := int(opt.get("amount", 0))
+	if stat != "" and amount != 0:
+		OfficeManager.apply_event_buff(stat, amount)
+		await _add_system_message(_buff_toast_text(stat, amount))
+
 	await get_tree().create_timer(END_DELAY).timeout
 	_close()
+
+# 拼出 buff 提示文字，例如 "全体员工 效率 +1（持续 3 分钟）"
+func _buff_toast_text(stat: String, amount: int) -> String:
+	var stat_name := stat
+	match stat:
+		"efficiency": stat_name = tr("Event_stat_efficiency")
+		"quality":    stat_name = tr("Event_stat_quality")
+		"experience": stat_name = tr("Event_stat_experience")
+	var amt_str := ("+" if amount > 0 else "") + str(amount)
+	return tr("Event_buff_prefix") + stat_name + " " + amt_str + tr("Event_buff_suffix")
+
+# 往对话里加一条居中的灰色系统提示（buff 生效）
+func _add_system_message(text: String) -> void:
+	var lbl := Label.new()
+	lbl.text = text
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl.add_theme_color_override("font_color", Color(0.45, 0.45, 0.45, 1))
+	lbl.add_theme_font_size_override("font_size", 18)
+	message_list.add_child(lbl)
+	await get_tree().process_frame
+	if _closed:
+		return
+	_scroll_to_bottom()
 
 func _add_player_message(text: String) -> void:
 	var bubble := CHAT_BUBBLE_SCENE.instantiate()

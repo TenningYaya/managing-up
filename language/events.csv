@@ -1,0 +1,9 @@
+id,zh,en
+event_1_msg_1,听说老板最近又裁了一个人。,Word is the boss just laid off someone again.
+event_1_msg_2,天呐，我们是不是也有可能被裁？,Oh no... could we be next?
+event_1_opt_a,都别慌，专心干活，效率给我提上去！,Everyone stay calm and focus—let's pick up the pace!
+event_1_opt_b,唉，人心惶惶的，活都没心思干了。,"Ugh, everyone's on edge, no one can focus on work."
+event_2_msg_1,这周的方案又被客户打回来了。,The client bounced our proposal again this week.
+event_2_msg_2,老板脸都黑了，这可怎么办。,The boss looks furious. What do we do now?
+event_2_opt_a,慢工出细活，先把质量提上去。,Slow down and get the quality right first.
+event_2_opt_b,先冲数量，把进度赶回来。,Push the volume and catch up on schedule.

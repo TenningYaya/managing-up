@@ -83,3 +83,7 @@ SETTING_DELETE_CONFIRM,确定要删除存档吗？此操作无法撤销！,Delet
 SETTING_DELETE_YES,删除,Delete
 SETTING_DELETE_NO,取消,Cancel
 OFFICE_TRAINING,培训,Training
+BUFF_EVENT_NAME,事件,Event
+BUFF_EVENT_EFF,全局效率 {v},Global Eff {v}
+BUFF_EVENT_QUAL,全局质量 {v},Global Qual {v}
+BUFF_EVENT_EXP,全局经验 {v},Global Exp {v}

@@ -95,6 +95,9 @@ func _ready() -> void:
 	# 当 PopupWindow 发出 canceled 信号时，执行取消逻辑（可选）
 	popup_window.canceled.connect(cancel_fire_employee)
 
+	# 事件 buff 变化（施加/3 分钟到期）时，若面板正开着就实时刷新 buff 标签
+	OfficeManager.event_buff_changed.connect(_on_event_buff_changed)
+
 	set_process_input(true)
 	_build_panel_rename_ui()
 
@@ -586,6 +589,14 @@ func _refresh_buffs() -> void:
 		_add_buff_label(tr("BUFF_CULTURE_NAME"), tr("BUFF_CULTURE_EXP").format({"v": OfficeManager.culture_experience}))
 	if OfficeManager.culture_quality > 0:
 		_add_buff_label(tr("BUFF_CULTURE_NAME"), tr("BUFF_CULTURE_QUAL").format({"v": OfficeManager.culture_quality}))
+
+	# 3.5 Event Buff (事件 Buff：全体临时加成，3 分钟；可正可负)
+	if OfficeManager.event_buff_efficiency != 0:
+		_add_buff_label(tr("BUFF_EVENT_NAME"), tr("BUFF_EVENT_EFF").format({"v": _signed(OfficeManager.event_buff_efficiency)}))
+	if OfficeManager.event_buff_quality != 0:
+		_add_buff_label(tr("BUFF_EVENT_NAME"), tr("BUFF_EVENT_QUAL").format({"v": _signed(OfficeManager.event_buff_quality)}))
+	if OfficeManager.event_buff_experience != 0:
+		_add_buff_label(tr("BUFF_EVENT_NAME"), tr("BUFF_EVENT_EXP").format({"v": _signed(OfficeManager.event_buff_experience)}))
 		
 	# 4. Snack Buff (零食 Buff)
 	if current_employee.get("current_snack_buff") != null:
@@ -599,6 +610,15 @@ func _refresh_buffs() -> void:
 				_add_buff_label(tr("BUFF_SNACK_CAKE"), tr("BUFF_SNACK_CAKE_DESC"))
 			3: # Sausage 烤肠
 				_add_buff_label(tr("BUFF_SNACK_SAUSAGE"), tr("BUFF_SNACK_SAUSAGE_DESC"))
+
+# 事件 buff 变了：面板开着就重刷（3 分钟到期时标签会自动消失）
+func _on_event_buff_changed() -> void:
+	if visible and current_employee != null:
+		_refresh_buffs()
+
+# 把数值格式化成带正负号的字符串：+1 / -1
+func _signed(v: int) -> String:
+	return ("+" if v > 0 else "") + str(v)
 
 func _add_buff_label(buff_name: String, hover_description: String) -> void:
 	var buff_tag = BUFF_TAG_SCENE.instantiate()

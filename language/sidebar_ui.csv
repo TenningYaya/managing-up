@@ -139,3 +139,8 @@ LEDGER_HEADHUNT,猎头招聘,Headhunting
 LEDGER_OTHER,其他,Other
 LEDGER_MODE_TOTAL,总计,Total
 LEDGER_MODE_LIVE,实时,Live
+Event_stat_efficiency,效率,Efficiency
+Event_stat_quality,质量,Quality
+Event_stat_experience,经验,Experience
+Event_buff_prefix,全体员工 ,All staff 
+Event_buff_suffix,（持续 3 分钟）, (3 min)
