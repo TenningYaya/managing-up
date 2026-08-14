@@ -79,3 +79,11 @@ event_20_msg_1,公司要试行弹性上下班。,Company's trialing flexible hou
 event_20_msg_2,终于不用挤早高峰了！,No more rush-hour crush!
 event_20_opt_a,弹性归弹性，活别落下。,Flexible hours are fine—just don't fall behind.
 event_20_opt_b,时间自由，状态好了活更细致。,Freedom helps—better focus means finer work.
+event_21_msg_1,各位早上好，先跟大家同步一下这周的重点：客户临时把交付时间提前了三天，还加了两个新需求，产品那边最终原型还没定，设计稿也要重做，测试时间被压缩到只剩一天，大家做好心理准备。,"Morning everyone, quick sync on this week's priorities: the client moved the deadline up by three days, added two new requirements, product still hasn't finalized the prototype, the mockups need redoing, and testing is squeezed into a single day—brace yourselves."
+event_21_msg_2,啊？三天？这不可能吧，光需求评审就得一天。,What? Three days? That's impossible—the requirements review alone takes a day.
+event_21_msg_3,而且上周的 bug 都还没修完呢，这周又要堆新的。,"And we haven't even finished last week's bugs, now new ones are piling on."
+event_21_msg_4,我这边接口还在等后端，联调根本排不上。,I'm still waiting on the backend for my API—there's no way to schedule integration testing.
+event_21_msg_5,要不我们跟客户再争取一下时间？这么赶质量肯定出问题，到时候返工更麻烦。,"Can we push back on the timeline? Rushing like this will hurt quality, and the rework later will be an even bigger headache."
+event_21_msg_6,老板，您给句话吧，我们到底是保时间还是保质量？,"Boss, just tell us—are we prioritizing the deadline or the quality?"
+event_21_opt_a,稳住，按质量来，我去跟客户谈时间，宁可晚几天也别返工。,"Hold steady, prioritize quality—I'll talk to the client about the timeline; better a few days late than redoing it all."
+event_21_opt_b,时间不能让，先把功能都堆出来，细节后面再打磨。,"The deadline holds—get all the features out first, we'll polish the details later."

@@ -22,7 +22,7 @@ class_name EventDefinitions
 extends RefCounted
 
 const EVENTS := [
-	# 1｜裁员传闻
+	 #1｜裁员传闻
 	{
 		"messages": ["event_1_msg_1", "event_1_msg_2"],
 		"options": [
@@ -180,6 +180,17 @@ const EVENTS := [
 		"options": [
 			{"text": "event_20_opt_a", "stat": "efficiency", "amount": 1},
 			{"text": "event_20_opt_b", "stat": "quality", "amount": 2},
+		],
+	},
+	# 21｜赶工大乱斗（长对话测试：6 条消息、多条很长，用来测换行和滚动）
+	{
+		"messages": [
+			"event_21_msg_1", "event_21_msg_2", "event_21_msg_3",
+			"event_21_msg_4", "event_21_msg_5", "event_21_msg_6",
+		],
+		"options": [
+			{"text": "event_21_opt_a", "stat": "quality", "amount": 2},
+			{"text": "event_21_opt_b", "stat": "efficiency", "amount": 2},
 		],
 	},
 ]

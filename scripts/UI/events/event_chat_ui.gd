@@ -14,6 +14,8 @@ const CHAT_BUBBLE_SCENE: PackedScene = preload("res://scenes/starter/chat_bubble
 const MSG_INTERVAL := 0.8      # 员工每条消息之间的间隔（秒）
 const FADE_TIME := 0.42        # 气泡淡入时长（与 intro 对话一致）
 const END_DELAY := 0.9         # 玩家选完之后停留多久再关闭
+# 气泡在本弹窗里的最大宽度（窗口 640 宽，留出头像+边距后约 460）：超过就自动换行
+const BUBBLE_MAX_WIDTH := 460.0
 
 # 事件内容与 buff 都在 scripts/events/event_definitions.gd 的 EVENTS 里配置，
 # 文本（中英文）在 language/events.csv 里填。这里只负责把它们显示出来 + 应用 buff。
@@ -50,7 +52,8 @@ func _ready() -> void:
 	fake_input.pressed.connect(_on_fake_input_pressed)
 	option_btn_1.pressed.connect(_on_option_1_pressed)
 	option_btn_2.pressed.connect(_on_option_2_pressed)
-	dimmer.gui_input.connect(_on_dimmer_input)
+	# 注意：不再连 dimmer 的点击关闭。遮罩只负责挡住点击（mouse_filter=STOP），
+	# 事件必须由玩家选一个选项才会关，点别处一律无效。
 
 	options_container.visible = false
 	_set_input_enabled(false)
@@ -112,6 +115,7 @@ func _play_employee_messages(messages: Array) -> void:
 func _add_employee_message(text: String) -> void:
 	var bubble := CHAT_BUBBLE_SCENE.instantiate()
 	message_list.add_child(bubble)
+	bubble.max_bubble_width = BUBBLE_MAX_WIDTH   # 说太多就换行，别超出窗口
 	bubble.setup(text)              # 复用 chat_bubble 的样式/尺寸逻辑
 	_apply_random_employee_avatar(bubble)
 
@@ -127,6 +131,9 @@ func _add_employee_message(text: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(bubble, "modulate:a", 1.0, FADE_TIME)
 	await tween.finished
+	# 气泡高度是延迟一两帧按真实行数校正的，等它稳定后再对齐到底部
+	if not _closed:
+		_scroll_to_bottom()
 
 # 把 chat_bubble 里 TextureRect2（原本是老板图）换成随机在职员工的头像
 func _apply_random_employee_avatar(bubble: Node) -> void:
@@ -207,6 +214,7 @@ func _add_system_message(text: String) -> void:
 func _add_player_message(text: String) -> void:
 	var bubble := CHAT_BUBBLE_SCENE.instantiate()
 	message_list.add_child(bubble)
+	bubble.max_bubble_width = BUBBLE_MAX_WIDTH   # 说太多就换行，别超出窗口
 	bubble.setup(text)
 	# 玩家气泡：靠右对齐、隐藏头像
 	bubble.alignment = BoxContainer.ALIGNMENT_END
@@ -225,6 +233,8 @@ func _add_player_message(text: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(bubble, "modulate:a", 1.0, FADE_TIME)
 	await tween.finished
+	if not _closed:
+		_scroll_to_bottom()
 
 # ---------------------------------------------------------------------
 # 杂项
@@ -236,10 +246,6 @@ func _scroll_to_bottom() -> void:
 func _set_input_enabled(enabled: bool) -> void:
 	fake_input.disabled = not enabled
 	fake_input.modulate.a = 1.0 if enabled else 0.55
-
-func _on_dimmer_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		_close()
 
 func _close() -> void:
 	if _closed:
