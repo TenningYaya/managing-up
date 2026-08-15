@@ -230,6 +230,7 @@ func _input(event: InputEvent) -> void:
 					if dragging:
 						_end_drag()
 					else:
+						SteamManager.register_employee_click(uid)  # 🏆 连续点同一员工(工作量不饱和)
 						if is_slacking and is_instance_valid(active_slacking_bubble):
 							active_slacking_bubble.resolve(true)
 						else:
@@ -923,6 +924,7 @@ func _on_slacking_resolved(by_click: bool) -> void:
 	if visual_component and visual_component.has_method("play_action"):
 		visual_component.play_action("idle")
 	if by_click:
+		SteamManager.register_fish_click()  # 🏆 点掉摸鱼气泡累计(禁止摸鱼)
 		var reward_amount = randi_range(2, 4)
 		Gamemanager.add_dollar(reward_amount, Ledger.Cat.SLACK_REWARD)
 		var spawn_pos: Vector2 = global_position
@@ -968,6 +970,7 @@ func _speed_up_work() -> void:
 		return
 		
 	Gamemanager.total_speedups += 1   # 催工次数 +1（已过 is_working 判定，只统计真正生效的加速）
+	SteamManager.unlock(SteamManager.ACH_FIRST_URGE)  # 🏆 我做主：首次成功催促 message（幂等，只上报一次）
 	var total_duration = current_cycle_duration
 	var speed_up_amount = total_duration * 0.04
 	work_elapsed += speed_up_amount

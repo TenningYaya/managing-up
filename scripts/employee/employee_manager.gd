@@ -21,6 +21,12 @@ func hire_employee(new_employee: Employee) -> void:
 	if new_employee not in my_employees:
 		my_employees.append(new_employee)
 		employee_added.emit(new_employee) # 通知仓库去生成UI名片
+
+		# 🏆 成就：抽到 SSR / 抽到属性全满的员工（读档不走 hire_employee，不会误触发）
+		if new_employee.rarity == Employee.Rarity.SSR:
+			SteamManager.unlock(SteamManager.ACH_DRAW_SSR)
+		if new_employee.efficiency == 10 and new_employee.quality == 10 and new_employee.experience == 10:
+			SteamManager.unlock(SteamManager.ACH_PERFECT_EMPLOYEE)
 		
 		# 🌟 1. 进来一个员工，就扔进缓冲篮子
 		_pending_banter_emps.append(new_employee)

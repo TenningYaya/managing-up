@@ -24,9 +24,6 @@ var window_height_fraction := 0.99  # 当前窗口高度占可用屏幕高的比
 # --- 2. Initialization ---
 func _ready():
 
-	# 接管"关闭窗口"事件:不再让系统直接退出,改为先存档再退出(见 _notification)
-	get_tree().auto_accept_quit = false
-
 	SaveManager.load_game()
 
 	# —— 全屏透明覆盖窗口 ——

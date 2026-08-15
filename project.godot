@@ -33,6 +33,7 @@ BanterManager="*uid://do3hs43bffhah"
 FloorManager="*uid://cfssx3hpb6hxe"
 StockManager="*uid://cf08jdimmvyij"
 Ledger="*res://scripts/system/ledger.gd"
+SteamManager="*res://scripts/system/steam_manager.gd"
 
 [debug]
 

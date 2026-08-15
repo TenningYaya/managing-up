@@ -32,6 +32,7 @@ const BUBBLE_MAX_WIDTH := 460.0
 @onready var bubble_sound: AudioStreamPlayer = $BubbleSound
 
 var _options: Array = []
+var _current_event_id: String = ""  # 🏆 本次事件的稳定标识(首条消息key)，供"全部事件"成就统计
 var _busy := false        # 员工消息还在播放：禁止点输入框
 var _answered := false     # 玩家已经选过：不再响应
 var _closed := false       # 已经关闭：正在播放的协程要及时中止
@@ -75,6 +76,9 @@ func open_event(event_data: Dictionary, project_name: String) -> void:
 	title_label.text = project_name + tr("Event_group_chat_suffix")
 
 	_options = event_data.get("options", [])
+	# 🏆 记录本次事件标识(首条消息 key)，供"全部事件"成就统计
+	var msgs: Array = event_data.get("messages", [])
+	_current_event_id = str(msgs[0]) if not msgs.is_empty() else ""
 	option_btn_1.text = _option_text(0)
 	option_btn_2.text = _option_text(1)
 	option_btn_2.visible = _options.size() > 1
@@ -169,6 +173,7 @@ func _on_option_chosen(index: int) -> void:
 	if _answered or index >= _options.size():
 		return
 	_answered = true
+	SteamManager.mark_event_seen(_current_event_id)  # 🏆 全部事件：记录体验过的事件
 	options_container.visible = false
 	_set_input_enabled(false)
 
