@@ -116,6 +116,7 @@ Event_group_chat_suffix,公司群, Group Chat
 LEDGER_TAB_KPI,KPI,KPI
 LEDGER_TAB_ASSETS,美金,Money
 LEDGER_ALL,全部,All
+LEDGER_TIMELINE,按时间排列,Timeline
 LEDGER_SORT_INCOME_ASC,收入·从少到多,Income · Low to High
 LEDGER_SORT_INCOME_DESC,收入·从多到少,Income · High to Low
 LEDGER_SORT_EXPENSE_ASC,支出·从少到多,Expense · Low to High
@@ -123,6 +124,7 @@ LEDGER_SORT_EXPENSE_DESC,支出·从多到少,Expense · High to Low
 LEDGER_TODAY,今天,Today
 LEDGER_DAY_N,第{n}天,Day {n}
 LEDGER_EMPTY,暂无记录,No records yet
+LEDGER_ALL_SORTS,全部收支,All Sorts
 LEDGER_WORK_OUTPUT,员工产出,Employee Output
 LEDGER_WORK_INTERRUPT,员工产出,Employee Output
 LEDGER_DECOR_SELL,变卖家具,Furniture Sold

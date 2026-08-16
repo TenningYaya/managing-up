@@ -28,14 +28,15 @@ class ArrowMark extends Control:
 @onready var _sel_btn = $VBoxContainer/Selections/SelectionButton
 @onready var _pin_btn = $VBoxContainer/Selections/PinButon          # 注意：场景里节点名是 PinButon（少个 t）
 @onready var _pin_tex: TextureRect = $VBoxContainer/Selections/PinButon/PinTexture
-@onready var _scroll: ScrollContainer = $VBoxContainer/CurrentLogContainer
-@onready var _log: VBoxContainer = $VBoxContainer/CurrentLogContainer/CurrentLog
+@onready var _scroll: ScrollContainer = $CurrentLogContainer
+@onready var _log: VBoxContainer = $CurrentLogContainer/CurrentLog
 @onready var _close_btn: Button = $CloseButton
 @onready var _bg: Control = $Background
 
 var _cur: int = 0            # 当前统计货币（Ledger.Cur.KPI / DOLLAR）
 var _mode := "live"          # "live"=实时按次；"total"=总计
 var _pinned := false
+var _pin_bg_normal_orig: Texture2D = null   # 图钉按钮原始的常态底图（取消固定时还原）
 var _home_parent: Node = null   # 未固定时的家（LedgerPanel）
 var _dirty := false
 var _refresh_timer := 0.0
@@ -61,6 +62,7 @@ func _ready() -> void:
 	_close_btn.pressed.connect(close)
 	Ledger.ledger_changed.connect(_on_ledger_changed)
 
+	_pin_bg_normal_orig = _pin_btn.bg_normal   # 记下常态底图，取消固定时还原
 	_update_sel_label()
 	_update_pin_visual()
 
@@ -109,6 +111,14 @@ func _update_pin_visual() -> void:
 		var t: Texture2D = pin_texture_on if _pinned else pin_texture_off
 		if t:
 			_pin_tex.texture = t
+
+	# 固定时保持“按下”的深色底：直接把按钮的常态底图换成 bg_pressed。
+	# （normal_button 在 button_up / mouse_exited 时都会复原成 bg_normal，
+	#   所以只改一次贴图会被它冲掉；换掉 bg_normal 本身才稳，且与信号顺序无关。）
+	if is_instance_valid(_pin_btn):
+		_pin_btn.bg_normal = _pin_btn.bg_pressed if _pinned else _pin_bg_normal_orig
+		if _pin_btn.bg_rect and _pin_btn.bg_normal:
+			_pin_btn.bg_rect.texture = _pin_btn.bg_normal   # 立刻生效，不等下一次事件
 
 
 # ==================== 刷新 ====================

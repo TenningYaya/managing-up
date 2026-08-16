@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://cm81yth1yimrg" path="res://scenes/UI/panel/settlement_panel.tscn" id="26_yq6so"]
 [ext_resource type="PackedScene" uid="uid://dfloorswui01" path="res://scenes/UI/floor_switch_ui.tscn" id="27_flswui"]
 [ext_resource type="PackedScene" uid="uid://bw0la0v3fp07e" path="res://scenes/UI/panel/ledger_panel.tscn" id="27_fv21b"]
+[ext_resource type="Texture2D" uid="uid://b1euw0ayihkuf" path="res://assets/UI/ledger/ledger_icon_3.png" id="27_tel4y"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dp3eg"]
 texture = ExtResource("2_jbj1t")
@@ -587,10 +588,25 @@ offset_right = 1165.0
 offset_bottom = 1070.0
 
 [node name="LedgerButton" type="Button" parent="CanvasLayer" unique_id=332844516]
-offset_top = 651.0
-offset_right = 97.0
-offset_bottom = 746.0
-text = "Ledger"
+offset_left = -15.0
+offset_top = 632.0
+offset_right = 86.0
+offset_bottom = 736.0
+flat = true
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/LedgerButton" unique_id=1214137607]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 86.0
+offset_right = 6.0
+offset_bottom = 86.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("27_tel4y")
+expand_mode = 1
 
 [node name="LedgerPanel" parent="CanvasLayer" unique_id=2113782766 instance=ExtResource("27_fv21b")]
 
@@ -603,5 +619,6 @@ decoratable_floor_scene = ExtResource("26_decofl")
 ui_layer_path = NodePath("../CanvasLayer")
 
 [node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
+visible = false
 
 [connection signal="pressed" from="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

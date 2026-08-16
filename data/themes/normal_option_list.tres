@@ -1,0 +1,35 @@
+[gd_resource type="Theme" format=3 uid="uid://cdalu688jo5dc"]
+
+[ext_resource type="StyleBox" uid="uid://cvnmvliyke1f0" path="res://data/UI/indigo_stylebox_hover.tres" id="1_stl6y"]
+[ext_resource type="StyleBox" uid="uid://dixbf21ulxawg" path="res://data/UI/indigo_stylebox_flat.tres" id="2_xsp7l"]
+[ext_resource type="StyleBox" uid="uid://c2rs0260hq3if" path="res://data/UI/indigo_stylebox_focus.tres" id="3_r0mwv"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="4_t3xqx"]
+
+[sub_resource type="DPITexture" id="DPITexture_uhtdn"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\"><path fill=\"none\" stroke=\"#b2b2b2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-opacity=\".85\" stroke-width=\"2\" d=\"m2 4 4 4 4-4\"/></svg>
+"
+
+[resource]
+default_font = ExtResource("4_t3xqx")
+OptionButton/colors/font_color = Color(0.9262248, 0.92622477, 0.92622477, 1)
+OptionButton/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+OptionButton/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+OptionButton/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+OptionButton/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+OptionButton/colors/font_outline_color = Color(0, 0, 0, 1)
+OptionButton/colors/font_pressed_color = Color(1, 1, 1, 1)
+OptionButton/constants/arrow_margin = 4
+OptionButton/constants/h_separation = 4
+OptionButton/constants/modulate_arrow = 0
+OptionButton/constants/outline_size = 0
+OptionButton/font_sizes/font_size = 20
+OptionButton/icons/arrow = SubResource("DPITexture_uhtdn")
+OptionButton/styles/disabled = ExtResource("1_stl6y")
+OptionButton/styles/disabled_mirrored = ExtResource("2_xsp7l")
+OptionButton/styles/focus = ExtResource("3_r0mwv")
+OptionButton/styles/hover = ExtResource("1_stl6y")
+OptionButton/styles/hover_mirrored = ExtResource("1_stl6y")
+OptionButton/styles/normal = ExtResource("2_xsp7l")
+OptionButton/styles/normal_mirrored = ExtResource("2_xsp7l")
+OptionButton/styles/pressed = ExtResource("2_xsp7l")
+OptionButton/styles/pressed_mirrored = ExtResource("2_xsp7l")

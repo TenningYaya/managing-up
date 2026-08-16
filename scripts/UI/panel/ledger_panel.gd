@@ -115,7 +115,7 @@ func _make_cfg(idx: int, cur: int, tab_root: Control) -> Dictionary:
 
 	# ListItems：全部 + 本货币的每个来源（隐藏项如“打断补偿”已并入产出，不单列）
 	list_ob.clear()
-	list_ob.add_item(tr("LEDGER_ALL"))
+	list_ob.add_item(tr("LEDGER_ALL_SORTS"))
 	list_ob.set_item_metadata(0, -1)
 	var i := 1
 	for cat in Ledger.CAT_META:
@@ -129,7 +129,7 @@ func _make_cfg(idx: int, cur: int, tab_root: Control) -> Dictionary:
 
 	# GainorLoss：全部 + 4 种排序
 	gain_ob.clear()
-	gain_ob.add_item(tr("LEDGER_ALL"))                # 0
+	gain_ob.add_item(tr("LEDGER_TIMELINE"))                # 0
 	gain_ob.add_item(tr("LEDGER_SORT_INCOME_ASC"))    # 1
 	gain_ob.add_item(tr("LEDGER_SORT_INCOME_DESC"))   # 2
 	gain_ob.add_item(tr("LEDGER_SORT_EXPENSE_ASC"))   # 3

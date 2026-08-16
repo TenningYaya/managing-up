@@ -3,10 +3,29 @@
 [ext_resource type="Texture2D" uid="uid://cje2nxck7bbu" path="res://assets/computer/PNG/1.png" id="1_k1ndo"]
 [ext_resource type="Script" uid="uid://2eojvj743mmi" path="res://scripts/UI/panel/ledger_panel.gd" id="2_ldgr"]
 [ext_resource type="PackedScene" uid="uid://8shbejidmqtt" path="res://scenes/UI/panel/daily_current.tscn" id="3_fbaxp"]
+[ext_resource type="Theme" uid="uid://cdalu688jo5dc" path="res://data/themes/normal_option_list.tres" id="3_hta7s"]
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="4_ldgft"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k1ndo"]
 atlas = ExtResource("1_k1ndo")
 region = Rect2(763, 49, 613, 542)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ldgpn"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ldguns"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.18502262, 0.4633698, 0.7658233, 0.6392157)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ldgsel"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.34117648, 0.6117647, 0.9098039, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
 
 [node name="LedgerPanel" type="Control" unique_id=2113782766]
 custom_minimum_size = Vector2(550, 400)
@@ -38,11 +57,16 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 29.0
-offset_top = 24.0
+offset_top = 28.0
 offset_right = -29.0
 offset_bottom = -67.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_ldgft")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/panel = SubResource("StyleBoxFlat_ldgpn")
+theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_ldguns")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_ldgsel")
 current_tab = 0
 
 [node name="KPI" type="MarginContainer" parent="TabContainer" unique_id=1649112552]
@@ -56,12 +80,15 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/KPI/VBoxContainer" unique_id=141110633]
 layout_mode = 2
+theme_override_constants/separation = 20
 
 [node name="ListItems" type="OptionButton" parent="TabContainer/KPI/VBoxContainer/HBoxContainer" unique_id=1105196307]
 layout_mode = 2
+theme = ExtResource("3_hta7s")
 
 [node name="GainorLoss" type="OptionButton" parent="TabContainer/KPI/VBoxContainer/HBoxContainer" unique_id=940774835]
 layout_mode = 2
+theme = ExtResource("3_hta7s")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/KPI/VBoxContainer" unique_id=1429137734]
 layout_mode = 2
@@ -89,6 +116,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="DailyCurrent" parent="." unique_id=932272871 instance=ExtResource("3_fbaxp")]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
