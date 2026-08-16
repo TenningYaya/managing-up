@@ -275,9 +275,9 @@ layout_mode = 2
 [node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea" unique_id=1716905617 groups=["currency_board"] instance=ExtResource("11_trceg")]
 layout_mode = 0
 offset_left = -102.0
-offset_top = -69.0
+offset_top = -81.0
 offset_right = 426.0
-offset_bottom = 1.0
+offset_bottom = -11.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea" unique_id=1047662462]
 layout_mode = 1

@@ -37,10 +37,13 @@ func _ready():
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_TRANSPARENT, true)     # 确保窗口可透明
 	get_viewport().transparent_bg = true
 
-	# 运行时窗口/任务栏图标（用项目里的 logo）
-	var _icon_tex: Texture2D = load("res://assets/figures/table_icon.png")
-	if _icon_tex:
-		DisplayServer.set_icon(_icon_tex.get_image())
+	# 运行时窗口/任务栏图标：直接读【项目设置 → 应用 → 配置 → 图标】，
+	# 这样换图标只改那一处即可，不必再回来同步这里（以前写死路径，导致换了图标任务栏仍是旧的）。
+	var _icon_path: String = str(ProjectSettings.get_setting("application/config/icon", ""))
+	if _icon_path != "":
+		var _icon_tex: Texture2D = load(_icon_path)
+		if _icon_tex:
+			DisplayServer.set_icon(_icon_tex.get_image())
 
 	await get_tree().process_frame  # 等模式切换生效再查询可用区域
 	print("after second await: size=", DisplayServer.window_get_size())
