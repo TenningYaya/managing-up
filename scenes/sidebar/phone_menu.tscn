@@ -22,6 +22,8 @@
 [ext_resource type="Texture2D" uid="uid://bes6dpqqqyvje" path="res://assets/sidebar/other/home_icon.png" id="18_v1wyx"]
 [ext_resource type="Texture2D" uid="uid://cyqpielvsukks" path="res://assets/sidebar/typeC-1.png" id="20_v1wyx"]
 [ext_resource type="Texture2D" uid="uid://0av1ee65xd0r" path="res://assets/events/event Occur Icon.png" id="21_event"]
+[ext_resource type="Texture2D" path="res://assets/sidebar/app/credits.png" id="22_credits"]
+[ext_resource type="PackedScene" path="res://scenes/sidebar/credits_page.tscn" id="23_credits"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reddot"]
 bg_color = Color(0.886275, 0.14902, 0.14902, 1)
@@ -125,7 +127,7 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 32.0
-offset_bottom = 93.0
+offset_bottom = 300.0
 grow_horizontal = 2
 size_flags_vertical = 0
 
@@ -265,6 +267,24 @@ theme_override_font_sizes/font_size = 12
 text = "	PERSONAL"
 horizontal_alignment = 1
 
+[node name="Credits" type="TextureButton" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+texture_normal = ExtResource("22_credits")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="CREDITS" type="Label" parent="PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/Credits"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 72.0
+offset_right = 78.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "CREDITS"
+horizontal_alignment = 1
+
 [node name="AppDisplayArea" type="Control" parent="PhoneWrapper/Screen" unique_id=1568197251]
 layout_mode = 1
 anchors_preset = 15
@@ -303,6 +323,10 @@ visible = false
 layout_mode = 0
 
 [node name="PersonalPage" parent="PhoneWrapper/Screen/AppDisplayArea" unique_id=552744011 instance=ExtResource("15_nnubu")]
+visible = false
+layout_mode = 0
+
+[node name="CreditsPage" parent="PhoneWrapper/Screen/AppDisplayArea" instance=ExtResource("23_credits")]
 visible = false
 layout_mode = 0
 

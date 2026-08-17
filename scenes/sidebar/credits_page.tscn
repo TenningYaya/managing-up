@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://c44gni2smcx8c"]
+
+[ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="1_credits"]
+
+[node name="CreditsPage" type="Control" unique_id=639303479]
+custom_minimum_size = Vector2(270, 360)
+layout_mode = 3
+anchors_preset = 0
+
+[node name="CreditsText" type="RichTextLabel" parent="." unique_id=689775096]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 39.0
+offset_right = 239.0
+offset_bottom = 316.0
+focus_mode = 2
+mouse_default_cursor_shape = 1
+theme_override_colors/default_color = Color(0.035, 0.047, 0.075, 1)
+theme_override_fonts/normal_font = ExtResource("1_credits")
+theme_override_font_sizes/normal_font_size = 24
+text = " CREDITS / 特别鸣谢 ==================
+
+[ Visual Assets / 视觉资产 ]
+
+@ shubibubi
+  - https://shubibubi.itch.io/cozy-people
+
+@ jimmydjourney
+  - https://jimmydjourney.itch.io/office-man-character
+  - https://jimmydjourney.itch.io/office-boss-character
+
+@ humblepixel
+  - https://humblepixel.itch.io/pocket-inventory-series-2-pixel-map
+  - https://humblepixel.itch.io/pocket-inventory-series-10-monitor
+  - https://humblepixel.itch.io/pocket-inventory-series-12-smart-phone
+  - https://humblepixel.itch.io/pocket-inventory-series-2-pixel-map/devlog/807671/-its-free-some-bug-fixes-
+
+@ donarg
+  - https://donarg.itch.io/officetileset
+
+@ glionox
+  - https://glionox.itch.io/items16
+
+@ Kenney.nl
+  - https://kenney.nl/assets/particle-pack
+
+@ adwitr
+  - https://adwitr.itch.io/button-asset-pack
+
+@ pogonr
+  - https://pogonr.itch.io/phone-asset-template
+
+@ jik-a-4
+  - https://jik-a-4.itch.io/freepixel
+
+@ bdragon1727
+  - https://bdragon1727.itch.io/free-effect-bullet-impact-explosion-32x32
+
+@ catshaped
+  - https://catshaped.itch.io/pixel-progress-bar-asset-pack
+
+@ karlote
+  - https://karlote.itch.io/star-lighting-effect
+
+@ distant-dimensions
+  - https://distant-dimensions.itch.io/
+
+[ Audio / 声音资产 ]
+
+@ Pixabay (SFX & Music)
+  - https://pixabay.com/sound-effects/technology-new-notification-040-493469/
+  - https://pixabay.com/sound-effects/film-special-effects-cute-level-up-2-189851/
+  - https://pixabay.com/sound-effects/musical-elegant-clean-tech-logo-design-537381/
+  - https://pixabay.com/music/lofi-lofi-lofi-music-531487/
+  - https://pixabay.com/sound-effects/film-special-effects-select-sound-121244/
+  - https://pixabay.com/sound-effects/film-special-effects-diamond-found-190255/
+  - https://pixabay.com/sound-effects/film-special-effects-bubble-pop-05-323639/
+  - https://pixabay.com/sound-effects/film-special-effects-start-computeraif-14572/
+
+@ ci
+  - https://ci.itch.io/400-sounds-pack
+
+[ Fonts / 字体 ]
+
+@ Google Fonts
+  - https://fonts.google.com/specimen/ZCOOL+KuaiLe
+  - https://fonts.google.com/noto/specimen/Noto+Sans+SC?preview.script=Hans
+
+@ purestudio
+  - https://purestudio.itch.io/ipix
+
+@ ggbot
+  - https://ggbot.itch.io/datdot-font
+
+@ monkopus
+  - https://monkopus.itch.io/stacked-pixel"
+context_menu_enabled = true
+selection_enabled = true

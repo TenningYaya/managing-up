@@ -55,6 +55,7 @@ var _reminder_timer: Timer = null
 @onready var btn_tutorial: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/tutorial
 @onready var btn_decor: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor
 @onready var btn_personal: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/Personal
+@onready var btn_credits: BaseButton = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/Credits
 
 @onready var home_button: BaseButton = $PhoneWrapper/HomeButton
 @onready var home_button_2: BaseButton = $PhoneWrapper/HomeButton2
@@ -66,6 +67,7 @@ var _reminder_timer: Timer = null
 @onready var tutorial_page: Control = $PhoneWrapper/Screen/AppDisplayArea/TutorialPage
 @onready var decor_page: Control = $PhoneWrapper/Screen/AppDisplayArea/DecorPage
 @onready var personal_page: Control = $PhoneWrapper/Screen/AppDisplayArea/PersonalPage
+@onready var credits_page: Control = $PhoneWrapper/Screen/AppDisplayArea/CreditsPage
 
 @onready var dot_upgrades: Panel = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/upgrades/RedDot
 @onready var dot_decor: Panel = $PhoneWrapper/Screen/HomeScreen/CenterContainer/GridContainer/decor/RedDot
@@ -186,6 +188,10 @@ func _ready() -> void:
 		open_app(personal_page)
 	)
 
+	btn_credits.pressed.connect(func():
+		open_app(credits_page)
+	)
+
 	# =====================================================
 	# 手机底部按钮：返回桌面
 	# =====================================================
@@ -269,6 +275,7 @@ func _menu_labels() -> Array:
 		btn_settings.get_node("SETTINGS"),
 		btn_decor.get_node("DECOR"),
 		btn_personal.get_node("PERSONAL"),
+		btn_credits.get_node("CREDITS"),
 	]
 
 # 只在中文时把这几个菜单文字调大；英文保持原始设计字号
@@ -288,6 +295,7 @@ func _apply_menu_translations() -> void:
 	btn_settings.get_node("SETTINGS").text = tr("Sidebar_menu_settings")
 	btn_decor.get_node("DECOR").text = tr("Sidebar_menu_decor")
 	btn_personal.get_node("PERSONAL").text = tr("Sidebar_personal_title")
+	btn_credits.get_node("CREDITS").text = tr("Sidebar_menu_credits")
 	_apply_locale_font_sizes()
 
 
@@ -446,6 +454,7 @@ func hide_all_pages() -> void:
 	tutorial_page.visible = false
 	decor_page.visible = false
 	personal_page.visible = false
+	credits_page.visible = false
 
 
 func lock_for_tutorial() -> void:
