@@ -25,7 +25,9 @@ func unlock_from_tutorial():
 @onready var culture_page: Control = $TabContainer/Culture
 
 # --- 按钮容器引用 ---
-@onready var selection_buttons: GridContainer = $TabContainer/Office/OfficeButton
+@onready var selection_buttons: GridContainer = $TabContainer/Office/VBoxContainer/OfficeButton
+# 选择页顶部的"当前功能：XXX"状态行
+@onready var current_func_label: Label = $TabContainer/Office/VBoxContainer/CurrentFuncLabel
 var culture_buttons: VBoxContainer
 var dragging = false
 var drag_offset = Vector2()
@@ -103,10 +105,30 @@ func _refresh_all_ui() -> void:
 	
 	# 刷新第一页的办公室按钮
 	get_tree().call_group("office_buttons", "refresh_status", current_target_office)
-	
+	_refresh_current_func_label()
+
 	var is_culture = (current_target_office.current_type == Gamemanager.OfficeType.CULTURE_CENTER)
 	if culture_buttons:
 		culture_buttons.visible = is_culture
+
+# 选择页顶部的状态行："当前功能：员工培训室"（未设置功能时显示"尚未设置"）
+func _refresh_current_func_label() -> void:
+	if current_func_label == null or current_target_office == null:
+		return
+	current_func_label.text = tr("OFFICE_PN_CURRENT_FUNC").format({
+		"name": _office_type_name(current_target_office.current_type)
+	})
+
+# 办公室功能类型 → 显示名。复用选择按钮已有的那批本地化键，不新增翻译
+func _office_type_name(t: int) -> String:
+	match t:
+		Gamemanager.OfficeType.PANTRY:         return tr("OFFICE_PN_FUNC_PANTRY")
+		Gamemanager.OfficeType.MEETING_ROOM:   return tr("OFFICE_PN_FUNC_MEETING")
+		Gamemanager.OfficeType.RECRUITMENT:    return tr("OFFICE_PN_FUNC_HEADHUNT")
+		Gamemanager.OfficeType.CULTURE_CENTER: return tr("OFFICE_PN_FUNC_CULTURE")
+		Gamemanager.OfficeType.STOCK_OFFICE:   return tr("OFFICE_PN_FUNC_STOCK")
+		Gamemanager.OfficeType.TRAINING_ROOM:  return tr("OFFICE_PN_FUNC_TRAINING")
+		_:                                     return tr("OFFICE_PN_FUNC_NONE")
 		
 func _setup_selection_buttons() -> void:
 	for child in selection_buttons.get_children():

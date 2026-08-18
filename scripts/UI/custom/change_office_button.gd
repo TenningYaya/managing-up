@@ -20,6 +20,7 @@ extends TextureButton
 @onready var locked_mask: Control = $LockedMask     # 未解锁遮罩
 @onready var disabled_mask: Control = $DisabledMask # 已存在遮罩
 @onready var selection_border: Control = $SelectionBorder # 选中边框
+@onready var current_mark: TextureRect = $CurrentMark     # 当前功能的对号标记（图标下方）
 var _full_tip_text: String = ""
 
 func _ready() -> void:
@@ -35,7 +36,8 @@ func _ready() -> void:
 	# ====================================================
 	if locked_mask: locked_mask.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if disabled_mask: disabled_mask.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if selection_border: selection_border.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	#if selection_border: selection_border.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if current_mark: current_mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	add_to_group("office_buttons")
 	_setup_native_tooltip() # 先拼凑好文案
@@ -65,9 +67,13 @@ func refresh_status(target_office: Node = null) -> void:
 
 	# --- 3. 视觉显隐控制 ---
 	# 边框显隐
-	if selection_border:
-		selection_border.visible = is_selected
-		selection_border.modulate.a = 1.0 # 确保它是实心的
+	#if selection_border:
+		#selection_border.visible = is_selected
+		#selection_border.modulate.a = 1.0 # 确保它是实心的
+
+	# 对号标记：和边框同一个判定，只有当前办公室正在用的那个功能才显示
+	if current_mark:
+		current_mark.visible = is_selected
 
 	# 遮罩和状态重置
 	disabled = false
@@ -100,16 +106,22 @@ func _on_pressed() -> void:
 	if panel:
 		panel.on_type_selected(office_type)
 
+# 是否"全局唯一"：整间公司只能开一间。判定与 refresh_status 里的 already_exists 一致
+func _is_unique_type() -> bool:
+	return office_type == Gamemanager.OfficeType.RECRUITMENT \
+		or office_type == Gamemanager.OfficeType.CULTURE_CENTER \
+		or office_type == Gamemanager.OfficeType.STOCK_OFFICE
+
 func _setup_native_tooltip() -> void:
-	#var is_unique = (office_type == Gamemanager.OfficeType.RECRUITMENT or office_type == Gamemanager.OfficeType.CULTURE_CENTER)
-	#var type_title = "【 💥 全局唯一职能办 】\n" if is_unique else "【 🏠 普通基础办公室 】\n"
-	
+	# 首行标注数量限制：唯一职能办 → "全司唯一"；其余 → "可设多间"。
+	# 这样玩家点不了时能明白是"已经开过一间"，而不是"等级不够"（后者由锁 + 等级提示负责）
+	var limit_line := tr("OFFICE_UNIQUE_ONE") if _is_unique_type() else tr("OFFICE_UNIQUE_MULTI")
+
 	var desc = tr(office_description) if office_description != "" else ""
 	var usage = "\n" + tr(office_usage) if office_usage != "" else ""
-	
+
 	# 💥 核心：把拼好的长篇大论存起来，先不急着喂给 tooltip_text
-	#_full_tip_text = type_title + desc + usage
-	_full_tip_text = desc + usage
+	_full_tip_text = limit_line + "\n" + desc + usage
 	
 func _make_custom_tooltip(for_text: String) -> Object:
 	# 💥 核心防呆：如果文字为空，直接返回 null，彻底拒绝渲染空黑框！

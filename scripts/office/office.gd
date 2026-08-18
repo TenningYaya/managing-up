@@ -28,10 +28,16 @@ var logic_node: OfficeLogic = null
 var _hint_tween: Tween = null
 var _is_initialized: bool = false
 
-# —— 悬停放大 RoomIcon ——
-const ICON_HOVER_TIME := 0.25          # 缓进缓出时长（秒）
-var _icon_home_pos := Vector2.ZERO     # 图标原始位置/尺寸（鼠标移开后恢复到这里）
+# —— RoomIcon 的悬停放大 / 按下反馈 ——
+const ICON_HOVER_TIME := 0.25            # 悬停缓进缓出时长（秒）
+const ICON_PRESS_TIME := 0.08            # 按下/回弹时长（要短才有"按"的手感）
+const ICON_PRESS_SINK := 3.0             # 按下时下沉几像素
+const ICON_PRESS_DIM := Color(0.82, 0.82, 0.82, 1.0)   # 按下时压暗到这个色调
+const ICON_OUTLINE_WIDTH := 2.0          # 悬停描边宽度（贴图像素）
+var _icon_home_pos := Vector2.ZERO       # 图标原始位置/尺寸（鼠标移开后恢复到这里）
 var _icon_home_size := Vector2.ZERO
+var _icon_hovered := false
+var _icon_pressed := false
 var _icon_tween: Tween = null
 
 # ==========================================
@@ -94,6 +100,10 @@ func _ready() -> void:
 			texture_display.offset_right - texture_display.offset_left,
 			texture_display.offset_bottom - texture_display.offset_top
 		)
+		# ⚠️ 场景里的 ShaderMaterial 是 SubResource，多个办公室实例默认【共享同一份】。
+		#    不复制的话，鼠标悬停一间办公室会让所有办公室一起亮描边。这里给每间一份独立副本。
+		if texture_display.material != null:
+			texture_display.material = texture_display.material.duplicate()
 
 	_is_initialized = true
 	
@@ -174,7 +184,16 @@ func _gui_input(event: InputEvent) -> void:
 				_on_training_btn_pressed()   # 点在培训按钮上 → 直接开培训页签
 				return
 
+		# 点在主区域（不是那几个悬停按钮）：图标下沉+压暗，给出"按下去了"的反馈
+		_icon_pressed = true
+		_apply_icon_state(true)
 		_on_office_clicked()
+
+	# 松开左键：图标回弹。单独一个分支，因为上面那段只处理 pressed
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		if _icon_pressed:
+			_icon_pressed = false
+			_apply_icon_state(true)
 		
 func _on_office_clicked() -> void:
 	var panel = get_tree().get_first_node_in_group("office_panel")
@@ -228,7 +247,8 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 
 func _on_mouse_entered() -> void:
 	if is_locked: return
-	_expand_room_icon()
+	_icon_hovered = true
+	_apply_icon_state()
 	if logic_node and logic_node.has_method("on_mouse_entered"):
 		logic_node.on_mouse_entered()
 
@@ -238,32 +258,50 @@ func _on_mouse_exited() -> void:
 	# ⚠️ 鼠标移到子按钮（管理/炒股/培训…）上时，父级 Office 也会收到 mouse_exited。
 	#    此时鼠标其实还在办公室范围内，不该收回图标，否则会来回抖动。
 	if not get_global_rect().has_point(mouse_pos):
-		_restore_room_icon()
+		_icon_hovered = false
+		_icon_pressed = false   # 按住不放直接划出去：也要松开，否则图标卡在按下态
+		_apply_icon_state()
 	if logic_node and logic_node.has_method("on_mouse_exited"):
 		logic_node.on_mouse_exited(mouse_pos)
 
-# 悬停：把 RoomIcon 放大到与 RoomTexture 边缘完全重合
-func _expand_room_icon() -> void:
-	if room_texture == null:
-		return
-	_tween_room_icon(room_texture.position, room_texture.size)
-
-# 移开：恢复图标原始位置与尺寸
-func _restore_room_icon() -> void:
-	if _icon_home_size == Vector2.ZERO:
-		return
-	_tween_room_icon(_icon_home_pos, _icon_home_size)
-
-# 位置与尺寸同时补间，缓进缓出。重复触发时先杀掉上一个 tween，避免两个动画打架
-func _tween_room_icon(target_pos: Vector2, target_size: Vector2) -> void:
+# RoomIcon 的表现只由 (_icon_hovered, _icon_pressed) 两个状态决定，统一在这里算目标值。
+# 用【单个】tween 同时补间位置/尺寸/色调，避免"悬停动画"和"按下动画"抢同一个属性打架。
+func _apply_icon_state(fast: bool = false) -> void:
 	if texture_display == null:
 		return
+	if _icon_home_size == Vector2.ZERO:
+		return
+
+	# 未按下时的基准矩形：悬停 = 与 RoomTexture 完全重合；否则 = 原始矩形
+	var base_pos := _icon_home_pos
+	var base_size := _icon_home_size
+	if _icon_hovered and room_texture != null:
+		base_pos = room_texture.position
+		base_size = room_texture.size
+
+	var target_pos: Vector2 = base_pos + (Vector2(0.0, ICON_PRESS_SINK) if _icon_pressed else Vector2.ZERO)
+	var target_mod: Color = ICON_PRESS_DIM if _icon_pressed else Color.WHITE
+	var dur: float = ICON_PRESS_TIME if fast else ICON_HOVER_TIME
+
 	if _icon_tween and _icon_tween.is_valid():
 		_icon_tween.kill()
 	_icon_tween = create_tween().set_parallel(true)
 	_icon_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_icon_tween.tween_property(texture_display, "position", target_pos, ICON_HOVER_TIME)
-	_icon_tween.tween_property(texture_display, "size", target_size, ICON_HOVER_TIME)
+	_icon_tween.tween_property(texture_display, "position", target_pos, dur)
+	_icon_tween.tween_property(texture_display, "size", base_size, dur)
+	_icon_tween.tween_property(texture_display, "modulate", target_mod, dur)
+
+	_set_icon_outline(_icon_hovered)
+
+# 悬停描边开关（改 shader 的 outline_width 参数；材质已在 _ready 里复制成每间独立）
+func _set_icon_outline(active: bool) -> void:
+	if texture_display == null:
+		return
+	var mat = texture_display.material
+	if mat is ShaderMaterial:
+		(mat as ShaderMaterial).set_shader_parameter(
+			"outline_width", ICON_OUTLINE_WIDTH if active else 0.0
+		)
 
 # ==========================================
 # 视觉与功能切换

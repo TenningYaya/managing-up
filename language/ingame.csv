@@ -87,3 +87,7 @@ BUFF_EVENT_NAME,事件,Event
 BUFF_EVENT_EFF,全局效率 {v},Global Eff {v}
 BUFF_EVENT_QUAL,全局质量 {v},Global Qual {v}
 BUFF_EVENT_EXP,全局经验 {v},Global Exp {v}
+OFFICE_PN_CURRENT_FUNC,当前功能：{name},Current function: {name}
+OFFICE_PN_FUNC_NONE,尚未设置,Not set
+OFFICE_UNIQUE_ONE,全司唯一,One per company
+OFFICE_UNIQUE_MULTI,可设多间,Multiple allowed

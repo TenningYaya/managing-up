@@ -48,33 +48,6 @@ func get_ui_layer() -> Node:
 	return get_node_or_null(ui_layer_path)
 
 
-# 当前楼层的装修控制器(不可装修楼层返回 null → 第一层永远进不了装修)
-func _lift_currency_boards_to_ui_layer() -> void:
-	var ui_layer := get_ui_layer()
-	if ui_layer == null:
-		return
-	# ⚠️ 必须等布局稳定后再搬，且必须做坐标系换算，否则货币板会瞬移到屏幕外：
-	#   1) 时机：货币板的祖先是 HBoxContainer，容器排布在 _ready 之后的布局阶段才生效。
-	#      在 _ready 里同步读 global_position 拿到的是“尚未布局”的脏坐标（实测 x 会是负值）。
-	#   2) 坐标系：搬家前它在世界里(受 Camera2D 影响)，global_position 是【世界坐标】；
-	#      搬进 CanvasLayer 后 global_position 是【屏幕坐标】。直接照抄会少掉一个相机变换。
-	#      所以用 get_global_transform_with_canvas()(含相机)取真实屏幕位置再赋回去。
-	await get_tree().process_frame
-	await get_tree().process_frame   # 多等一帧，跨过启动时的窗口尺寸调整
-	for board in get_tree().get_nodes_in_group("currency_board"):
-		if not is_instance_valid(board) or board.get_parent() == ui_layer:
-			continue
-		if not (board is CanvasItem):
-			continue
-		var screen_pos: Vector2 = (board as CanvasItem).get_global_transform_with_canvas().origin
-		board.get_parent().remove_child(board)
-		ui_layer.add_child(board)
-		if board is Control:
-			(board as Control).global_position = screen_pos
-		elif board is Node2D:
-			(board as Node2D).global_position = screen_pos
-
-
 func get_decoration_controller(floor_id: int = -1) -> DecorationController:
 	var f := get_floor_node(current_floor_id if floor_id < 0 else floor_id)
 	if f == null:
@@ -111,7 +84,6 @@ func _ready() -> void:
 		else:
 			visuals.append(n)
 	_floors[1] = {"label": "1F", "visuals": visuals, "floor_node": null}
-	_lift_currency_boards_to_ui_layer()
 
 	# 监听等级变化驱动 2F 解锁
 	if Gamemanager.has_signal("level_changed"):

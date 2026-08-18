@@ -4,6 +4,31 @@
 [ext_resource type="Texture2D" uid="uid://b67g0q3qv8w5m" path="res://icon.svg" id="2_soxcl"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="3_4ghmv"]
 [ext_resource type="Texture2D" uid="uid://xk8qvkxuphm0" path="res://assets/UI/office_function_locked.png" id="3_ic3v5"]
+[ext_resource type="Texture2D" uid="uid://bcq4hsxc4yqal" path="res://assets/office/office_icon/FF2706BD0165788EDF55B3E2AB58D13C.png" id="4_vwghu"]
+[ext_resource type="Texture2D" uid="uid://caan7b6sqqx7i" path="res://assets/office/office_icon/current_office_mark_2.png" id="5_fxkjr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s1fef"]
+bg_color = Color(0.09019608, 0.5019608, 0.85490197, 0.5411765)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_selborder"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.897224, 0.4568857, 0.3017082, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
 
 [node name="ChangeOfficeButton" type="TextureButton" unique_id=959548433]
 custom_minimum_size = Vector2(100, 100)
@@ -30,7 +55,8 @@ theme_override_font_sizes/font_size = 20
 text = "Name"
 horizontal_alignment = 1
 
-[node name="DisabledMask" type="ColorRect" parent="." unique_id=737525674]
+[node name="DisabledMask0" type="ColorRect" parent="." unique_id=737525674]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,6 +64,35 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.09061124, 0.50000703, 0.85347265, 0.5411765)
+
+[node name="DisabledMask" type="Panel" parent="." unique_id=1522439656]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_s1fef")
+
+[node name="ExistsIcon" type="TextureRect" parent="DisabledMask" unique_id=817637912]
+modulate = Color(0.7019608, 1, 1, 1)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 6.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_vwghu")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="LockedMask" type="ColorRect" parent="." unique_id=740803253]
 layout_mode = 1
@@ -65,13 +120,32 @@ texture = ExtResource("3_ic3v5")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="SelectionBorder" type="ReferenceRect" parent="." unique_id=769132046]
+[node name="CurrentMark" type="TextureRect" parent="." unique_id=769132047]
+visible = false
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -13.0
+offset_top = -62.0
+offset_right = 56.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("5_fxkjr")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="SelectionBorder" type="Panel" parent="." unique_id=769132046]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-border_color = Color(0.7916734, 0.7370134, 0.10803854, 1)
-border_width = 5.0
-editor_only = false
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_selborder")

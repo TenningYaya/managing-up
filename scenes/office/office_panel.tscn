@@ -124,26 +124,37 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/panel = SubResource("StyleBoxFlat_oppgx")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_1hrmf")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_0khrq")
-current_tab = 3
+current_tab = 0
 tab_0/title = "OFFICE_PN_TAB_OFFICE"
 tab_1/title = "OFFICE_PN_TAB_CULTURE"
 tab_2/title = "OFFICE_PN_TAB_STOCK"
 
 [node name="Office" type="MarginContainer" parent="TabContainer" unique_id=1786972547]
-visible = false
 layout_mode = 2
+theme_override_constants/margin_top = 40
 metadata/_tab_index = 0
 metadata/_tab_name = "OFFICE_PN_TAB_OFFICE"
 
-[node name="OfficeButton" type="GridContainer" parent="TabContainer/Office" unique_id=1425084846]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Office" unique_id=111000101]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CurrentFuncLabel" type="Label" parent="TabContainer/Office/VBoxContainer" unique_id=111000102]
+visible = false
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_dvne8")
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+
+[node name="OfficeButton" type="GridContainer" parent="TabContainer/Office/VBoxContainer" unique_id=1425084846]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/h_separation = 13
-theme_override_constants/v_separation = 35
+theme_override_constants/v_separation = 45
 columns = 3
 
-[node name="ChangeOfficeButton" parent="TabContainer/Office/OfficeButton" unique_id=959548433 groups=["pantry_button"] instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton" parent="TabContainer/Office/VBoxContainer/OfficeButton" unique_id=959548433 groups=["pantry_button"] instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 1
 button_text = "OFFICE_PN_FUNC_PANTRY"
@@ -151,7 +162,7 @@ normal_icon = ExtResource("6_4k283")
 office_description = "OFFICE_PANTRY_TIP_1"
 office_usage = "OFFICE_PANTRY_TIP_2"
 
-[node name="ChangeOfficeButton5" parent="TabContainer/Office/OfficeButton" unique_id=455359539 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton5" parent="TabContainer/Office/VBoxContainer/OfficeButton" unique_id=455359539 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 5
 button_text = "OFFICE_PN_FUNC_STOCK"
@@ -159,7 +170,7 @@ normal_icon = ExtResource("7_j1pli")
 office_description = "OFFICE_STOCK_TIP_1"
 office_usage = "OFFICE_STOCK_TIP_2"
 
-[node name="ChangeOfficeButton3" parent="TabContainer/Office/OfficeButton" unique_id=2129935784 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton3" parent="TabContainer/Office/VBoxContainer/OfficeButton" unique_id=2129935784 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 3
 button_text = "OFFICE_PN_FUNC_HEADHUNT"
@@ -167,7 +178,7 @@ normal_icon = ExtResource("8_llm6m")
 office_description = "OFFICE_HEADHUNT_TIP_1"
 office_usage = "OFFICE_HEADHUNT_TIP_2"
 
-[node name="ChangeOfficeButton2" parent="TabContainer/Office/OfficeButton" unique_id=2030963439 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton2" parent="TabContainer/Office/VBoxContainer/OfficeButton" unique_id=2030963439 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 2
 button_text = "OFFICE_PN_FUNC_MEETING"
@@ -175,7 +186,7 @@ normal_icon = ExtResource("9_puim3")
 office_description = "OFFICE_MEETING_TIP_1"
 office_usage = "OFFICE_MEETING_TIP_2"
 
-[node name="ChangeOfficeButton4" parent="TabContainer/Office/OfficeButton" unique_id=277010416 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton4" parent="TabContainer/Office/VBoxContainer/OfficeButton" unique_id=277010416 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 4
 button_text = "OFFICE_PN_FUNC_CULTURE"
@@ -183,7 +194,7 @@ normal_icon = ExtResource("10_kr45q")
 office_description = "OFFICE_CULTURE_TIP_1"
 office_usage = "OFFICE_CULTURE_TIP_2"
 
-[node name="ChangeOfficeButton6" parent="TabContainer/Office/OfficeButton" unique_id=1752987444 instance=ExtResource("1_kpljw")]
+[node name="ChangeOfficeButton6" parent="TabContainer/Office/VBoxContainer/OfficeButton" unique_id=1752987444 instance=ExtResource("1_kpljw")]
 layout_mode = 2
 office_type = 6
 button_text = "OFFICE_PN_FUNC_TRAINING"
@@ -223,6 +234,7 @@ metadata/_tab_name = "OFFICE_PN_TAB_STOCK"
 layout_mode = 2
 
 [node name="Training" type="PanelContainer" parent="TabContainer" unique_id=254818744]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_1hrmf")
 metadata/_tab_index = 3

@@ -11,6 +11,11 @@ shader_type canvas_item;
 // 圆角半径，单位 = 贴图的像素（不是屏幕像素）。比如贴图 32x32、半径 4 = 切掉 4 个美术像素
 uniform float corner_radius : hint_range(0.0, 64.0, 1.0) = 4.0;
 
+// 描边：沿圆角矩形边缘【向内】画一圈，单位同样是贴图像素。0 = 不描边（默认关闭）。
+// 画在形状内侧而不是外侧，这样不会被节点矩形裁掉。悬停时由脚本把宽度调上去。
+uniform float outline_width : hint_range(0.0, 16.0, 1.0) = 0.0;
+uniform vec4 outline_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+
 void fragment() {
 	// 1. 贴图的原始像素尺寸（TEXTURE_PIXEL_SIZE = 1/尺寸，取倒数还原）
 	vec2 tex_size = vec2(1.0) / TEXTURE_PIXEL_SIZE;
@@ -32,5 +37,14 @@ void fragment() {
 	float mask = dist <= 0.0 ? 1.0 : 0.0;
 
 	vec4 tex_color = texture(TEXTURE, UV);
-	COLOR = vec4(tex_color.rgb, tex_color.a * mask);
+	vec3 rgb = tex_color.rgb;
+	float a = tex_color.a;
+
+	// 6. 描边：距离边缘 outline_width 以内的像素换成描边色（同样是硬边，无羽化）
+	if (outline_width > 0.0 && dist > -outline_width) {
+		rgb = outline_color.rgb;
+		a = outline_color.a;
+	}
+
+	COLOR = vec4(rgb, a * mask);
 }

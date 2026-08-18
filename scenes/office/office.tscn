@@ -50,6 +50,13 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_88o6m")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s1fef"]
+bg_color = Color(0, 0, 0, 0.30980393)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
 [sub_resource type="Shader" id="Shader_qei30"]
 code = "shader_type canvas_item;
 
@@ -124,6 +131,15 @@ offset_right = 362.0
 offset_bottom = 187.0
 texture = ExtResource("11_qei30")
 expand_mode = 1
+
+[node name="ColorRect" type="Panel" parent="." unique_id=1955054156]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 13.0
+offset_right = 213.0
+offset_bottom = 101.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_s1fef")
 
 [node name="RoomIcon" type="TextureRect" parent="." unique_id=2070433266]
 material = SubResource("ShaderMaterial_qei30")

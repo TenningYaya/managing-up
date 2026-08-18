@@ -4,6 +4,22 @@
 [ext_resource type="Script" uid="uid://cotl14t6i0e58" path="res://scripts/UI/custom/change_culture_button.gd" id="2_kivqj"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="3_vamsw"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_selborder"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.897224, 0.4568857, 0.3017082, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+
 [node name="ChangeCultureButton" type="TextureButton" unique_id=1466933540 groups=["culture_selection_buttons"]]
 custom_minimum_size = Vector2(280, 90)
 offset_right = 251.0
@@ -28,7 +44,7 @@ theme_override_font_sizes/font_size = 20
 text = "Name"
 horizontal_alignment = 1
 
-[node name="SelectionBorder" type="ReferenceRect" parent="." unique_id=1479282821]
+[node name="SelectionBorder" type="Panel" parent="." unique_id=1479282821]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -36,6 +52,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-border_color = Color(0.7916734, 0.7370134, 0.10803854, 1)
-border_width = 5.0
-editor_only = false
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_selborder")
