@@ -112,6 +112,7 @@ offset_bottom = 200.0
 script = ExtResource("1_d5yd0")
 tex_locked = ExtResource("2_b6q11")
 tex_empty = ExtResource("3_41xxe")
+tex_assigned = ExtResource("11_qei30")
 tex_pantry = ExtResource("4_yexkw")
 tex_meeting = ExtResource("5_yexkw")
 tex_recruitment = ExtResource("6_yexkw")
@@ -132,7 +133,7 @@ offset_bottom = 187.0
 texture = ExtResource("11_qei30")
 expand_mode = 1
 
-[node name="ColorRect" type="Panel" parent="." unique_id=1955054156]
+[node name="RoomIconShade" type="Panel" parent="." unique_id=1955054156]
 layout_mode = 0
 offset_left = 36.0
 offset_top = 13.0

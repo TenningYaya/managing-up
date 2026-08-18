@@ -3,8 +3,12 @@ extends Control
 class_name Office
 
 @export_group("Visuals")
-@export var tex_locked: Texture2D # 拖入那张纯灰色不可用贴图
-@export var tex_empty: Texture2D
+# —— RoomTexture（房间底图）的三种状态 ——
+@export var tex_locked: Texture2D # 未解锁：拖入那张纯灰色不可用贴图
+@export var tex_empty: Texture2D  # 已解锁但还没分配功能（空置）
+@export var tex_assigned: Texture2D # 已分配功能时的房间底图（留空则沿用 tex_empty）
+
+# —— RoomIcon（功能图标）——只在"已分配功能"时显示，空置/未解锁一律隐藏
 @export var tex_pantry: Texture2D
 @export var tex_meeting: Texture2D
 @export var tex_recruitment: Texture2D
@@ -17,6 +21,8 @@ class_name Office
 # 引用下方的子节点用来换图
 @onready var texture_display: TextureRect = $RoomIcon   # 房间功能图标（悬停时会放大到与 RoomTexture 重合）
 @onready var room_texture: TextureRect = $RoomTexture   # 房间底图，作为图标放大的目标矩形
+# 功能图标的底座/投影。跟着 RoomIcon 一起显隐（没这个节点也不报错）
+@onready var room_icon_shade: CanvasItem = get_node_or_null("RoomIconShade")
 @onready var manage_btn: TextureButton = $ManageButton
 @onready var stock_btn: TextureButton = $StockButton
 @onready var training_btn: TextureButton = $TrainingButton
@@ -267,8 +273,8 @@ func _on_mouse_exited() -> void:
 # RoomIcon 的表现只由 (_icon_hovered, _icon_pressed) 两个状态决定，统一在这里算目标值。
 # 用【单个】tween 同时补间位置/尺寸/色调，避免"悬停动画"和"按下动画"抢同一个属性打架。
 func _apply_icon_state(fast: bool = false) -> void:
-	if texture_display == null:
-		return
+	if texture_display == null or not texture_display.visible:
+		return   # 空置/未解锁时图标是藏着的，没必要为它跑动画
 	if _icon_home_size == Vector2.ZERO:
 		return
 
@@ -365,36 +371,57 @@ func change_function(new_type: Gamemanager.OfficeType) -> void:
 # ==========================================
 # 视觉显示逻辑 (核心：锁住强制显示灰图)
 # ==========================================
+# 功能类型 → RoomIcon 上显示的功能图标
+func _function_icon(t: Gamemanager.OfficeType) -> Texture2D:
+	match t:
+		Gamemanager.OfficeType.PANTRY:         return tex_pantry
+		Gamemanager.OfficeType.MEETING_ROOM:   return tex_meeting
+		Gamemanager.OfficeType.RECRUITMENT:    return tex_recruitment
+		Gamemanager.OfficeType.CULTURE_CENTER: return tex_culture
+		Gamemanager.OfficeType.STOCK_OFFICE:   return tex_stock
+		Gamemanager.OfficeType.TRAINING_ROOM:  return tex_training
+		_:                                     return null
+
 func _update_visuals() -> void:
-	# 锁住状态：强制换灰图，强制藏按钮
+	# 分工：RoomTexture = 房间底图（未解锁 / 空置 / 已分配 三态）
+	#      RoomIcon    = 功能图标（只在已分配功能时出现，其余一律隐藏）
+
+	# 锁住状态：底图换灰图，功能图标藏起来
 	if is_locked:
+		if room_texture:
+			room_texture.texture = tex_locked
 		if texture_display:
-			# 🌟 关键：确保这里拿到了 tex_locked！
-			texture_display.texture = tex_locked
-			texture_display.show()
+			texture_display.hide()
+		if room_icon_shade:
+			room_icon_shade.hide()
 		if empty_hint:
 			empty_hint.hide()
 			if _hint_tween and _hint_tween.is_valid():
 				_hint_tween.kill()
 		return
-		
-	# 解锁状态：恢复地板贴图
-	var target_tex: Texture2D = tex_empty
-	
-	match current_type:
-		Gamemanager.OfficeType.PANTRY: target_tex = tex_pantry
-		Gamemanager.OfficeType.MEETING_ROOM: target_tex = tex_meeting
-		Gamemanager.OfficeType.RECRUITMENT: target_tex = tex_recruitment
-		Gamemanager.OfficeType.CULTURE_CENTER: target_tex = tex_culture
-		Gamemanager.OfficeType.STOCK_OFFICE: target_tex = tex_stock
-		Gamemanager.OfficeType.TRAINING_ROOM: target_tex = tex_training
 
-		_: target_tex = tex_empty
-	
+	var has_function := current_type != Gamemanager.OfficeType.NONE
+
+	# 房间底图：已分配用 tex_assigned（没配就退回 tex_empty，不至于变空白），空置用 tex_empty
+	if room_texture:
+		if has_function:
+			room_texture.texture = tex_assigned if tex_assigned != null else tex_empty
+		else:
+			room_texture.texture = tex_empty
+
+	# 功能图标（连同它的底座/投影）：只有分配了功能才显示
+	if room_icon_shade:
+		room_icon_shade.visible = has_function
 	if texture_display:
-		texture_display.texture = target_tex
-		texture_display.show()
-	
+		if has_function:
+			texture_display.texture = _function_icon(current_type)
+			texture_display.show()
+			# 重新出现时若鼠标不在房间上，先回到原始矩形，避免停在上次悬停放大的状态
+			if not _icon_hovered:
+				_apply_icon_state(true)
+		else:
+			texture_display.hide()
+
 	if empty_hint:
 		if current_type == Gamemanager.OfficeType.NONE:
 			empty_hint.show()

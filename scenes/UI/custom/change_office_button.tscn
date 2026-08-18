@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://caan7b6sqqx7i" path="res://assets/office/office_icon/current_office_mark_2.png" id="5_fxkjr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s1fef"]
-bg_color = Color(0.09019608, 0.5019608, 0.85490197, 0.5411765)
+bg_color = Color(0.09019608, 0.40392157, 0.85490197, 0.5411765)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
@@ -75,7 +75,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_s1fef")
 
 [node name="ExistsIcon" type="TextureRect" parent="DisabledMask" unique_id=817637912]
-modulate = Color(0.7019608, 1, 1, 1)
+modulate = Color(0.6313726, 0.80784315, 0.8862745, 0.8745098)
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
