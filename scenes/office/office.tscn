@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://d17amenxcu3og" path="res://assets/office/Stock_1.png" id="8_yexkw"]
 [ext_resource type="Texture2D" uid="uid://ddpivhjkarech" path="res://assets/office/Training.jpg" id="9_yexkw"]
 [ext_resource type="Texture2D" uid="uid://45w50bbhsdcy" path="res://assets/sidebar/Pocket inventory series #1/Pocket inventory series #2 Pixel Map v1.1/Sprites/Sprites/Signs/0.png" id="11_41xxe"]
+[ext_resource type="Texture2D" uid="uid://dx2vxv0fa13fl" path="res://assets/office/Stock.png" id="11_qei30"]
 [ext_resource type="PackedScene" uid="uid://cyeom2d65rx2y" path="res://scenes/vfx/blingbling.tscn" id="12_e1yc2"]
 [ext_resource type="Texture2D" uid="uid://cvaeui5fxlfqo" path="res://assets/background/around_office_1.png" id="13_y3s53"]
 
@@ -49,6 +50,49 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_88o6m")
 
+[sub_resource type="Shader" id="Shader_qei30"]
+code = "shader_type canvas_item;
+
+// 像素风圆角：把四角按【贴图自身的像素网格】切掉，圆角边缘是方块台阶而不是抗锯齿的平滑弧线，
+// 和像素美术的硬边风格统一。（若想要平滑抗锯齿的圆角，用 resume_cards.gdshader 那个即可。）
+//
+// 与 resume_cards.gdshader 的区别：
+//   · 那个用 fwidth(UV) 取【屏幕】像素尺寸 → 半径按屏幕像素算、边缘 smoothstep 抗锯齿
+//   · 本shader 用 TEXTURE_PIXEL_SIZE 取【贴图】像素尺寸 → 半径按美术像素算、硬切不羽化，
+//     贴图放大几倍，圆角台阶也跟着放大几倍，始终是整齐的像素块
+
+// 圆角半径，单位 = 贴图的像素（不是屏幕像素）。比如贴图 32x32、半径 4 = 切掉 4 个美术像素
+uniform float corner_radius : hint_range(0.0, 64.0, 1.0) = 4.0;
+
+void fragment() {
+	// 1. 贴图的原始像素尺寸（TEXTURE_PIXEL_SIZE = 1/尺寸，取倒数还原）
+	vec2 tex_size = vec2(1.0) / TEXTURE_PIXEL_SIZE;
+
+	// 2. 当前点在贴图里的像素坐标，并对齐到像素中心（floor + 0.5）。
+	//    这一步是\"像素感\"的关键：同一个美术像素内的所有采样点算出同样的结果，
+	//    于是要么整块保留、要么整块切掉，绝不会出现半透明的过渡像素。
+	vec2 pixel_pos = floor(UV * tex_size) + 0.5;
+
+	// 3. 半径夹取：不能超过短边的一半，否则形状会翻转出错
+	float r = min(corner_radius, min(tex_size.x, tex_size.y) * 0.5);
+
+	// 4. 圆角矩形的有向距离场（SDF）：dist > 0 = 在圆角之外
+	vec2 half_size = tex_size * 0.5;
+	vec2 q = abs(pixel_pos - half_size) - half_size + r;
+	float dist = length(max(q, vec2(0.0))) + min(max(q.x, q.y), 0.0) - r;
+
+	// 5. 硬切：不做 smoothstep，圆角外的整个像素直接透明
+	float mask = dist <= 0.0 ? 1.0 : 0.0;
+
+	vec4 tex_color = texture(TEXTURE, UV);
+	COLOR = vec4(tex_color.rgb, tex_color.a * mask);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qei30"]
+shader = SubResource("Shader_qei30")
+shader_parameter/corner_radius = 12.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1yc2"]
 
 [node name="Office" type="Control" unique_id=1395701316]
@@ -73,11 +117,21 @@ visible = false
 tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAABAAAAAAACAAAAAAABAAAAAAADAAAAAAABAAAAAAAEAAAAAAABAAAAAAAFAAAAAAABAAAAAAAAAAEAAAAAAAEAAAAAAAIAAAAAAAEAAAAAAAMAAAAAAAEAAAAAAAQAAAAAAAIAAAABAAQAAAABAAIAAAACAAQAAAABAAIAAAADAAQAAAABAAIAAAAEAAQAAAABAAIAAAAFAAQAAAABAAIAAAAGAAQAAAABAAIAAAAHAAQAAAABAAIAAAAGAAAAAAABAAAAAAAHAAAAAAABAAAAAAAIAAAAAAACAAAAAAAIAAEAAAACAAEAAAAIAAIAAAACAAEAAAAIAAQAAAACAAIAAAAIAAMAAAACAAEAAAABAAEAAAAGAAgAAAABAAIAAAAGAAgAAAABAAMAAAAGAAgAAAACAAEAAAAGAAgAAAACAAIAAAAGAAgAAAACAAMAAAAGAAgAAAADAAEAAAAGAAgAAAADAAIAAAAGAAgAAAADAAMAAAAGAAgAAAAEAAEAAAAGAAgAAAAEAAIAAAAGAAgAAAAEAAMAAAAGAAgAAAAFAAEAAAAGAAgAAAAFAAIAAAAGAAgAAAAFAAMAAAAGAAgAAAAGAAEAAAAGAAgAAAAGAAIAAAAGAAgAAAAGAAMAAAAGAAgAAAAHAAEAAAAGAAgAAAAHAAIAAAAGAAgAAAAHAAMAAAAGAAgAAAA=")
 tile_set = SubResource("TileSet_16a3e")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=2070433266]
+[node name="RoomTexture" type="TextureRect" parent="." unique_id=575884158]
 layout_mode = 0
-offset_left = 22.667
-offset_right = 364.0
-offset_bottom = 185.333
+offset_left = 24.0
+offset_right = 362.0
+offset_bottom = 187.0
+texture = ExtResource("11_qei30")
+expand_mode = 1
+
+[node name="RoomIcon" type="TextureRect" parent="." unique_id=2070433266]
+material = SubResource("ShaderMaterial_qei30")
+layout_mode = 0
+offset_left = 33.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 98.0
 mouse_filter = 2
 texture = ExtResource("3_7m821")
 expand_mode = 1
@@ -213,9 +267,3 @@ position = Vector2(163.2, -48)
 scale = Vector2(0.35555547, 0.34678572)
 frame = 10
 frame_progress = 0.99278116
-
-[node name="Control" type="Control" parent="." unique_id=835399244]
-visible = false
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0

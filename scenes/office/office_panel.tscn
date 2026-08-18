@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dueysgphbqwby" path="res://assets/computer/PNG/0.png" id="2_kpljw"]
 [ext_resource type="Texture2D" uid="uid://cje2nxck7bbu" path="res://assets/computer/PNG/1.png" id="3_mixia"]
 [ext_resource type="FontVariation" uid="uid://cstackpx12cjk" path="res://assets/fonts/standard.tres" id="4_dvne8"]
+[ext_resource type="Texture2D" uid="uid://dnrqtwbwt5472" path="res://assets/sidebar/Pocket Inventory Series #2/Pocket Inventory Series #2 Pixel Map v1.2/PNG SpriteSheet/SpriteSheet.png" id="4_j1pli"]
 [ext_resource type="Texture2D" uid="uid://cwcaprye6s1rr" path="res://assets/office/office_icon/pantry.png" id="6_4k283"]
 [ext_resource type="PackedScene" uid="uid://b2l7mr7bb5b41" path="res://scenes/UI/panel/culture_panel.tscn" id="7_dvne8"]
 [ext_resource type="Texture2D" uid="uid://qhr6g2a12x4e" path="res://assets/office/office_icon/trading.png" id="7_j1pli"]
@@ -22,6 +23,10 @@ region = Rect2(2595, 65, 333, 229)
 [sub_resource type="AtlasTexture" id="AtlasTexture_oppgx"]
 atlas = ExtResource("3_mixia")
 region = Rect2(1692, 467, 134, 143)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1fef"]
+atlas = ExtResource("4_j1pli")
+region = Rect2(744, 2015, 299, 290)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oppgx"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -76,6 +81,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("AtlasTexture_oppgx")
@@ -85,19 +91,20 @@ patch_margin_top = 21
 patch_margin_right = 39
 patch_margin_bottom = 22
 
-[node name="ColorRect" type="ColorRect" parent="bcg" unique_id=1110563995]
+[node name="ColorRect" type="TextureRect" parent="bcg" unique_id=1771552808]
+modulate = Color(0.49411765, 0.9019608, 1, 1)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = -359.0
-offset_right = -7.0
+offset_left = 7.0
+offset_top = -362.0
+offset_right = -5.0
 offset_bottom = -13.0
 grow_horizontal = 2
 grow_vertical = 0
-color = Color(0.43529412, 1, 1, 0.4392157)
+texture = SubResource("AtlasTexture_s1fef")
 
 [node name="TabContainer" type="TabContainer" parent="." unique_id=515328770]
 layout_mode = 1

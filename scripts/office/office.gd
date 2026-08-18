@@ -15,7 +15,8 @@ class_name Office
 @export var unlock_at_level: int = 1 # 🌟 在编辑器里设置：M1=1, M2=2...
 
 # 引用下方的子节点用来换图
-@onready var texture_display: TextureRect = $TextureRect
+@onready var texture_display: TextureRect = $RoomIcon   # 房间功能图标（悬停时会放大到与 RoomTexture 重合）
+@onready var room_texture: TextureRect = $RoomTexture   # 房间底图，作为图标放大的目标矩形
 @onready var manage_btn: TextureButton = $ManageButton
 @onready var stock_btn: TextureButton = $StockButton
 @onready var training_btn: TextureButton = $TrainingButton
@@ -26,6 +27,12 @@ var current_type: Gamemanager.OfficeType = Gamemanager.OfficeType.NONE
 var logic_node: OfficeLogic = null 
 var _hint_tween: Tween = null
 var _is_initialized: bool = false
+
+# —— 悬停放大 RoomIcon ——
+const ICON_HOVER_TIME := 0.25          # 缓进缓出时长（秒）
+var _icon_home_pos := Vector2.ZERO     # 图标原始位置/尺寸（鼠标移开后恢复到这里）
+var _icon_home_size := Vector2.ZERO
+var _icon_tween: Tween = null
 
 # ==========================================
 # 🌟 核心中枢：确保数据和表现同步，无死循环
@@ -78,6 +85,16 @@ func _ready() -> void:
 	
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
+
+	# 记下图标的原始矩形（鼠标移开后恢复用）。RoomIcon 不受容器管理，
+	# 这里直接按场景里的 offset 推算，不依赖布局是否已完成，最稳。
+	if texture_display:
+		_icon_home_pos = Vector2(texture_display.offset_left, texture_display.offset_top)
+		_icon_home_size = Vector2(
+			texture_display.offset_right - texture_display.offset_left,
+			texture_display.offset_bottom - texture_display.offset_top
+		)
+
 	_is_initialized = true
 	
 # 全局等级变动时，自动判断生死
@@ -211,13 +228,42 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 
 func _on_mouse_entered() -> void:
 	if is_locked: return
+	_expand_room_icon()
 	if logic_node and logic_node.has_method("on_mouse_entered"):
 		logic_node.on_mouse_entered()
 
 func _on_mouse_exited() -> void:
 	if is_locked: return
+	var mouse_pos := get_global_mouse_position()
+	# ⚠️ 鼠标移到子按钮（管理/炒股/培训…）上时，父级 Office 也会收到 mouse_exited。
+	#    此时鼠标其实还在办公室范围内，不该收回图标，否则会来回抖动。
+	if not get_global_rect().has_point(mouse_pos):
+		_restore_room_icon()
 	if logic_node and logic_node.has_method("on_mouse_exited"):
-		logic_node.on_mouse_exited(get_global_mouse_position())
+		logic_node.on_mouse_exited(mouse_pos)
+
+# 悬停：把 RoomIcon 放大到与 RoomTexture 边缘完全重合
+func _expand_room_icon() -> void:
+	if room_texture == null:
+		return
+	_tween_room_icon(room_texture.position, room_texture.size)
+
+# 移开：恢复图标原始位置与尺寸
+func _restore_room_icon() -> void:
+	if _icon_home_size == Vector2.ZERO:
+		return
+	_tween_room_icon(_icon_home_pos, _icon_home_size)
+
+# 位置与尺寸同时补间，缓进缓出。重复触发时先杀掉上一个 tween，避免两个动画打架
+func _tween_room_icon(target_pos: Vector2, target_size: Vector2) -> void:
+	if texture_display == null:
+		return
+	if _icon_tween and _icon_tween.is_valid():
+		_icon_tween.kill()
+	_icon_tween = create_tween().set_parallel(true)
+	_icon_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_icon_tween.tween_property(texture_display, "position", target_pos, ICON_HOVER_TIME)
+	_icon_tween.tween_property(texture_display, "size", target_size, ICON_HOVER_TIME)
 
 # ==========================================
 # 视觉与功能切换
