@@ -437,9 +437,12 @@ func _handle_focus_click(step: TutorialStep) -> void:
 	blocker_ui._arrange_curtains(target_rect)
 	blocker_ui.hole_rect = target_rect
 	blocker_ui.is_hole_clickable = true
-	# 🌟 聚焦点击步:黑幕只作视觉引导,鼠标必须穿透,玩家才能点到被高亮的目标。
-	#    必须显式设 IGNORE,否则会沿用上一对话步残留的 STOP,把要点的招聘/录用按钮也挡死。
-	blocker_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# 🌟 聚焦点击步：用 STOP，不要用 IGNORE。
+	#    洞内能不能点由 blocker 的 _has_point() 精确判定：is_hole_clickable=true 时洞内放行、
+	#    洞外一律拦死，所以玩家照样点得到被高亮的目标。
+	#    ⚠️ 设成 IGNORE 会让【整块黑幕失去拦截力】：玩家能点到黑幕底下的任何东西——
+	#       比如再点一次招聘/仓库按钮，把教程要求打开的面板 toggle 关掉，只剩一个空高亮框。
+	blocker_ui.mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	# 🌟【硬核补丁 3】：图层刺穿！
 	# 为了防止按钮被黑布无脑压住，我们利用 CanvasItem 的 z_index 或者是强行把按钮的渲染层级提到黑布前面

@@ -25,6 +25,10 @@ var dragging = false
 var drag_offset = Vector2()
 var _tip_tween: Tween = null
 var _opened_frame: int = -1   # 面板变可见的那一帧，_input 用它忽略"打开面板的那一下点击"
+# 教程锁：新手教程"招满三个人"那几步期间禁止关闭面板。
+# 由 tutorial_layer 通过 lock_for_tutorial()/unlock_from_tutorial() 驱动
+# （步骤 .tres 里配 force_show_ui_group="recruitment_panel" + lock_ui_lifecycle=true）。
+var is_locked_by_tutorial: bool = false
 
 func _ready():
 	#RecruitmentManager.normal_pool.clear()
@@ -78,6 +82,8 @@ func _on_visibility_changed() -> void:
 func _input(event: InputEvent) -> void:
 	if not visible:
 		return
+	if is_locked_by_tutorial:
+		return   # 教程锁定期间：点外面也不关，免得留下一个空的教程高亮框
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		# 忽略"打开面板的那一下"（同一帧），否则刚开就被关掉
 		if Engine.get_process_frames() == _opened_frame:
@@ -314,7 +320,17 @@ func _on_title_bar_gui_input(event: InputEvent):
 
 
 func _on_close_panel_pressed() -> void:
+	if is_locked_by_tutorial:
+		return   # 教程锁定期间：关闭按钮点了不生效
 	self.hide()
+
+# ================= 教程锁（供 tutorial_layer 调用，接口与其它面板一致）=================
+func lock_for_tutorial() -> void:
+	is_locked_by_tutorial = true
+	show()   # 保证它确实在屏幕上，别出现"锁住了但没显示"
+
+func unlock_from_tutorial() -> void:
+	is_locked_by_tutorial = false
 	
 func _show_normal_viewer() -> void:
 	normal_no_resume.hide()
