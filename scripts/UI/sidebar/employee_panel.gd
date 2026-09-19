@@ -221,12 +221,32 @@ func _notification(what: int) -> void:
 func _process(_delta: float) -> void:
 	if visible and is_instance_valid(current_employee):
 		_update_tenure()
+		_update_total_kpi()           # 这人边看边在产出，累计数要跟着涨
 		_update_go_meeting_button()   # 会议室可能被填满/解散，实时刷新按钮可用状态
 
 func _update_tenure() -> void:
 	if not is_instance_valid(current_employee):
 		return
 	attribute_label.set_value_text(_format_tenure(Gamemanager.total_time - current_employee.hire_time))
+
+# 该员工迄今累计产出的 KPI。数据来自 Ledger 的按员工累计（记账时顺手攒的，查询是 O(1)）
+func _update_total_kpi() -> void:
+	if not is_instance_valid(current_employee):
+		return
+	var total := Ledger.get_emp_total(int(current_employee.uid), Ledger.Cur.KPI)
+	rarity_label.set_value_text(_format_kpi(total))
+
+# 大数字缩写，和货币条的显示规则保持一致，避免把这一行撑爆
+func _format_kpi(value: int) -> String:
+	var v := float(value)
+	var a := absf(v)
+	if a >= 1000000000.0:
+		return "%.1fB" % (v / 1000000000.0)
+	elif a >= 1000000.0:
+		return "%.1fM" % (v / 1000000.0)
+	elif a >= 10000.0:
+		return "%.1fK" % (v / 1000.0)
+	return str(value)
 
 # 格式化成 时:分:秒（小时不限位，超过一天就继续累加小时，够紧凑）
 func _format_tenure(seconds: float) -> String:
@@ -285,15 +305,11 @@ func open_panel(employee: Employee) -> void:
 	# ==========================================
 	name_label.set_value_text(employee.get_display_name())
 	
-	# 刷新稀有度
-	match employee.rarity:
-		Employee.Rarity.R: 
-			rarity_label.set_value_text("R")
-		Employee.Rarity.SR: 
-			rarity_label.set_value_text("SR")
-		Employee.Rarity.SSR: 
-			rarity_label.set_value_text("SSR")
-	
+	# 这一行原本显示稀有度，现改为「迄今累计产出的 KPI」（实时由 _process 刷新）。
+	# 稀有度已经由头像底色 + 纹理 + 边框三重表达，不必再占一行文字。
+	rarity_label.tooltip_text = tr("EMP_TOTAL_KPI")
+	_update_total_kpi()
+
 	# 把“属性之和”改成“在职时间”（实时由 _process 刷新）
 	attribute_label.tooltip_text = tr("EMP_TENURE")
 	_update_tenure()
@@ -311,7 +327,7 @@ func open_panel(employee: Employee) -> void:
 	
 	if employee.portrait:
 		# 🌟 改成这一句：直接把立绘节点(figure)交给 Helper 处理
-		AvatarHelper.apply_portrait(figure, employee.portrait, employee.rarity)
+		AvatarHelper.apply_portrait(figure, employee.portrait, employee.rarity, true)   # true = 加照片白边框
 	
 	_refresh_progress_bar()
 	_refresh_buffs()
@@ -667,7 +683,7 @@ func force_bind_and_refresh(employee: Employee) -> void:
 		_refresh_buffs()
 		# 4. 刷新立绘
 		if employee.portrait:
-			AvatarHelper.apply_portrait(figure, employee.portrait, employee.rarity)
+			AvatarHelper.apply_portrait(figure, employee.portrait, employee.rarity, true)   # true = 加照片白边框
 		
 		show()
 

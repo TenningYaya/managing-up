@@ -3,7 +3,7 @@ extends Control
 
 # 把你做的卡片 Scene 拖到右侧 Inspector 的这个变量里
 @export var card_scene: PackedScene 
-@onready var grid = $ScrollContainer/GridContainer
+@onready var grid = $ScrollContainer/MarginContainer/GridContainer
 @onready var sort_menu: OptionButton = $VBoxContainer/SortMenu
 
 @onready var select_toggle_btn = $VBoxContainer/Select # 仓库右上的“选择”按钮
@@ -63,7 +63,8 @@ func _ready() -> void:
 	bulk_select_all_btn.pressed.connect(_on_bulk_select_all_pressed)
 	
 	# 初始化 UI 状态
-	bottom_op_bar.hide()
+	# 底部操作栏【常驻显示】（否则没进选择模式时下面空一块不好看），
+	# 可用与否改由按钮自身的 disabled + 半透明表达，见 _update_bulk_buttons_state()
 	_update_bulk_buttons_state()
 	
 	Gamemanager.request_employee_drop.connect(_on_map_needs_refresh)
@@ -131,7 +132,7 @@ func _toggle_selection_mode():
 		if card.has_method("set_selection_mode"):
 			card.set_selection_mode(is_selection_mode)
 	
-	bottom_op_bar.visible = is_selection_mode
+	# 操作栏常驻显示，不随选择模式显隐；可用性统一交给下面这句处理
 	_update_bulk_buttons_state()
 	
 	var btn_label = select_toggle_btn.get_node("Label")
@@ -248,6 +249,14 @@ func _update_bulk_buttons_state():
 	bulk_optimize_btn.modulate.a = alpha
 	bulk_recall_btn.modulate.a = alpha
 	bulk_dispatch_btn.modulate.a = alpha
+
+	# 「全选」判定条件和上面三个不同：它是"从零开始选"的入口，
+	# 所以在选择模式里即使一个没选也必须可用；只在【没进选择模式】时才灰掉。
+	# ⚠️ 不灰掉的话，操作栏常驻显示后玩家能在非选择模式下点它，
+	#    结果是卡片全打上勾、但 is_selection_mode 仍是 false —— 状态错乱。
+	if bulk_select_all_btn:
+		bulk_select_all_btn.disabled = not is_selection_mode
+		bulk_select_all_btn.modulate.a = 1.0 if is_selection_mode else 0.5
 
 # ================= 批量操作业务逻辑 =================
 

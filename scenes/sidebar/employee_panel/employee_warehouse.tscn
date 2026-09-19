@@ -15,6 +15,14 @@
 atlas = ExtResource("3_g51u0")
 region = Rect2(1680, 464, 160, 160)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s1fef"]
+bg_color = Color(0.5952, 0.88536, 0.93, 0.7882353)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 6
+
 [sub_resource type="DPITexture" id="DPITexture_uhtdn"]
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\"><path fill=\"none\" stroke=\"#b2b2b2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-opacity=\".85\" stroke-width=\"2\" d=\"m2 4 4 4 4-4\"/></svg>
 "
@@ -44,6 +52,16 @@ OptionButton/styles/normal_mirrored = ExtResource("5_flfux")
 OptionButton/styles/pressed = ExtResource("5_flfux")
 OptionButton/styles/pressed_mirrored = ExtResource("5_flfux")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_flfux"]
+bg_color = Color(0.89625, 0.9, 0.67499995, 0.7254902)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 6
+
+[sub_resource type="Theme" id="Theme_flfux"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vfn86"]
 
 [node name="EmployeeWarehouse" type="Control" unique_id=1330516969]
@@ -59,7 +77,7 @@ card_scene = ExtResource("2_fdhm7")
 texture_filter = 1
 layout_mode = 0
 offset_left = -12.0
-offset_right = 437.0
+offset_right = 442.0
 offset_bottom = 539.0
 texture = SubResource("AtlasTexture_0rffj")
 region_rect = Rect2(0, 0, 160, 160)
@@ -68,13 +86,33 @@ patch_margin_top = 32
 patch_margin_right = 64
 patch_margin_bottom = 32
 
+[node name="Panel" type="Panel" parent="." unique_id=1362387243]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 77.0
+offset_right = -8.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_s1fef")
+
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1485195668]
 visible = false
-layout_mode = 0
-offset_right = 270.0
-offset_bottom = 360.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 74.0
+offset_right = -7.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-color = Color(0.40893582, 0.82403606, 0.9084133, 1)
+color = Color(0.6365064, 0.9055293, 0.9654762, 0.50980395)
 
 [node name="VBoxContainer" type="HBoxContainer" parent="." unique_id=1272892589]
 layout_mode = 0
@@ -92,8 +130,8 @@ theme = SubResource("Theme_b6rgt")
 theme_override_font_sizes/font_size = 20
 
 [node name="Select" parent="VBoxContainer" unique_id=2048579194 instance=ExtResource("3_wfpq7")]
-clip_contents = true
 custom_minimum_size = Vector2(130, 0)
+clip_contents = true
 layout_mode = 2
 button_text = "WAREHOUSE_SELECT"
 
@@ -102,22 +140,43 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = 71.0
-offset_right = -20.0
-offset_bottom = -69.0
+offset_left = 16.0
+offset_top = 90.0
+offset_right = -14.0
+offset_bottom = -83.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
 horizontal_scroll_mode = 0
 
-[node name="GridContainer" type="GridContainer" parent="ScrollContainer" unique_id=182124426]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer" unique_id=194650835]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/h_separation = 15
-theme_override_constants/v_separation = 5
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 15
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer/MarginContainer" unique_id=182124426]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 22
+theme_override_constants/v_separation = 25
 columns = 4
+
+[node name="Panel2" type="Panel" parent="." unique_id=720116]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 463.0
+offset_right = -8.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_flfux")
 
 [node name="BottomOperationBar" type="HBoxContainer" parent="." unique_id=1005811720]
 custom_minimum_size = Vector2(270, 0)
@@ -133,6 +192,7 @@ offset_right = 192.0
 offset_bottom = -21.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = SubResource("Theme_flfux")
 theme_override_constants/separation = 8
 
 [node name="Fire" parent="BottomOperationBar" unique_id=1517868733 instance=ExtResource("3_wfpq7")]

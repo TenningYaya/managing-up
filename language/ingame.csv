@@ -91,3 +91,4 @@ OFFICE_PN_CURRENT_FUNC,当前功能：{name},Current function: {name}
 OFFICE_PN_FUNC_NONE,尚未设置,Not set
 OFFICE_UNIQUE_ONE,全司唯一,One per company
 OFFICE_UNIQUE_MULTI,可设多间,Multiple allowed
+EMP_TOTAL_KPI,累计产出 KPI,Total KPI produced

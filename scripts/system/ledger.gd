@@ -221,6 +221,12 @@ func get_emp_totals(cur: int) -> Array:
 	out.sort_custom(func(a, b): return a["amount"] > b["amount"])
 	return out
 
+# 查单个员工的生涯累计（uid 取自 Employee.uid）。查不到返回 0。
+# 用于员工面板显示"这个人迄今一共产出了多少"。
+func get_emp_total(uid: int, cur: int) -> int:
+	var r: Dictionary = lifetime_emp.get(uid, {})
+	return int(r.get("kpi" if cur == Cur.KPI else "dollar", 0))
+
 # “实时/按次”模式：该货币下最近的进账事件，最新在前，最多 limit 条
 func get_recent_emp_events(cur: int, limit: int = RECENT_EMP_EVENTS_CAP) -> Array:
 	var out := []

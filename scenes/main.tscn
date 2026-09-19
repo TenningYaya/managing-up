@@ -273,6 +273,7 @@ unlock_at_level = 2
 layout_mode = 2
 
 [node name="CurrencyUI" parent="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea" unique_id=1716905617 groups=["currency_board"] instance=ExtResource("11_trceg")]
+visible = false
 layout_mode = 0
 offset_left = -102.0
 offset_top = -81.0

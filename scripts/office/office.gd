@@ -20,7 +20,7 @@ class_name Office
 
 # 引用下方的子节点用来换图
 @onready var texture_display: TextureRect = $RoomIcon   # 房间功能图标（悬停时会放大到与 RoomTexture 重合）
-@onready var room_texture: TextureRect = $RoomTexture   # 房间底图，作为图标放大的目标矩形
+@onready var room_texture: TextureRect = $RoomTexture   # 房间底图（未解锁/空置/已分配 三态切换）
 # 功能图标的底座/投影。跟着 RoomIcon 一起显隐（没这个节点也不报错）
 @onready var room_icon_shade: CanvasItem = get_node_or_null("RoomIconShade")
 @onready var manage_btn: TextureButton = $ManageButton
@@ -35,13 +35,15 @@ var _hint_tween: Tween = null
 var _is_initialized: bool = false
 
 # —— RoomIcon 的悬停放大 / 按下反馈 ——
-const ICON_HOVER_TIME := 0.25            # 悬停缓进缓出时长（秒）
+const ICON_HOVER_TIME := 0.15            # 悬停缓进缓出时长（秒）
 const ICON_PRESS_TIME := 0.08            # 按下/回弹时长（要短才有"按"的手感）
-const ICON_PRESS_SINK := 3.0             # 按下时下沉几像素
+const ICON_HOVER_SINK := 4.0             # 悬停时下沉几像素（图标和底座一起动，不做缩放）
+const ICON_PRESS_SINK := 3.0             # 按下时在悬停基础上再多沉几像素
 const ICON_PRESS_DIM := Color(0.82, 0.82, 0.82, 1.0)   # 按下时压暗到这个色调
 const ICON_OUTLINE_WIDTH := 2.0          # 悬停描边宽度（贴图像素）
 var _icon_home_pos := Vector2.ZERO       # 图标原始位置/尺寸（鼠标移开后恢复到这里）
 var _icon_home_size := Vector2.ZERO
+var _shade_home_pos := Vector2.ZERO      # 底座原始位置（跟着图标一起下沉/回弹）
 var _icon_hovered := false
 var _icon_pressed := false
 var _icon_tween: Tween = null
@@ -110,6 +112,13 @@ func _ready() -> void:
 		#    不复制的话，鼠标悬停一间办公室会让所有办公室一起亮描边。这里给每间一份独立副本。
 		if texture_display.material != null:
 			texture_display.material = texture_display.material.duplicate()
+
+	# 底座的原始位置：悬停/按下时它要和图标一起下沉
+	if room_icon_shade is Control:
+		_shade_home_pos = Vector2(
+			(room_icon_shade as Control).offset_left,
+			(room_icon_shade as Control).offset_top
+		)
 
 	_is_initialized = true
 	
@@ -278,14 +287,14 @@ func _apply_icon_state(fast: bool = false) -> void:
 	if _icon_home_size == Vector2.ZERO:
 		return
 
-	# 未按下时的基准矩形：悬停 = 与 RoomTexture 完全重合；否则 = 原始矩形
-	var base_pos := _icon_home_pos
-	var base_size := _icon_home_size
-	if _icon_hovered and room_texture != null:
-		base_pos = room_texture.position
-		base_size = room_texture.size
+	# 只做"下沉"，不做缩放：悬停沉一点，按下再多沉一点，两者叠加
+	var sink := 0.0
+	if _icon_hovered:
+		sink += ICON_HOVER_SINK
+	if _icon_pressed:
+		sink += ICON_PRESS_SINK
 
-	var target_pos: Vector2 = base_pos + (Vector2(0.0, ICON_PRESS_SINK) if _icon_pressed else Vector2.ZERO)
+	var offset := Vector2(0.0, sink)
 	var target_mod: Color = ICON_PRESS_DIM if _icon_pressed else Color.WHITE
 	var dur: float = ICON_PRESS_TIME if fast else ICON_HOVER_TIME
 
@@ -293,9 +302,12 @@ func _apply_icon_state(fast: bool = false) -> void:
 		_icon_tween.kill()
 	_icon_tween = create_tween().set_parallel(true)
 	_icon_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_icon_tween.tween_property(texture_display, "position", target_pos, dur)
-	_icon_tween.tween_property(texture_display, "size", base_size, dur)
+	_icon_tween.tween_property(texture_display, "position", _icon_home_pos + offset, dur)
 	_icon_tween.tween_property(texture_display, "modulate", target_mod, dur)
+	# 底座跟着一起沉，保持和图标的相对关系不变
+	if room_icon_shade is Control:
+		_icon_tween.tween_property(room_icon_shade, "position", _shade_home_pos + offset, dur)
+		_icon_tween.tween_property(room_icon_shade, "modulate", target_mod, dur)
 
 	_set_icon_outline(_icon_hovered)
 

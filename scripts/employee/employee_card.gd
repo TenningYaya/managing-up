@@ -5,7 +5,7 @@ extends Control
 signal card_clicked(employee_data: Employee) # 定义信号，把员工数据传出去
 
 # 节点引用 (根据上面的结构定位)
-@onready var name_label = $VBoxContainer/NameLabel
+@onready var name_label: Label = $VBoxContainer/NameLabel
 @onready var avatar_img = $VBoxContainer/AvatarArea/Avatar
 @onready var rarity_label = $VBoxContainer/AvatarArea/RarityLabel
 
@@ -19,16 +19,26 @@ signal card_clicked(employee_data: Employee) # 定义信号，把员工数据传
 @onready var on_drop_area = $OnDropArea
 @onready var not_working = $NotWorking
 
-# 重命名相关资源（铅笔图标 + 卡片字体，保持与名字标签一致的像素字体）
-const RENAME_ICON := preload("res://assets/sidebar/other/edit (1).png")
-const CARD_FONT := preload("res://assets/fonts/standard.tres")
+# 名字自适应：名字过长时自动缩小字号塞进卡片宽度，而不是把卡片撑变形。
+# ⚠️ NAME_BASE_FONT_SIZE 必须和场景里 NameLabel 的 font_size 保持一致。
+const NAME_BASE_FONT_SIZE := 16
+const NAME_MIN_FONT_SIZE := 8
 
-# 重命名用到的节点（在 _ready 里动态创建，避免改 .tscn 结构）
-var name_row: HBoxContainer
-var edit_name_button: TextureButton
-var name_edit: LineEdit
-var _is_editing_name: bool = false
-var _name_before_edit: String = ""
+# ==========================================================
+# 🎨 卡片底色（按稀有度区分）—— 随便调，改完直接跑就能看效果
+# 现在给的是头像底色的浅化版，当起点用；想怎么改都行。
+# ==========================================================
+const RARITY_CARD_COLORS = {
+	Employee.Rarity.R:   Color("ffffffff"),
+	Employee.Rarity.SR:  Color("ffffffff"),
+	Employee.Rarity.SSR: Color("ffffffff")
+}
+
+# 卡片底色的那块 ColorRect。
+# 兼容两种节点名：改名成 RarityColorRect 的用新名，没改名的回退到原来的 ColorRect。
+@onready var rarity_rect: ColorRect = (
+	get_node_or_null("RarityColorRect") as ColorRect
+)
 
 var my_employee_data: Employee
 var is_selected: bool = false : 
@@ -41,118 +51,51 @@ func _ready():
 	Gamemanager.request_employee_drop.connect(_on_map_changed)
 	EmployeeManager.employee_removed.connect(_on_map_changed)
 	EmployeeManager.employee_map_status_changed.connect(_on_map_changed)
-	_build_rename_ui()
 
-# 把名字标签塞进一行容器，并在右侧加一个铅笔按钮；再放一个默认隐藏的行内编辑框。
-func _build_rename_ui() -> void:
-	var vbox := $VBoxContainer
-	var label_index := name_label.get_index()
+	# 名字标签：裁切模式 + 布局变化时重算字号
+	# ⚠️ clip_text 是关键：Label 默认把「文字完整宽度」当成自己的最小宽度，
+	#    会一路把 VBoxContainer 顶宽、进而把 AvatarArea 也拉长（卡片变形）。
+	#    开了裁切之后最小宽度归零，卡片宽度就只由 AvatarArea 决定，稳定不变。
+	name_label.clip_text = true
+	name_label.resized.connect(_fit_name_font)
 
-	# 一行容器：名字（占满剩余宽度、文字居中）+ 铅笔按钮（贴右）
-	name_row = HBoxContainer.new()
-	name_row.name = "NameRow"
-	name_row.mouse_filter = Control.MOUSE_FILTER_PASS  # 让空白处的点击仍能冒泡给卡片（打开面板）
-	name_row.add_theme_constant_override("separation", 2)
-	vbox.add_child(name_row)
-	vbox.move_child(name_row, label_index)
-
-	# 原 NameLabel 移进行容器，占满剩余宽度（文字本身已是居中对齐）
-	name_label.reparent(name_row, false)
-	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-
-	# 铅笔按钮
-	edit_name_button = TextureButton.new()
-	edit_name_button.name = "EditNameButton"
-	edit_name_button.texture_normal = RENAME_ICON
-	edit_name_button.ignore_texture_size = true
-	edit_name_button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-	edit_name_button.custom_minimum_size = Vector2(14, 14)
-	edit_name_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	name_row.add_child(edit_name_button)
-	edit_name_button.pressed.connect(_start_rename)
-
-	# 行内编辑框：默认隐藏，编辑时顶替 name_row 的位置
-	name_edit = LineEdit.new()
-	name_edit.name = "NameEdit"
-	name_edit.max_length = 12
-	name_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_edit.add_theme_font_override("font", CARD_FONT)
-	name_edit.add_theme_font_size_override("font_size", 14)
-	# 收窄默认主题里偏厚的上下边距，让编辑框高度贴近名字文字，避免编辑时把卡片撑高
-	var box := StyleBoxFlat.new()
-	box.bg_color = Color(0, 0, 0, 0.10)
-	box.set_corner_radius_all(3)
-	box.content_margin_left = 4
-	box.content_margin_right = 4
-	box.content_margin_top = 0
-	box.content_margin_bottom = 0
-	name_edit.add_theme_stylebox_override("normal", box)
-	name_edit.add_theme_stylebox_override("focus", box)
-	name_edit.hide()
-	vbox.add_child(name_edit)
-	vbox.move_child(name_edit, name_row.get_index() + 1)
-	name_edit.text_submitted.connect(_on_name_submitted)
-	name_edit.focus_exited.connect(_on_name_focus_exited)
-	name_edit.gui_input.connect(_on_name_edit_gui_input)
-
-# ==================== 行内重命名 ====================
-func _start_rename() -> void:
-	if my_employee_data == null or _is_editing_name:
+# 名字自适应字号：按当前可用宽度，把过长的名字缩到塞得下为止。
+# 用实际尺寸计算，卡片宽度以后怎么调都自动适配，不写死像素。
+func _fit_name_font() -> void:
+	if name_label == null or name_label.text == "":
 		return
-	_is_editing_name = true
-	_name_before_edit = my_employee_data.get_display_name()
-	name_edit.text = _name_before_edit
-	name_row.hide()
-	name_edit.show()
-	# 等控件显示后再抢焦点并全选，让玩家直接打字覆盖
-	name_edit.grab_focus.call_deferred()
-	name_edit.select_all.call_deferred()
-
-func _on_name_submitted(_text: String) -> void:
-	_commit_rename()
-
-func _on_name_focus_exited() -> void:
-	_commit_rename()
-
-func _on_name_edit_gui_input(event: InputEvent) -> void:
-	# Esc 取消：先还原再退出（见 _cancel_rename），并吃掉事件防止冒泡
-	if event.is_action_pressed("ui_cancel"):
-		_cancel_rename()
-		accept_event()
-
-func _commit_rename() -> void:
-	if not _is_editing_name:
+	var font: Font = name_label.get_theme_font("font")
+	if font == null:
 		return
-	_is_editing_name = false
-	var new_name := name_edit.text.strip_edges()
-	# 空名字不接受 → 还原原名字（即不写回）；没变化也不写回
-	if new_name != "" and is_instance_valid(my_employee_data) and new_name != my_employee_data.get_display_name():
-		my_employee_data.set_custom_name(new_name)  # 写回数据源，renamed 信号会刷新所有视图
-	_exit_edit_mode()
+	var avail: float = name_label.size.x
+	if avail <= 0.0:
+		return   # 还没布局好，等 resized 再来
 
-func _cancel_rename() -> void:
-	if not _is_editing_name:
+	var full_w := font.get_string_size(name_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, NAME_BASE_FONT_SIZE).x
+	var target := NAME_BASE_FONT_SIZE
+	if full_w > avail and full_w > 0.0:
+		target = int(floor(NAME_BASE_FONT_SIZE * avail / full_w))
+	name_label.add_theme_font_size_override("font_size", clampi(target, NAME_MIN_FONT_SIZE, NAME_BASE_FONT_SIZE))
+
+# 按稀有度刷卡片底色。节点没找到就安静跳过，不报错。
+func _apply_rarity_card_color(emp_rarity: Employee.Rarity) -> void:
+	if rarity_rect == null:
 		return
-	# 关键顺序：先把标志位置 false，这样退出时 hide() 触发的 focus_exited 会被 _commit_rename 拦掉，
-	# 绝不会把编辑框里的新文本提交回去
-	_is_editing_name = false
-	name_edit.text = _name_before_edit
-	_exit_edit_mode()
+	rarity_rect.color = RARITY_CARD_COLORS.get(emp_rarity, rarity_rect.color)
 
-func _exit_edit_mode() -> void:
-	name_edit.hide()
-	name_row.show()
-	if is_instance_valid(my_employee_data):
-		name_label.text = my_employee_data.get_display_name()
+# 统一的「设名字」入口：设完文字顺手重算字号
+func _set_name_text(new_text: String) -> void:
+	name_label.text = new_text
+	_fit_name_font()
 
-# 数据被改名时（无论从哪触发）刷新本卡名字
+# 数据被改名时（在员工面板改的）刷新本卡名字
 func _on_employee_renamed() -> void:
 	if is_instance_valid(my_employee_data):
-		name_label.text = my_employee_data.get_display_name()
-	
+		_set_name_text(my_employee_data.get_display_name())
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready() and is_instance_valid(my_employee_data):
-		name_label.text = my_employee_data.get_display_name()
+		_set_name_text(my_employee_data.get_display_name())
 
 func _on_map_changed(_data = null):
 	if not is_inside_tree() or is_queued_for_deletion():
@@ -170,13 +113,16 @@ func setup_card(employee_data: Employee) -> void:
 	if not employee_data.display_name_changed.is_connected(_on_employee_renamed):
 		employee_data.display_name_changed.connect(_on_employee_renamed)
 
-	# 1. 设置名字
-	name_label.text = employee_data.get_display_name()
+	# 1. 设置名字（过长会自动缩字号，不撑变卡片）
+	_set_name_text(employee_data.get_display_name())
 	
 	if employee_data.portrait:
 		AvatarHelper.apply_portrait(avatar_img, employee_data.portrait, employee_data.rarity)
 		
-	# 2. 设置头像和等级悬浮标
+	# 2. 卡片底色按稀有度刷
+	_apply_rarity_card_color(employee_data.rarity)
+
+	# 3. 设置头像和等级悬浮标
 	match employee_data.rarity:
 		Employee.Rarity.R: 
 			rarity_label.text = " R "
