@@ -165,7 +165,7 @@ offset_bottom = 358.0
 texture = ExtResource("4_2wyq8")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=422862178]
+[node name="TextureRect" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=422862178 groups=["sky_window"]]
 layout_mode = 0
 offset_left = -780.0
 offset_right = 16.0
@@ -173,7 +173,7 @@ offset_bottom = 105.0
 texture = SubResource("AtlasTexture_vxglm")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=177922556]
+[node name="TextureRect2" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=177922556 groups=["sky_window"]]
 layout_mode = 0
 offset_left = -1567.0
 offset_right = -771.0
@@ -181,7 +181,7 @@ offset_bottom = 105.0
 texture = SubResource("AtlasTexture_vxglm")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=660731690]
+[node name="TextureRect3" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=660731690 groups=["sky_window"]]
 layout_mode = 0
 offset_left = -2356.0
 offset_right = -1560.0
@@ -189,7 +189,7 @@ offset_bottom = 105.0
 texture = SubResource("AtlasTexture_vxglm")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=1408688453]
+[node name="TextureRect4" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=1408688453 groups=["sky_window"]]
 layout_mode = 0
 offset_left = -3142.0
 offset_right = -2346.0
@@ -197,7 +197,7 @@ offset_bottom = 105.0
 texture = SubResource("AtlasTexture_vxglm")
 expand_mode = 1
 
-[node name="TextureRect5" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=1201363362]
+[node name="TextureRect5" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=1201363362 groups=["sky_window"]]
 layout_mode = 0
 offset_left = -3932.0
 offset_right = -3136.0
@@ -205,7 +205,7 @@ offset_bottom = 105.0
 texture = SubResource("AtlasTexture_vxglm")
 expand_mode = 1
 
-[node name="TextureRect6" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=1970160437]
+[node name="TextureRect6" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=1970160437 groups=["sky_window"]]
 layout_mode = 0
 offset_left = -4619.0
 offset_right = -3823.0
@@ -431,6 +431,20 @@ limit_right = 10000101
 limit_bottom = 540
 position_smoothing_speed = 10.0
 script = ExtResource("13_a8y0u")
+
+[node name="IndoorLight" type="ColorRect" parent="FullGameMode" unique_id=770635339 groups=["indoor_light"]]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -675.0
+offset_top = 746.0
+offset_right = 2634.0
+offset_bottom = 1108.0
+grow_horizontal = 2
+grow_vertical = 0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2052431275]
 

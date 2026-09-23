@@ -34,6 +34,7 @@ FloorManager="*uid://cfssx3hpb6hxe"
 StockManager="*uid://cf08jdimmvyij"
 Ledger="*res://scripts/system/ledger.gd"
 SteamManager="*res://scripts/system/steam_manager.gd"
+DayNight="*res://scripts/system/day_night.gd"
 
 [debug]
 
@@ -78,6 +79,9 @@ explain_dispatch=""
 floor_tilemap=""
 select_avatar=""
 name_program=""
+sky_window=""
+sky_window_lights=""
+indoor_light=""
 
 [input]
 
