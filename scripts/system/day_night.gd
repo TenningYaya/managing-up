@@ -62,19 +62,88 @@ const WORLD_GRADIENT: Gradient = preload("res://data/daynight/world_tint.tres")
 ## 峰值会在 _ready 里自动量出来归一化，所以你随便拖 Alpha，不用再去同步任何常量。
 const SKY_GRADIENT: Gradient = preload("res://data/daynight/sky_tint.tres")
 
-## ── 室内开灯 ────────────────────────────────────────────────
-## 加法混合：最终颜色 = 底下的画面 + 这个颜色 × 强度。所以它只会提亮，
-## 不会像 modulate 那样把东西弄脏。偏暖 = 白炽灯，越白越像日光灯。
-const INDOOR_LIGHT_COLOR := Color(1.0, 0.82, 0.55)
-const INDOOR_LIGHT_STRENGTH := 0.28   ## 夜晚最亮时叠多少。太大会糊成一片，从小往上调
-const INDOOR_LIGHT_DAY := 0.0         ## 白天叠多少（0 = 白天不开灯）
-## 光心：纵向 0 = 贴着窗户，1 = 贴着地板。0.45 = 桌子和人那一带最亮，窗边和地板都暗。
-## 夜里别用 0 —— 那等于"窗外往屋里打光"，可窗外是黑的，说不通。
-const INDOOR_LIGHT_CENTER := 0.45
-const INDOOR_LIGHT_REACH := 0.75      ## 光摊多开。越大越均匀，越小越像一道光带
-const INDOOR_LIGHT_FALLOFF := 1.8     ## 衰减陡峭度。1 = 线性；越大光斑边界越明显
-const INDOOR_LIGHT_EDGE := 0.12       ## 左右边缘收多少，免得光层两侧是硬切口
-const INDOOR_SHADER: Shader = preload("res://data/shader/indoor_light.gdshader")
+## ── 吊顶灯 ──────────────────────────────────────────────────
+## 天花板降下 N 盏横灯管，每盏往下打一个梯形光锥。锥内正常亮，锥外压暗靛蓝，
+## 【锥与锥之间的缝隙】才是表现夜晚的地方。
+##
+## 用乘法遮罩而不是加法光：加法是往黑画面上糊暖色，怎么调都发闷；
+## 乘法是锥内乘 1（画面原样 = 真正的"正常亮度"）、锥外乘暗色。
+const INDOOR_SHADER: Shader = preload("res://data/shader/ceiling_lamp.gdshader")
+## ⚠️ 这四个是【乘数】，而且【必须 ≤ 1】。
+##    2D 画布是 8 位定点混合，着色器输出会先被 clamp 到 [0,1] 再相乘，
+##    所以填 2.5 实际生效的是 1.0 —— 想靠乘法把压暗的画面"提亮回去"是做不到的。
+##    唯一可行的模型是：【暗是减出来的，亮是"没被减"】。
+##    灯下乘 1 = 原图分毫不动 = 真正的正常亮度；灯外乘 0.4 = 压暗。
+const LAMP_DARK := Color(0.379, 0.488, 0.731, 1.0)    ## 没灯照到：压成靛蓝
+const LAMP_LIT := Color(1.00, 1.00, 1.00)     ## 一盏灯照到：什么都不做 = 原图亮度
+const LAMP_OVERLAP := Color(1.00, 0.99, 0.95) ## 两锥交叠：几乎不动，暖色交给加法层
+const LAMP_TUBE := Color(1.00, 1.00, 1.00)    ## 灯管本体：不压暗
+
+## ── 加法层：只负责"亮" ──────────────────────────────────────
+## 乘法最多做到"原图亮度"，做不出【比原图更亮】，所以灯下看着只是白天的颜色，
+## 没有"被照亮"的感觉。这一层补上那一截。
+## 而且它【只在光锥内出数】，锥外加 0 —— 所以不会像早先那版一样把暗部一起抬亮糊成一片。
+##
+## 数值要小。0.10 已经是很明显的"被照亮"，上到 0.3 开始过曝。
+## 调色：三个分量一起加 = 更亮；把 B 压低 = 更黄。
+## 「很淡的亮黄」= 三个都不低 + B 稍低。R/G 高而 B 接近 0 那是纯黄，会很脏。
+const LAMP_LIT_ADD := Color(0.051, 0.06, 0.114, 1.0)    ## 一盏灯照到：加一点暖光
+const LAMP_OVERLAP_ADD := Color(0.204, 0.202, 0.167, 1.0) ## 两锥交叠：更亮的淡黄
+const LAMP_TUBE_ADD := Color(0.55, 0.520, 0.400)    ## 灯管本体：打到发白
+const LAMP_ADD_SHADER: Shader = preload("res://data/shader/ceiling_lamp_add.gdshader")
+const LAMP_ADD_NODE := "_LampGlowAdd"
+
+## 遮罩往四周铺多少像素。铺大是为了盖住整个可见画面 —— 夜色全靠这块布，
+## 布的边缘就是"夜晚的边缘"，所以宁可铺大。
+## 灯的位置由 ref_min/ref_size 换算，铺多大都不会把灯带跑，放心加。
+const MASK_PAD_X := 3000.0
+const MASK_PAD_TOP := 1200.0
+const MASK_PAD_BOTTOM := 1200.0
+const LAMP_COUNT := 5                 ## 几盏灯，沿办公区均分
+const LAMP_HALF_W := 0.08             ## 灯管半长（占整条办公区宽度的比例）
+const LAMP_SPREAD := 0.46             ## 梯形往下张开多少。0 = 直筒，越大越像喇叭
+const LAMP_CONE_LEN := 10.0            ## 光打多远（1 = 直到办公区底部）
+## 相邻两盏灯【灯心之间】的距离，整组始终以 LAMP_GROUP_X 为轴居中。
+## 调小 = 灯一起往中间收。和 LAMP_COUNT 互不干扰：加灯不会把它们撑开。
+const LAMP_PITCH := 0.2
+const LAMP_GROUP_X := 0.5             ## 整组灯的中心。0.5 = 办公区正中
+
+## 注意 lamp_y 是【遮罩矩形内的比例】，所以矩形一变高，灯管会自动往上跑 ——
+## 这正是"灯管升到窗户那一带"的效果，不用另外调 lamp_y。
+## 0 = 完全不碰你手摆的节点。
+
+## 硬边斜线按屏幕像素走的话，台阶会比美术本身的像素还细，看着像锯齿而不像设计。
+## 填你的美术放大倍率（一个美术像素 = 几个屏幕像素），台阶就和像素块同尺寸。1 = 不对齐。
+const LAMP_BLOCK_PX := 1.0
+const LAMP_TUBE_H := 0.02             ## 灯管粗细
+
+## 光的上边界。这条线以上【一律不受光】，哪怕光锥罩到了。
+## 用来挡住窗户 —— 室内吊灯照不到室外，但遮罩分不清室内室外，不设这条线的话
+## 光锥会在窗户上"挖个洞"，露出白天的玻璃贴图。
+## 0 = 你手摆那个遮罩矩形的上沿 = 办公室天花板。正数往下挪，负数往上放。
+const LAMP_LIGHT_TOP := 0.0
+
+## ── 灯管周围的光晕 ──
+## 和光锥是两回事：光锥是"照到哪儿"，光晕是"灯本身在发光"，四面八方都有。
+## 它会溢到光锥之外的暗区里 —— 那正是"雾状扩散"的来源。
+##
+## ⚠️ LAMP_GLOW_STEPS 是重点：像素风的光晕是【一圈圈硬边色阶】，不是平滑渐变。
+##    平滑渐变在像素画里会糊成一团脏东西 —— 你上次觉得"还不如没有"多半就是这个原因。
+##    2~4 圈最常见，越少越硬朗。
+## ⚠️ 这个值要【小】。灯管是条长线段，光晕是贴着它的胶囊形，
+##    半径一大，每圈在中段就是一条笔直的横线 —— 看着不像光晕，像凭空画了条分界线。
+##    参考：0.10 ≈ 36 像素，而灯管才 7 像素粗，这个比例看着还像"灯周围"。
+##    超过 0.2 就开始变成一条横贯办公室的光带了。
+const LAMP_GLOW_RADIUS := 0.25                   ## 扩散多远（参考矩形高度的倍数）
+const LAMP_GLOW_POWER := 2.2                     ## 衰减曲线。越大越集中在灯管附近
+const LAMP_GLOW_STRETCH := 1.0                   ## >1 横向拉长成椭圆
+## 0 = 平滑模糊（柔光晕）；≥2 = 量化成那么多圈硬边色阶。
+## 之前那条莫名其妙的横线就是色阶造成的 —— 灯管是长线段，每圈在中段都是平的。
+const LAMP_GLOW_STEPS := 0.0
+const LAMP_GLOW_ADD := Color(0.14, 0.125, 0.085) ## 最内圈加多少光
+## 灯是"降下来"的：天黑时从 UP 滑到 DOWN，跟窗灯同一条 1.5 秒淡入曲线。
+const LAMP_Y_UP := -0.12              ## 还没降下来时灯管在哪（负数 = 在办公区上方看不见）
+const LAMP_Y_DOWN := -0.1             ## 降到位后灯管在哪
 
 ## 光层节点自动生成，不用你去 main.tscn 里摆。
 ## 横向范围和上沿【自动对齐天空带】——正好从那条天空下面开始，不会照到窗外。
@@ -95,14 +164,22 @@ const DEBUG_LOG := true
 const LIGHTS_BOOST := 1.9
 
 var phase: float = 0.0        ## 当前昼夜进度 0~1，别处想读"现在几点"用这个
+## 调试用的进度偏移。跳转昼夜时只动它，【不碰 Gamemanager.total_time】——
+## total_time 是全局游戏时长，账目结算之类的东西都挂在上面，为了看个夜景去改它会出乱子。
+var phase_shift: float = 0.0
 var night_amount: float = 0.0 ## 0 = 大白天，1 = 全黑。给别的系统当钩子用
 
 var debug_phase: float = -1.0 ## ≥0 时锁定进度，方便调色；-1 = 跟随时间
 
-var _add_mat: ShaderMaterial
+var _add_mat: ShaderMaterial    ## 乘法层：只压暗
+var _glow_mat: ShaderMaterial   ## 加法层：只提亮
 var _canvas_mod: CanvasModulate = null
 var _auto_light: TextureRect = null   ## 自动生成的那个光层，只有它才走自动对齐
 var _warned_no_sky := false
+var _indoor_orig: Dictionary = {}   ## 手摆遮罩的原始矩形，上拉时作基准，防止每帧累加
+var _ref_min := Vector2.ZERO        ## 办公区参考矩形在铺大后的遮罩里的起点（UV）
+var _ref_size := Vector2.ONE
+var _ref_aspect := 1.0              ## 参考矩形宽高比，用来把光晕修圆        ## 同上，尺寸。灯的坐标全部相对它算
 var _debug_timer := 0
 var _last_sky_count := -1
 var _dt := 0.0
@@ -122,6 +199,8 @@ var _night_peak := 1.0      ## 夜色曲线的 Alpha 峰值，用来归一化
 func _ready() -> void:
 	_add_mat = ShaderMaterial.new()
 	_add_mat.shader = INDOOR_SHADER
+	_glow_mat = ShaderMaterial.new()
+	_glow_mat.shader = LAMP_ADD_SHADER
 
 	# 量出夜色曲线的 Alpha 峰值，让"峰值 = 完全入夜"。
 	# 这样你在编辑器里随便拖 Alpha，都不用再回来同步某个常量 —— 之前那个手动同步
@@ -141,7 +220,7 @@ func _process(_delta: float) -> void:
 		_apply(_day_phase())
 		return
 
-	phase = fposmod(Gamemanager.total_time / CYCLE_SECONDS + PHASE_OFFSET, 1.0)
+	phase = fposmod(Gamemanager.total_time / CYCLE_SECONDS + PHASE_OFFSET + phase_shift, 1.0)
 	_apply(debug_phase if debug_phase >= 0.0 else phase)
 
 
@@ -178,22 +257,26 @@ func _apply(p: float) -> void:
 			_ensure_window_overlays(tr)
 			_update_window_overlays(tr)
 
-	# ── 屋里：开灯。加法混合，强度跟着夜的浓度走 ──
+	# ── 吊顶灯 ──
 	_ensure_indoor_light()
 	_layout_indoor_light()
-	# 衰减和加法混合都在 shader 里，所以挂 ColorRect 也有层次，不挑节点类型。
-	# compensate 把"天黑"对光层的压暗除掉，不然越黑越看不见灯，等于白开。
-	var lit: float = lerpf(INDOOR_LIGHT_DAY, INDOOR_LIGHT_STRENGTH, night_amount)
-	_add_mat.set_shader_parameter("light_color", INDOOR_LIGHT_COLOR)
-	_add_mat.set_shader_parameter("strength", lit)
-	_add_mat.set_shader_parameter("light_center", INDOOR_LIGHT_CENTER)
-	_add_mat.set_shader_parameter("light_reach", INDOOR_LIGHT_REACH)
-	_add_mat.set_shader_parameter("falloff", INDOOR_LIGHT_FALLOFF)
-	_add_mat.set_shader_parameter("edge_softness", INDOOR_LIGHT_EDGE)
-	_add_mat.set_shader_parameter("compensate", Vector3(
-		1.0 / maxf(world.r, 0.001),
-		1.0 / maxf(world.g, 0.001),
-		1.0 / maxf(world.b, 0.001)))
+	# 整套效果（包括灯降下来）都跟 _glow_a 走，和窗灯同一时刻、同一条曲线。
+	var lit: float = _glow_a
+	# 两层必须吃完全一样的几何参数，否则光锥的暗边和亮边会错开一截
+	_set_lamp_geometry(_add_mat, lit)
+	_set_lamp_geometry(_glow_mat, lit)
+
+	# 乘法层：只管暗
+	_add_mat.set_shader_parameter("dark_color", _v3(LAMP_DARK))
+	_add_mat.set_shader_parameter("lamp_color", _v3(LAMP_LIT))
+	_add_mat.set_shader_parameter("overlap_color", _v3(LAMP_OVERLAP))
+	_add_mat.set_shader_parameter("tube_color", _v3(LAMP_TUBE))
+
+	# 加法层：只管亮
+	_glow_mat.set_shader_parameter("lit_add", _v3(LAMP_LIT_ADD))
+	_glow_mat.set_shader_parameter("overlap_add", _v3(LAMP_OVERLAP_ADD))
+	_glow_mat.set_shader_parameter("tube_add", _v3(LAMP_TUBE_ADD))
+	_glow_mat.set_shader_parameter("glow_add", _v3(LAMP_GLOW_ADD))
 
 	for n in get_tree().get_nodes_in_group(INDOOR_GROUP):
 		var ci := n as CanvasItem
@@ -209,6 +292,9 @@ func _apply(p: float) -> void:
 				ci.z_index = INDOOR_LIGHT_Z
 			ci.modulate = Color.WHITE   # 颜色交给 shader，这里别再乘一遍
 			ci.visible = lit > 0.001
+			if ci != _auto_light:
+				_pad_indoor_mask(ci as Control)
+				_ensure_glow_layer(ci as Control)
 
 	# ── 窗户亮灯：透明度直接跟"夜的强度"走 ──
 	for n in get_tree().get_nodes_in_group(LIGHTS_GROUP):
@@ -218,6 +304,90 @@ func _apply(p: float) -> void:
 
 	if DEBUG_LOG:
 		_debug_tick(p, world, lit)
+
+
+## ── 调试：昼夜跳转 ────────────────────────────────────────────
+## 跳到【灯刚好要开/要关的那一刻】，按下去立刻就能看见变化。
+##
+## 这两个点是从曲线里【算】出来的，不是手填的 —— 你在编辑器里拖色标之后，
+## 跳转点自动跟着走。之前写死 0.70 / 0.16，你一改曲线就对不上，按了像没反应。
+func _night_at(p: float) -> float:
+	return clampf(SKY_GRADIENT.sample(p).a / _night_peak, 0.0, 1.0)
+
+
+## 扫一遍曲线，找 night_amount 穿过开灯阈值的那个进度。
+## rising = true 找天黑那次，false 找天亮那次。
+func _find_crossing(rising: bool) -> float:
+	const STEPS := 400
+	var prev: float = _night_at(0.0)
+	for i in range(1, STEPS + 1):
+		var p: float = float(i) / float(STEPS)
+		var cur: float = _night_at(p)
+		if rising and prev < GLOW_ON_AT and cur >= GLOW_ON_AT:
+			return p
+		if not rising and prev >= GLOW_ON_AT and cur < GLOW_ON_AT:
+			return p
+		prev = cur
+	return 0.75 if rising else 0.25   # 曲线没有穿越点时的兜底
+
+
+## 把当前进度挪到 target，之后照常往前走（不是锁定）。
+func jump_to_phase(target: float) -> void:
+	var base: float = fposmod(Gamemanager.total_time / CYCLE_SECONDS + PHASE_OFFSET, 1.0)
+	phase_shift = fposmod(target - base, 1.0)
+
+
+## 在天黑和天亮之间来回跳。返回 true = 跳去天黑。
+func debug_toggle_daynight() -> bool:
+	var to_night: bool = night_amount < GLOW_ON_AT
+	var target: float = _find_crossing(to_night)
+	jump_to_phase(target)
+	# 立刻把状态推到位，省得按钮文字和日志还停在旧值上
+	_apply(target)
+	print("[DayNight] 跳到 %s，phase=%.3f" % ["天黑" if to_night else "天亮", target])
+	return to_night
+
+
+func _v3(c: Color) -> Vector3:
+	return Vector3(c.r, c.g, c.b)
+
+
+## 乘法层和加法层共用同一套形状参数。写成一个函数，省得改参数要改两遍 ——
+## 两边一旦不同步，光锥的暗边和亮边就会错开一截，而且极难查。
+func _set_lamp_geometry(mat: ShaderMaterial, lit: float) -> void:
+	mat.set_shader_parameter("amount", lit)
+	mat.set_shader_parameter("lamp_count", LAMP_COUNT)
+	mat.set_shader_parameter("lamp_y", lerpf(LAMP_Y_UP, LAMP_Y_DOWN, lit))
+	mat.set_shader_parameter("lamp_half_w", LAMP_HALF_W)
+	mat.set_shader_parameter("spread", LAMP_SPREAD)
+	mat.set_shader_parameter("cone_len", LAMP_CONE_LEN)
+	mat.set_shader_parameter("lamp_pitch", LAMP_PITCH)
+	mat.set_shader_parameter("group_x", LAMP_GROUP_X)
+	mat.set_shader_parameter("block_px", LAMP_BLOCK_PX)
+	mat.set_shader_parameter("tube_h", LAMP_TUBE_H)
+	mat.set_shader_parameter("light_top", LAMP_LIGHT_TOP)
+	mat.set_shader_parameter("glow_radius", LAMP_GLOW_RADIUS)
+	mat.set_shader_parameter("glow_steps", LAMP_GLOW_STEPS)
+	mat.set_shader_parameter("glow_power", LAMP_GLOW_POWER)
+	mat.set_shader_parameter("glow_stretch", LAMP_GLOW_STRETCH)
+	mat.set_shader_parameter("ref_aspect", _ref_aspect)
+	# 遮罩铺得比办公区大，这两个把灯的坐标锁回原始矩形
+	mat.set_shader_parameter("ref_min", _ref_min)
+	mat.set_shader_parameter("ref_size", _ref_size)
+
+
+## 加法层挂成乘法层的【子节点】：子节点天生画在父节点之后，所以
+## 「先压暗、再加光」的顺序自动就对；尺寸用 FULL_RECT 跟着父节点走，
+## 两层的 UV 空间永远一致，不用另外同步位置和大小。
+func _ensure_glow_layer(host: Control) -> void:
+	if host == null or host.has_node(LAMP_ADD_NODE):
+		return
+	var g := ColorRect.new()
+	g.name = LAMP_ADD_NODE
+	g.material = _glow_mat
+	g.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	g.set_anchors_preset(Control.PRESET_FULL_RECT)
+	host.add_child(g)
 
 
 func _debug_tick(p: float, world: Color, lit: float) -> void:
@@ -251,9 +421,6 @@ func _debug_tick(p: float, world: Color, lit: float) -> void:
 				rect_txt, c.visible, c.z_index,
 				str(c.material == _add_mat)])
 		light_info = " | ".join(parts)
-
-	print("[DayNight] phase=%.2f 夜浓度=%.2f 窗灯=%.2f 室内压暗=%s 开灯量=%.3f 天空节点=%d 光层×%d：%s"
-		% [p, night_amount, _glow_a, world, lit, n_sky, members.size(), light_info])
 
 
 ## 取一个铁定是白天的进度值（两条 Gradient 的白天段中点）
@@ -396,6 +563,42 @@ func _update_window_overlays(host: TextureRect) -> void:
 
 	glow.visible = _glow_a > 0.001
 	glow.modulate = Color(_comp.x, _comp.y, _comp.z, _glow_a)
+
+
+## sky_window 组的外接矩形 = 窗外那条玻璃带的实际位置。
+func _sky_band() -> Rect2:
+	var band := Rect2()
+	var found := false
+	for n in get_tree().get_nodes_in_group(SKY_GROUP):
+		var c := n as Control
+		if c == null:
+			continue
+		var r := c.get_global_rect()
+		band = r if not found else band.merge(r)
+		found = true
+	return band if found else Rect2()
+
+
+## 把光照遮罩往四周铺大，盖住整个可见画面。
+## 必须记住原始矩形：不记的话每帧在上一帧的基础上再铺一次，节点会一路膨胀没边。
+## 铺大之后灯会不会跑？不会 —— ref_min/ref_size 把灯的坐标锁回原始矩形，见下面。
+func _pad_indoor_mask(c: Control) -> void:
+	if c == null:
+		return
+	var key := c.get_instance_id()
+	if not _indoor_orig.has(key):
+		_indoor_orig[key] = Rect2(c.position, c.size)
+	var o: Rect2 = _indoor_orig[key]
+
+	var pad_tl := Vector2(MASK_PAD_X, MASK_PAD_TOP)
+	var full_size := o.size + pad_tl + Vector2(MASK_PAD_X, MASK_PAD_BOTTOM)
+	c.position = o.position - pad_tl
+	c.size = full_size
+
+	# 原始矩形在铺大后的遮罩里占哪一块 —— 灯的所有坐标都相对它算
+	_ref_min = pad_tl / full_size
+	_ref_size = o.size / full_size
+	_ref_aspect = o.size.x / maxf(o.size.y, 1.0)
 
 
 ## 没人往 indoor_light 组里放东西的话，自己建一个。

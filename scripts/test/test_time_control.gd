@@ -24,6 +24,36 @@ func _ready() -> void:
 		btn_max_level.text = "👑 一键满级+暴富"
 		btn_max_level.pressed.connect(_on_max_level_pressed)
 
+	_add_daynight_button()
+
+
+# ── 昼夜跳转（调试用）───────────────────────────────────────
+# 按钮在代码里建，不写进 main.tscn —— 调试件不该污染正式场景，
+# 以后不要了删掉这个函数就干净了。
+var _btn_daynight: Button
+
+
+func _add_daynight_button() -> void:
+	var box := $VBoxContainer
+	_btn_daynight = Button.new()
+	_btn_daynight.name = "JumpDayNight"
+	_btn_daynight.pressed.connect(_on_daynight_pressed)
+	box.add_child(_btn_daynight)
+	_refresh_daynight_text()
+
+
+func _on_daynight_pressed() -> void:
+	# 跳到灯刚好要开/要关的那一刻，按下去立刻看得见
+	var to_night: bool = DayNight.debug_toggle_daynight()
+	# 按哪边就显示反过来那边，不用延时 —— 跳转已经立刻生效了
+	_btn_daynight.text = "☀️ 跳到天亮" if to_night else "🌙 跳到天黑"
+
+
+func _refresh_daynight_text() -> void:
+	if not is_instance_valid(_btn_daynight):
+		return
+	_btn_daynight.text = "☀️ 跳到天亮" if DayNight.night_amount >= 0.5 else "🌙 跳到天黑"
+
 func _change_speed(multiplier: float) -> void:
 	# 核心逻辑：修改引擎时间缩放
 	Engine.time_scale = multiplier

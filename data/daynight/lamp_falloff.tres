@@ -1,0 +1,21 @@
+[gd_resource type="GradientTexture2D" format=3]
+
+; PointLight2D 的光照贴图：一个径向渐变，中心实、边缘透明。
+; 灯的「形状和衰减」完全由这张图决定 —— 这就是 Godot 2D 光照的核心机制，
+; 灯本身不算物理，只是把这张图加法叠到场景上。
+;
+; 想要光斑边界更硬（更像聚光灯）：把中间那个色标往外推，Alpha 调高。
+; 想要更柔：往里收，Alpha 调低。
+; 想要椭圆光斑：别改这张图，在节点上改 scale 的 x/y 比例。
+
+[sub_resource type="Gradient" id="Gradient_lamp"]
+offsets = PackedFloat32Array(0, 0.4, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.35, 1, 1, 1, 0)
+
+[resource]
+gradient = SubResource("Gradient_lamp")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)

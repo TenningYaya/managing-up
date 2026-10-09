@@ -82,6 +82,7 @@ name_program=""
 sky_window=""
 sky_window_lights=""
 indoor_light=""
+scene_lamp=""
 
 [input]
 
