@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cjogeu44x0fs"]
+
+[ext_resource type="Texture2D" uid="uid://cr2o3p827mhlc" path="res://assets/background/hanging_light.png" id="1_lamp"]
+[ext_resource type="Script" uid="uid://bhw18xnsdhb0s" path="res://scripts/office/hanging_light_gizmo.gd" id="2_gizmo"]
+
+[node name="HangingLight" type="Node2D" unique_id=1122715880 groups=["ceiling_lamp"]]
+script = ExtResource("2_gizmo")
+
+[node name="Art" type="TextureRect" parent="." unique_id=713691973]
+modulate = Color(0.92971414, 0.92971486, 0.9297146, 1)
+offset_right = 532.0
+offset_bottom = 77.0
+mouse_filter = 2
+texture = ExtResource("1_lamp")
+expand_mode = 1

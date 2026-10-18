@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" uid="uid://dfloorswui01" path="res://scenes/UI/floor_switch_ui.tscn" id="27_flswui"]
 [ext_resource type="PackedScene" uid="uid://bw0la0v3fp07e" path="res://scenes/UI/panel/ledger_panel.tscn" id="27_fv21b"]
 [ext_resource type="Texture2D" uid="uid://b1euw0ayihkuf" path="res://assets/UI/ledger/ledger_icon_3.png" id="27_tel4y"]
+[ext_resource type="PackedScene" uid="uid://cjogeu44x0fs" path="res://scenes/office/hanging_light.tscn" id="40_lamp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dp3eg"]
 texture = ExtResource("2_jbj1t")
@@ -315,6 +316,31 @@ unlock_at_level = 3
 [node name="DeskSlot5" parent="FullGameMode/Background/WholeAlignment/DeskRow" unique_id=715536118 instance=ExtResource("2_sugp2")]
 layout_mode = 2
 unlock_at_level = 5
+
+[node name="HangingLight" type="Control" parent="FullGameMode/Background" unique_id=1291001296]
+anchors_preset = 0
+offset_left = 93.0
+offset_top = -5.0
+offset_right = 133.0
+offset_bottom = 35.0
+
+[node name="HangingLight1" parent="FullGameMode/Background/HangingLight" unique_id=376813676 instance=ExtResource("40_lamp")]
+position = Vector2(-1702, -84)
+
+[node name="HangingLight2" parent="FullGameMode/Background/HangingLight" unique_id=600441655 instance=ExtResource("40_lamp")]
+position = Vector2(-1143, -86)
+
+[node name="HangingLight3" parent="FullGameMode/Background/HangingLight" unique_id=832314179 instance=ExtResource("40_lamp")]
+position = Vector2(-584, -86)
+
+[node name="HangingLight4" parent="FullGameMode/Background/HangingLight" unique_id=1229185440 instance=ExtResource("40_lamp")]
+position = Vector2(-30, -86)
+
+[node name="HangingLight5" parent="FullGameMode/Background/HangingLight" unique_id=1105275024 instance=ExtResource("40_lamp")]
+position = Vector2(533, -86)
+
+[node name="HangingLight6" parent="FullGameMode/Background/HangingLight" unique_id=1951546126 instance=ExtResource("40_lamp")]
+position = Vector2(1095, -86)
 
 [node name="employees" type="Control" parent="FullGameMode" unique_id=489643899]
 layout_mode = 1
@@ -624,6 +650,7 @@ texture = ExtResource("27_tel4y")
 expand_mode = 1
 
 [node name="LedgerPanel" parent="CanvasLayer" unique_id=2113782766 instance=ExtResource("27_fv21b")]
+visible = false
 
 [node name="BuildingManager" type="Node" parent="." unique_id=680144762]
 script = ExtResource("25_bldmgr")
@@ -634,5 +661,6 @@ decoratable_floor_scene = ExtResource("26_decofl")
 ui_layer_path = NodePath("../CanvasLayer")
 
 [node name="TutorialLayer" parent="." unique_id=48294334 instance=ExtResource("24_y6deb")]
+visible = false
 
 [connection signal="pressed" from="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" to="FullGameMode/Background/WholeAlignment/DeskRow/EmployeeDropArea/HBoxContainer/FrontRecruitmentButton" method="_on_pressed"]

@@ -74,10 +74,28 @@ const INDOOR_SHADER: Shader = preload("res://data/shader/ceiling_lamp.gdshader")
 ##    所以填 2.5 实际生效的是 1.0 —— 想靠乘法把压暗的画面"提亮回去"是做不到的。
 ##    唯一可行的模型是：【暗是减出来的，亮是"没被减"】。
 ##    灯下乘 1 = 原图分毫不动 = 真正的正常亮度；灯外乘 0.4 = 压暗。
-const LAMP_DARK := Color(0.379, 0.488, 0.731, 1.0)    ## 没灯照到：压成靛蓝
+## ── 夜幕是【纵向渐变】的，不是一个固定颜色 ──
+## 夜色从窗户渗进来：靠窗那头最蓝最暗，越往屋里越淡，底部几乎不压暗。
+## 这样不用专门去画两锥之间那块楔形 —— 它露出来的就是这条渐变，
+## 天然"下面亮、往上渐渐发蓝"。
+const LAMP_DARK_TOP := Color(0.534, 0.616, 0.798)   ## 贴着窗户那头
+const LAMP_DARK_BOTTOM := Color(0.97, 0.98, 1.0)    ## 屋子深处，几乎不压暗
+## 蓝色【最深】的那条线在哪。0 = 天花板，正数往下挪，负数往上提（进玻璃带）。
+## 换算：1.0 = 办公区整高 ≈ 362 像素，所以 0.1 ≈ 36 像素。
+## 你要的：画面下半截全白、50%~80% 高度之间过渡、80% 以上全蓝。
+## ry 是从办公区【上沿】往下算的（0 = 天花板，1 = 下沿），所以换算过来：
+##   80% 高度 = ry 0.2（这条线以上全蓝）
+##   50% 高度 = ry 0.5（这条线以下全白）
+const LAMP_DARK_START := -0.05
+const LAMP_DARK_SPAN := 0.1    ## 从那条线往下渐变多高，到这儿蓝色消失
+## ⚠️ >1 = 蓝的范围【变大】（我之前注释写反了，你设成 2.0 等于让蓝更多）。1.0 = 线性。
+const LAMP_DARK_POWER := 1.0
+
+## 调试：把夜幕渐变画成 绿→红 的色带，看清那两条线到底落在哪。
+## 纯绿 = 全蓝区，纯红 = 全白区，中间是过渡带。调完改回 false。
+const LAMP_DEBUG_GRADIENT := false
 const LAMP_LIT := Color(1.00, 1.00, 1.00)     ## 一盏灯照到：什么都不做 = 原图亮度
-const LAMP_OVERLAP := Color(1.00, 0.99, 0.95) ## 两锥交叠：几乎不动，暖色交给加法层
-const LAMP_TUBE := Color(1.00, 1.00, 1.00)    ## 灯管本体：不压暗
+const LAMP_OVERLAP := Color(0.97, 0.99, 1.00) ## 两锥交叠：几乎不动，暖色交给加法层
 
 ## ── 加法层：只负责"亮" ──────────────────────────────────────
 ## 乘法最多做到"原图亮度"，做不出【比原图更亮】，所以灯下看着只是白天的颜色，
@@ -87,9 +105,8 @@ const LAMP_TUBE := Color(1.00, 1.00, 1.00)    ## 灯管本体：不压暗
 ## 数值要小。0.10 已经是很明显的"被照亮"，上到 0.3 开始过曝。
 ## 调色：三个分量一起加 = 更亮；把 B 压低 = 更黄。
 ## 「很淡的亮黄」= 三个都不低 + B 稍低。R/G 高而 B 接近 0 那是纯黄，会很脏。
-const LAMP_LIT_ADD := Color(0.051, 0.06, 0.114, 1.0)    ## 一盏灯照到：加一点暖光
-const LAMP_OVERLAP_ADD := Color(0.204, 0.202, 0.167, 1.0) ## 两锥交叠：更亮的淡黄
-const LAMP_TUBE_ADD := Color(0.55, 0.520, 0.400)    ## 灯管本体：打到发白
+const LAMP_LIT_ADD := Color(0.040, 0.055, 0.130)    ## 一盏灯照到：加一点暖光
+const LAMP_OVERLAP_ADD := Color(0.140, 0.170, 0.260) ## 两锥交叠：更亮的淡黄
 const LAMP_ADD_SHADER: Shader = preload("res://data/shader/ceiling_lamp_add.gdshader")
 const LAMP_ADD_NODE := "_LampGlowAdd"
 
@@ -99,29 +116,58 @@ const LAMP_ADD_NODE := "_LampGlowAdd"
 const MASK_PAD_X := 3000.0
 const MASK_PAD_TOP := 1200.0
 const MASK_PAD_BOTTOM := 1200.0
-const LAMP_COUNT := 5                 ## 几盏灯，沿办公区均分
-const LAMP_HALF_W := 0.08             ## 灯管半长（占整条办公区宽度的比例）
+## ── 灯的位置来自场景节点，不是常量 ───────────────────────────
+## 把 hanging_light.tscn 拖进办公室，随便摆、随便缩放，光锥自动跟着走。
+## 想加一盏就再拖一个，上限 8 盏（shader 数组大小）。
+## 原先那套 LAMP_COUNT / PITCH / HALF_W / GROUP_X / Y_UP / Y_DOWN 全部作废 ——
+## 位置信息现在在场景里，所见即所得，不用跑游戏对数字。
+const LAMP_GROUP := "ceiling_lamp"
+const LAMP_MAX := 8
+
+## 发光部分比灯的图窄多少（每边）。你说"横向往里收了一点点"，就是这个。
+## 0.08 = 两边各收 8%，光锥不会从灯罩最外沿直接射出来。
+const LAMP_LIGHT_INSET := 0.08
+
+## 光柱起点相对灯【底边】上下挪多少像素。正数 = 光往下挪（灯和光之间留空），
+## 负数 = 光往上提（钻进灯罩里）。灯的图本身不动，只动光。
+const LAMP_LIGHT_Y_OFFSET := 0.0
+
+## 灯【自身】发亮的那一截，占灯图高度的比例，从底边往上算。
+## 只算下面一截是因为你的图上半部分是锁链 —— 链条不该发光。
+## 高度减半过了（原来 0.35）。底边不动，只往上收。
+const LAMP_CORE_FRAC := 0.175
+## 灯芯是【圆角矩形 + 柔边】，不是硬方块 —— 真光源的边界一定是糊的。
+const LAMP_CORE_ROUND := 0.8    ## 1 = 两头全圆（胶囊形）
+const LAMP_CORE_SOFT := 0.05    ## 柔边往外化开多少（办公区高度的倍数）
+const LAMP_CORE_POWER := 1.4    ## 柔边衰减曲线。越大越贴着灯管
+## 灯芯的强光。整套里最亮的一处 —— 它是光源，得比它照亮的东西更亮。
+const LAMP_CORE_ADD := Color(0.360, 0.390, 0.450)
+
+## "降下来"的幅度：天亮时灯缩到这么高的上方，天黑时滑回原位。
+## 跟窗灯同一条 1.5 秒曲线。设 0 = 不要这个动画。
+const LAMP_DESCEND_PX := 70.0
+
+## 灯的图画在夜色遮罩【之上】，所以完全不被压暗，原样显示。
+## 遮罩自己是 INDOOR_LIGHT_Z（100），所以这里要更高。
+const LAMP_ART_Z := 110
+## 加法层再往上一层，这样光晕/灯芯能盖在灯的图上面 —— 否则光被图挡住，
+## 灯管那块柔光就只能从边缘漏一点出来，等于白做。
+## 这是相对遮罩的增量（遮罩 100 + 20 = 120）。
+const LAMP_GLOW_Z := 20
+
 const LAMP_SPREAD := 0.46             ## 梯形往下张开多少。0 = 直筒，越大越像喇叭
 const LAMP_CONE_LEN := 10.0            ## 光打多远（1 = 直到办公区底部）
-## 相邻两盏灯【灯心之间】的距离，整组始终以 LAMP_GROUP_X 为轴居中。
-## 调小 = 灯一起往中间收。和 LAMP_COUNT 互不干扰：加灯不会把它们撑开。
-const LAMP_PITCH := 0.2
-const LAMP_GROUP_X := 0.5             ## 整组灯的中心。0.5 = 办公区正中
 
-## 注意 lamp_y 是【遮罩矩形内的比例】，所以矩形一变高，灯管会自动往上跑 ——
-## 这正是"灯管升到窗户那一带"的效果，不用另外调 lamp_y。
-## 0 = 完全不碰你手摆的节点。
 
 ## 硬边斜线按屏幕像素走的话，台阶会比美术本身的像素还细，看着像锯齿而不像设计。
 ## 填你的美术放大倍率（一个美术像素 = 几个屏幕像素），台阶就和像素块同尺寸。1 = 不对齐。
 const LAMP_BLOCK_PX := 1.0
-const LAMP_TUBE_H := 0.02             ## 灯管粗细
 
 ## 光的上边界。这条线以上【一律不受光】，哪怕光锥罩到了。
 ## 用来挡住窗户 —— 室内吊灯照不到室外，但遮罩分不清室内室外，不设这条线的话
 ## 光锥会在窗户上"挖个洞"，露出白天的玻璃贴图。
 ## 0 = 你手摆那个遮罩矩形的上沿 = 办公室天花板。正数往下挪，负数往上放。
-const LAMP_LIGHT_TOP := 0.0
+const LAMP_LIGHT_TOP := -20
 
 ## ── 灯管周围的光晕 ──
 ## 和光锥是两回事：光锥是"照到哪儿"，光晕是"灯本身在发光"，四面八方都有。
@@ -140,10 +186,17 @@ const LAMP_GLOW_STRETCH := 1.0                   ## >1 横向拉长成椭圆
 ## 0 = 平滑模糊（柔光晕）；≥2 = 量化成那么多圈硬边色阶。
 ## 之前那条莫名其妙的横线就是色阶造成的 —— 灯管是长线段，每圈在中段都是平的。
 const LAMP_GLOW_STEPS := 0.0
-const LAMP_GLOW_ADD := Color(0.14, 0.125, 0.085) ## 最内圈加多少光
-## 灯是"降下来"的：天黑时从 UP 滑到 DOWN，跟窗灯同一条 1.5 秒淡入曲线。
-const LAMP_Y_UP := -0.12              ## 还没降下来时灯管在哪（负数 = 在办公区上方看不见）
-const LAMP_Y_DOWN := -0.1             ## 降到位后灯管在哪
+const LAMP_GLOW_ADD := Color(0.090, 0.110, 0.150)
+
+
+
+## ── 纵向衰减 ──
+## 光越往下越弱。【只作用在加法层】—— 乘法层照旧灯下乘 1，
+## 所以灯下仍然是正常亮度，衰减掉的只是额外叠上去的那层光。
+## 这么分的好处：衰减再狠也不会把桌椅人物压暗，只是"光没那么浓"。
+const LAMP_FADE_DIST := 1.0    ## 衰减跨度。1.0 = 从灯管一路衰减到办公区底部
+const LAMP_FADE_MIN := 0    ## 最远处还剩多少光。0 = 完全没有
+const LAMP_FADE_POWER := 0.8   ## 曲线。>1 = 亮区更集中在顶部；<1 = 衰减得更慢
 
 ## 光层节点自动生成，不用你去 main.tscn 里摆。
 ## 横向范围和上沿【自动对齐天空带】——正好从那条天空下面开始，不会照到窗外。
@@ -179,6 +232,9 @@ var _warned_no_sky := false
 var _indoor_orig: Dictionary = {}   ## 手摆遮罩的原始矩形，上拉时作基准，防止每帧累加
 var _ref_min := Vector2.ZERO        ## 办公区参考矩形在铺大后的遮罩里的起点（UV）
 var _ref_size := Vector2.ONE
+var _ref_global := Rect2()          ## 参考矩形的全局位置，换算灯的坐标用
+var _lamps: PackedVector4Array = []  ## 每盏灯：x=中心 y=底边 z=半宽（ruv 空间）
+var _lamp_orig: Dictionary = {}     ## 灯的原始位置，"降下来"动画的基准
 var _ref_aspect := 1.0              ## 参考矩形宽高比，用来把光晕修圆        ## 同上，尺寸。灯的坐标全部相对它算
 var _debug_timer := 0
 var _last_sky_count := -1
@@ -263,20 +319,24 @@ func _apply(p: float) -> void:
 	# 整套效果（包括灯降下来）都跟 _glow_a 走，和窗灯同一时刻、同一条曲线。
 	var lit: float = _glow_a
 	# 两层必须吃完全一样的几何参数，否则光锥的暗边和亮边会错开一截
+	_update_lamps(lit)
 	_set_lamp_geometry(_add_mat, lit)
 	_set_lamp_geometry(_glow_mat, lit)
 
 	# 乘法层：只管暗
-	_add_mat.set_shader_parameter("dark_color", _v3(LAMP_DARK))
+	_add_mat.set_shader_parameter("dark_top", _v3(LAMP_DARK_TOP))
+	_add_mat.set_shader_parameter("dark_bottom", _v3(LAMP_DARK_BOTTOM))
 	_add_mat.set_shader_parameter("lamp_color", _v3(LAMP_LIT))
 	_add_mat.set_shader_parameter("overlap_color", _v3(LAMP_OVERLAP))
-	_add_mat.set_shader_parameter("tube_color", _v3(LAMP_TUBE))
 
 	# 加法层：只管亮
 	_glow_mat.set_shader_parameter("lit_add", _v3(LAMP_LIT_ADD))
 	_glow_mat.set_shader_parameter("overlap_add", _v3(LAMP_OVERLAP_ADD))
-	_glow_mat.set_shader_parameter("tube_add", _v3(LAMP_TUBE_ADD))
 	_glow_mat.set_shader_parameter("glow_add", _v3(LAMP_GLOW_ADD))
+	_glow_mat.set_shader_parameter("core_add", _v3(LAMP_CORE_ADD))
+	_glow_mat.set_shader_parameter("fade_dist", LAMP_FADE_DIST)
+	_glow_mat.set_shader_parameter("fade_min", LAMP_FADE_MIN)
+	_glow_mat.set_shader_parameter("fade_power", LAMP_FADE_POWER)
 
 	for n in get_tree().get_nodes_in_group(INDOOR_GROUP):
 		var ci := n as CanvasItem
@@ -356,24 +416,86 @@ func _v3(c: Color) -> Vector3:
 ## 两边一旦不同步，光锥的暗边和亮边就会错开一截，而且极难查。
 func _set_lamp_geometry(mat: ShaderMaterial, lit: float) -> void:
 	mat.set_shader_parameter("amount", lit)
-	mat.set_shader_parameter("lamp_count", LAMP_COUNT)
-	mat.set_shader_parameter("lamp_y", lerpf(LAMP_Y_UP, LAMP_Y_DOWN, lit))
-	mat.set_shader_parameter("lamp_half_w", LAMP_HALF_W)
+	mat.set_shader_parameter("lamp_n", _lamps.size())
+	mat.set_shader_parameter("lamps", _lamps)
 	mat.set_shader_parameter("spread", LAMP_SPREAD)
 	mat.set_shader_parameter("cone_len", LAMP_CONE_LEN)
-	mat.set_shader_parameter("lamp_pitch", LAMP_PITCH)
-	mat.set_shader_parameter("group_x", LAMP_GROUP_X)
-	mat.set_shader_parameter("block_px", LAMP_BLOCK_PX)
-	mat.set_shader_parameter("tube_h", LAMP_TUBE_H)
 	mat.set_shader_parameter("light_top", LAMP_LIGHT_TOP)
+	mat.set_shader_parameter("dark_start", LAMP_DARK_START)
+	mat.set_shader_parameter("dark_span", LAMP_DARK_SPAN)
+	mat.set_shader_parameter("dark_power", LAMP_DARK_POWER)
+	mat.set_shader_parameter("debug_gradient", LAMP_DEBUG_GRADIENT)
+	mat.set_shader_parameter("core_frac", LAMP_CORE_FRAC)
+	mat.set_shader_parameter("core_round", LAMP_CORE_ROUND)
+	mat.set_shader_parameter("core_soft", LAMP_CORE_SOFT)
+	mat.set_shader_parameter("core_power", LAMP_CORE_POWER)
+	mat.set_shader_parameter("block_px", LAMP_BLOCK_PX)
 	mat.set_shader_parameter("glow_radius", LAMP_GLOW_RADIUS)
-	mat.set_shader_parameter("glow_steps", LAMP_GLOW_STEPS)
 	mat.set_shader_parameter("glow_power", LAMP_GLOW_POWER)
 	mat.set_shader_parameter("glow_stretch", LAMP_GLOW_STRETCH)
+	mat.set_shader_parameter("glow_steps", LAMP_GLOW_STEPS)
 	mat.set_shader_parameter("ref_aspect", _ref_aspect)
 	# 遮罩铺得比办公区大，这两个把灯的坐标锁回原始矩形
 	mat.set_shader_parameter("ref_min", _ref_min)
 	mat.set_shader_parameter("ref_size", _ref_size)
+
+
+## 扫一遍场景里的灯，把每盏的位置换算成 shader 要的 ruv 坐标。
+##
+## 灯是 Control，所以直接读 get_global_rect()：
+##   x = 横向中心、y = 【底边】（光从底边出，锁链在上面天然不参与）、z = 半宽。
+## 这意味着你在编辑器里怎么摆、缩放到多大，光锥都自动跟上，不用改任何数字。
+func _update_lamps(lit: float) -> void:
+	_lamps.clear()
+	var raw: Array[Vector4] = []
+	if _ref_global.size.x <= 0.0 or _ref_global.size.y <= 0.0:
+		return   # 遮罩还没量出来，这一帧先跳过
+
+	var lift: float = (1.0 - lit) * LAMP_DESCEND_PX   # 天亮时缩到上方
+	for n in get_tree().get_nodes_in_group(LAMP_GROUP):
+		var c := n as CanvasItem
+		if c == null:
+			continue
+
+		# 记住原位，否则每帧在上一帧基础上再抬一次，灯会一路飞走
+		var key := c.get_instance_id()
+		if not _lamp_orig.has(key):
+			_lamp_orig[key] = c.get("position")
+		var home: Vector2 = _lamp_orig[key]
+		c.set("position", Vector2(home.x, home.y - lift))
+		c.visible = lit > 0.001
+		c.z_index = LAMP_ART_Z   # 画在夜色遮罩之上 = 不被压暗
+
+		if _lamps.size() >= LAMP_MAX:
+			continue   # 超出 shader 数组上限的灯只摆不发光
+		var r := _lamp_rect(c)
+		if r.size.x <= 0.0:
+			continue
+		raw.append(Vector4(
+			(r.position.x + r.size.x * 0.5 - _ref_global.position.x) / _ref_global.size.x,
+			(r.end.y + LAMP_LIGHT_Y_OFFSET - _ref_global.position.y) / _ref_global.size.y,
+			r.size.x * 0.5 * (1.0 - LAMP_LIGHT_INSET) / _ref_global.size.x,
+			r.size.y / _ref_global.size.y))   # w = 灯图的高，灯芯要用
+
+	# 按 x 从左到右排好 —— 楔形算的是"相邻两盏"的关系，
+	# 场景里的节点顺序不保证和左右顺序一致，不排的话会把不相邻的两盏配成一对。
+	raw.sort_custom(func(a: Vector4, b: Vector4) -> bool: return a.x < b.x)
+	for v in raw:
+		_lamps.append(v)
+
+
+## 灯的实际占地矩形。
+## 灯的根节点是 Node2D（为了让"模板管大小、实例管位置"成立），
+## 图在它下面的 Art 子节点上，所以尺寸要去子节点上拿。
+## 根节点直接是 Control 的老结构也兼容。
+func _lamp_rect(n: CanvasItem) -> Rect2:
+	if n is Control:
+		return (n as Control).get_global_rect()
+	for ch in n.get_children():
+		var c := ch as Control
+		if c != null:
+			return c.get_global_rect()
+	return Rect2()
 
 
 ## 加法层挂成乘法层的【子节点】：子节点天生画在父节点之后，所以
@@ -384,9 +506,13 @@ func _ensure_glow_layer(host: Control) -> void:
 		return
 	var g := ColorRect.new()
 	g.name = LAMP_ADD_NODE
+	# 默认透明。ColorRect 默认是白色不透明，万一 shader 编译失败退回默认材质，
+	# 这块铺满全屏的布会把整个画面刷白 —— 留个保险。
+	g.color = Color(0, 0, 0, 0)
 	g.material = _glow_mat
 	g.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	g.set_anchors_preset(Control.PRESET_FULL_RECT)
+	g.z_index = LAMP_GLOW_Z   # 相对遮罩再抬一层，好盖在灯的图上
 	host.add_child(g)
 
 
@@ -599,6 +725,7 @@ func _pad_indoor_mask(c: Control) -> void:
 	_ref_min = pad_tl / full_size
 	_ref_size = o.size / full_size
 	_ref_aspect = o.size.x / maxf(o.size.y, 1.0)
+	_ref_global = Rect2(c.global_position + pad_tl, o.size)
 
 
 ## 没人往 indoor_light 组里放东西的话，自己建一个。
