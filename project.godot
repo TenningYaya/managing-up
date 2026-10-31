@@ -83,6 +83,7 @@ sky_window=""
 sky_window_lights=""
 indoor_light=""
 scene_lamp=""
+night_cover=""
 
 [input]
 

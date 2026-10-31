@@ -55,6 +55,38 @@ const GLOW_FADE_SEC := 1.5        ## 淡入淡出用几秒（现实时间，不�
 ## 这里乘上 1/压暗色 抵消掉，净效果 = 完全按你 Procreate 里画的样子显示。
 ## 关掉的话它俩就会跟着天一起黑 —— 那样"亮着的灯"就不成立了。
 const WINDOW_IGNORE_NIGHT := true
+
+## ── 右侧室外夜景（right_night.png）────────────────────────────
+## RightCover 顶上叠一张画好的夜版，透明度跟 night_amount 走，白天完全透明。
+## 不用换 texture：换贴图是硬切，黄昏会"啪"地跳一下；叠层能真的过渡。
+## 这层不吃 _comp（不豁免全局压暗）—— 它是室外实景，就该跟着天一起暗，
+## 和窗户那三层（亮框/光晕，室内受光所以要豁免）不是一回事。
+const NIGHT_COVER_GROUP := "night_cover"
+## 夜版最浓时的透明度。右边室外还会再被夜幕遮罩乘一次蓝，
+## 两层叠起来嫌太黑就把这个调小（0.6 左右 = 夜版只出一半）。
+const NIGHT_COVER_MAX := 1.0
+## 提前量：让这一层比别处【早】这么多进入夜晚。单位是周期的比例。
+## 0.06 × CYCLE_SECONDS(600) ≈ 36 秒。
+##
+## 为什么需要它：灯和夜幕是在 night_amount 冲过 GLOW_ON_AT 那一瞬间整屏切过去的，
+## 而夜色曲线本身要到 phase 0.908 才满 —— 不提前的话，灯都亮了，
+## 右边室外才换了一半，之后还在慢慢变黑，显得拖。
+## ⚠️ 这是把这一层的"表"整个拨快，所以早上也会跟着【早】亮回白天。
+const NIGHT_COVER_LEAD := 0.06
+
+## ── 左侧室外：没有夜版图，入夜直接压暗 ────────────────────────
+## 右边有你画的 right_night，左边没有，所以这边只能靠压 self_modulate。
+## 用 self_modulate 而不是 modulate：后者会传给子节点。
+## 两边吃【同一个】提前过的进度，所以左右是同时变暗的，不会一边先黑。
+const NIGHT_DIM_GROUP := "night_dim"
+## 完全入夜时乘这个。默认值是量出来的 right_night ÷ right_down ≈ (0.80, 0.78, 0.78)，
+## 也就是让左边挨的这一刀，和你给右边画的那一刀一样重。
+## 想更暗就整体往下调；想偏蓝就把 r 压得比 g/b 多。
+const NIGHT_DIM := Color(0.80, 0.78, 0.78)
+## 按节点名自动加进组，省得去编辑器点 —— 也省得我动 main.tscn（你开着 Godot 时会打架）。
+## 想加别的（比如某盆植物），在这儿补个名字就行；重命名了节点记得同步。
+const NIGHT_DIM_NAMES := ["LeftCover"]
+
 const INDOOR_GROUP := "indoor_light"       ## 室内"开灯"光层（加法混合）
 
 const WORLD_GRADIENT: Gradient = preload("res://data/daynight/world_tint.tres")
@@ -230,6 +262,9 @@ var _canvas_mod: CanvasModulate = null
 var _auto_light: TextureRect = null   ## 自动生成的那个光层，只有它才走自动对齐
 var _warned_no_sky := false
 var _indoor_orig: Dictionary = {}   ## 手摆遮罩的原始矩形，上拉时作基准，防止每帧累加
+var _dim_orig: Dictionary = {}      ## 压暗前的 self_modulate。每帧在它基础上乘，
+									## 不记的话会把你在编辑器里调的配色一层层洗掉
+var _dim_scanned := false           ## 按名认领只在主场景就绪后扫一次，之后靠 node_added 补
 var _ref_min := Vector2.ZERO        ## 办公区参考矩形在铺大后的遮罩里的起点（UV）
 var _ref_size := Vector2.ONE
 var _ref_global := Rect2()          ## 参考矩形的全局位置，换算灯的坐标用
@@ -264,6 +299,10 @@ func _ready() -> void:
 	_night_peak = 0.001
 	for i in SKY_GRADIENT.get_point_count():
 		_night_peak = maxf(_night_peak, SKY_GRADIENT.get_color(i).a)
+
+	# 二楼的 LeftCover 是建楼时才 duplicate 出来的，开局那次扫描扫不到它。
+	# 挂在 node_added 上，谁一进场就当场认领，比每帧全树递归便宜得多。
+	get_tree().node_added.connect(_on_node_added)
 
 
 func _process(_delta: float) -> void:
@@ -312,6 +351,38 @@ func _apply(p: float) -> void:
 		if tr:
 			_ensure_window_overlays(tr)
 			_update_window_overlays(tr)
+
+	# ── 两侧室外 ──
+	# 用提前过的进度去取曲线，不是直接用 night_amount。fposmod 是因为 +lead 可能越过 1.0，
+	# 而 Gradient.sample 对超界是【夹住】不是绕回，不绕的话跨零点那段会卡住不动。
+	# 左右共用这一个值，所以两边永远同步，不会一边先黑。
+	var outdoor_night: float = _night_at(fposmod(p + NIGHT_COVER_LEAD, 1.0))
+
+	# 右：淡入画好的夜版。
+	# 二楼的 RightCover 是从一楼 duplicate() 出来的，组会一起复制，所以这里一并照顾到。
+	var cover_a: float = outdoor_night * NIGHT_COVER_MAX
+	for n in get_tree().get_nodes_in_group(NIGHT_COVER_GROUP):
+		var ci := n as CanvasItem
+		if ci:
+			ci.visible = cover_a > 0.001
+			ci.modulate = Color(1.0, 1.0, 1.0, cover_a)
+
+	# 左：没有夜版图，直接压 self_modulate。
+	_claim_night_dim()
+	var dim: Color = Color.WHITE.lerp(NIGHT_DIM, outdoor_night)
+	for n in get_tree().get_nodes_in_group(NIGHT_DIM_GROUP):
+		var ci := n as CanvasItem
+		if ci == null:
+			continue
+		# ⚠️ 按【名字】缓存原色，不是按实例。
+		# 二楼的 LeftCover 是建楼时从一楼 duplicate() 出来的 —— 要是建楼时正好是晚上，
+		# 它复制到的是一楼【已经被压暗】的 self_modulate。按实例缓存就会把那个暗值
+		# 当成原色，结果二楼晚上双重压暗、白天还亮不回来。同名共用一份原色就没这问题。
+		var key := String(ci.name)
+		if not _dim_orig.has(key):
+			_dim_orig[key] = ci.self_modulate
+		var base: Color = _dim_orig[key]
+		ci.self_modulate = Color(base.r * dim.r, base.g * dim.g, base.b * dim.b, base.a)
 
 	# ── 吊顶灯 ──
 	_ensure_indoor_light()
@@ -410,6 +481,31 @@ func debug_toggle_daynight() -> bool:
 
 func _v3(c: Color) -> Vector3:
 	return Vector3(c.r, c.g, c.b)
+
+
+## ── 按节点名认领"入夜压暗"的节点 ───────────────────────────────
+## 为什么不在 main.tscn 里加组：那样每次都得你把 Godot 关掉我才能改，
+## 不关的话编辑器一保存就把我的改动盖回去。按名认领，场景一个字都不用动。
+func _claim_night_dim() -> void:
+	if _dim_scanned:
+		return
+	var root := get_tree().current_scene
+	if root == null:
+		return
+	_dim_scanned = true
+	_claim_recursive(root)
+
+
+func _claim_recursive(n: Node) -> void:
+	if n is CanvasItem and NIGHT_DIM_NAMES.has(String(n.name)):
+		n.add_to_group(NIGHT_DIM_GROUP)
+	for c in n.get_children():
+		_claim_recursive(c)
+
+
+func _on_node_added(n: Node) -> void:
+	if n is CanvasItem and NIGHT_DIM_NAMES.has(String(n.name)):
+		n.add_to_group(NIGHT_DIM_GROUP)
 
 
 ## 乘法层和加法层共用同一套形状参数。写成一个函数，省得改参数要改两遍 ——

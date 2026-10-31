@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://sclbpjras5bi" path="res://scenes/employee/employee_drop_area.tscn" id="3_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://yxab4qjkxvbk" path="res://assets/background/959907CBFB75635004DB71D30DBF186B.png" id="3_yc10j"]
 [ext_resource type="Texture2D" uid="uid://b47ers1c5bqr5" path="res://assets/right.png" id="4_2wyq8"]
+[ext_resource type="Texture2D" uid="uid://c0x6lripge1by" path="res://assets/right_down.PNG" id="41_rdown"]
+[ext_resource type="Texture2D" uid="uid://ccsotq47iqqcc" path="res://assets/right_night.png" id="42_rnight"]
 [ext_resource type="Script" uid="uid://cfssx3hpb6hxe" path="res://scripts/system/floor_manager.gd" id="4_og1vs"]
 [ext_resource type="Texture2D" uid="uid://dd6d6fy13utth" path="res://assets/background/left4.png" id="5_og1vs"]
 [ext_resource type="PackedScene" uid="uid://cjfjfj4l46h23" path="res://scenes/sidebar/employee_panel/employee_panel.tscn" id="5_tbgi4"]
@@ -163,7 +165,21 @@ offset_left = 2631.0
 offset_top = -79.0
 offset_right = 3629.0
 offset_bottom = 358.0
-texture = ExtResource("4_2wyq8")
+self_modulate = Color(1.05, 1.06, 1.14, 1)
+texture = ExtResource("41_rdown")
+expand_mode = 1
+
+[node name="NightCover" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=835587991 groups=["night_cover"]]
+visible = false
+self_modulate = Color(1.05, 1.06, 1.14, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("42_rnight")
 expand_mode = 1
 
 [node name="TextureRect" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=422862178 groups=["sky_window"]]
@@ -211,6 +227,35 @@ layout_mode = 0
 offset_left = -4619.0
 offset_right = -3823.0
 offset_bottom = 105.0
+texture = SubResource("AtlasTexture_vxglm")
+expand_mode = 1
+
+[node name="GlassA" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover" unique_id=241645187 groups=["sky_window"]]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 7.0
+offset_right = 803.0
+offset_bottom = 105.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_vxglm")
+expand_mode = 1
+
+[node name="GlassClip" type="Control" parent="FullGameMode/Background/Floors/RightCover" unique_id=1267814324]
+show_behind_parent = true
+clip_contents = true
+layout_mode = 0
+offset_left = 794.0
+offset_top = -200.0
+offset_right = 998.0
+offset_bottom = 305.0
+mouse_filter = 2
+
+[node name="GlassB" type="TextureRect" parent="FullGameMode/Background/Floors/RightCover/GlassClip" unique_id=1775810081 groups=["sky_window"]]
+layout_mode = 0
+offset_top = 200.0
+offset_right = 796.0
+offset_bottom = 305.0
+mouse_filter = 2
 texture = SubResource("AtlasTexture_vxglm")
 expand_mode = 1
 
