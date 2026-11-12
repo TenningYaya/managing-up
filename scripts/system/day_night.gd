@@ -87,6 +87,37 @@ const NIGHT_DIM := Color(0.80, 0.78, 0.78)
 ## 想加别的（比如某盆植物），在这儿补个名字就行；重命名了节点记得同步。
 const NIGHT_DIM_NAMES := ["LeftCover"]
 
+## ── 清晨 / 傍晚 ──────────────────────────────────────────────
+## 日落日出那一小段，整屏乘一层暖色（傍晚）或冷色（清晨）。
+## 用 CanvasModulate 做：它是【整块世界画布】的乘法，一行就够，
+## 不用新建图层、不用写 shader，也不会碰到 UI（UI 在 CanvasLayer 里）。
+##
+## ⚠️ 时机【不是写死的 phase】，是从夜色曲线自己算出来的：
+##      夜色正在变浓 = 傍晚，正在变淡 = 清晨，浓度为 0 或者已经很浓 = 不上色。
+##    所以你在编辑器里怎么拖 sky_tint 的色标，这段都自动跟着走，不用回来改数。
+##    按现在的曲线：傍晚约 48 秒（phase 0.72~0.80），清晨约 42 秒（0.18~0.25）。
+const GOLDEN_STRENGTH := 1.0            ## 总强度。0 = 整个关掉
+## 傍晚的暖色。压绿压蓝、留红 = 金色。想更橙就把 b 再压低一点。
+## ⚠️ 别压太狠。这是【乘法】，暖色乘在蓝色上会变橄榄绿 ——
+##    (1.00, 0.86, 0.70) 那档试过，天空和泳池直接变墨绿色，像做旧滤镜不像夕阳。
+const DUSK_TINT := Color(1.00, 0.92, 0.84)
+## 清晨的冷色。压红、留蓝 = 青灰。清晨本来就比傍晚淡，别拉太狠。
+const DAWN_TINT := Color(0.90, 0.94, 1.00)
+## 夜色浓到这个程度就收工（再往后就是正经夜里了，不该还挂着晚霞）。
+## 它顺带决定峰值位置：最浓的那一下在"夜色浓度 = 这个值的一半"处。
+const GOLDEN_UNTIL := 0.7
+## 玻璃吃几成晨昏色。1.0 = 和屋里一样，0 = 完全不吃（天色不变）。
+##
+## 为什么反而要【少】吃：你画的是一张蓝天。暖色乘蓝天 = 橄榄绿，
+## 越加码越脏。屋里是木头和米色家具，暖色乘上去才好看。
+## 所以是"屋里暖起来、天还是蓝的"——像傍晚的阳光斜照进办公室。
+##
+## 想让天空也真的烧起来，得换画的：照 glass_wall_night 的路子再画一张
+## glass_wall_dusk，我接到同一套交叉淡化里，那才是真·晚霞。乘法做不出来。
+##
+## 只作用在玻璃本身（self_modulate 不传子节点），亮框和窗灯不受影响。
+const GOLDEN_WINDOW_MIX := 0.3
+
 const INDOOR_GROUP := "indoor_light"       ## 室内"开灯"光层（加法混合）
 
 const WORLD_GRADIENT: Gradient = preload("res://data/daynight/world_tint.tres")
@@ -265,6 +296,9 @@ var _indoor_orig: Dictionary = {}   ## 手摆遮罩的原始矩形，上拉时�
 var _dim_orig: Dictionary = {}      ## 压暗前的 self_modulate。每帧在它基础上乘，
 									## 不记的话会把你在编辑器里调的配色一层层洗掉
 var _dim_scanned := false           ## 按名认领只在主场景就绪后扫一次，之后靠 node_added 补
+var _golden := Color.WHITE          ## 这一刻的晨昏色，已经按强度混好，直接乘
+var _golden_col := Color.WHITE      ## 这一刻用的是哪头的色（傍晚暖 / 清晨冷），窗户加码要用
+var _golden_k := 0.0                ## 晨昏的浓度 0~1。别处想挂钩"现在是不是黄昏"读这个
 var _ref_min := Vector2.ZERO        ## 办公区参考矩形在铺大后的遮罩里的起点（UV）
 var _ref_size := Vector2.ONE
 var _ref_global := Rect2()          ## 参考矩形的全局位置，换算灯的坐标用
@@ -324,6 +358,11 @@ func _apply(p: float) -> void:
 	# 曲线的 Alpha 只画形状，峰值当作"完全入夜"。除以峰值归一化成 0~1。
 	night_amount = clampf(SKY_GRADIENT.sample(p).a / _night_peak, 0.0, 1.0)
 
+	# 晨昏色直接乘进 world。这样下面那套东西全都自动跟着走：
+	# CanvasModulate 吃到它，_comp 也是按 world 算的，亮框/窗灯照样被补偿回原样。
+	_update_golden(p)
+	world = Color(world.r * _golden.r, world.g * _golden.g, world.b * _golden.b, world.a)
+
 	# ── 屋里：整体压暗 ──
 	var cm := _get_canvas_modulate()
 	if cm:
@@ -343,12 +382,22 @@ func _apply(p: float) -> void:
 			1.0 / maxf(world.g, 0.001),
 			1.0 / maxf(world.b, 0.001))
 
+	# 玻璃少吃一点晨昏色，免得蓝天被暖色乘成橄榄绿。
+	# 整屏已经乘过 _golden 了，所以这里【除掉】多余的那部分 —— 和 _comp 一个路子。
+	# 净效果 = 玻璃只挨了 GOLDEN_WINDOW_MIX 成，屋里挨满。
+	var win_want := Color.WHITE.lerp(_golden_col, _golden_k * GOLDEN_WINDOW_MIX)
+	var win_gold := Color(
+		win_want.r / maxf(_golden.r, 0.001),
+		win_want.g / maxf(_golden.g, 0.001),
+		win_want.b / maxf(_golden.b, 0.001))
+
 	for n in get_tree().get_nodes_in_group(SKY_GROUP):
 		var ci := n as CanvasItem
 		if ci and ci.material != null:
 			ci.material = null   # 清掉早先那版叠色 shader 留下的材质
 		var tr := n as TextureRect
 		if tr:
+			tr.self_modulate = win_gold
 			_ensure_window_overlays(tr)
 			_update_window_overlays(tr)
 
@@ -481,6 +530,35 @@ func debug_toggle_daynight() -> bool:
 
 func _v3(c: Color) -> Vector3:
 	return Vector3(c.r, c.g, c.b)
+
+
+## ── 晨昏色 ────────────────────────────────────────────────────
+## 不看钟点，看【夜色曲线走到哪、往哪走】：
+##   浓度 0        → 大白天，不上色
+##   浓度 0~0.7    → 正在换班，上色；中间最浓，两头平滑收掉
+##   浓度 ≥ 0.7    → 已经是夜里了，收工
+##   在变浓 = 傍晚（暖），在变淡 = 清晨（冷）
+## 好处是你把 sky_tint 的色标拖到哪，晚霞就跟到哪，不用再回来对数字。
+func _update_golden(p: float) -> void:
+	_golden = Color.WHITE
+	_golden_col = Color.WHITE
+	_golden_k = 0.0
+	if GOLDEN_STRENGTH <= 0.0:
+		return
+
+	var n: float = _night_at(p)
+	if n <= 0.001 or n >= GOLDEN_UNTIL:
+		return
+
+	# 钟形：两头是 0，中间最浓。用 sin 而不是三角波，切入切出看不出拐点。
+	_golden_k = clampf(sin(PI * n / GOLDEN_UNTIL) * GOLDEN_STRENGTH, 0.0, 1.0)
+
+	# 往前往后各探一点，看夜色是在变浓还是变淡。
+	# fposmod 是因为清晨那段跨着 phase 0，不绕回去会探到曲线外面。
+	const EPS := 0.004
+	var rising: bool = _night_at(fposmod(p + EPS, 1.0)) > _night_at(fposmod(p - EPS, 1.0))
+	_golden_col = DUSK_TINT if rising else DAWN_TINT
+	_golden = Color.WHITE.lerp(_golden_col, _golden_k)
 
 
 ## ── 按节点名认领"入夜压暗"的节点 ───────────────────────────────
@@ -762,7 +840,9 @@ func _update_window_overlays(host: TextureRect) -> void:
 	var night := host.get_node_or_null(WINDOW_NIGHT_NODE) as Control
 	if night:
 		night.visible = night_amount > 0.001
-		night.modulate = Color(_comp.x, _comp.y, _comp.z, night_amount)
+		# 这一层【不】补偿全局色 —— 它画的是窗外实景，黄昏就该跟着染上晚霞。
+		# 亮框和窗灯才需要补偿：那俩是"亮着的灯"，不该被天色改颜色。
+		night.modulate = Color(1.0, 1.0, 1.0, night_amount)
 
 	# 亮框：和窗口 1:1，铺满父节点即可。室内受光，一直亮着，不参与昼夜。
 	var frame := host.get_node_or_null(WINDOW_FRAME_NODE) as Control
